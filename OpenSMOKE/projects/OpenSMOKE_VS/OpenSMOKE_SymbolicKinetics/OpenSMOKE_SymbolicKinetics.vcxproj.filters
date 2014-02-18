@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\fluent_drm22">
+      <UniqueIdentifier>{4d29607d-f5a5-4b40-a64f-43f5dcb74367}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gri30">
+      <UniqueIdentifier>{ec3b425a-0a0c-4926-9e30-62bc98610e9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gri12">
+      <UniqueIdentifier>{726cd599-3373-437d-b260-0a72869fb056}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\polimi_c1c3htnox_1101">
+      <UniqueIdentifier>{4f67ea54-b3b8-48c7-8bb2-5912babf82d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\polimi_h2conox_1101">
+      <UniqueIdentifier>{c1b2231f-3a27-454f-8cf7-02d733e7243f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\polimi_h2conox_non2o_1101">
+      <UniqueIdentifier>{b6b22585-7539-4740-9ed5-f5dd711ed2ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\polimi_h2conox_nonnh_1101">
+      <UniqueIdentifier>{f97a18b5-4047-49bb-b01d-e64fcbea40f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\polimi_h2conox_nothermal_1101">
+      <UniqueIdentifier>{0b4b2a18-a4c8-410d-a04f-e0b64045eff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\polimi_nc7_avio">
+      <UniqueIdentifier>{d702d7ee-5618-40f9-a838-905080a415e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sandiego_avio">
+      <UniqueIdentifier>{1f1f0b7e-ce24-4614-8f9a-3d13159aec65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\fluent_drm22">
+      <UniqueIdentifier>{ded126d8-e58a-4cb0-ad0f-fb185d315b01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gri30">
+      <UniqueIdentifier>{7e701279-f51a-4844-a01c-42289c48019f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gri12">
+      <UniqueIdentifier>{1b6de60e-d184-454b-b5ad-968e15665a12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\sandiego_avio">
+      <UniqueIdentifier>{45a8e301-9d12-4a85-99e5-f01fca6dba16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\polimi_nc7_avio">
+      <UniqueIdentifier>{891560ba-d9da-4fd8-a843-2898916ae75d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\polimi_h2conox_nothermal_1101">
+      <UniqueIdentifier>{b2c64229-0fbf-418a-9030-ff2ca9535462}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\polimi_h2conox_1101">
+      <UniqueIdentifier>{c3f85316-4ebe-4c1b-a7e3-18b1880d1f20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\polimi_h2conox_nonnh_1101">
+      <UniqueIdentifier>{0e1a61bc-0afc-4162-bff5-7c5d7dd869c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\polimi_h2conox_non2o_1101">
+      <UniqueIdentifier>{b15b7f01-0a24-4820-b96f-3dbd1fa56af9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\polimi_c1c3htnox_1101">
+      <UniqueIdentifier>{624b226d-6cf3-4852-8118-04521e998274}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\polimi_c1c3htnox_avio_0702">
+      <UniqueIdentifier>{ec6f9adf-b2c2-416a-8ff8-bcdcd9db67f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\polimi_c1c3htnox_avio_0702">
+      <UniqueIdentifier>{379627f2-e11d-43ee-8ebb-6c1b028c334f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\fluent_drm22_polimi_nox\OpenSMOKE_SymbolicKinetics_Fluent_DRM22_Polimi_NOX.cpp">
+      <Filter>Source Files\fluent_drm22</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\fluent_drm22_polimi_nox\OpenSMOKE_SymbolicKinetics_Fluent_DRM22_Polimi_NOX_ReactionRates.cpp">
+      <Filter>Source Files\fluent_drm22</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\fluent_drm22_polimi_nox\OpenSMOKE_SymbolicKinetics_Fluent_DRM22_Polimi_NOX_Jacobian.cpp">
+      <Filter>Source Files\fluent_drm22</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\gri30\OpenSMOKE_SymbolicKinetics_GRI30.cpp">
+      <Filter>Source Files\gri30</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\gri30\OpenSMOKE_SymbolicKinetics_GRI30_Jacobian.cpp">
+      <Filter>Source Files\gri30</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\gri30\OpenSMOKE_SymbolicKinetics_GRI30_ReactionRates.cpp">
+      <Filter>Source Files\gri30</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\gri12\OpenSMOKE_SymbolicKinetics_GRI12.cpp">
+      <Filter>Source Files\gri12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\gri12\OpenSMOKE_SymbolicKinetics_GRI12_Jacobian.cpp">
+      <Filter>Source Files\gri12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\gri12\OpenSMOKE_SymbolicKinetics_GRI12_ReactionRates.cpp">
+      <Filter>Source Files\gri12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\sandiego_avio\OpenSMOKE_SymbolicKinetics_SanDiego_AVIO.cpp">
+      <Filter>Source Files\sandiego_avio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\sandiego_avio\OpenSMOKE_SymbolicKinetics_SanDiego_AVIO_Jacobian.cpp">
+      <Filter>Source Files\sandiego_avio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\sandiego_avio\OpenSMOKE_SymbolicKinetics_SanDiego_AVIO_ReactionRates.cpp">
+      <Filter>Source Files\sandiego_avio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_nc7_avio\OpenSMOKE_SymbolicKinetics_Polimi_NC7_AVIO.cpp">
+      <Filter>Source Files\polimi_nc7_avio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_nc7_avio\OpenSMOKE_SymbolicKinetics_Polimi_NC7_AVIO_Jacobian.cpp">
+      <Filter>Source Files\polimi_nc7_avio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_nc7_avio\OpenSMOKE_SymbolicKinetics_Polimi_NC7_AVIO_ReactionRates.cpp">
+      <Filter>Source Files\polimi_nc7_avio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_nothermal_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoThermal_1101.cpp">
+      <Filter>Source Files\polimi_h2conox_nothermal_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_nothermal_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoThermal_1101_Jacobian.cpp">
+      <Filter>Source Files\polimi_h2conox_nothermal_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_nothermal_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoThermal_1101_ReactionRates.cpp">
+      <Filter>Source Files\polimi_h2conox_nothermal_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_nonnh_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoNNH_1101.cpp">
+      <Filter>Source Files\polimi_h2conox_nonnh_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_nonnh_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoNNH_1101_Jacobian.cpp">
+      <Filter>Source Files\polimi_h2conox_nonnh_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_nonnh_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoNNH_1101_ReactionRates.cpp">
+      <Filter>Source Files\polimi_h2conox_nonnh_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_non2o_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoN2O_1101.cpp">
+      <Filter>Source Files\polimi_h2conox_non2o_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_non2o_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoN2O_1101_Jacobian.cpp">
+      <Filter>Source Files\polimi_h2conox_non2o_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_non2o_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoN2O_1101_ReactionRates.cpp">
+      <Filter>Source Files\polimi_h2conox_non2o_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_1101.cpp">
+      <Filter>Source Files\polimi_h2conox_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_1101_Jacobian.cpp">
+      <Filter>Source Files\polimi_h2conox_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_1101_ReactionRates.cpp">
+      <Filter>Source Files\polimi_h2conox_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_c1c3htnox_1101\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_1101.cpp">
+      <Filter>Source Files\polimi_c1c3htnox_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_c1c3htnox_1101\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_1101_Jacobian.cpp">
+      <Filter>Source Files\polimi_c1c3htnox_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_c1c3htnox_1101\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_1101_ReactionRates.cpp">
+      <Filter>Source Files\polimi_c1c3htnox_1101</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\OpenSMOKE_SymbolicKinetics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_c1c3htnox_avio_0702\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_AVIO_0702.cpp">
+      <Filter>Source Files\polimi_c1c3htnox_avio_0702</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_c1c3htnox_avio_0702\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_AVIO_0702_Jacobian.cpp">
+      <Filter>Source Files\polimi_c1c3htnox_avio_0702</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_c1c3htnox_avio_0702\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_AVIO_0702_ReactionRates.cpp">
+      <Filter>Source Files\polimi_c1c3htnox_avio_0702</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\fluent_drm22_polimi_nox\OpenSMOKE_SymbolicKinetics_Fluent_DRM22_Polimi_NOX.h">
+      <Filter>Header Files\fluent_drm22</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\gri30\OpenSMOKE_SymbolicKinetics_GRI30.h">
+      <Filter>Header Files\gri30</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\gri12\OpenSMOKE_SymbolicKinetics_GRI12.h">
+      <Filter>Header Files\gri12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_c1c3htnox_1101\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_1101.h">
+      <Filter>Header Files\polimi_c1c3htnox_1101</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_h2conox_non2o_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoN2O_1101.h">
+      <Filter>Header Files\polimi_h2conox_non2o_1101</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_h2conox_nonnh_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoNNH_1101.h">
+      <Filter>Header Files\polimi_h2conox_nonnh_1101</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_h2conox_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_1101.h">
+      <Filter>Header Files\polimi_h2conox_1101</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_h2conox_nothermal_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoThermal_1101.h">
+      <Filter>Header Files\polimi_h2conox_nothermal_1101</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_nc7_avio\OpenSMOKE_SymbolicKinetics_Polimi_NC7_AVIO.h">
+      <Filter>Header Files\polimi_nc7_avio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\sandiego_avio\OpenSMOKE_SymbolicKinetics_SanDiego_AVIO.h">
+      <Filter>Header Files\sandiego_avio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\OpenSMOKE_SymbolicKinetics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_c1c3htnox_avio_0702\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_AVIO_0702.h">
+      <Filter>Header Files\polimi_c1c3htnox_avio_0702</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

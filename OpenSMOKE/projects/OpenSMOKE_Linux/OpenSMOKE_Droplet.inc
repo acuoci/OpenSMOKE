@@ -1,0 +1,28 @@
+#COMPILER
+PATH_OBJECTS 	= OpenSMOKE_Droplet/$(OBJ_PATH)
+PATH_CPP 	= ../../cpp/droplet
+PATH_HPP 	= ../../hpp/droplet
+
+# OBJECT FILES
+OBJS =  $(PATH_OBJECTS)/OpenSMOKE_DropletMicrogravity.o \
+        $(PATH_OBJECTS)/OpenSMOKE_DropletMicrogravity_DAE_Objects.o \
+        $(PATH_OBJECTS)/OpenSMOKE_DropletMicrogravity_DataManager.o 
+
+# MAIN TARGET
+../../lib/linux/$(OBJ_PATH)/libOpenSMOKE_Droplet_$(STRING_NAME).a : $(OBJS)
+	ar rc ../../lib/linux/$(OBJ_PATH)/libOpenSMOKE_Droplet_$(STRING_NAME).a $(OBJS)
+
+
+# CHEMISTRY
+$(PATH_OBJECTS)/OpenSMOKE_DropletMicrogravity.o : $(PATH_CPP)/OpenSMOKE_DropletMicrogravity.cpp $(PATH_HPP)/OpenSMOKE_DropletMicrogravity.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_DropletMicrogravity.cpp -o $(PATH_OBJECTS)/OpenSMOKE_DropletMicrogravity.o
+
+$(PATH_OBJECTS)/OpenSMOKE_DropletMicrogravity_DAE_Objects.o : $(PATH_CPP)/OpenSMOKE_DropletMicrogravity_DAE_Objects.cpp $(PATH_HPP)/OpenSMOKE_DropletMicrogravity_DAE_Objects.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_DropletMicrogravity_DAE_Objects.cpp -o $(PATH_OBJECTS)/OpenSMOKE_DropletMicrogravity_DAE_Objects.o
+
+$(PATH_OBJECTS)/OpenSMOKE_DropletMicrogravity_DataManager.o : $(PATH_CPP)/OpenSMOKE_DropletMicrogravity_DataManager.cpp $(PATH_HPP)/OpenSMOKE_DropletMicrogravity_DataManager.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_DropletMicrogravity_DataManager.cpp -o $(PATH_OBJECTS)/OpenSMOKE_DropletMicrogravity_DataManager.o
+
+clean:
+	-rm $(PATH_OBJECTS)/*.o ../../lib/linux/$(OBJ_PATH)/libOpenSMOKE_Droplet_$(STRING_NAME).a
+

@@ -1,0 +1,46 @@
+#COMPILER
+PATH_OBJECTS 	= OpenSMOKE_Flame1D/$(OBJ_PATH)
+PATH_CPP 	= ../../cpp/idealreactors/flame1d
+PATH_HPP 	= ../../hpp/idealreactors/flame1d
+
+# OBJECT FILES
+OBJS =  $(PATH_OBJECTS)/OpenSMOKE_Flame1D.o \
+	$(PATH_OBJECTS)/OpenSMOKE_Flame1D_DataManager.o \
+	$(PATH_OBJECTS)/OpenSMOKE_Flame1D_NLS_DAE_ODE_Classes.o \
+	$(PATH_OBJECTS)/OpenSMOKE_Flame1D_OscillatingBoundary.o \
+	$(PATH_OBJECTS)/OpenSMOKE_Flame1D_ScheduleClass.o \
+	$(PATH_OBJECTS)/OpenSMOKE_Flame1D_OpposedFlameManager.o \
+	$(PATH_OBJECTS)/OpenSMOKE_Flame1D_FlameSpeedManager.o 
+
+
+# MAIN TARGET
+../../lib/linux/$(OBJ_PATH)/libOpenSMOKE_Flame1D_$(STRING_NAME).a : $(OBJS)
+	ar rc ../../lib/linux/$(OBJ_PATH)/libOpenSMOKE_Flame1D_$(STRING_NAME).a $(OBJS)
+
+
+# MAKE
+$(PATH_OBJECTS)/OpenSMOKE_Flame1D.o : $(PATH_CPP)/OpenSMOKE_Flame1D.cpp $(PATH_HPP)/OpenSMOKE_Flame1D.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_Flame1D.cpp -o $(PATH_OBJECTS)/OpenSMOKE_Flame1D.o
+
+$(PATH_OBJECTS)/OpenSMOKE_Flame1D_DataManager.o : $(PATH_CPP)/OpenSMOKE_Flame1D_DataManager.cpp $(PATH_HPP)/OpenSMOKE_Flame1D_DataManager.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_Flame1D_DataManager.cpp -o $(PATH_OBJECTS)/OpenSMOKE_Flame1D_DataManager.o
+
+$(PATH_OBJECTS)/OpenSMOKE_Flame1D_NLS_DAE_ODE_Classes.o : $(PATH_CPP)/OpenSMOKE_Flame1D_NLS_DAE_ODE_Classes.cpp $(PATH_HPP)/OpenSMOKE_Flame1D_NLS_DAE_ODE_Classes.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_Flame1D_NLS_DAE_ODE_Classes.cpp -o $(PATH_OBJECTS)/OpenSMOKE_Flame1D_NLS_DAE_ODE_Classes.o
+
+$(PATH_OBJECTS)/OpenSMOKE_Flame1D_OscillatingBoundary.o : $(PATH_CPP)/OpenSMOKE_Flame1D_OscillatingBoundary.cpp $(PATH_HPP)/OpenSMOKE_Flame1D_OscillatingBoundary.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_Flame1D_OscillatingBoundary.cpp -o $(PATH_OBJECTS)/OpenSMOKE_Flame1D_OscillatingBoundary.o
+
+$(PATH_OBJECTS)/OpenSMOKE_Flame1D_ScheduleClass.o : $(PATH_CPP)/OpenSMOKE_Flame1D_ScheduleClass.cpp $(PATH_HPP)/OpenSMOKE_Flame1D_ScheduleClass.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_Flame1D_ScheduleClass.cpp -o $(PATH_OBJECTS)/OpenSMOKE_Flame1D_ScheduleClass.o
+
+$(PATH_OBJECTS)/OpenSMOKE_Flame1D_OpposedFlameManager.o : $(PATH_CPP)/OpenSMOKE_Flame1D_OpposedFlameManager.cpp $(PATH_HPP)/OpenSMOKE_Flame1D_OpposedFlameManager.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_Flame1D_OpposedFlameManager.cpp -o $(PATH_OBJECTS)/OpenSMOKE_Flame1D_OpposedFlameManager.o
+		
+$(PATH_OBJECTS)/OpenSMOKE_Flame1D_FlameSpeedManager.o : $(PATH_CPP)/OpenSMOKE_Flame1D_FlameSpeedManager.cpp $(PATH_HPP)/OpenSMOKE_Flame1D_FlameSpeedManager.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_Flame1D_FlameSpeedManager.cpp -o $(PATH_OBJECTS)/OpenSMOKE_Flame1D_FlameSpeedManager.o
+				
+			 	 
+clean:
+	-rm $(PATH_OBJECTS)/*.o ../../lib/linux/$(OBJ_PATH)/libOpenSMOKE_Flame1D_$(STRING_NAME).a
+

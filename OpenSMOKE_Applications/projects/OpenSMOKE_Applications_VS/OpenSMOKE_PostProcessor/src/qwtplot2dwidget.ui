@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QwtPlot2DWidgetClass</class>
+ <widget class="QWidget" name="QwtPlot2DWidgetClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>475</width>
+    <height>423</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Plot2D</string>
+  </property>
+  <widget class="QPushButton" name="pushButton_autoscale">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>10</y>
+     <width>81</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Autoscale x and y axis</string>
+   </property>
+   <property name="text">
+    <string>Autoscale</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>110</y>
+     <width>431</width>
+     <height>291</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout"/>
+  </widget>
+  <widget class="QPushButton" name="pushButton_zoomin">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>40</y>
+     <width>81</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Zoom in</string>
+   </property>
+   <property name="text">
+    <string>Zoom In</string>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/Resources/images/icon_zoomin.png</normaloff>:/Resources/images/icon_zoomin.png</iconset>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_zoomout">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>70</y>
+     <width>81</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Zoom out</string>
+   </property>
+   <property name="text">
+    <string>Zoom Out</string>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/Resources/images/icon_zoomout.png</normaloff>:/Resources/images/icon_zoomout.png</iconset>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_xLog">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>20</y>
+     <width>70</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>logarithmic scale x axis</string>
+   </property>
+   <property name="text">
+    <string>x Log</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_yLog">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>40</y>
+     <width>70</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>logarithmic scale y axis</string>
+   </property>
+   <property name="text">
+    <string>y Log</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_xNormal">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>20</y>
+     <width>70</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>normalized profiles x axis</string>
+   </property>
+   <property name="text">
+    <string>x Normal</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_yNormal">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>40</y>
+     <width>70</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>normalized profiles y axis</string>
+   </property>
+   <property name="text">
+    <string>y Normal</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_autoscale_2">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>10</y>
+     <width>101</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Change plot colors&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="text">
+    <string>Change colors</string>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/Resources/images/icon_colors.png</normaloff>:/Resources/images/icon_colors.png</iconset>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>pushButton_autoscale</sender>
+   <signal>clicked()</signal>
+   <receiver>QwtPlot2DWidgetClass</receiver>
+   <slot>setAutoscale()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>288</x>
+     <y>17</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>328</x>
+     <y>21</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_zoomin</sender>
+   <signal>clicked()</signal>
+   <receiver>QwtPlot2DWidgetClass</receiver>
+   <slot>setZoomIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>288</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>54</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_zoomout</sender>
+   <signal>clicked()</signal>
+   <receiver>QwtPlot2DWidgetClass</receiver>
+   <slot>setZoomOut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>290</x>
+     <y>83</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>326</x>
+     <y>103</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_xLog</sender>
+   <signal>clicked()</signal>
+   <receiver>QwtPlot2DWidgetClass</receiver>
+   <slot>setLogX()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>58</x>
+     <y>29</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>33</x>
+     <y>89</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_yLog</sender>
+   <signal>clicked()</signal>
+   <receiver>QwtPlot2DWidgetClass</receiver>
+   <slot>setLogY()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>79</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>114</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_xNormal</sender>
+   <signal>clicked()</signal>
+   <receiver>QwtPlot2DWidgetClass</receiver>
+   <slot>setNormalX()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>29</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>231</x>
+     <y>86</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_yNormal</sender>
+   <signal>clicked()</signal>
+   <receiver>QwtPlot2DWidgetClass</receiver>
+   <slot>setNormalY()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>157</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>120</x>
+     <y>65</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_autoscale_2</sender>
+   <signal>clicked()</signal>
+   <receiver>QwtPlot2DWidgetClass</receiver>
+   <slot>setColors()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>424</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>388</x>
+     <y>59</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>setAutoscale()</slot>
+  <slot>setZoomIn()</slot>
+  <slot>setZoomOut()</slot>
+  <slot>setLogX()</slot>
+  <slot>setLogY()</slot>
+  <slot>setNormalX()</slot>
+  <slot>setNormalY()</slot>
+  <slot>setColors()</slot>
+ </slots>
+</ui>

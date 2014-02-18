@@ -1,0 +1,23 @@
+#INCLUDE FILES
+include ../../make_intel.inc
+include ../../make.inc
+
+PATH_OBJECTS 	= OpenSMOKE_MixManager/intel
+PATH_CPP 	= ../../cpp/mixmanager
+PATH_HPP 	= ../../hpp/mixmanager
+
+# OBJECT FILES
+OBJS =  $(PATH_OBJECTS)/OpenSMOKE_MixManager.o
+
+# MAIN TARGET
+../../lib/linux/intel/libOpenSMOKE_MixManager_INTEL.a : $(OBJS)
+	ar rc ../../lib/linux/intel/libOpenSMOKE_MixManager_INTEL.a $(OBJS)
+
+
+# CHEMISTRY
+$(PATH_OBJECTS)/OpenSMOKE_MixManager.o : $(PATH_CPP)/OpenSMOKE_MixManager.cpp $(PATH_HPP)/OpenSMOKE_MixManager.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_MixManager.cpp -o $(PATH_OBJECTS)/OpenSMOKE_MixManager.o
+			 	 
+clean:
+	-rm $(PATH_OBJECTS)/*.o ../../lib/linux/intel/libOpenSMOKE_MixManager_INTEL.a
+

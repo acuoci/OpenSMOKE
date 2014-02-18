@@ -1,0 +1,23 @@
+#INCLUDE FILES
+include ../../make_intel.inc
+include ../../make.inc
+ 
+PATH_OBJECTS 	= OpenSMOKE_BatchReactor/intel
+PATH_CPP 	= ../../cpp/idealreactors/batch
+PATH_HPP 	= ../../hpp/idealreactors/batch
+
+# OBJECT FILES
+OBJS =  $(PATH_OBJECTS)/OpenSMOKE_Batch.o
+
+# MAIN TARGET
+../../lib/linux/intel/libOpenSMOKE_BatchReactor_INTEL.a : $(OBJS)
+	ar rc ../../lib/linux/intel/libOpenSMOKE_BatchReactor_INTEL.a $(OBJS)
+
+
+# CHEMISTRY
+$(PATH_OBJECTS)/OpenSMOKE_Batch.o : $(PATH_CPP)/OpenSMOKE_Batch.cpp $(PATH_HPP)/OpenSMOKE_Batch.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_Batch.cpp -o $(PATH_OBJECTS)/OpenSMOKE_Batch.o
+			 	 
+clean:
+	-rm $(PATH_OBJECTS)/*.o ../../lib/linux/intel/libOpenSMOKE_BatchReactor_INTEL.a
+

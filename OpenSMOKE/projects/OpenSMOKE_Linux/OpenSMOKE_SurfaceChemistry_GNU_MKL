@@ -1,0 +1,6 @@
+#INCLUDE FILES
+
+include ../../make_gnu.inc
+include ../../make_mkl.inc
+
+include OpenSMOKE_SurfaceChemistry.inc

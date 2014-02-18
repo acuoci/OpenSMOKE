@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\kpp">
+      <UniqueIdentifier>{7b271afe-89aa-4333-81fc-a85e963c5382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\linearsolvers">
+      <UniqueIdentifier>{6211645e-f4c5-4cdb-b8c9-375b4c1977e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\linearsolvers">
+      <UniqueIdentifier>{1369d417-c290-40ca-bfa3-5646db78bd3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\kpp">
+      <UniqueIdentifier>{795f36b0-31ff-40a7-ab74-44cd3b34df86}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\linear_solvers\OpenSMOKE_DirectLinearSolver_Unsymmetric.cpp">
+      <Filter>Source Files\linearsolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\linear_solvers\OpenSMOKE_LAPACK_Dense.cpp">
+      <Filter>Source Files\linearsolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\linear_solvers\OpenSMOKE_LIS_Unsymmetric.cpp">
+      <Filter>Source Files\linearsolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\linear_solvers\OpenSMOKE_MUMPS_Unsymmetric.cpp">
+      <Filter>Source Files\linearsolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\linear_solvers\OpenSMOKE_PARDISO_Unsymmetric.cpp">
+      <Filter>Source Files\linearsolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_BlockMatrixNetwork.cpp">
+      <Filter>Source Files\kpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_ConvectiveNetworkStatistics.cpp">
+      <Filter>Source Files\kpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_DataManager.cpp">
+      <Filter>Source Files\kpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_Dictionary.cpp">
+      <Filter>Source Files\kpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_NewtonMethod_Manager.cpp">
+      <Filter>Source Files\kpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_ODE_Manager.cpp">
+      <Filter>Source Files\kpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_ReactorNetwork.cpp">
+      <Filter>Source Files\kpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_ReactorNetwork_Residuals.cpp">
+      <Filter>Source Files\kpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_SingleReactor.cpp">
+      <Filter>Source Files\kpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_SingleReactor_KineticsManager.cpp">
+      <Filter>Source Files\kpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_SingleReactorStatistics.cpp">
+      <Filter>Source Files\kpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\OpenSMOKE_KPP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\OpenSMOKE_KPP_Definitions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\linear_solvers\OpenSMOKE_PARDISO_Unsymmetric.h">
+      <Filter>Header Files\linearsolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\linear_solvers\OpenSMOKE_MUMPS_Unsymmetric.h">
+      <Filter>Header Files\linearsolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\linear_solvers\OpenSMOKE_LIS_Unsymmetric.h">
+      <Filter>Header Files\linearsolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\linear_solvers\OpenSMOKE_LAPACK_Dense.h">
+      <Filter>Header Files\linearsolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\linear_solvers\OpenSMOKE_DirectLinearSolver_Unsymmetric.h">
+      <Filter>Header Files\linearsolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_BlockMatrixNetwork.h">
+      <Filter>Header Files\kpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_ConvectiveNetworkStatistics.h">
+      <Filter>Header Files\kpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_DataManager.h">
+      <Filter>Header Files\kpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_Dictionary.h">
+      <Filter>Header Files\kpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_NewtonMethod_Manager.h">
+      <Filter>Header Files\kpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_ODE_Manager.h">
+      <Filter>Header Files\kpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_ReactorNetwork.h">
+      <Filter>Header Files\kpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_ReactorNetwork_Residuals.h">
+      <Filter>Header Files\kpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_SingleReactor.h">
+      <Filter>Header Files\kpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_SingleReactor_KineticsManager.h">
+      <Filter>Header Files\kpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_SingleReactorStatistics.h">
+      <Filter>Header Files\kpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\OpenSMOKE_KPP_Definitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

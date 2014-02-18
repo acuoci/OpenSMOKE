@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>qsensitivityClass</class>
+ <widget class="QWidget" name="qsensitivityClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>450</width>
+    <height>336</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>OpenSMOKE - Sensitivity Analysis</string>
+  </property>
+  <widget class="QPushButton" name="pushButton_open">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Open file</string>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/Resources/images/icon_open.png</normaloff>:/Resources/images/icon_open.png</iconset>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textEdit_status">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>20</y>
+     <width>281</width>
+     <height>291</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_chart2d">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>80</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Chart</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_ropa">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>120</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>RoPA</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_sensitivity">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>160</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sensitivity
+Frequency Factor</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_about">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>260</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>About...</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_sensitivity_diffusivity">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>200</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sensitivity
+Diffusivity</string>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>pushButton_open</sender>
+   <signal>clicked()</signal>
+   <receiver>qsensitivityClass</receiver>
+   <slot>openFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>81</x>
+     <y>45</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>203</x>
+     <y>132</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_chart2d</sender>
+   <signal>clicked()</signal>
+   <receiver>qsensitivityClass</receiver>
+   <slot>openChart()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>81</x>
+     <y>97</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>208</x>
+     <y>100</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_ropa</sender>
+   <signal>clicked()</signal>
+   <receiver>qsensitivityClass</receiver>
+   <slot>openROPA()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>80</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>203</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_sensitivity</sender>
+   <signal>clicked()</signal>
+   <receiver>qsensitivityClass</receiver>
+   <slot>openSensitivity()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>77</x>
+     <y>173</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>195</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_about</sender>
+   <signal>clicked()</signal>
+   <receiver>qsensitivityClass</receiver>
+   <slot>openAbout()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>85</x>
+     <y>289</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>119</x>
+     <y>314</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_sensitivity_diffusivity</sender>
+   <signal>clicked()</signal>
+   <receiver>qsensitivityClass</receiver>
+   <slot>openSensitivityDiffusivity()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>57</x>
+     <y>228</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>153</x>
+     <y>10</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>openFile()</slot>
+  <slot>openChart()</slot>
+  <slot>openROPA()</slot>
+  <slot>openSensitivity()</slot>
+  <slot>openAbout()</slot>
+  <slot>openSensitivityDiffusivity()</slot>
+ </slots>
+</ui>

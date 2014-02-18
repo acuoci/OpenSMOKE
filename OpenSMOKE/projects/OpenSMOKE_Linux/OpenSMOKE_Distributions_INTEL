@@ -1,0 +1,48 @@
+#INCLUDE FILES
+include ../../make_intel.inc
+include ../../make.inc
+
+PATH_OBJECTS 	= OpenSMOKE_Distributions/intel
+PATH_CPP 	= ../../cpp/distributions
+PATH_HPP 	= ../../hpp/distributions
+
+# OBJECT FILES
+OBJS =  $(PATH_OBJECTS)/OpenSMOKE_BetaDistribution.o \
+        $(PATH_OBJECTS)/OpenSMOKE_ClippedGaussianAccurateDistribution.o \
+        $(PATH_OBJECTS)/OpenSMOKE_ClippedGaussianDistribution.o \
+        $(PATH_OBJECTS)/OpenSMOKE_DoubleDeltaDiracDistribution.o \
+        $(PATH_OBJECTS)/OpenSMOKE_GammaFunction.o \
+        $(PATH_OBJECTS)/OpenSMOKE_SinDistribution.o \
+        $(PATH_OBJECTS)/OpenSMOKE_SinIntegralDistribution.o
+
+# MAIN TARGET
+../../lib/linux/intel/libOpenSMOKE_Distributions_INTEL.a : $(OBJS)
+	ar rc ../../lib/linux/intel/libOpenSMOKE_Distributions_INTEL.a $(OBJS)
+
+
+# CHEMISTRY
+$(PATH_OBJECTS)/OpenSMOKE_BetaDistribution.o : $(PATH_CPP)/OpenSMOKE_BetaDistribution.cpp $(PATH_HPP)/OpenSMOKE_BetaDistribution.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_BetaDistribution.cpp -o $(PATH_OBJECTS)/OpenSMOKE_BetaDistribution.o
+
+$(PATH_OBJECTS)/OpenSMOKE_ClippedGaussianAccurateDistribution.o : $(PATH_CPP)/OpenSMOKE_ClippedGaussianAccurateDistribution.cpp $(PATH_HPP)/OpenSMOKE_ClippedGaussianAccurateDistribution.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_ClippedGaussianAccurateDistribution.cpp -o $(PATH_OBJECTS)/OpenSMOKE_ClippedGaussianAccurateDistribution.o
+
+$(PATH_OBJECTS)/OpenSMOKE_ClippedGaussianDistribution.o : $(PATH_CPP)/OpenSMOKE_ClippedGaussianDistribution.cpp $(PATH_HPP)/OpenSMOKE_ClippedGaussianDistribution.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_ClippedGaussianDistribution.cpp -o $(PATH_OBJECTS)/OpenSMOKE_ClippedGaussianDistribution.o
+
+$(PATH_OBJECTS)/OpenSMOKE_DoubleDeltaDiracDistribution.o : $(PATH_CPP)/OpenSMOKE_DoubleDeltaDiracDistribution.cpp $(PATH_HPP)/OpenSMOKE_DoubleDeltaDiracDistribution.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_DoubleDeltaDiracDistribution.cpp -o $(PATH_OBJECTS)/OpenSMOKE_DoubleDeltaDiracDistribution.o
+
+$(PATH_OBJECTS)/OpenSMOKE_GammaFunction.o : $(PATH_CPP)/OpenSMOKE_GammaFunction.cpp $(PATH_HPP)/OpenSMOKE_GammaFunction.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_GammaFunction.cpp -o $(PATH_OBJECTS)/OpenSMOKE_GammaFunction.o
+
+$(PATH_OBJECTS)/OpenSMOKE_SinDistribution.o : $(PATH_CPP)/OpenSMOKE_SinDistribution.cpp $(PATH_HPP)/OpenSMOKE_SinDistribution.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_SinDistribution.cpp -o $(PATH_OBJECTS)/OpenSMOKE_SinDistribution.o
+
+$(PATH_OBJECTS)/OpenSMOKE_SinIntegralDistribution.o : $(PATH_CPP)/OpenSMOKE_SinIntegralDistribution.cpp $(PATH_HPP)/OpenSMOKE_SinIntegralDistribution.h
+		 	 $(CCP) $(PATH_CPP)/OpenSMOKE_SinIntegralDistribution.cpp -o $(PATH_OBJECTS)/OpenSMOKE_SinIntegralDistribution.o
+
+
+clean:
+	-rm $(PATH_OBJECTS)/*.o ../../lib/linux/intel/libOpenSMOKE_Distributions_INTEL.a
+

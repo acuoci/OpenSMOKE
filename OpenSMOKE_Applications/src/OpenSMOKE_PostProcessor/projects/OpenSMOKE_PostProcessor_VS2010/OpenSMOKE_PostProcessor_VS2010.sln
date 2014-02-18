@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenSMOKE_PostProcessor_VS2010", "OpenSMOKE_PostProcessor_VS2010\OpenSMOKE_PostProcessor_VS2010.vcxproj", "{E190209B-CC12-40FD-A939-87298FFB4488}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E190209B-CC12-40FD-A939-87298FFB4488}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E190209B-CC12-40FD-A939-87298FFB4488}.Debug|Win32.Build.0 = Debug|Win32
+		{E190209B-CC12-40FD-A939-87298FFB4488}.Release|Win32.ActiveCfg = Release|Win32
+		{E190209B-CC12-40FD-A939-87298FFB4488}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

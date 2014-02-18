@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QW_Panel_SensitivityClass</class>
+ <widget class="QWidget" name="QW_Panel_SensitivityClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>589</width>
+    <height>397</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>OpenSMOKE Sensitivity Analysis</string>
+  </property>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>140</y>
+     <width>111</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Normalization</string>
+   </property>
+   <widget class="QRadioButton" name="radioButton_GlobalNormalization">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>30</y>
+      <width>82</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Global</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_LocalNormalization">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>60</y>
+      <width>82</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Local</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_2">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>140</y>
+     <width>171</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Local Analysis</string>
+   </property>
+   <widget class="QLineEdit" name="lineEdit_LocalAnalysis">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>60</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhDigitsOnly</set>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_LocalAnalysis">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>30</y>
+      <width>101</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Local Analysis</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_SensitivityItem_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Coordinate</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>551</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Sensitivity Analisys</string>
+   </property>
+   <widget class="QComboBox" name="comboBox_SensitivityItem_Species">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>60</y>
+      <width>161</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_ComboBox_Additional">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>31</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_SensitivityItem_Additional">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>20</y>
+      <width>161</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_SensitivityItem">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>60</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Species (mass fractions)</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_ComboBox_Species">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>60</y>
+      <width>31</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_SensitivityItem_3">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>20</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Additional variables</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Display">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>20</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Sensitivity Bars</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Plot2D">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>50</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Sensitivity Profiles</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_SingleProfiles">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>80</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Single Profiles</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QTextEdit" name="textEdit_SensitivityList">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>250</y>
+     <width>551</width>
+     <height>141</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton_Display</sender>
+   <signal>clicked()</signal>
+   <receiver>QW_Panel_SensitivityClass</receiver>
+   <slot>display_sensitivityitem()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>410</x>
+     <y>60</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>346</x>
+     <y>127</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_ComboBox_Species</sender>
+   <signal>clicked()</signal>
+   <receiver>QW_Panel_SensitivityClass</receiver>
+   <slot>change_species_sensitivity()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>78</x>
+     <y>70</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>189</x>
+     <y>10</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_ComboBox_Additional</sender>
+   <signal>clicked()</signal>
+   <receiver>QW_Panel_SensitivityClass</receiver>
+   <slot>change_additional_sensitivity()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>76</x>
+     <y>46</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>25</x>
+     <y>98</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_Plot2D</sender>
+   <signal>clicked()</signal>
+   <receiver>QW_Panel_SensitivityClass</receiver>
+   <slot>display_sensitivitychart()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>410</x>
+     <y>90</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>407</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_SingleProfiles</sender>
+   <signal>clicked()</signal>
+   <receiver>QW_Panel_SensitivityClass</receiver>
+   <slot>open_single_profileschart()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>485</x>
+     <y>108</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>504</x>
+     <y>209</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>display_sensitivityitem()</slot>
+  <slot>change_species_sensitivity()</slot>
+  <slot>change_additional_sensitivity()</slot>
+  <slot>display_sensitivitychart()</slot>
+  <slot>open_single_profileschart()</slot>
+ </slots>
+</ui>

@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QW_Panel_ROPAClass</class>
+ <widget class="QWidget" name="QW_Panel_ROPAClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>469</width>
+    <height>501</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Rate of Production Analysis</string>
+  </property>
+  <widget class="QComboBox" name="comboBox_IntegralSpecies">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>20</y>
+     <width>151</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_IntegralSpecies">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>46</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Species</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_UnimportantReactions_2">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>20</y>
+     <width>81</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Display</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textEdit_UnimportantReactions">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>270</y>
+     <width>431</width>
+     <height>191</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier</family>
+    </font>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBox_IntegralSpecies">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>470</y>
+     <width>62</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <double>0.010000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>10.000000000000000</double>
+   </property>
+   <property name="singleStep">
+    <double>0.010000000000000</double>
+   </property>
+   <property name="value">
+    <double>1.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_IntegralSpecies_2">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>240</y>
+     <width>121</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Unimportant reactions</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_IntegralSpecies_3">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>470</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Threshold (%)</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="ropaRadioButton_Global">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>20</y>
+     <width>82</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Global</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="ropaRadioButton_Local">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>50</y>
+     <width>82</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Local</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="ropaRadioButton_Region">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>80</y>
+     <width>82</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Region</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>70</y>
+     <width>46</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>xA</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>70</y>
+     <width>46</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>xB</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBox_xA">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>90</y>
+     <width>81</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="decimals">
+    <number>7</number>
+   </property>
+   <property name="minimum">
+    <double>0.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>10.000000000000000</double>
+   </property>
+   <property name="singleStep">
+    <double>0.010000000000000</double>
+   </property>
+   <property name="value">
+    <double>0.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBox_xB">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>90</y>
+     <width>81</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="decimals">
+    <number>7</number>
+   </property>
+   <property name="minimum">
+    <double>0.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>1.000000000000000</double>
+   </property>
+   <property name="singleStep">
+    <double>0.010000000000000</double>
+   </property>
+   <property name="value">
+    <double>1.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_x_coordinate">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>120</y>
+     <width>171</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_Update">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>110</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="palette">
+    <palette>
+     <active>
+      <colorrole role="Text">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="ButtonText">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>170</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </active>
+     <inactive>
+      <colorrole role="Text">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="ButtonText">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>170</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </inactive>
+     <disabled>
+      <colorrole role="Text">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>120</red>
+         <green>120</green>
+         <blue>120</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="ButtonText">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>120</red>
+         <green>120</green>
+         <blue>120</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </disabled>
+    </palette>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="toolTip">
+    <string extracomment="Remember to press this button when you change your options!"/>
+   </property>
+   <property name="text">
+    <string>Update!</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_ReactionRates">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>190</y>
+     <width>111</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Reaction Rates</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_FormationRates">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>190</y>
+     <width>111</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Formation Rates</string>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton_UnimportantReactions_2</sender>
+   <signal>clicked()</signal>
+   <receiver>QW_Panel_ROPAClass</receiver>
+   <slot>display_integralspecies()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>46</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>364</x>
+     <y>76</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>doubleSpinBox_IntegralSpecies</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>QW_Panel_ROPAClass</receiver>
+   <slot>update_unimportantreactions()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>470</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>383</x>
+     <y>260</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_Update</sender>
+   <signal>clicked()</signal>
+   <receiver>QW_Panel_ROPAClass</receiver>
+   <slot>update_rateofproductionanalysis()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>398</x>
+     <y>120</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>446</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ropaRadioButton_Global</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QW_Panel_ROPAClass</receiver>
+   <slot>update_updatescreen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>394</x>
+     <y>30</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>444</x>
+     <y>49</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ropaRadioButton_Local</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QW_Panel_ROPAClass</receiver>
+   <slot>update_updatescreen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>388</x>
+     <y>60</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>418</x>
+     <y>69</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ropaRadioButton_Region</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QW_Panel_ROPAClass</receiver>
+   <slot>update_updatescreen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>352</x>
+     <y>90</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>94</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>doubleSpinBox_xA</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>QW_Panel_ROPAClass</receiver>
+   <slot>update_updatescreen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>84</x>
+     <y>98</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>38</x>
+     <y>137</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>doubleSpinBox_xB</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>QW_Panel_ROPAClass</receiver>
+   <slot>update_updatescreen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>103</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>246</x>
+     <y>125</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_ReactionRates</sender>
+   <signal>clicked()</signal>
+   <receiver>QW_Panel_ROPAClass</receiver>
+   <slot>openReactionRatesChart()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>137</x>
+     <y>201</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>183</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_FormationRates</sender>
+   <signal>clicked()</signal>
+   <receiver>QW_Panel_ROPAClass</receiver>
+   <slot>openFormationRatesChart()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>324</x>
+     <y>204</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>427</x>
+     <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>display_integralspecies()</slot>
+  <slot>update_unimportantreactions()</slot>
+  <slot>update_rateofproductionanalysis()</slot>
+  <slot>update_updatescreen()</slot>
+  <slot>openReactionRatesChart()</slot>
+  <slot>openFormationRatesChart()</slot>
+ </slots>
+</ui>

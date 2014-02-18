@@ -1,0 +1,6 @@
+#INCLUDE FILES
+
+include ../../make_gnu.inc
+include ../../make.inc
+
+include OpenSMOKE_ICEM.inc

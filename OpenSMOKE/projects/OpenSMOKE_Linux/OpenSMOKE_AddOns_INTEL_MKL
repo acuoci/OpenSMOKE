@@ -1,0 +1,8 @@
+#INCLUDE FILES
+
+include ../../make_intel.inc
+include ../../make_mkl.inc
+
+include OpenSMOKE_AddOns.inc
+
+

@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{16E5AD78-B4F5-45A6-9C8A-AB6365228E1E}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>OpenSMOKE_SymbolicKinetics</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>Intel C++ Compiler XE 13.0</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>Intel C++ Compiler XE 13.0</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>Intel C++ Compiler XE 13.0</PlatformToolset>
+    <InterproceduralOptimization>false</InterproceduralOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>Intel C++ Compiler XE 13.0</PlatformToolset>
+    <InterproceduralOptimization>false</InterproceduralOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\NumericalLibraries\OpenSMOKE\hpp;C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\NumericalLibraries\OpenSMOKE\hpp;C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\NumericalLibraries\OpenSMOKE\hpp;C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\NumericalLibraries\OpenSMOKE\hpp;C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <OutputFile>../../../lib/xe2011/lib$(TargetName)_32bit_debug$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <OutputFile>../../../lib/xe2011/lib$(TargetName)_64bit_debug$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <OutputFile>../../../lib/xe2013/lib$(TargetName)_32bit_release$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <OutputFile>../../../lib/xe2013/lib$(TargetName)_64bit_release$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\fluent_drm22_polimi_nox\OpenSMOKE_SymbolicKinetics_Fluent_DRM22_Polimi_NOX.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\fluent_drm22_polimi_nox\OpenSMOKE_SymbolicKinetics_Fluent_DRM22_Polimi_NOX_Jacobian.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\fluent_drm22_polimi_nox\OpenSMOKE_SymbolicKinetics_Fluent_DRM22_Polimi_NOX_ReactionRates.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\gri12\OpenSMOKE_SymbolicKinetics_GRI12.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\gri12\OpenSMOKE_SymbolicKinetics_GRI12_Jacobian.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\gri12\OpenSMOKE_SymbolicKinetics_GRI12_ReactionRates.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\gri30\OpenSMOKE_SymbolicKinetics_GRI30.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\gri30\OpenSMOKE_SymbolicKinetics_GRI30_Jacobian.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\gri30\OpenSMOKE_SymbolicKinetics_GRI30_ReactionRates.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\OpenSMOKE_SymbolicKinetics.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_c1c3htnox_1101\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_1101.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_c1c3htnox_1101\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_1101_Jacobian.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_c1c3htnox_1101\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_1101_ReactionRates.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_c1c3htnox_avio_0702\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_AVIO_0702.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_c1c3htnox_avio_0702\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_AVIO_0702_Jacobian.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_c1c3htnox_avio_0702\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_AVIO_0702_ReactionRates.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_1101.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_1101_Jacobian.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_1101_ReactionRates.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_non2o_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoN2O_1101.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_non2o_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoN2O_1101_Jacobian.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_non2o_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoN2O_1101_ReactionRates.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_nonnh_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoNNH_1101.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_nonnh_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoNNH_1101_Jacobian.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_nonnh_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoNNH_1101_ReactionRates.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_nothermal_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoThermal_1101.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_nothermal_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoThermal_1101_Jacobian.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_h2conox_nothermal_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoThermal_1101_ReactionRates.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_nc7_avio\OpenSMOKE_SymbolicKinetics_Polimi_NC7_AVIO.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_nc7_avio\OpenSMOKE_SymbolicKinetics_Polimi_NC7_AVIO_Jacobian.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\polimi_nc7_avio\OpenSMOKE_SymbolicKinetics_Polimi_NC7_AVIO_ReactionRates.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\sandiego_avio\OpenSMOKE_SymbolicKinetics_SanDiego_AVIO.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\sandiego_avio\OpenSMOKE_SymbolicKinetics_SanDiego_AVIO_Jacobian.cpp" />
+    <ClCompile Include="..\..\..\cpp\symbolickinetics\sandiego_avio\OpenSMOKE_SymbolicKinetics_SanDiego_AVIO_ReactionRates.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\fluent_drm22_polimi_nox\OpenSMOKE_SymbolicKinetics_Fluent_DRM22_Polimi_NOX.h" />
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\gri12\OpenSMOKE_SymbolicKinetics_GRI12.h" />
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\gri30\OpenSMOKE_SymbolicKinetics_GRI30.h" />
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\OpenSMOKE_SymbolicKinetics.h" />
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_c1c3htnox_1101\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_1101.h" />
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_c1c3htnox_avio_0702\OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_AVIO_0702.h" />
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_h2conox_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_1101.h" />
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_h2conox_non2o_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoN2O_1101.h" />
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_h2conox_nonnh_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoNNH_1101.h" />
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_h2conox_nothermal_1101\OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_NoThermal_1101.h" />
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\polimi_nc7_avio\OpenSMOKE_SymbolicKinetics_Polimi_NC7_AVIO.h" />
+    <ClInclude Include="..\..\..\hpp\symbolickinetics\sandiego_avio\OpenSMOKE_SymbolicKinetics_SanDiego_AVIO.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
