@@ -14,19 +14,18 @@
 
 COMPILER_NAME  	      = gnu
 
-BZZ_PATH 	       =  ../../../../BzzMath6
-OPENSMOKE_PATH         =  ../../../../OpenSMOKE
+BZZ_PATH 	       =  ${HOME}/NumericalLibraries/BzzMath6
+OPENSMOKE_PATH         =  ../../../../../../OpenSMOKE/OpenSMOKE
 
 #Paths 
-NUMERICALRECIPES_PATH  =  ../../../../NumericalRecipes
-MKL_PATH               =  ../../../../../intel/mkl
+NUMERICALRECIPES_PATH  =  ${HOME}/NumericalLibraries/NumericalRecipes
 LIS_PATH               =  ${HOME}/NumericalLibraries/lis-1.2.62/lis-omp-complete
 MUMPS_PATH             =  ${HOME}/NumericalLibraries/MUMPS/MUMPS_4.9.2_SEQ_MKL_PORD
 METIS_PATH             =  ${HOME}/NumericalLibraries/metis-5.0.2
 BLAS_PATH              =  #{HOME}/NumericalLibraries/GotoBLAS2
 
 #Options
-OPTIONS_INTEL   =  -O3 -DUSE_INTEL_MKL=0
+OPTIONS_INTEL   =  -O3 -DUSE_INTEL_MKL=0 -I/usr/include/x86_64-linux-gnu/c++/4.8
 OPTIONS_GNU     =  -O3 -m64 -Wall -fexpensive-optimizations -funroll-loops -DUSE_INTEL_MKL=0	
 
 # ------------------------------------------------------------------------------------------------

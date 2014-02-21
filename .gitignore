@@ -258,5 +258,10 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
+#Personal settings
+##################
+tests/
+OpenSMOKE_Applications/exe/
+OpenSMOKE_Applications/src/*/exe/
 
-tests
+

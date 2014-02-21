@@ -1,3 +1,5 @@
+FILE_NAME    =  OpenSMOKE_LookUpTables
+
 # ------------------------------------------------------------------------------------------------
 # OBJECTS
 # ------------------------------------------------------------------------------------------------
@@ -44,13 +46,13 @@ LINKER    = $(CXX) 	$(CXX_FLAGS) 		$(INCDIRS) 	$(LIBS_PATH)
 # DETAILS
 # ------------------------------------------------------------------------------------------------
 
-default: OpenSMOKE_LookUpTable
+default: OpenSMOKE_LookUpTables
 
 $(OBJ_PATH)/Main.o: 	../../src/Main.cpp 
-					$(CPP) ../../src/Main.cpp  -o $(OBJ_PATH)/Main.o
+			$(CPP) ../../src/Main.cpp  -o $(OBJ_PATH)/Main.o
 
 $(OBJ_PATH)/Utilities.o: 	../../src/Utilities.cpp ../../src/Utilities.h
-					$(CPP) ../../src/Utilities.cpp  -o $(OBJ_PATH)/Utilities.o
+				$(CPP) ../../src/Utilities.cpp  -o $(OBJ_PATH)/Utilities.o
 
 
 $(OBJ_PATH)/OpenSMOKE_LookUp_Table_Flame.o: ../../src/OpenSMOKE_LookUp_Table_Flame.cpp ../../src/OpenSMOKE_LookUp_Table_Flame.h
@@ -71,7 +73,7 @@ $(OBJ_PATH)/flamelet_group.o: ../../src/flamelet_group.cpp ../../src/flamelet_gr
 $(OBJ_PATH)/flamelet.o: ../../src/flamelet.cpp ../../src/flamelet.h
 					$(CPP) ../../src/flamelet.cpp  -o $(OBJ_PATH)/flamelet.o
 
-OpenSMOKE_LookUpTable:  $(OBJS)  
-			$(LINKER) $(OBJS) -o ../../exe/OpenSMOKE_LookUpTable_$(STRING_NAME).sh $(LIBS)
+OpenSMOKE_LookUpTables:  $(OBJS)  
+			$(LINKER) $(OBJS) -o ../../exe/OpenSMOKE_LookUpTables_$(STRING_NAME).sh $(LIBS)
 
 clean: ; @rm $(OBJ_PATH)/*.o ../../exe/$(FILE_NAME)_$(STRING_NAME).sh

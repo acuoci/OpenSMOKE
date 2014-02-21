@@ -11,16 +11,15 @@
 ############################################################################
 
 #Paths 
-MYHOME		       =  /home/chimica2/cuoci
+MYHOME		       =  $(HOME)
 BZZ_PATH 	       =  $(MYHOME)/NumericalLibraries/BzzMath6
-OPENSMOKE_PATH         =  $(MYHOME)/NumericalLibraries/OpenSMOKE
+OPENSMOKE_PATH         =  $(MYHOME)/NumericalLibraries/OpenSMOKE/OpenSMOKE
 NUMERICALRECIPES_PATH  =  $(MYHOME)/NumericalLibraries/NumericalRecipes
-MKL_PATH               =  $(MYHOME)/intel/mkl
 
 #Options
 #OPTIONS_INTEL   =  -O2 -static 
 #OPTIONS_GNU     =  -O2 -static -Wall -fexpensive-optimizations -funroll-loops
-OPTIONS_INTEL    =  -O3 -Wall -m64 -DUSE_INTEL_MKL=1
+OPTIONS_INTEL    =  -O3 -Wall -m64 -DUSE_INTEL_MKL=1 -I/usr/include/x86_64-linux-gnu/c++/4.8
 OPTIONS_GNU      =  -O3 -Wall -m64 -DUSE_INTEL_MKL=1
 
 # ------------------------------------------------------------------------------------------------
