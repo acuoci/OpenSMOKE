@@ -40,8 +40,9 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>Intel C++ Compiler XE 13.0</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>Intel C++ Compiler XE 14.0</PlatformToolset>
+    <InterproceduralOptimization>false</InterproceduralOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -78,7 +79,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;C:\NumericalLibraries\OpenSMOKE\hpp;C:\NumericalLibraries\NumericalRecipes\hpp;C:\NumericalLibraries\OpenSMOKE_Applications\src\OpenSMOKE_KinPP_Splitting\src;C:\Program Files %28x86%29\Intel\Composer XE 2013\mkl\include;C:\NumericalLibraries\MUMPS_4.9.2\MUMPS_4.9.2\include;C:\NumericalLibraries\lis-1.2.53\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;..\..\..\..\OpenSMOKE\hpp;C:\NumericalLibraries\OpenSMOKE_Applications\src\OpenSMOKE_KinPP_Splitting\src;C:\Program Files %28x86%29\Intel\Composer XE 2013\mkl\include;C:\NumericalLibraries\MUMPS_4.9.2\MUMPS_4.9.2\include;C:\NumericalLibraries\lis-1.2.53\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -134,7 +135,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <OpenMP>GenerateParallelCode</OpenMP>
     </ClCompile>
     <Link>
@@ -142,7 +143,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\NumericalLibraries\BzzMath\BzzMath6x\lib;C:\NumericalLibraries\OpenSMOKE\lib\xe2011;C:\Program Files %28x86%29\Intel\ComposerXE-2011\mkl\lib\intel64;C:\NumericalLibraries\NumericalRecipes\lib;C:\NumericalLibraries\Lis\lis-1.2.64\lib;C:\NumericalLibraries\MUMPS\MUMPS_4.10.0\lib\Release\x64;C:\NumericalLibraries\lis-1.2.53\lib;C:\NumericalLibraries\MUMPS_4.9.2\MUMPS_4.9.2\lib\Release\x64;C:\Program Files %28x86%29\Intel\Composer XE 2013\mkl\lib\intel64;C:\NumericalLibraries\metis-4.0.3\metis-4.0.3\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\NumericalLibraries\BzzMath\BzzMath6x\lib;..\..\..\..\OpenSMOKE\lib\xe2013;C:\Program Files %28x86%29\Intel\ComposerXE-2011\mkl\lib\intel64;C:\NumericalLibraries\NumericalRecipes\lib;C:\NumericalLibraries\Lis\lis-1.2.64\lib;C:\NumericalLibraries\MUMPS\MUMPS_4.10.0\lib\Release\x64;C:\NumericalLibraries\lis-1.2.53\lib;C:\NumericalLibraries\MUMPS_4.9.2\MUMPS_4.9.2\lib\Release\x64;C:\Program Files %28x86%29\Intel\Composer XE 2013\mkl\lib\intel64;C:\NumericalLibraries\metis-4.0.3\metis-4.0.3\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libBzzMath6_XE2013_serial_64bit_release_mt.lib;libOpenSMOKE_Flamelet_64bit_release.lib;libOpenSMOKE_AddOns_64bit_release.lib;libOpenSMOKE_Basic_64bit_release.lib;libOpenSMOKE_IdealReactors_64bit_release.lib;libOpenSMOKE_PFR_64bit_release.lib;libOpenSMOKE_QMOM_64bit_release.lib;libOpenSMOKE_Engine_64bit_release.lib;lib_NR_XE2013_64bit_release.lib;libOpenSMOKE_SymbolicKinetics_64bit_release.lib;libOpenSMOKE_Distributions_64bit_release.lib;lisseq_64bit.lib;dmumps_fortran.lib;mkl_core.lib;mkl_intel_lp64.lib;mkl_sequential.lib;libseq_fortran.lib;dmumps_c.lib;pord_c.lib;metis-4.0.3.lib;mumps_common_c.lib;libseq_c.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>

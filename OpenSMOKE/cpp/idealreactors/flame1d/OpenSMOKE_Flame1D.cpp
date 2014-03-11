@@ -7792,7 +7792,7 @@ void OpenSMOKE_Flame1D::give_Premixed_DT()
 	dT[1] = T[1] - data->TC;
 
 	for(i=2;i<=Ni;i++)
-		
+	{
 		dT[i] = - ( + H[i] * diffT[i] + 
 				    - (A_x_lambdae[i]*(T[i+1]-T[i])*grid.udxe[i] - A_x_lambdaw[i]*(T[i]-T[i-1])*grid.udxw[i] ) 
 				      *grid.udxc_over_2[i] / Cp[i]
@@ -7800,6 +7800,8 @@ void OpenSMOKE_Flame1D::give_Premixed_DT()
 				    + G[i]*rho[i]/Cp[i]*sumCpDiffusive[i]*diffTcentral[i]
 				  ) / (rho[i]*G[i]);
 		
+		dT[i]  += Qrad[i]/Cp[i]/rho[i] ;
+	}
 
 	dT[Np] = T[Np] - T[Np-1];
 	}
