@@ -7167,29 +7167,37 @@ void OpenSMOKE_Flame1D::give_Opposed_DT(double t)
 	// Equazioni
 	// --------------------------------------------------------------------------------------
 
-	dT[1] = T[1] - data->TC;
-
-	if (data->iPoolFire == POOL_FIRE_EQUILIBRIUM || data->iPoolFire == POOL_FIRE_LIQUIDPOOL)
+	if (data->iTemperatureProfile==1)
 	{
-		double Pvap = data->pool_fire_liquid_species->Pv(T[1]) * data->correctionFactorVaporPressure;
-		dT[1] = Pvap/data->P_Pascal - X[1][data->jFUEL];
-		data->TC = T[1];
+		dT[1] = T[1] - data->TC;
+		for(i=2;i<=Ni;i++)
+			dT[i] = 0.;
+		dT[Np] = T[Np] - data->TO; 
+	}
+	else
+	{
+		dT[1] = T[1] - data->TC;
+
+		if (data->iPoolFire == POOL_FIRE_EQUILIBRIUM || data->iPoolFire == POOL_FIRE_LIQUIDPOOL)
+		{
+			double Pvap = data->pool_fire_liquid_species->Pv(T[1]) * data->correctionFactorVaporPressure;
+			dT[1] = Pvap/data->P_Pascal - X[1][data->jFUEL];
+			data->TC = T[1];
+		}
+
+		for(i=2;i<=Ni;i++)
+		
+			dT[i] = - ( + 2.*U[i] * diffT[i] + 
+					    - (  lambda[i]*(T[i+1]-T[i])*grid.udxe[i] - lambda[i-1]*(T[i]-T[i-1])*grid.udxw[i] ) 
+					      *grid.udxc_over_2[i] / Cp[i]
+						- QReaction[i] / Cp[i] 
+					    + rho[i]/Cp[i]*sumCpDiffusive[i]*diffTcentral[i] - Qrad[i]/Cp[i]
+					  ) * urho[i] ;
+		
+		dT[Np] = T[Np] - data->TO; 
 	}
 
-	for(i=2;i<=Ni;i++)
-		
-		dT[i] = - ( + 2.*U[i] * diffT[i] + 
-				    - (  lambda[i]*(T[i+1]-T[i])*grid.udxe[i] - lambda[i-1]*(T[i]-T[i-1])*grid.udxw[i] ) 
-				      *grid.udxc_over_2[i] / Cp[i]
-					- QReaction[i] / Cp[i] 
-				    + rho[i]/Cp[i]*sumCpDiffusive[i]*diffTcentral[i] - Qrad[i]/Cp[i]
-				  ) * urho[i] ;
-		
-	dT[Np] = T[Np] - data->TO; 
-
-	// TODO
-	if (data->iTemperatureProfile==1)
-		dT = 0.;
+	
 }
 
 void OpenSMOKE_Flame1D::give_Twin_DT(double t)
