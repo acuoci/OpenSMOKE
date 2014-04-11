@@ -18,6 +18,25 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\flamelet.cpp" />
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\flamelet_group.cpp" />
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\Main.cpp" />
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\OpenSMOKE_LookUp_Table_Executables.cpp" />
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\OpenSMOKE_LookUp_Table_Flame.cpp" />
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\OpenSMOKE_LookUp_Table_Manager.cpp" />
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\sources_in_flamelet_library.cpp" />
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\Utilities.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\flamelet.h" />
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\flamelet_group.h" />
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\OpenSMOKE_LookUp_Table_Executables.h" />
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\OpenSMOKE_LookUp_Table_Flame.h" />
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\OpenSMOKE_LookUp_Table_Manager.h" />
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\sources_in_flamelet_library.h" />
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\Utilities.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{566DEF7A-5ABE-49F5-9DD2-022245F60A30}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -163,25 +182,6 @@
       <AdditionalDependencies>libBzzMath6_XE2013_serial_64bit_release.lib;libOpenSMOKE_Flamelet_64bit_release.lib;libOpenSMOKE_AddOns_64bit_release.lib;libOpenSMOKE_Basic_64bit_release.lib;libOpenSMOKE_IdealReactors_64bit_release.lib;libOpenSMOKE_PFR_64bit_release.lib;libOpenSMOKE_QMOM_64bit_release.lib;libOpenSMOKE_Engine_64bit_release.lib;libOpenSMOKE_SurfaceChemistry_64bit_release.lib;libOpenSMOKE_Flame1D_64bit_release.lib;libOpenSMOKE_Interfaces_64bit_release.lib;libOpenSMOKE_LiquidProperties_64bit_release.lib;libOpenSMOKE_PreProcessor_64bit_release.lib;libOpenSMOKE_CHEMKINPreProcessor_64bit_release.lib;lib_NR_XE2013_64bit_release.lib;libOpenSMOKE_SymbolicKinetics_64bit_release.lib;libOpenSMOKE_Distributions_64bit_release.lib;mkl_core.lib;mkl_intel_lp64.lib;mkl_sequential.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\flamelet.cpp" />
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\flamelet_group.cpp" />
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\Main.cpp" />
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\OpenSMOKE_LookUp_Table_Executables.cpp" />
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\OpenSMOKE_LookUp_Table_Flame.cpp" />
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\OpenSMOKE_LookUp_Table_Manager.cpp" />
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\sources_in_flamelet_library.cpp" />
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\Utilities.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\flamelet.h" />
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\flamelet_group.h" />
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\OpenSMOKE_LookUp_Table_Executables.h" />
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\OpenSMOKE_LookUp_Table_Flame.h" />
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\OpenSMOKE_LookUp_Table_Manager.h" />
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\sources_in_flamelet_library.h" />
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\Utilities.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

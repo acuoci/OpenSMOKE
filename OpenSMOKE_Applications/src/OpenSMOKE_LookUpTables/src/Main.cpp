@@ -55,6 +55,7 @@ CSimpleOpt::SOption parser_options[] =
 	{ OPT_ARG,  _T("-fluent-lut-correlated-non-adiabatic-exe"),		SO_NONE    }, // "-fluent-lut-correlated-non-adiabatic-exe"
 
 	{ OPT_ARG,  _T("--kinetics"),									SO_REQ_SEP },	// "--kinetics   ARG"
+	{ OPT_ARG,  _T("--kinetics-ascii"),  SO_REQ_SEP }, // "-kinetics-ascii ARG"
 	{ OPT_ARG,  _T("--input"),										SO_REQ_SEP },	// "--input		ARG"
 	{ OPT_ARG,  _T("-verbose-formation-rates"),					SO_NONE },	// "--input		ARG"
     SO_END_OF_OPTIONS																// END
@@ -80,14 +81,25 @@ int main(int argc, char* argv[])
 		string kineticsFolder;
 		string inputFile;
 
-		if (parser.parse("--kinetics", argument))	kineticsFolder = argument.c_str();
-		else										ErrorMessage("The --kinetics option is compulsory");
+		if (parser.parse("--kinetics", argument))				kineticsFolder = argument.c_str();
+		else if (parser.parse("--kinetics-ascii", argument))		kineticsFolder = argument.c_str();
+		else													ErrorMessage("The --kinetics || --kinetics-ascii option is compulsory");
 
 		if (parser.parse("--input", argument))		inputFile = argument.c_str();
 		else										ErrorMessage("The --input option is compulsory");
 
 		OpenSMOKE_ReactingGas mix;
-		mix.SetupBinary(kineticsFolder);
+
+		if (parser.parse("--kinetics", argument))
+		{
+			mix.SetupBinary(kineticsFolder);
+		}
+		else if (parser.parse("--kinetics-ascii", argument))
+		{
+			mix.SetASCII();
+			mix.SetupBinary(kineticsFolder);
+		}
+		else ErrorMessage("The kinetic mechanism must be specified: --kinetics NAMEFOLDER || --kinetics-ascii NAMEFOLDER");
 		
 		OpenSMOKE_LookUp_Table_Manager manager;
 
@@ -151,6 +163,7 @@ void ParserClass::ShowUsage()
     cout << "Options: "                                                                          << endl;
     cout << "   -?                              this help"                                                << endl;
     cout << "   --kinetics FOLDER               folder (kinetic scheme)"                                  << endl;
+	cout << "   --kinetics-ascii FOLDER         folder (kinetic scheme)"                                  << endl;
     cout << "   --input FILENAME                input file name"                                          << endl;
 	cout << "   -help                           this help"                                                << endl;
 	cout << "   -build-library                  build pdf library"                                        << endl;

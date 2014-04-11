@@ -48,6 +48,7 @@ CSimpleOpt::SOption parser_options[] =
     { OPT_ARG,  _T("--input"),           SO_REQ_SEP }, // "--input    ARG"
     { OPT_ARG,  _T("--output"),          SO_REQ_SEP }, // "--output   ARG"
     { OPT_ARG,  _T("--kinetics"),        SO_REQ_SEP }, // "--kinetic  ARG"
+	{ OPT_ARG,  _T("--kinetics-ascii"),  SO_REQ_SEP }, // "-kinetics-ascii ARG"
     { OPT_ARG,  _T("--global"),          SO_REQ_SEP }, // "--global   ARG"
     { OPT_ARG,  _T("--schedule"),        SO_REQ_SEP }, // "--schedule ARG"
 
@@ -85,8 +86,15 @@ int main(int argc, char* argv[])
 
     // 1. Detailed kinetic scheme setup
     if (parser.parse("--kinetics", argument))
+	{
 		mix.SetupBinary(argument);
-    else ErrorMessage("The kinetics must be specified: --kinetics FOLDERNAME");
+	}
+    else if (parser.parse("--kinetics-ascii", argument))
+	{
+		mix.SetASCII();
+		mix.SetupBinary(argument);
+	}
+    else ErrorMessage("The kinetic mechanism must be specified: --kinetics NAMEFOLDER || --kinetics-ascii NAMEFOLDER");
 
 	// 2. Global kinetic scheme setup
     global.assign_mix(&mix);
@@ -167,6 +175,7 @@ void ParserClass::ShowUsage()
 	cout << "   --global FILENAME     global kinetics file name"										<< endl;
     cout << "   --input FILENAME      input file for setting up"										<< endl;
     cout << "   --kinetics FOLDER     detailed kinetic scheme folder"									<< endl;
+	cout << "   --kinetics-ascii FOLDER     detailed kinetic scheme folder"									<< endl;
     cout << "   --output FOLDER	      output folder for setting up (default 'Output')"					<< endl;
     cout << "   --schedule FILENAME   input file for operations (default 'Input/Operations.inp')"		<< endl;
 	cout << endl;
