@@ -28,21 +28,21 @@ class OpenSMOKE_Flame1D_ScheduleClass
 public:
 
 	OpenSMOKE_Flame1D_ScheduleClass();
-	void SetName(const string name);
+	void SetName(const std::string name);
 
 	int nOperations;
 	BzzVectorInt iOperation;
 	BzzVector iOptionA;
 	BzzVector iOptionB;
-	string *species;
+	std::string *species;
 
-	void readOperations(const string fileName);
+	void readOperations(const std::string fileName);
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif // !defined(SCHEDULECLASS)

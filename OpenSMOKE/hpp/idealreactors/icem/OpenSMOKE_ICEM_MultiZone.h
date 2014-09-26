@@ -95,9 +95,9 @@ public:	// Virtual functions (compulsory)
 	void VideoFinalResult();
 	void VideoGeneralInfo();
 	void VideoSummary();
-	void DefineFromFile(const string inputFile);
+	void DefineFromFile(const std::string inputFile);
 	void Solve();
-	void AssignEnd(const string units, const double value);
+	void AssignEnd(const std::string units, const double value);
 	void EnergyAnalysis(OpenSMOKE_GasStream &outletStream);
 	void EquationSystemPrint(BzzVector &y, double eta);
 	void ODEPrint(BzzVector &y, double t);
@@ -134,21 +134,21 @@ private: // Virtual functions (compulsory)
 public: // Specific functions 
 	
 	void AssignEngineModel(const icem_multizone_models value);
-	void AssignClearanceVolume(const string units, const double value);
-	void AssignTotalDisplacement(const string units, const double value);
-	void AssignRotationRate(const string units, const double value);
+	void AssignClearanceVolume(const std::string units, const double value);
+	void AssignTotalDisplacement(const std::string units, const double value);
+	void AssignRotationRate(const std::string units, const double value);
 	void AssignCompressionRatio(const double value);
 	void AssignArmRatio(const double value);
 	void AssignExhaustRatio(const double value);
-	void AssignStartAngle(const string units, const double value);
-	void AssignEndAngle(const string units, const double value);
-	void AssignDiameter(const string units, const double value);
+	void AssignStartAngle(const std::string units, const double value);
+	void AssignEndAngle(const std::string units, const double value);
+	void AssignDiameter(const std::string units, const double value);
 	void AssignNumberOfZones(const int value);
-	void AssignCrevicesVolume(const string units, const double value);
+	void AssignCrevicesVolume(const std::string units, const double value);
 	void AssignNumberOfCycles(const int value);
 	
-	void SetConstantExchangeArea(const double value, const string units);
-	void SetUserDefinedExchangeArea(const string fileName);
+	void SetConstantExchangeArea(const double value, const std::string units);
+	void SetUserDefinedExchangeArea(const std::string fileName);
 	void UnsetUserDefinedExchangeArea();
 	void SetExchangeAreaModel(const icem_exchange_area_models value);
 	void SetRelaxation(const int value);
@@ -385,10 +385,10 @@ private:
 	void SetDifferentialEquations(BzzVectorInt &fDifferential);
 	void SetRelativeTolerances(BzzVector &fRelTol);
 	void SetMonteCarloMixing();
-	void SetMicromixingTime(const double value, const string units);
+	void SetMicromixingTime(const double value, const std::string units);
 	void SetMicromixingConstant(const double value);
-	void SetPlugFlowTime(const string units, const double value);
-	void SetPlugFlowInletTemperature(const string units, const double value);
+	void SetPlugFlowTime(const std::string units, const double value);
+	void SetPlugFlowInletTemperature(const std::string units, const double value);
 	void ResetSpecies(BzzMatrix &species);
 	void SetResetSpecies(const vector<string> names);
 
@@ -498,7 +498,7 @@ private:
 private:
 	
 	void SaveOnBinaryFile(BzzSave &fOutput);
-	void SaveOnBinaryFile(const string filename);
+	void SaveOnBinaryFile(const std::string filename);
 	void UpdateReactionRates(const double TT, const double PP, BzzVector &xx, BzzVector &rr);
 
 	BzzDaeObject		dae_single;

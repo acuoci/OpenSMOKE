@@ -23,7 +23,7 @@
 #include "basic/OpenSMOKE_WarningFile.h"
 #include "preprocessing_chemkin/OpenSMOKE_CHEMKINInterpreter_SpeciesData.h"
 
-void OpenSMOKE_CHEMKINInterpreter_SpeciesData::ErrorMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_SpeciesData::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_ElementsData"	<< endl;
@@ -34,7 +34,7 @@ void OpenSMOKE_CHEMKINInterpreter_SpeciesData::ErrorMessage(const string message
     exit(-1);
 }
 
-void OpenSMOKE_CHEMKINInterpreter_SpeciesData::WarningMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_SpeciesData::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_ElementsData"	<< endl;
@@ -56,7 +56,7 @@ OpenSMOKE_CHEMKINInterpreter_SpeciesData::OpenSMOKE_CHEMKINInterpreter_SpeciesDa
 	species_in_list.push_back("actual list");
 }
 
-bool OpenSMOKE_CHEMKINInterpreter_SpeciesData::Parse_Species_Name(const string species_name)
+bool OpenSMOKE_CHEMKINInterpreter_SpeciesData::Parse_Species_Name(const std::string species_name)
 {
 	for(int j=1;j<=int(species_in_list.size())-1;j++)
 		if (species_name == species_in_list[j])

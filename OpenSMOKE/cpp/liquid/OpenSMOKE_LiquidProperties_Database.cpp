@@ -21,7 +21,7 @@
 #include <sstream>
 #include "liquid/OpenSMOKE_LiquidProperties_Database.h"
 
-void OpenSMOKE_LiquidProperties_Database::ErrorMessage(const string message)
+void OpenSMOKE_LiquidProperties_Database::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidProperties_Database"	<< endl;
@@ -32,7 +32,7 @@ void OpenSMOKE_LiquidProperties_Database::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_LiquidProperties_Database::WarningMessage(const string message)
+void OpenSMOKE_LiquidProperties_Database::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidProperties_Database"	<< endl;
@@ -54,7 +54,7 @@ OpenSMOKE_LiquidProperties_Database::OpenSMOKE_LiquidProperties_Database()
 	dictionary_thermal_conductivity	= new OpenSMOKE_LiquidThermalConductivity_Dictionary();
 }
 
-void OpenSMOKE_LiquidProperties_Database::ReadFromFolder(const string folder_name)
+void OpenSMOKE_LiquidProperties_Database::ReadFromFolder(const std::string folder_name)
 {
 	dictionary_critical_constants->ReadFromFile(folder_name + "/CriticalConstants.liq");
 	dictionary_density->ReadFromFile(folder_name + "/Density.liq");
@@ -120,7 +120,7 @@ void OpenSMOKE_LiquidProperties_Database::CheckConsistency()
 	}
 }
 
-void OpenSMOKE_LiquidProperties_Database::SaveOnFile(const string file_name)
+void OpenSMOKE_LiquidProperties_Database::SaveOnFile(const std::string file_name)
 {
 	BzzSave fOutput('*', file_name);
 	dictionary_critical_constants->SaveToFile(fOutput);
@@ -132,7 +132,7 @@ void OpenSMOKE_LiquidProperties_Database::SaveOnFile(const string file_name)
 	fOutput.End();
 }
 
-void OpenSMOKE_LiquidProperties_Database::LoadFromFile(const string file_name)
+void OpenSMOKE_LiquidProperties_Database::LoadFromFile(const std::string file_name)
 {
 	BzzVectorInt equation_int;
 	char dummy[Constants::NAME_SIZE];
@@ -140,7 +140,7 @@ void OpenSMOKE_LiquidProperties_Database::LoadFromFile(const string file_name)
 	BzzLoad fInput('*', file_name);
 
 	fInput.fileLoad.read((char*) dummy, sizeof(dummy));
-	if (strcmp(dummy, "CONSTANTS"))	WarningMessage("Expected: CONSTANTS - Found: " + string(dummy));
+	if (strcmp(dummy, "CONSTANTS"))	WarningMessage("Expected: CONSTANTS - Found: " + std::string(dummy));
 
 	// Number of species
 	fInput >> N;
@@ -185,7 +185,7 @@ void OpenSMOKE_LiquidProperties_Database::LoadFromFile(const string file_name)
 	fInput >> omega;
 
 	fInput.fileLoad.read((char*) dummy, sizeof(dummy));
-	if (strcmp(dummy, "DENSITY"))	WarningMessage("Expected: DENSITY - Found: " + string(dummy));
+	if (strcmp(dummy, "DENSITY"))	WarningMessage("Expected: DENSITY - Found: " + std::string(dummy));
 	fInput >> Rho_C1;
 	fInput >> Rho_C2;
 	fInput >> Rho_C3;
@@ -201,7 +201,7 @@ void OpenSMOKE_LiquidProperties_Database::LoadFromFile(const string file_name)
 	}
 
 	fInput.fileLoad.read((char*) dummy, sizeof(dummy));
-	if (strcmp(dummy, "VAPORPRESSURE"))	WarningMessage("Expected: VAPORPRESSURE - Found: " + string(dummy));
+	if (strcmp(dummy, "VAPORPRESSURE"))	WarningMessage("Expected: VAPORPRESSURE - Found: " + std::string(dummy));
 	fInput >> Pv_C1;
 	fInput >> Pv_C2;
 	fInput >> Pv_C3;
@@ -214,7 +214,7 @@ void OpenSMOKE_LiquidProperties_Database::LoadFromFile(const string file_name)
 	     if (equation_int[i] == 1)	Pv_equation[i] = liquid_vaporpressure_equation::EQ1;
 
 	fInput.fileLoad.read((char*) dummy, sizeof(dummy));
-	if (strcmp(dummy, "VAPORIZATIONHEAT"))	WarningMessage("Expected: VAPORIZATIONHEAT - Found: " + string(dummy));
+	if (strcmp(dummy, "VAPORIZATIONHEAT"))	WarningMessage("Expected: VAPORIZATIONHEAT - Found: " + std::string(dummy));
 	fInput >> Hv_C1;
 	fInput >> Hv_C2;
 	fInput >> Hv_C3;
@@ -226,7 +226,7 @@ void OpenSMOKE_LiquidProperties_Database::LoadFromFile(const string file_name)
 	     if (equation_int[i] == 1)	Hv_equation[i] = liquid_vaporizationheat_equation::EQ1;
 
 	fInput.fileLoad.read((char*) dummy, sizeof(dummy));
-	if (strcmp(dummy, "SPECIFICHEAT"))	WarningMessage("Expected: SPECIFICHEAT - Found: " + string(dummy));
+	if (strcmp(dummy, "SPECIFICHEAT"))	WarningMessage("Expected: SPECIFICHEAT - Found: " + std::string(dummy));
 	fInput >> Cp_C1;
 	fInput >> Cp_C2;
 	fInput >> Cp_C3;
@@ -242,7 +242,7 @@ void OpenSMOKE_LiquidProperties_Database::LoadFromFile(const string file_name)
 	}
 
 	fInput.fileLoad.read((char*) dummy, sizeof(dummy));
-	if (strcmp(dummy, "THERMALCOND"))	WarningMessage("Expected: THERMALCOND - Found: " + string(dummy));
+	if (strcmp(dummy, "THERMALCOND"))	WarningMessage("Expected: THERMALCOND - Found: " + std::string(dummy));
 	fInput >> Lambda_C1;
 	fInput >> Lambda_C2;
 	fInput >> Lambda_C3;
@@ -262,7 +262,7 @@ void OpenSMOKE_LiquidProperties_Database::LoadFromFile(const string file_name)
 	fInput.End();
 }
 
-int OpenSMOKE_LiquidProperties_Database::RecognizeSpecies(const string name)
+int OpenSMOKE_LiquidProperties_Database::RecognizeSpecies(const std::string name)
 {
 	for(int i=1;i<=N;i++)
 		if (name == name_first[i] || name == name_second[i])

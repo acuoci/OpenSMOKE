@@ -43,7 +43,7 @@ public:
 	OpenSMOKE_CHEMKINInterpreter_ReactionData *reaction;
 	OpenSMOKE_CHEMKINInterpreter_ReactionData *reaction_reverserate;
 	void Setup(ofstream *_fLog, OpenSMOKE_WarningFile *fWarning);
-	int  RecognizeSpecies(const string name_species);
+	int  RecognizeSpecies(const std::string name_species);
 	void CheckDuplicateReactions();
 	void CheckReactionRatesReactions();
 
@@ -51,10 +51,10 @@ public:
 	bool CheckDuplicateReactionsGivenOrder(const int i, const int j);
 	bool CheckDuplicateReactionsInverseOrder(const int i, const int j);
 
-	void PrintNamesFile(const string file_name);
-	void PrintStoichiometryFile(const string file_name);
-	void PrintReactionsFile(const string file_name);
-	void PrintBinaryFile(const string file_name, OpenSMOKE_CHEMKINInterpreter_ThermoData &thermo, OpenSMOKE_CHEMKINInterpreter_TransportData &transport, OpenSMOKE_CHEMKINInterpreter &interp);
+	void PrintNamesFile(const std::string file_name);
+	void PrintStoichiometryFile(const std::string file_name);
+	void PrintReactionsFile(const std::string file_name);
+	void PrintBinaryFile(const std::string file_name, OpenSMOKE_CHEMKINInterpreter_ThermoData &thermo, OpenSMOKE_CHEMKINInterpreter_TransportData &transport, OpenSMOKE_CHEMKINInterpreter &interp);
 
 	void SummaryOnFile(ofstream &fOutput);
 	void Statistics();
@@ -164,9 +164,9 @@ private:
 
 private:
 	
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
-	string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
+	std::string name_object;
 };
 
 #endif // !defined(OPENSMOKE_CHEMKININTERPRETER_KINETICSDATA_H)

@@ -34,8 +34,8 @@ public:
 
 private:
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
 private:
 

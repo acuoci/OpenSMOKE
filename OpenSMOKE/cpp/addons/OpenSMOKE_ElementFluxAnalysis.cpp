@@ -27,7 +27,7 @@
 #include "addons/OpenSMOKE_ElementFluxAnalysis.h"
 
 
-void OpenSMOKE_ElementFluxAnalysis::ErrorMessage(const string message)
+void OpenSMOKE_ElementFluxAnalysis::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_ElementFluxAnalysis"	<< endl;
@@ -38,7 +38,7 @@ void OpenSMOKE_ElementFluxAnalysis::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_ElementFluxAnalysis::WarningMessage(const string message)
+void OpenSMOKE_ElementFluxAnalysis::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_ElementFluxAnalysis"	<< endl;
@@ -249,7 +249,7 @@ void OpenSMOKE_ElementFluxAnalysis::PrintOnFile(const int e, BzzMatrix &A, ofstr
 }
 
 
-void OpenSMOKE_ElementFluxAnalysis::Run(const string file_name, BzzVector &qForward, BzzVector &qBackward)
+void OpenSMOKE_ElementFluxAnalysis::Run(const std::string file_name, BzzVector &qForward, BzzVector &qBackward)
 {
 	for (int e=1;e<=list_of_element_indices.Size();e++)
 	{
@@ -257,7 +257,7 @@ void OpenSMOKE_ElementFluxAnalysis::Run(const string file_name, BzzVector &qForw
 		
 		Calculate(e, Alocal, qForward, qBackward);
 
-		string name;
+		std::string name;
 		name = file_name + "_" + mix->list_of_elements[list_of_element_indices[e]-1] + ".ced";
 			
 		ofstream fFluxAnalysis;
@@ -269,7 +269,7 @@ void OpenSMOKE_ElementFluxAnalysis::Run(const string file_name, BzzVector &qForw
 	}
 }
 
-void OpenSMOKE_ElementFluxAnalysis::RunGlobal(const string file_name, BzzVector &x, const double &xA, const double &xB, BzzMatrix &qForward, BzzMatrix &qBackward)
+void OpenSMOKE_ElementFluxAnalysis::RunGlobal(const std::string file_name, BzzVector &x, const double &xA, const double &xB, BzzMatrix &qForward, BzzMatrix &qBackward)
 {
 	int jA=0;
 	int jB=0;
@@ -315,7 +315,7 @@ void OpenSMOKE_ElementFluxAnalysis::RunGlobal(const string file_name, BzzVector 
 	Run(file_name, qForwardTotal, qBackwardTotal);
 }
 
-void OpenSMOKE_ElementFluxAnalysisManager::ErrorMessage(const string message)
+void OpenSMOKE_ElementFluxAnalysisManager::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_ElementFluxAnalysis"	<< endl;
@@ -326,7 +326,7 @@ void OpenSMOKE_ElementFluxAnalysisManager::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_ElementFluxAnalysisManager::WarningMessage(const string message)
+void OpenSMOKE_ElementFluxAnalysisManager::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_ElementFluxAnalysisManager"	<< endl;

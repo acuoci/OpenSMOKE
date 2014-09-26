@@ -25,7 +25,7 @@
 
 const int OpenSMOKE_GlobalKinetics::MAXREACTIONS = 30;
 
-void OpenSMOKE_GlobalKinetics::ErrorMessage(string message)
+void OpenSMOKE_GlobalKinetics::ErrorMessage(std::string message)
 {
     cout << "FATAL ERROR: OpenSMOKE_GlobalKinetics" << endl;
     cout << message << endl;
@@ -98,7 +98,7 @@ void OpenSMOKE_GlobalKinetics::change_set()
 		ErrorMessage("Rotation tolerances not available...");
 }
 
-void OpenSMOKE_GlobalKinetics::read_from_file(string fileName)
+void OpenSMOKE_GlobalKinetics::read_from_file(std::string fileName)
 {
 	ifstream fInput;
 	int iReaction;
@@ -132,7 +132,7 @@ void OpenSMOKE_GlobalKinetics::read_from_file(string fileName)
 		checkInputFile(label, "Tatt");
 		Tatt.Append(double_number);
 
-		string dummy;
+		std::string dummy;
 		fInput >> label >> dummy;
 		checkInputFile(label, "Equilibrium");
 		if		(dummy == "Y")	iEquilibrium.Append(1);
@@ -402,7 +402,7 @@ void OpenSMOKE_GlobalKinetics::IsLambdaAKineticParameter(const int index_reactio
 	}
 }
 
-void OpenSMOKE_GlobalKinetics::SensitivityCoefficients(const string fileName, BzzVector &grid, BzzVector &T, BzzMatrix &C)
+void OpenSMOKE_GlobalKinetics::SensitivityCoefficients(const std::string fileName, BzzVector &grid, BzzVector &T, BzzMatrix &C)
 {
 	int i, j, k;
 

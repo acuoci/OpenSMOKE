@@ -42,7 +42,7 @@ public:
 	OpenSMOKE_EquilibriumStanjan();
 
 	void Reset();
-	void SetName(string name);
+	void SetName(std::string name);
 	void SetVerbose();
 	void UnsetVerbose();
 	void Setup(OpenSMOKE_IdealGas *ideal_gas);
@@ -63,7 +63,7 @@ private:
 	int NER;
 	int NCR;
 	
-	string name_object;
+	std::string name_object;
 	bool assignedElementalComposition;
 
 	OpenSMOKE_IdealGas *gas;
@@ -126,9 +126,9 @@ private:
 	void GetLambdaFirstGuessFromLinearProgramming(double &NtotFirstGuess, BzzVector &xFirstGuessR, BzzVector &lambdaFirstGuessR);
 	void GetLambdaFirstGuessFromLeastSquares(BzzVector &xFirstGuessR, BzzVector &lambdaFirstGuessR);
 
-    void ErrorMessage(const string message);
-    void WarningMessageStrong(const string message);
-    void WarningMessageSoft(const string message);
+    void ErrorMessage(const std::string message);
+    void WarningMessageStrong(const std::string message);
+    void WarningMessageSoft(const std::string message);
 
 	static const double threshold_element;
 

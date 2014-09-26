@@ -34,16 +34,16 @@ public:
 
     OpenSMOKE_UD_Profile();
 
-    void    AssignFromFile(const string fileName, const string name);
-    void    SetName(const string name);
+    void    AssignFromFile(const std::string fileName, const std::string name);
+    void    SetName(const std::string name);
     void	Check(const double abscissa, const double expected_value);
     double  GiveMeValue(const double t, const double x);
-	void Setup(const string units_x, const string units_y, const double x0, const double x1, const double y0, const double y1);
+	void Setup(const std::string units_x, const std::string units_y, const double x0, const double x1, const double y0, const double y1);
 
 
 public:
 
-	string				name_object;
+	std::string				name_object;
     bool				timeSupport;
 	bool				iLinear;
     LinearInterpolation interpolation;
@@ -55,10 +55,10 @@ public:
 	BzzVector		x;
     BzzVector		y;
 
-	bool CheckForComment(const string read_word);
-	bool CheckForKeyWord(const string read_word);
+	bool CheckForComment(const std::string read_word);
+	bool CheckForKeyWord(const std::string read_word);
 
-    void ErrorMessage(const string message);
+    void ErrorMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_UD_PROFILE_H

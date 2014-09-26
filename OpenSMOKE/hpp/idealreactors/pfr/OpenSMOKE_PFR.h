@@ -59,10 +59,10 @@ public: // Virtual functions (compulsory)
 	void VideoFinalResult();
 	void VideoGeneralInfo();
 	void VideoSummary();
-	void DefineFromFile(const string inputFile);
+	void DefineFromFile(const std::string inputFile);
 	void Solve();
 	void ReSolve();
-	void AssignEnd(const string units, const double value);
+	void AssignEnd(const std::string units, const double value);
 	void EnergyAnalysis(OpenSMOKE_GasStream &outletStream);
 	void ODEPrint(BzzVector &y, double eta);
 	void SummaryOnFile();
@@ -82,25 +82,25 @@ private: // Virtual functions (compulsory)
 	void UpdateTwoEquationModel(BzzVector &y, BzzVector &dy);
 	void UpdateReactionRates(const double TT, const double PP, BzzVector &xx, BzzVector &rr);
 
-	void SaveOnBinaryFile(const string filename);
+	void SaveOnBinaryFile(const std::string filename);
 	void SaveOnBinaryFile(BzzSave &fOutput);
 
 public:	// Specific Functions
 	
-	void AssignDiameter(const string cm_or_m, const double value);
-	void AssignArea(const string units, const double value);
+	void AssignDiameter(const std::string cm_or_m, const double value);
+	void AssignArea(const std::string units, const double value);
 
-	void SetUserDefinedDiameter(const string fileName);
-	void SetUserDefinedArea(const string fileName);
+	void SetUserDefinedDiameter(const std::string fileName);
+	void SetUserDefinedArea(const std::string fileName);
 
 	void SetMomentumEquation();
 	void UnsetMomentumEquation();
 
-	void SetInitialTime(const string units, const double value);
-	void SetInitialLenght(const string units, const double value);
+	void SetInitialTime(const std::string units, const double value);
+	void SetInitialLenght(const std::string units, const double value);
 
-	void SetConstantSpecificExchangeArea(const double value, const string units);
-	void SetUserDefinedSpecificExchangeArea(const string fileName);
+	void SetConstantSpecificExchangeArea(const double value, const std::string units);
+	void SetUserDefinedSpecificExchangeArea(const std::string fileName);
 	void UnsetUserDefinedSpecificExchangeArea();
 
 	void SetTimeIndependent() { iTimeIndipendent = true; }
@@ -170,7 +170,7 @@ private: // Momentum equation data
 	BzzVector S_right;
 
 	ode_solver_type iODE_Solver;
-	void	SetODESolver(const string value);
+	void	SetODESolver(const std::string value);
 
 private:
 

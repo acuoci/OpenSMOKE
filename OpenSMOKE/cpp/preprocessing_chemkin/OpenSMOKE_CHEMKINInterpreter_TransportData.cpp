@@ -24,7 +24,7 @@
 #include "preprocessing_chemkin/OpenSMOKE_CHEMKINInterpreter_TransportSpecies.h"
 #include <iomanip>
 
-void OpenSMOKE_CHEMKINInterpreter_TransportData::ErrorMessage(const int iLine, const string message)
+void OpenSMOKE_CHEMKINInterpreter_TransportData::ErrorMessage(const int iLine, const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_TransportData"	<< endl;
@@ -36,7 +36,7 @@ void OpenSMOKE_CHEMKINInterpreter_TransportData::ErrorMessage(const int iLine, c
     exit(-1);
 }
 
-void OpenSMOKE_CHEMKINInterpreter_TransportData::ErrorMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_TransportData::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_TransportData"	<< endl;
@@ -47,7 +47,7 @@ void OpenSMOKE_CHEMKINInterpreter_TransportData::ErrorMessage(const string messa
     exit(-1);
 }
 
-void OpenSMOKE_CHEMKINInterpreter_TransportData::WarningMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_TransportData::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_ThermoData"	<< endl;
@@ -73,7 +73,7 @@ bool OpenSMOKE_CHEMKINInterpreter_TransportData::IsActivated()
 }
 
 
-void OpenSMOKE_CHEMKINInterpreter_TransportData::ReadTransportData(const string file_name, ofstream *_fLog)
+void OpenSMOKE_CHEMKINInterpreter_TransportData::ReadTransportData(const std::string file_name, ofstream *_fLog)
 {
 	const int SIZE = 2000;
 	char comment[SIZE];

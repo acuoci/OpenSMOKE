@@ -36,14 +36,14 @@ friend  class OpenSMOKE_Kinetics;
 public:
 
 	OpenSMOKE_SensitivityAnalysis_Fast_Flame1D();
-	void SetName(const string name);
+	void SetName(const std::string name);
 	void Initialize(const int kind_of_flame, OpenSMOKE_ReactingGas *_mix, BzzVectorInt &_indices, const int _N, const kindOfSensitivityParameter _kindOfParameter);
 	void BuildJAlfaMatrix(	BzzVector &T, BzzVector &rho, BzzVector &Cp, 
 							vector<string> list_of_names, const double P_Pascal, BzzMatrix &X);
 	
 	void VideoSummary();
 
-	void PrintOnFile(const string nameFolderAdditionalData, BzzVector &x, BzzVector &T, BzzVector &H, BzzMatrix &omega, 
+	void PrintOnFile(const std::string nameFolderAdditionalData, BzzVector &x, BzzVector &T, BzzVector &H, BzzMatrix &omega, 
 					 BzzVector &U, BzzVector &G, BzzVector &rho, BzzVector &MWtot,
 					 vector<string> list_of_names);
 
@@ -54,10 +54,10 @@ public:
 	
 private:
 
-	string name_object;
-	string reacting_system;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	std::string reacting_system;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 	void BuildNuMatrix(OpenSMOKE_Kinetics *kinetics);
 
 	kindOfSensitivityParameter kindOfParameter;

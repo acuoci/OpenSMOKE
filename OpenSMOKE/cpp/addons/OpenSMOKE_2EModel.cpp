@@ -24,7 +24,7 @@
 #include "basic/OpenSMOKE_Constants.h"
 #include "addons/OpenSMOKE_2EModel.h"
 
-void OpenSMOKE_2EModel::setupFromFile(string fileName)
+void OpenSMOKE_2EModel::setupFromFile(std::string fileName)
 {
 	const int SIZE = 200;
 	char comments[SIZE];
@@ -580,11 +580,11 @@ void OpenSMOKE_2EModel::GnuPlotInterface(ofstream &fOutput, int count)
 	PrintTagOnGnuplotLabel(20, fOutput, "H[kmol/m3s]",	count);
 }
 
-void OpenSMOKE_2EModel::MessageError(string message)
+void OpenSMOKE_2EModel::MessageError(std::string message)
 {
-	cout << "Class: OpenSMOKE_2EModel"		<< endl;
-	cout << "Error: " << message			<< endl;
-	cout << "Press enter to continue... "	<< endl;
+	std::cout << "Class: OpenSMOKE_2EModel"		<< std::endl;
+	std::cout << "Error: " << message.c_str()	<< std::endl;
+	std::cout << "Press enter to continue... "	<< std::endl;
 	getchar();
 	exit(-1);
 }

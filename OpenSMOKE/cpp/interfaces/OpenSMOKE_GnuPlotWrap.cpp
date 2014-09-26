@@ -154,7 +154,7 @@ void Gnuplot::set_terminal_std(const std::string &type)
 
 //----------------------------------------------------------------------------------
 //
-// A string tokenizer taken from http://www.sunsite.ualberta.ca/Documentation/
+// A std::string tokenizer taken from http://www.sunsite.ualberta.ca/Documentation/
 // /Gnu/libstdc++-2.90.8/html/21_strings/stringtok_std_h.txt
 //
 template <typename Container>
@@ -1420,7 +1420,7 @@ Gnuplot& Gnuplot::cmd(const std::string &cmdstr)
 
 
     // int fputs ( const char * str, FILE * stream );
-    // writes the string str to the stream.
+    // writes the std::string str to the stream.
     // The function begins copying from the address specified (str) until it reaches the
     // terminating null character ('\0'). This final null-character is not copied to the stream.
     fputs( (cmdstr+"\n").c_str(), this->gnucmd );
@@ -1472,7 +1472,7 @@ Gnuplot& Gnuplot::operator<<(const std::string &cmdstr)
 void Gnuplot::init()
 {
     // char * getenv ( const char * name );  get value of an environment variable
-    // Retrieves a C string containing the value of the environment variable whose name is specified as argument.
+    // Retrieves a C std::string containing the value of the environment variable whose name is specified as argument.
     // If the requested variable is not part of the environment list, the function returns a NULL pointer.
 #if ( defined(unix) || defined(__unix) || defined(__unix__) ) && !defined(__APPLE__)
     if (getenv("DISPLAY") == NULL)
@@ -1497,7 +1497,7 @@ void Gnuplot::init()
     std::string tmp = Gnuplot::m_sGNUPlotPath + "/" + Gnuplot::m_sGNUPlotFileName;
 
     // FILE *popen(const char *command, const char *mode);
-    // The popen() function shall execute the command specified by the string command,
+    // The popen() function shall execute the command specified by the std::string command,
     // create a pipe between the calling program and the executed command, and
     // return a pointer to a stream that can be used to either read from or write to the pipe.
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__TOS_WIN__)
@@ -1550,7 +1550,7 @@ bool Gnuplot::get_program_path()
     // second look in PATH for Gnuplot
     //
     char *path;
-    // Retrieves a C string containing the value of the environment variable PATH
+    // Retrieves a C std::string containing the value of the environment variable PATH
     path = getenv("PATH");
 
 
@@ -1561,9 +1561,9 @@ bool Gnuplot::get_program_path()
     }
     else
     {
-        std::list<std::string> ls;
+        std::list<string> ls;
 
-        //split path (one long string) into list ls of strings
+        //split path (one long std::string) into list ls of strings
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__TOS_WIN__)
         stringtok(ls,path,";");
 #elif defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
@@ -1571,7 +1571,7 @@ bool Gnuplot::get_program_path()
 #endif
 
         // scan list for Gnuplot program files
-        for (std::list<std::string>::const_iterator i = ls.begin(); i != ls.end(); ++i)
+        for (std::list<string>::const_iterator i = ls.begin(); i != ls.end(); ++i)
         {
             tmp = (*i) + "/" + Gnuplot::m_sGNUPlotFileName;
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__TOS_WIN__)
@@ -1660,10 +1660,10 @@ std::string Gnuplot::create_tmpfile(std::ofstream &tmp)
     }
 
     // int mkstemp(char *name);
-    // shall replace the contents of the string pointed to by "name" by a unique filename,
+    // shall replace the contents of the std::string pointed to by "name" by a unique filename,
     // and return a file descriptor for the file open for reading and writing.
     // Otherwise, -1 shall be returned if no suitable file could be created.
-    // The string in template should look like a filename with six trailing 'X' s;
+    // The std::string in template should look like a filename with six trailing 'X' s;
     // mkstemp() replaces each 'X' with a character from the portable filename character set.
     // The characters are chosen such that the resulting name does not duplicate the name of an existing file at the time of a call to mkstemp()
 

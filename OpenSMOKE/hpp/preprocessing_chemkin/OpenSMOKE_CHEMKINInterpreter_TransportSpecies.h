@@ -32,7 +32,7 @@ public:
 
 	int index_line;
 	
-	string	name;
+	std::string	name;
 	int		shape_factor;
 	double	epsylon_over_kb;
 	double	sigma;
@@ -40,14 +40,14 @@ public:
 	double	alfa;
 	double	zRot298;
 
-	void ReadMainData(const string line, const int iLine);
+	void ReadMainData(const std::string line, const int iLine);
 	void Analyze();
 
 private:
 	
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
-	string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
+	std::string name_object;
 };
 
 #endif // !defined(OPENSMOKE_CHEMKININTERPRETER_TRANSPORTSPECIES_H)

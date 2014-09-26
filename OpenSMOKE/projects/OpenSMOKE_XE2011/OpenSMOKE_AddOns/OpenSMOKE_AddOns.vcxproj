@@ -75,10 +75,10 @@
     <IncludePath>C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;C:\NumericalLibraries\OpenSMOKE\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;..\..\..\hpp;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\..\hpp;C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\..\..\hpp;C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\..\hpp;C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -149,6 +149,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/DBZZMATH_USE_MKL=1 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

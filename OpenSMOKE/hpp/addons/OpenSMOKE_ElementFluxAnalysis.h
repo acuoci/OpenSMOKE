@@ -44,9 +44,9 @@ private:
 
 	OpenSMOKE_ReactingGas	*mix;
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 	
 	void BuildNuMatrix(OpenSMOKE_Kinetics *kinetics);
 	
@@ -70,8 +70,8 @@ private:
 
 public:
 
-	void Run(const string file_name, BzzVector &qForward, BzzVector &qBackward);
-	void RunGlobal(const string file_name, BzzVector &x, const double &xA, const double &xB, BzzMatrix &qForward, BzzMatrix &qBackward);
+	void Run(const std::string file_name, BzzVector &qForward, BzzVector &qBackward);
+	void RunGlobal(const std::string file_name, BzzVector &x, const double &xA, const double &xB, BzzMatrix &qForward, BzzMatrix &qBackward);
 
 };
 
@@ -90,9 +90,9 @@ public:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_ELEMENTFLUXANALYSIS

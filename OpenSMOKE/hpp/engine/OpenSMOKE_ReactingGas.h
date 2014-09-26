@@ -30,13 +30,13 @@ class OpenSMOKE_ReactingGas : public OpenSMOKE_IdealGas
 public:
 
 	OpenSMOKE_ReactingGas();
-	void SetName(const string name);
+	void SetName(const std::string name);
 
 	OpenSMOKE_Kinetics kinetics;
 
 	// Main functions
 	int		NumberOfReactions();					// Number of reactions
-	void	SetupBinary(const string pathName);		// Setup of kinetic scheme
+	void	SetupBinary(const std::string pathName);		// Setup of kinetic scheme
 
 	BzzVector	reactionDH;
 	BzzVector	reactionDS;
@@ -52,9 +52,9 @@ public:
 	BzzVector		coeffFallOff;
 
 	// Kinetic scheme Path
-	string path_complete;
-	string folder_path;
-	string name_kinetic_scheme;
+	std::string path_complete;
+	std::string folder_path;
+	std::string name_kinetic_scheme;
 	char **strReaction;
 
 	// Soot mode
@@ -68,7 +68,7 @@ public:
 	double ComputeQReaction(const double T);
 
 	// Matrix of stoichiometric coefficient
-	void GiveMeIndexOfSpeciesInReactions(const string fileName, BzzVectorIntArray &indices);
+	void GiveMeIndexOfSpeciesInReactions(const std::string fileName, BzzVectorIntArray &indices);
 	void GiveMe_Jalfa_A(BzzMatrix &JAlfa, OpenSMOKE_NuManager *nu, const double T, const int indexSpecies, const int indexTemperature, BzzVector &parameters);
 	void GiveMe_Jalfa_Beta(BzzMatrix &JAlfa, OpenSMOKE_NuManager *nu, const double T, const int indexSpecies, const int indexTemperature, BzzVector &parameters);
 	void GiveMe_Jalfa_Eatt(BzzMatrix &JAlfa, OpenSMOKE_NuManager *nu, const double T, const int indexSpecies, const int indexTemperature, BzzVector &parameters);
@@ -109,14 +109,14 @@ public:
 	void VerboseDataKinetics(ofstream &fOutput, ofstream &fOutputInverseKinetics);
 	void VerboseDataKinetics(ofstream &fOutput, const int k, BzzVector &T_Vector, BzzMatrix &kappa_Matrix, BzzMatrix &uKappaEquilibrium_Matrix, BzzMatrix &DH_Matrix, BzzMatrix &DS_Matrix);
 	void VerboseDataSummary(ofstream &fOutput, BzzVector &DH_Tref, BzzVector &DS_Tref);
-	void WriteElementsFile(const string fileName);
+	void WriteElementsFile(const std::string fileName);
 
 	bool IsTransportModeAvailable();
 
 private:
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 

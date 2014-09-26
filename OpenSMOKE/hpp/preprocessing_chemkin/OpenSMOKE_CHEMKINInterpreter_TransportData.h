@@ -32,7 +32,7 @@ public:
 	OpenSMOKE_CHEMKINInterpreter_TransportData();
 	virtual ~OpenSMOKE_CHEMKINInterpreter_TransportData();
 
-	void ReadTransportData(const string file_name, ofstream *_fLog);
+	void ReadTransportData(const std::string file_name, ofstream *_fLog);
 	void CheckForDuplicates();
 	double ReducedDiameter(const int i1, const int i2);
 	bool IsActivated();
@@ -67,10 +67,10 @@ public:
 
 private:
 	
-	void ErrorMessage(const string message);
-	void ErrorMessage(const int iLine, const string message);
-	void WarningMessage(const string message);
-	string name_object;
+	void ErrorMessage(const std::string message);
+	void ErrorMessage(const int iLine, const std::string message);
+	void WarningMessage(const std::string message);
+	std::string name_object;
 };
 
 #endif // !defined(OPENSMOKE_CHEMKININTERPRETER_TRANSPORTDATA_H)

@@ -96,8 +96,8 @@ public:
 	BzzVectorInt iTAR;
 	BzzVectorInt negativeSigns;
 
-	void readStoichiometricFile(const string fileSt);
-	void readStoichiometricFile_2(const string fileSt);
+	void readStoichiometricFile(const std::string fileSt);
+	void readStoichiometricFile_2(const std::string fileSt);
 
 public:
 
@@ -106,15 +106,15 @@ public:
 	// Private variables
 	int		NC;
 	int		NR;
-	string	name_object;
+	std::string	name_object;
 
 	// Lettura delle informazioni dello schema cinetico da file
-	void readFromFile(const string fileSt, const string fileKin);
-	void SparsityStructures(const string fileSt);
+	void readFromFile(const std::string fileSt, const std::string fileKin);
+	void SparsityStructures(const std::string fileSt);
 	void CheckingStoichiometry();
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
 private:
 

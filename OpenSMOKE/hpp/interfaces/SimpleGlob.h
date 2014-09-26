@@ -100,7 +100,7 @@
         to a directory
 
     @param SG_GLOB_NOSORT
-        By default, files are returned in sorted into string order. With this
+        By default, files are returned in sorted into std::string order. With this
         flag, no sorting is done. This is not compatible with 
         SG_GLOB_FULLSORT.
 
@@ -154,7 +154,7 @@ enum SG_Error {
 // don't include this in documentation as it isn't relevant
 #ifndef DOXYGEN
 
-// on Windows we want to use MBCS aware string functions and mimic the
+// on Windows we want to use MBCS aware std::string functions and mimic the
 // Unix glob functionality. On Unix we just use glob.
 #ifdef _WIN32
 # include <mbstring.h>
@@ -185,7 +185,7 @@ enum SG_Error {
 #endif
 
 #include <stdlib.h>
-#include <string.h>
+#include <string>
 #include <wchar.h>
 
 // use assertions to test the input data
@@ -517,8 +517,8 @@ public:
 
 private:
     /*! @brief The argv array has it's members stored as either an offset into
-        the string buffer, or as pointers to their string in the buffer. The 
-        offsets are used because if the string buffer is dynamically resized, 
+        the std::string buffer, or as pointers to their std::string in the buffer. The 
+        offsets are used because if the std::string buffer is dynamically resized, 
         all pointers into that buffer would become invalid.
      */
     enum ARG_ARRAY_TYPE { OFFSETS, POINTERS };
@@ -532,7 +532,7 @@ private:
     /*! @brief Grow the argv array to the required size. */
     bool GrowArgvArray(int a_nNewLen);
 
-    /*! @brief Grow the string buffer to the required size. */
+    /*! @brief Grow the std::string buffer to the required size. */
     bool GrowStringBuffer(size_t a_uiMinSize);
 
     /*! @brief Compare two (possible NULL) strings */
@@ -545,7 +545,7 @@ private:
     int                 m_nReservedSlots;   //!< # client slots in argv array
     int                 m_nArgsSize;        //!< allocated size of array
     int                 m_nArgsLen;         //!< used length
-    SOCHAR *            m_pBuffer;          //!< argv string buffer
+    SOCHAR *            m_pBuffer;          //!< argv std::string buffer
     size_t              m_uiBufferSize;     //!< allocated size of buffer
     size_t              m_uiBufferLen;      //!< used length of buffer
     SOCHAR              m_szPathPrefix[MAX_PATH]; //!< wildcard path prefix
@@ -638,7 +638,7 @@ CSimpleGlobTempl<SOCHAR>::Add(
 
 #ifdef _WIN32
     // Windows doesn't return the directory with the filename, so we need to 
-    // extract the path from the search string ourselves and prefix it to the 
+    // extract the path from the search std::string ourselves and prefix it to the 
     // filename we get back.
     const SOCHAR * pszFilename = 
         SimpleGlobUtil::strrchr(a_pszFileSpec, SG_PATH_CHAR);
@@ -733,7 +733,7 @@ CSimpleGlobTempl<SOCHAR>::AppendName(
         return SG_ERR_MEMORY;
     }
 
-    // ensure that we have enough room in the string buffer (+1 for null)
+    // ensure that we have enough room in the std::string buffer (+1 for null)
     size_t uiPrefixLen = SimpleGlobUtil::strlen(m_szPathPrefix);
     size_t uiLen = uiPrefixLen + SimpleGlobUtil::strlen(a_pszFileName) + 1; 
     if (a_bIsDir && (m_uiFlags & SG_GLOB_MARK) == SG_GLOB_MARK) {

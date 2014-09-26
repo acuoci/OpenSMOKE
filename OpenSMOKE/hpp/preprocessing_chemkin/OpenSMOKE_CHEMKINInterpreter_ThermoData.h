@@ -33,9 +33,9 @@ public:
 	OpenSMOKE_CHEMKINInterpreter_ThermoData();
 	virtual ~OpenSMOKE_CHEMKINInterpreter_ThermoData();
 
-	void ReadThermoData(const string file_name, ofstream *_fLog);
+	void ReadThermoData(const std::string file_name, ofstream *_fLog);
 	BzzVectorInt GiveMeSpeciesIndices(vector<string> &list);
-	void PrintThermoFile(const string file_name, BzzVectorInt &indices);
+	void PrintThermoFile(const std::string file_name, BzzVectorInt &indices);
 	void GiveMeMolecularWeights(BzzVectorInt &indices, OpenSMOKE_CHEMKINInterpreter_ElementsData &elements);
 	void SummaryOnFile(ofstream &fOutput, BzzVectorInt &indices, OpenSMOKE_CHEMKINInterpreter_ElementsData &elements);
 	void SummaryOnFile(ofstream &fOutput, BzzVectorInt &site_indices, BzzVectorInt &bulk_indices, OpenSMOKE_CHEMKINInterpreter_ElementsData &elements);
@@ -45,7 +45,7 @@ public:
 	void ProcessElementData(BzzVectorInt &indices, OpenSMOKE_CHEMKINInterpreter_ElementsData &elements);
 	void ProcessElementData(BzzVectorInt &site_indices, BzzVectorInt &bulk_indices, OpenSMOKE_CHEMKINInterpreter_ElementsData &elements);
 
-	double ReducedMolecularWeight(const string name1, const string name2);
+	double ReducedMolecularWeight(const std::string name1, const std::string name2);
 
 	void WriteSurfaceThermodynamicData(BzzSave &binaryFile, BzzSave &asciiFile, BzzVectorInt &site_indices, BzzVectorInt &bulk_indices);
 	void WriteSurfaceElementsData(BzzSave &binaryFile, BzzSave &asciiFile);
@@ -114,9 +114,9 @@ public:
 
 private:
 	
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
-	string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
+	std::string name_object;
 };
 
 #endif // !defined(OPENSMOKE_CHEMKININTERPRETER_THERMODATA_H)

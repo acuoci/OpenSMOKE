@@ -37,14 +37,14 @@ public:
 	vector<string> energy_units_original;
 	vector<string> frequency_factor_units_original;
 
-	string current_energy;
-	string current_frequency_factor;
+	std::string current_energy;
+	std::string current_frequency_factor;
 
 	bool iCurrentEnergy;
 	bool iCurrentFrequencyFactor;
 
-	void Parse_Units(const string units_string);
-	void GiveMeConversionFactor(const string units_string, double &conversion, bool &iEnergy);
+	void Parse_Units(const std::string units_string);
+	void GiveMeConversionFactor(const std::string units_string, double &conversion, bool &iEnergy);
 	void Setup(ofstream *_fLog);
 	void Setup(ofstream *_fLog, OpenSMOKE_WarningFile *_fWarning);
 	void Summary();
@@ -54,9 +54,9 @@ public:
 
 private:
 	
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
-	string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
+	std::string name_object;
 };
 
 #endif // !defined(OPENSMOKE_CHEMKININTERPRETER_UNITSDATA_H)

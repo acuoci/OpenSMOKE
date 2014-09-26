@@ -33,7 +33,7 @@ class OpenSMOKE_SurfaceKinetics
 public:
 
 	OpenSMOKE_SurfaceKinetics();
-	void Setup(OpenSMOKE_ReactingSurface *surface, const string name_);
+	void Setup(OpenSMOKE_ReactingSurface *surface, const std::string name_);
 	void ReadFromBinaryFile(BzzLoad &binaryFile);
 	void ReactionRates(	const double T, const double lnT, const BzzVector &cGas, BzzVector &cSurface, BzzVector &zSurface, BzzVector &aBulk,
 				BzzVector &RGas, BzzVector &RSurface, BzzVector &RBulk, double &QReaction);
@@ -57,10 +57,10 @@ private:
 
 private:
 
-	string name_object;
+	std::string name_object;
     void coupleDirectAndInverseReactions();
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };	
 
 #endif	// OPENSMOKE_SURFACEKINETICS_H

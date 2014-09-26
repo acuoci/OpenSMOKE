@@ -47,7 +47,7 @@ OpenSMOKE_IdealGas::OpenSMOKE_IdealGas()
 	binary_version_			= true;
 }
 
-void OpenSMOKE_IdealGas::ErrorMessage(const string message)
+void OpenSMOKE_IdealGas::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_IdealGas"	<< endl;
@@ -58,7 +58,7 @@ void OpenSMOKE_IdealGas::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_IdealGas::WarningMessage(const string message)
+void OpenSMOKE_IdealGas::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_IdealGas"		<< endl;
@@ -83,12 +83,12 @@ void OpenSMOKE_IdealGas::SetMaximumTemperature(const double tmax)
 		ErrorMessage("Please check your maximum temperature!");
 }
 
-void OpenSMOKE_IdealGas::SetName(const string name)
+void OpenSMOKE_IdealGas::SetName(const std::string name)
 {
 	name_object = name;
 }
 
-void OpenSMOKE_IdealGas::SetAuthorName(const string name)
+void OpenSMOKE_IdealGas::SetAuthorName(const std::string name)
 {
 	name_author = name;
 }
@@ -96,7 +96,7 @@ void OpenSMOKE_IdealGas::SetAuthorName(const string name)
 
 void OpenSMOKE_IdealGas::ReadVersion(BzzLoad &binaryFile)
 {
-	string version;
+	std::string version;
 	
 	cout << "Reading version (1): " << binary_version_ << endl;
 	if (binary_version_ == true)	
@@ -135,7 +135,7 @@ void OpenSMOKE_IdealGas::Setup(BzzLoad &binaryFile)
 	cout << "                 THERMODYNAMICS AND TRANSPORT PROPERTIES                  " << endl;
 	cout << "--------------------------------------------------------------------------" << endl;
 
-	string version;
+	std::string version;
 	cout << "Reading version (2): " << binary_version_ << endl;
 	if (binary_version_ == true)	
 	{
@@ -170,7 +170,7 @@ void OpenSMOKE_IdealGas::Setup(BzzLoad &binaryFile)
 		cout << "Version: " << version << endl;
 
 		// Reading information
-		string dummy;
+		std::string dummy;
 		binaryFile >> dummy;
 		cout << "Name:    "  << dummy << endl;
 		binaryFile >> dummy;
@@ -194,7 +194,7 @@ void OpenSMOKE_IdealGas::Setup(BzzLoad &binaryFile)
 	if (binary_version_ == true)	
 	{
 		char name[Constants::NAME_SIZE];
-		names = new string[NC + 1];
+		names = new std::string[NC + 1];
 		for(k=1;k<=NC;k++)
 		{
 			binaryFile.fileLoad.read((char*) name, sizeof(name));
@@ -203,7 +203,7 @@ void OpenSMOKE_IdealGas::Setup(BzzLoad &binaryFile)
 	}
 	else
 	{
-		names = new string[NC + 1];
+		names = new std::string[NC + 1];
 		for(k=1;k<=NC;k++)
 		{
 			binaryFile >> names[k];
@@ -245,7 +245,7 @@ void OpenSMOKE_IdealGas::Setup(BzzLoad &binaryFile)
 	{
 		for(k=1;k<=elements.Rows();k++)
 		{
-			string name;
+			std::string name;
 			binaryFile >> name;
 			list_of_elements.push_back(name);
 		}
@@ -785,6 +785,53 @@ void OpenSMOKE_IdealGas::SpeciesDiffusivityFromFitting(double T, double P)
 	}
 }
 
+void OpenSMOKE_IdealGas::CorrectSpeciesDiffusivityForSoot()
+{
+	/*
+	unsigned int jBIN1A = 0;
+	double MWBIN1A = 0.;
+
+	for (int j = 1; j <= NC; j++)
+	{
+		if (names[j] == "BIN1A")
+		{
+			jBIN1A = j;
+			MWBIN1A = M[j];
+			break;
+		}
+	}
+
+	if (jBIN1A > 0)
+	{
+		for (int j = 1; j <= NC; j++)
+		{
+			if (names[j].compare(0, 3, "BIN") == 0)
+			{
+				const double MWratio = M[j] / MWBIN1A;
+				const double correctionCoefficient = pow(MWratio, -0.681);
+
+				for (int k = j + 1; k <= NC; k++)
+					Djk[j][k] = Djk[jBIN1A][k] * correctionCoefficient;
+			}
+			else
+			{
+				for (int k = j + 1; k <= NC; k++)
+				{
+					if (names[k].compare(0, 3, "BIN") == 0)
+					{
+						const double MWratio = M[k] / MWBIN1A;
+						const double correctionCoefficient = pow(MWratio, -0.681);
+
+						Djk[j][k] = Djk[j][jBIN1A] * correctionCoefficient;
+					}
+				}
+			}
+		}
+
+	}
+	*/
+}
+
 void OpenSMOKE_IdealGas::SpeciesThermalDiffusionRatiosFromFitting(double T)
 {
 	Tetakj = 0.;
@@ -828,7 +875,7 @@ int OpenSMOKE_IdealGas::recognize_species(char* name)
 		if (names[i] == name)
 			return i;
 	
-	string dummy = name;
+	std::string dummy = name;
 	ErrorMessage("This species is not included in the kinetic scheme: " + dummy);
 	return -1;
 }
@@ -842,7 +889,7 @@ int OpenSMOKE_IdealGas::recognize_species_without_exit(char* name)
 	return 0;
 }
 
-int OpenSMOKE_IdealGas::recognize_species(const string name)
+int OpenSMOKE_IdealGas::recognize_species(const std::string name)
 {
 	for(int i=1;i<=NC;i++)
 		if (!name.compare(names[i]))
@@ -852,7 +899,7 @@ int OpenSMOKE_IdealGas::recognize_species(const string name)
 	return -1;
 }
 
-int OpenSMOKE_IdealGas::recognize_species_without_exit(const string name)
+int OpenSMOKE_IdealGas::recognize_species_without_exit(const std::string name)
 {
 	for(int i=1;i<=NC;i++)
 		if (!name.compare(names[i]))
@@ -1018,7 +1065,7 @@ double OpenSMOKE_IdealGas::GetMixtureFraction(BzzVector &omega, BzzVector &omega
 	return Z;
 }
 
-int OpenSMOKE_IdealGas::recognize_element(const string name)
+int OpenSMOKE_IdealGas::recognize_element(const std::string name)
 {
 	for(int i=1;i<=NumberOfElements();i++)
 		if (caseInsCompare(name, list_of_elements[i-1]) == true)
@@ -1028,7 +1075,7 @@ int OpenSMOKE_IdealGas::recognize_element(const string name)
 	return -1;
 }
 
-int OpenSMOKE_IdealGas::recognize_element_without_error(const string name)
+int OpenSMOKE_IdealGas::recognize_element_without_error(const std::string name)
 {
 	for(int i=1;i<=NumberOfElements();i++)
 		if (caseInsCompare(name, list_of_elements[i-1]))
@@ -2700,7 +2747,7 @@ void OpenSMOKE_Equilibrium_SRHO_MyNonLinearSystem::assignIdealGas(OpenSMOKE_Idea
 	equilibrium.SetElementalComposition(x_elements);
 }
 
-BzzVector OpenSMOKE_IdealGas::GetMoleFractionsFromEquivalenceRatio(const double equivalence_ratio, const string fuel_name)
+BzzVector OpenSMOKE_IdealGas::GetMoleFractionsFromEquivalenceRatio(const double equivalence_ratio, const std::string fuel_name)
 {
 	double nC	= elements[recognize_element("c")][recognize_species(fuel_name)];
 	double nH	= elements[recognize_element("h")][recognize_species(fuel_name)];

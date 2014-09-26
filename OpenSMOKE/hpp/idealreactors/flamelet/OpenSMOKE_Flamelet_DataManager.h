@@ -36,13 +36,13 @@ class OpenSMOKE_Flamelet_DataManager
 public:
 
 	OpenSMOKE_Flamelet_DataManager();
-	void SetName(const string name);
+	void SetName(const std::string name);
 
 	void Assign(OpenSMOKE_Flamelet *_flamelet);
 	void Assign(OpenSMOKE_ReactingGas *_mix);
-	void ReadFromFile(const string fileName);
+	void ReadFromFile(const std::string fileName);
 
-	void DefineFromFile(const string inputFile);
+	void DefineFromFile(const std::string inputFile);
 	void Lock();
 
 	// Pressure
@@ -65,7 +65,7 @@ public:
 	BzzVectorInt iXO;
 	BzzVectorInt iOut;
 	vector <string> nameOutput;
-	string twoEquation_file_name;
+	std::string twoEquation_file_name;
 
 	// Flame
 	OpenSMOKE_Flamelet		*flamelet;
@@ -86,9 +86,9 @@ public:
 	int		jFUEL;
 	int		jO2;
 	int		jINERT;
-	string	nameFuel;
-	string	nameOxidizer;
-	string	nameInert;
+	std::string	nameFuel;
+	std::string	nameOxidizer;
+	std::string	nameInert;
 
 	// Grid refining
 	int		nDiff;
@@ -150,19 +150,19 @@ public:
 
 private:
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
-	string name_object;
+	std::string name_object;
 
 
-	void AssignFuel(const string string_value);
-	void AssignOxidizer(const string string_value);
-	void AssignInert(const string string_value);
-	void AssignPressure(const string units, const double value);
-	void AssignFlameTemperature(const string units, const double value);
-	void AssignFuelTemperature(const string units, const double value);
-	void AssignOxidizerTemperature(const string units, const double value);
+	void AssignFuel(const std::string string_value);
+	void AssignOxidizer(const std::string string_value);
+	void AssignInert(const std::string string_value);
+	void AssignPressure(const std::string units, const double value);
+	void AssignFlameTemperature(const std::string units, const double value);
+	void AssignFuelTemperature(const std::string units, const double value);
+	void AssignOxidizerTemperature(const std::string units, const double value);
 	void AssignFuelMassFractions(const vector<string> _names, const vector<double> _values);
 	void AssignFuelMoleFractions(const vector<string> _names, const vector<double> _values);
 	void AssignOxidizerMassFractions(const vector<string> _names, const vector<double> _values);
@@ -177,9 +177,9 @@ private:
 	void SetBackupSteps(const int int_value);
 	void SetRelativeTolerance(const double double_value);
 	void SetAbsoluteTolerance(const double double_value);
-	void SetEnvironmentTemperature(const string units, const double value);
-	void SetEnthalpyDefect(const string units, const double value);
-	void SetMinimumTemperature(const string units, const double value);
+	void SetEnvironmentTemperature(const std::string units, const double value);
+	void SetEnthalpyDefect(const std::string units, const double value);
+	void SetMinimumTemperature(const std::string units, const double value);
 	void SetGasRadiation();
 	void SetSootRadiation();
 	void SetGridRefineGradient(const int int_value);

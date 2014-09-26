@@ -24,7 +24,7 @@
 #include "engine/OpenSMOKE_ReactingGas.h"
 #include "addons/OpenSMOKE_SensitivityAnalysis_Fast_Flame1D.h"
 
-void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::ErrorMessage(const string message)
+void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_SensitivityAnalysis_Fast_Flame1D"	<< endl;
@@ -35,7 +35,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::ErrorMessage(const string messa
     exit(-1);
 }
 
-void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::WarningMessage(const string message)
+void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_SensitivityAnalysis_Fast_Flame1D"	<< endl;
@@ -45,7 +45,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::WarningMessage(const string mes
     getchar();
 }
 
-void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::SetName(const string name)
+void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -338,12 +338,12 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::VideoSummary()
 }
 
 
-void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::PrintOnFile(	const string nameFolderAdditionalData, BzzVector &x, BzzVector &T, BzzVector &H, BzzMatrix &omega, 
+void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::PrintOnFile(	const std::string nameFolderAdditionalData, BzzVector &x, BzzVector &T, BzzVector &H, BzzMatrix &omega, 
 																BzzVector &U, BzzVector &G, BzzVector &rho, BzzVector &MWtot,
 																vector<string> list_of_names)
 {
 /*	int j;
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 	char name_reaction[Constants::REACTION_NAME_SIZE];
 
@@ -354,7 +354,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::PrintOnFile(	const string nameF
 	strcpy(name, dummy.c_str());
 	fOutput.fileSave.write((char*) name, sizeof(name));
 	
-	string building_date = GiveMeTimeAndDate();
+	std::string building_date = GiveMeTimeAndDate();
 	dummy = building_date;
 	strcpy(name, dummy.c_str());
 	fOutput.fileSave.write((char*) name, sizeof(name));
@@ -514,7 +514,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::PrintOnFile(	const string nameF
 
 void OpenSMOKE_SensitivityAnalysis_Fast_Flame1D::SaveOnBinaryFile(BzzSave &fOutput)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 	char name_reaction[Constants::REACTION_NAME_SIZE];
 

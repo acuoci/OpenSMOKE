@@ -28,20 +28,20 @@ class OpenSMOKE_LatexInterface
 public:
 
         OpenSMOKE_LatexInterface();
-        OpenSMOKE_LatexInterface(string _fileName);
-        void include_figure(string fileName, string caption);
-        void include_table(string *titlesUp, string *titlesLeft, BzzMatrix &matrix);
+        OpenSMOKE_LatexInterface(std::string _fileName);
+        void include_figure(std::string fileName, std::string caption);
+        void include_table(std::string *titlesUp, std::string *titlesLeft, BzzMatrix &matrix);
         void setup();
-        void new_section(string section_name);
-        void add(string message);
+        void new_section(std::string section_name);
+        void add(std::string message);
         void new_page();
         void close();
         void create_pdf();
 
 private:
-        string fileName;
+        std::string fileName;
         ofstream latex_file;
-        static const string newline;
+        static const std::string newline;
 };
 
 #endif // OPENSMOKE_LATEXINTERFACE

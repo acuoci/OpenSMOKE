@@ -22,7 +22,7 @@
 
 #include "basic/OpenSMOKE_Dictionary.h"
 
-void OpenSMOKE_Dictionary::ErrorMessage(const string message)
+void OpenSMOKE_Dictionary::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Dictionary"		<< endl;
@@ -33,7 +33,7 @@ void OpenSMOKE_Dictionary::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_Dictionary::WarningMessage(const string message)
+void OpenSMOKE_Dictionary::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:	  OpenSMOKE_Dictionary"		<< endl;
@@ -47,7 +47,7 @@ OpenSMOKE_Dictionary::OpenSMOKE_Dictionary()
 	name_object	= "[Name not assigned]";
 }
 
-void OpenSMOKE_Dictionary::SetName(const string name)
+void OpenSMOKE_Dictionary::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -68,7 +68,7 @@ void OpenSMOKE_Dictionary::SetupBase()
     Add("#Help",            'O', 'N', "This help");
 }
 
-void OpenSMOKE_Dictionary::Add(const string new_word, const char new_flag, const char new_type_id, const string new_comment)
+void OpenSMOKE_Dictionary::Add(const std::string new_word, const char new_flag, const char new_type_id, const std::string new_comment)
 {
     if (iLocked == true)
         ErrorMessage("The dictionary is already locked");
@@ -81,7 +81,7 @@ void OpenSMOKE_Dictionary::Add(const string new_word, const char new_flag, const
     comment.push_back(new_comment);
 }
 
-void OpenSMOKE_Dictionary::Conflict(const string word_a, const string word_b)
+void OpenSMOKE_Dictionary::Conflict(const std::string word_a, const std::string word_b)
 {
     if (iLocked == true)
         ErrorMessage("The dictionary is already locked");
@@ -92,7 +92,7 @@ void OpenSMOKE_Dictionary::Conflict(const string word_a, const string word_b)
     conflict_word_b.push_back(word_b);
 }
 
-void OpenSMOKE_Dictionary::Compulsory(const string word_a, const string word_b)
+void OpenSMOKE_Dictionary::Compulsory(const std::string word_a, const std::string word_b)
 {
     if (iLocked == true)
         ErrorMessage("The dictionary is already locked");
@@ -107,7 +107,7 @@ void OpenSMOKE_Dictionary::Compulsory(const string word_a, const string word_b)
     compulsory_word_f.push_back("!");
 }
 
-void OpenSMOKE_Dictionary::Compulsory(const string word_a, const string word_b, const string word_c)
+void OpenSMOKE_Dictionary::Compulsory(const std::string word_a, const std::string word_b, const std::string word_c)
 {
     if (iLocked == true)
         ErrorMessage("The dictionary is already locked");
@@ -123,7 +123,7 @@ void OpenSMOKE_Dictionary::Compulsory(const string word_a, const string word_b, 
     compulsory_word_f.push_back("!");
 }
 
-void OpenSMOKE_Dictionary::Compulsory(const string word_a, const string word_b, const string word_c, const string word_d)
+void OpenSMOKE_Dictionary::Compulsory(const std::string word_a, const std::string word_b, const std::string word_c, const std::string word_d)
 {
     if (iLocked == true)
         ErrorMessage("The dictionary is already locked");
@@ -140,8 +140,8 @@ void OpenSMOKE_Dictionary::Compulsory(const string word_a, const string word_b, 
     compulsory_word_f.push_back("!");
 }
 
-void OpenSMOKE_Dictionary::Compulsory(const string word_a, const string word_b, const string word_c,
-									  const string word_d, const string word_e)
+void OpenSMOKE_Dictionary::Compulsory(const std::string word_a, const std::string word_b, const std::string word_c,
+									  const std::string word_d, const std::string word_e)
 {
     if (iLocked == true)
         ErrorMessage("The dictionary is already locked");
@@ -159,8 +159,8 @@ void OpenSMOKE_Dictionary::Compulsory(const string word_a, const string word_b, 
     compulsory_word_f.push_back("!");
 }
 
-void OpenSMOKE_Dictionary::Compulsory(const string word_a, const string word_b, const string word_c,
-									  const string word_d, const string word_e, const string word_f)
+void OpenSMOKE_Dictionary::Compulsory(const std::string word_a, const std::string word_b, const std::string word_c,
+									  const std::string word_d, const std::string word_e, const std::string word_f)
 {
     if (iLocked == true)
         ErrorMessage("The dictionary is already locked");
@@ -179,7 +179,7 @@ void OpenSMOKE_Dictionary::Compulsory(const string word_a, const string word_b, 
     compulsory_word_f.push_back(word_f);
 }
 
-char OpenSMOKE_Dictionary::Check(const string new_word)
+char OpenSMOKE_Dictionary::Check(const std::string new_word)
 {
     int n = words.size();
     for(int i=0; i<n; i++)
@@ -190,7 +190,7 @@ char OpenSMOKE_Dictionary::Check(const string new_word)
     return 0;
 }
 
-void OpenSMOKE_Dictionary::CheckAdd(const string new_word)
+void OpenSMOKE_Dictionary::CheckAdd(const std::string new_word)
 {
     int n = words.size();
     for(int i=0; i<n; i++)
@@ -302,7 +302,7 @@ void OpenSMOKE_Dictionary::CheckDouble(const vector<string> read_words)
                 ErrorMessage("The following options is used two times: " + read_words[j]);
 }
 
-void OpenSMOKE_Dictionary::ReadAdd(const string new_word)
+void OpenSMOKE_Dictionary::ReadAdd(const std::string new_word)
 {
     read_words.push_back(new_word);
    	read_char.push_back(' ');
@@ -317,7 +317,7 @@ void OpenSMOKE_Dictionary::ReadAdd(const string new_word)
 	read_2DMap.push_back(_2DMap);
 }
 
-void OpenSMOKE_Dictionary::ReadAdd(const string new_word, const int n)
+void OpenSMOKE_Dictionary::ReadAdd(const std::string new_word, const int n)
 {
     read_words.push_back(new_word);
     read_char.push_back(' ');
@@ -332,7 +332,7 @@ void OpenSMOKE_Dictionary::ReadAdd(const string new_word, const int n)
 	read_2DMap.push_back(_2DMap);
 }
 
-void OpenSMOKE_Dictionary::ReadAdd(const string new_word, const char c)
+void OpenSMOKE_Dictionary::ReadAdd(const std::string new_word, const char c)
 {
     read_words.push_back(new_word);
     read_char.push_back(c);
@@ -347,7 +347,7 @@ void OpenSMOKE_Dictionary::ReadAdd(const string new_word, const char c)
 	read_2DMap.push_back(_2DMap);
 }
 
-void OpenSMOKE_Dictionary::ReadAdd(const string new_word, const double n)
+void OpenSMOKE_Dictionary::ReadAdd(const std::string new_word, const double n)
 {
     read_words.push_back(new_word);
     read_char.push_back(' ');
@@ -362,7 +362,7 @@ void OpenSMOKE_Dictionary::ReadAdd(const string new_word, const double n)
 	read_2DMap.push_back(_2DMap);
 }
 
-void OpenSMOKE_Dictionary::ReadAdd(const string new_word, const string n)
+void OpenSMOKE_Dictionary::ReadAdd(const std::string new_word, const std::string n)
 {
     read_words.push_back(new_word);
     read_char.push_back(' ');
@@ -377,7 +377,7 @@ void OpenSMOKE_Dictionary::ReadAdd(const string new_word, const string n)
 	read_2DMap.push_back(_2DMap);
 }
 
-void OpenSMOKE_Dictionary::ReadAdd(const string new_word, const double d, const string n)
+void OpenSMOKE_Dictionary::ReadAdd(const std::string new_word, const double d, const std::string n)
 {
     read_words.push_back(new_word);
     read_char.push_back(' ');
@@ -392,7 +392,7 @@ void OpenSMOKE_Dictionary::ReadAdd(const string new_word, const double d, const 
 	read_2DMap.push_back(_2DMap);
 }
 
-void OpenSMOKE_Dictionary::ReadAdd(const string new_word, OpenSMOKE_1DMap _1DMap)
+void OpenSMOKE_Dictionary::ReadAdd(const std::string new_word, OpenSMOKE_1DMap _1DMap)
 {
     read_words.push_back(new_word);
     read_char.push_back(' ');
@@ -406,7 +406,7 @@ void OpenSMOKE_Dictionary::ReadAdd(const string new_word, OpenSMOKE_1DMap _1DMap
 	read_2DMap.push_back(_2DMap);
 }
 
-void OpenSMOKE_Dictionary::ReadAdd(const string new_word, const OpenSMOKE_2DMap _2DMap)
+void OpenSMOKE_Dictionary::ReadAdd(const std::string new_word, const OpenSMOKE_2DMap _2DMap)
 {
     read_words.push_back(new_word);
     read_char.push_back(' ');
@@ -420,7 +420,7 @@ void OpenSMOKE_Dictionary::ReadAdd(const string new_word, const OpenSMOKE_2DMap 
 	read_1DMap.push_back(_1DMap);
 }
 
-bool OpenSMOKE_Dictionary::CheckForComment(const string read_word)
+bool OpenSMOKE_Dictionary::CheckForComment(const std::string read_word)
 {
     if(read_word.at(0) == '/')
         if(read_word.at(1) == '/')
@@ -429,7 +429,7 @@ bool OpenSMOKE_Dictionary::CheckForComment(const string read_word)
     return false;
 }
 
-bool OpenSMOKE_Dictionary::CheckForKeyWord(const string read_word)
+bool OpenSMOKE_Dictionary::CheckForKeyWord(const std::string read_word)
 {
     if(read_word.at(0) == '#')
 		return true;
@@ -438,17 +438,17 @@ bool OpenSMOKE_Dictionary::CheckForKeyWord(const string read_word)
 }
 
 
-void OpenSMOKE_Dictionary::ParseFile(const string fileName)
+void OpenSMOKE_Dictionary::ParseFile(const std::string fileName)
 {
     const int SIZE = 300;
     char comment[SIZE];
 
     char    flag;
-    string  dummy;
+    std::string  dummy;
     int     dummy_int;
     char    dummy_char;
     double  dummy_double;
-    string  dummy_string;
+    std::string  dummy_string;
 	bool    iGoBack;
 
     ifstream fInput;
@@ -581,7 +581,7 @@ void OpenSMOKE_Dictionary::ParseFile(const string fileName)
     CheckDouble(read_words);
 }
 
-bool OpenSMOKE_Dictionary::Return(const string new_word)
+bool OpenSMOKE_Dictionary::Return(const std::string new_word)
 {
     int n = read_words.size();
     for(int i=0; i<n; i++)
@@ -594,7 +594,7 @@ bool OpenSMOKE_Dictionary::Return(const string new_word)
     return false;
 }
 
-bool OpenSMOKE_Dictionary::Return(const string new_word, int &value)
+bool OpenSMOKE_Dictionary::Return(const std::string new_word, int &value)
 {
     int n = read_words.size();
     for(int i=0; i<n; i++)
@@ -608,7 +608,7 @@ bool OpenSMOKE_Dictionary::Return(const string new_word, int &value)
     return false;
 }
 
-bool OpenSMOKE_Dictionary::Return(const string new_word, char &value)
+bool OpenSMOKE_Dictionary::Return(const std::string new_word, char &value)
 {
     int n = read_words.size();
     for(int i=0; i<n; i++)
@@ -622,7 +622,7 @@ bool OpenSMOKE_Dictionary::Return(const string new_word, char &value)
     return false;
 }
 
-bool OpenSMOKE_Dictionary::Return(const string new_word, double &value)
+bool OpenSMOKE_Dictionary::Return(const std::string new_word, double &value)
 {
     int n = read_words.size();
     for(int i=0; i<n; i++)
@@ -636,7 +636,7 @@ bool OpenSMOKE_Dictionary::Return(const string new_word, double &value)
     return false;
 }
 
-bool OpenSMOKE_Dictionary::Return(const string new_word, string &value)
+bool OpenSMOKE_Dictionary::Return(const std::string new_word, std::string &value)
 {
     int n = read_words.size();
     for(int i=0; i<n; i++)
@@ -650,7 +650,7 @@ bool OpenSMOKE_Dictionary::Return(const string new_word, string &value)
     return 0;
 }
 
-bool OpenSMOKE_Dictionary::Return(const string new_word, double &number, string &unit)
+bool OpenSMOKE_Dictionary::Return(const std::string new_word, double &number, std::string &unit)
 {
     int n = read_words.size();
     for(int i=0; i<n; i++)
@@ -665,7 +665,7 @@ bool OpenSMOKE_Dictionary::Return(const string new_word, double &number, string 
     return false;
 }
 
-bool OpenSMOKE_Dictionary::Return(const string new_word, vector<double> &values, vector<string> &names)
+bool OpenSMOKE_Dictionary::Return(const std::string new_word, vector<double> &values, vector<string> &names)
 {
 	int n = read_words.size();
     for(int i=0; i<n; i++)
@@ -680,7 +680,7 @@ bool OpenSMOKE_Dictionary::Return(const string new_word, vector<double> &values,
     return false;
 }
 
-bool OpenSMOKE_Dictionary::Return(const string new_word, vector<string> &names)
+bool OpenSMOKE_Dictionary::Return(const std::string new_word, vector<string> &names)
 {
 	int n = read_words.size();
     for(int i=0; i<n; i++)
@@ -716,9 +716,9 @@ void OpenSMOKE_Dictionary::Help()
             else if (type_id[i] == 'D')
                 cout << "   " << words[i] << " [double]\t\t" << comment[i] << endl;
             else if (type_id[i] == 'S')
-                cout << "   " << words[i] << " [string]\t\t" << comment[i] << endl;
+                cout << "   " << words[i] << " [std::string]\t\t" << comment[i] << endl;
             else if (type_id[i] == 'M')
-                cout << "   " << words[i] << " [double] [string]\t" << comment[i] << endl;
+                cout << "   " << words[i] << " [double] [std::string]\t" << comment[i] << endl;
         }
     cout << endl;
 
@@ -735,9 +735,9 @@ void OpenSMOKE_Dictionary::Help()
             else if (type_id[i] == 'D')
                 cout << "   " << words[i] << " [double]\t\t" << comment[i] << endl;
             else if (type_id[i] == 'S')
-                cout << "   " << words[i] << " [string]\t\t" << comment[i] << endl;
+                cout << "   " << words[i] << " [std::string]\t\t" << comment[i] << endl;
             else if (type_id[i] == 'M')
-                cout << "   " << words[i] << " [double] [string]\t" << comment[i] << endl;
+                cout << "   " << words[i] << " [double] [std::string]\t" << comment[i] << endl;
         }
     cout << endl;
 

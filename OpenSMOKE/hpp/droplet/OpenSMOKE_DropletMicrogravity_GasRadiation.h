@@ -29,7 +29,7 @@ class OpenSMOKE_DropletMicrogravity_GasRadiation
 public:
 
 	OpenSMOKE_DropletMicrogravity_GasRadiation();
-	void SetName(const string name);
+	void SetName(const std::string name);
 
 	void Initialize(const int N_);
 	void Calculate(const BzzVector &x_, const BzzVector &T_, const BzzVector &Kp_);
@@ -84,9 +84,9 @@ private:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_DROPLETMICROGRAVITY_GASRADIATION_H

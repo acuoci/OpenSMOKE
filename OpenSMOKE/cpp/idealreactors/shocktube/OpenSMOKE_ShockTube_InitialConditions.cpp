@@ -24,7 +24,7 @@
 
 OpenSMOKE_ShockTube_InitialConditions *pt_ics;
 
-void OpenSMOKE_ShockTube_InitialConditions::ErrorMessage(const string message)
+void OpenSMOKE_ShockTube_InitialConditions::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_ShockTube_InitialConditions"		<< endl;
@@ -35,7 +35,7 @@ void OpenSMOKE_ShockTube_InitialConditions::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_ShockTube_InitialConditions::WarningMessage(const string message)
+void OpenSMOKE_ShockTube_InitialConditions::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:   OpenSMOKE_ShockTube_InitialConditions"	<< endl;
@@ -51,7 +51,7 @@ OpenSMOKE_ShockTube_InitialConditions::OpenSMOKE_ShockTube_InitialConditions()
 	ALFAMAX		= 30.;				// Maximum temperature ratio
 }
 
-void OpenSMOKE_ShockTube_InitialConditions::SetName(const string name)
+void OpenSMOKE_ShockTube_InitialConditions::SetName(const std::string name)
 {
 	name_object	= name;				// Object Name
 }

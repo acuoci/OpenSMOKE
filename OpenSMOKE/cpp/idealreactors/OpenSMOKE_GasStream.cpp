@@ -27,7 +27,7 @@ const double    OpenSMOKE_GasStream::EPSILON			=  1.e-6;
 const double    OpenSMOKE_GasStream::_1_PLUS_EPSILON	=  1.+EPSILON;
 const double    OpenSMOKE_GasStream::_1_MINUS_EPSILON   =  1.-EPSILON;
 
-void OpenSMOKE_GasStream::ErrorMessage(const string message)
+void OpenSMOKE_GasStream::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_GasStream"	<< endl;
@@ -38,7 +38,7 @@ void OpenSMOKE_GasStream::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_GasStream::WarningMessage(const string message)
+void OpenSMOKE_GasStream::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:	  OpenSMOKE_GasStream"		<< endl;
@@ -68,7 +68,7 @@ OpenSMOKE_GasStream::OpenSMOKE_GasStream()
 	locked						= false;
 }
 
-void OpenSMOKE_GasStream::SetName(const string name)
+void OpenSMOKE_GasStream::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -88,7 +88,7 @@ void OpenSMOKE_GasStream::AssignKineticScheme(OpenSMOKE_ReactingGas &_mix)
 	assignedKineticScheme = true;
 }
 
-void OpenSMOKE_GasStream::AssignMassFlowRate(const double _value, const string _units)
+void OpenSMOKE_GasStream::AssignMassFlowRate(const double _value, const std::string _units)
 {
 	if (_value<=0.)
 		ErrorMessage("The mass flow rate must be greater than zero!");
@@ -100,7 +100,7 @@ void OpenSMOKE_GasStream::AssignMassFlowRate(const double _value, const string _
 	assignedMoleFlowRate		= false;
 }
 
-void OpenSMOKE_GasStream::AssignMoleFlowRate(const double _value, const string _units)
+void OpenSMOKE_GasStream::AssignMoleFlowRate(const double _value, const std::string _units)
 {
 	if (_value<=0.)
 		ErrorMessage("The mole flow rate must be greater than zero!");
@@ -112,7 +112,7 @@ void OpenSMOKE_GasStream::AssignMoleFlowRate(const double _value, const string _
 	assignedMoleFlowRate		= true;
 }
 
-void OpenSMOKE_GasStream::AssignVolumetricFlowRate(const double _value, const string _units)
+void OpenSMOKE_GasStream::AssignVolumetricFlowRate(const double _value, const std::string _units)
 {
 	if (_value<=0.)
 		ErrorMessage("The volumetric flow rate must be greater than zero!");
@@ -124,7 +124,7 @@ void OpenSMOKE_GasStream::AssignVolumetricFlowRate(const double _value, const st
 	assignedMoleFlowRate		= false;
 }
 
-void OpenSMOKE_GasStream::AssignTemperature(const double _value, const string _units)
+void OpenSMOKE_GasStream::AssignTemperature(const double _value, const std::string _units)
 {
 	if (_value<=0.)
 		ErrorMessage("The temperature must be greater than zero!");
@@ -133,7 +133,7 @@ void OpenSMOKE_GasStream::AssignTemperature(const double _value, const string _u
 	assignedTemperature = true;
 }
 
-void OpenSMOKE_GasStream::AssignDensity(const double _value, const string _units)
+void OpenSMOKE_GasStream::AssignDensity(const double _value, const std::string _units)
 {
 	if (_value<=0.)
 		ErrorMessage("The density must be greater than zero!");
@@ -142,7 +142,7 @@ void OpenSMOKE_GasStream::AssignDensity(const double _value, const string _units
 	assignedDensity = true;
 }
 
-void OpenSMOKE_GasStream::AssignPressure(const double _value, const string _units)
+void OpenSMOKE_GasStream::AssignPressure(const double _value, const std::string _units)
 {
 	if (_value<=0.)
 		ErrorMessage("The pressure must be greater than zero!");
@@ -213,7 +213,7 @@ void OpenSMOKE_GasStream::AssignMassFractions(const vector<string> _names, const
 
 /*
 // Equivalence Ratio in air
-void OpenSMOKE_GasStream::AssignEquivalenceRatio(const double equivalence_ratio, const string fuel_name)
+void OpenSMOKE_GasStream::AssignEquivalenceRatio(const double equivalence_ratio, const std::string fuel_name)
 {
 	double nC	= mix->elements[mix->recognize_element("c")][mix->recognize_species(fuel_name)];
 	double nH	= mix->elements[mix->recognize_element("h")][mix->recognize_species(fuel_name)];
@@ -556,7 +556,7 @@ void OpenSMOKE_GasStream::lock()
 	Entropy();
 }
 
-void OpenSMOKE_GasStream::SetVelocity(const double _value, const string _units)
+void OpenSMOKE_GasStream::SetVelocity(const double _value, const std::string _units)
 {
 	velocity = OpenSMOKE_Conversions::conversion_velocity(_value, _units);
 }
@@ -601,7 +601,7 @@ void OpenSMOKE_GasStream::VideoSummary()
 
 }
 
-void OpenSMOKE_GasStream::ChangeTemperature(const double _value, const string _units)
+void OpenSMOKE_GasStream::ChangeTemperature(const double _value, const std::string _units)
 {
 	if (_value<=0.)
 		ErrorMessage("The temperature must be greater than zero!");
@@ -617,7 +617,7 @@ void OpenSMOKE_GasStream::ChangeTemperature(const double _value, const string _u
 	Entropy();
 }
 
-void OpenSMOKE_GasStream::ChangePressure(const double _value, const string _units)
+void OpenSMOKE_GasStream::ChangePressure(const double _value, const std::string _units)
 {
 	if (_value<=0.)
 		ErrorMessage("The pressure must be greater than zero!");
@@ -630,7 +630,7 @@ void OpenSMOKE_GasStream::ChangePressure(const double _value, const string _unit
 	Enthalpy();
 }
 
-void OpenSMOKE_GasStream::ChangeMassFlowRate(const double _value, const string _units)
+void OpenSMOKE_GasStream::ChangeMassFlowRate(const double _value, const std::string _units)
 {
 	if (_value<=0.)
 		ErrorMessage("The mass flow rate must be greater than zero!");
@@ -645,7 +645,7 @@ void OpenSMOKE_GasStream::ChangeMassFlowRate(const double _value, const string _
 	Enthalpy();
 }
 
-void OpenSMOKE_GasStream::ChangeMoleFlowRate(const double _value, const string _units)
+void OpenSMOKE_GasStream::ChangeMoleFlowRate(const double _value, const std::string _units)
 {
 	if (_value<=0.)
 		ErrorMessage("The mole flow rate must be greater than zero!");
@@ -660,7 +660,7 @@ void OpenSMOKE_GasStream::ChangeMoleFlowRate(const double _value, const string _
 	Enthalpy();
 }
 
-void OpenSMOKE_GasStream::ChangeVolumetricFlowRate(const double _value, const string _units)
+void OpenSMOKE_GasStream::ChangeVolumetricFlowRate(const double _value, const std::string _units)
 {
 	if (_value<=0.)
 		ErrorMessage("The volumetric flow rate must be greater than zero!");
@@ -768,10 +768,10 @@ void OpenSMOKE_GasStream::Entropy()
 {	
 	entropy = massSpecificEntropy * massFlowRate;			// [J/s/K]
 }
-void OpenSMOKE_GasStream::DefineFromFile(const string inputFile)
+void OpenSMOKE_GasStream::DefineFromFile(const std::string inputFile)
 {
     double			double_value;
-    string			string_value;
+    std::string			string_value;
     vector<double>  double_vector;
     vector<string>  string_vector;
     

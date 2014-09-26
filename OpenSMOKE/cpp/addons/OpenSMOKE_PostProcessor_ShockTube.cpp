@@ -24,7 +24,7 @@
 #include "addons/OpenSMOKE_PostProcessor.h"
 #include "addons/OpenSMOKE_PostProcessor_ShockTube.h"
 
-void OpenSMOKE_PostProcessor_ShockTube::ErrorMessage(const string message)
+void OpenSMOKE_PostProcessor_ShockTube::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_PostProcessor_ShockTube"		<< endl;
@@ -35,7 +35,7 @@ void OpenSMOKE_PostProcessor_ShockTube::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_PostProcessor_ShockTube::WarningMessage(const string message)
+void OpenSMOKE_PostProcessor_ShockTube::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_PostProcessor_ShockTube"	<< endl;
@@ -54,7 +54,7 @@ void OpenSMOKE_PostProcessor_ShockTube::ReadFromBinaryFile(BzzLoad &fLoad)
 {
 	char dummy[Constants::NAME_SIZE];
 	fLoad.fileLoad.read((char*) dummy, sizeof(dummy));
-	string version = dummy;
+	std::string version = dummy;
 	if (version != "V20100417")
 		ErrorMessage("This version post processing file is not supported: " + version);
 	cout << "Version: " << version << endl;
@@ -163,7 +163,7 @@ void OpenSMOKE_PostProcessor_ShockTube::ExportAvailableYAxis(vector<string> &y_a
 	y_available = list_of_y_available;
 }
 
-void OpenSMOKE_PostProcessor_ShockTube::ImportSelectedAxis(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, string &name_x, string &name_y, vector<string> &names_lines)
+void OpenSMOKE_PostProcessor_ShockTube::ImportSelectedAxis(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, std::string &name_x, std::string &name_y, vector<string> &names_lines)
 {
 	ChangeDimensions(y_axis.size(), x.Size(), &xAxis);
 	ChangeDimensions(y_axis.size(), x.Size(), &yAxis);

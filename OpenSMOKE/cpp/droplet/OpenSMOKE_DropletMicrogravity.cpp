@@ -66,7 +66,7 @@ void DAE_Print(BzzVector &x, double t)
 
 const double OpenSMOKE_DropletMicrogravity::MMIN  =  -1.e6;
 
-void OpenSMOKE_DropletMicrogravity::ErrorMessage(const string message)
+void OpenSMOKE_DropletMicrogravity::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_DropletMicrogravity"	<< endl;
@@ -77,7 +77,7 @@ void OpenSMOKE_DropletMicrogravity::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_DropletMicrogravity::WarningMessage(const string message)
+void OpenSMOKE_DropletMicrogravity::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_DropletMicrogravity"	<< endl;
@@ -183,7 +183,7 @@ OpenSMOKE_DropletMicrogravity::OpenSMOKE_DropletMicrogravity()
 	tOld = 0.;
 }
 
-void OpenSMOKE_DropletMicrogravity::SetName(const string name)
+void OpenSMOKE_DropletMicrogravity::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -272,7 +272,7 @@ void OpenSMOKE_DropletMicrogravity::Setup()
 {
 	// Output files
 	{
-		string MSDOScommand = "mkdir " + data->nameOutputFolder;
+		std::string MSDOScommand = "mkdir " + data->nameOutputFolder;
 		system(MSDOScommand.c_str());
 
 		openOutputFileAndControl(fUnsteady, data->nameOutputFolder + "/SolutionUnsteady.out");
@@ -1229,8 +1229,8 @@ void OpenSMOKE_DropletMicrogravity::DAESystemSolution(BzzDaeSparseObject *o, dou
 	o->SetMaximumConstraints(xMax);
 
 	// Default values: (A) 1e-10      (R) 100*MachEps()
-	o->SetTollRel(data->relTolerances);
-	o->SetTollAbs(data->absTolerances);
+	o->SetTolRel(data->relTolerances);
+	o->SetTolAbs(data->absTolerances);
 
 	cout << "Absolute tolerance: " << data->absTolerances << endl;
 	cout << "Relative tolerance: " << data->relTolerances << endl;
@@ -1369,7 +1369,7 @@ double OpenSMOKE_DropletMicrogravity::SootPropensity()
 	return sum;
 }
 
-double OpenSMOKE_DropletMicrogravity::MassIntegral(const string names)
+double OpenSMOKE_DropletMicrogravity::MassIntegral(const std::string names)
 {
 	int indexSpecies = 0;
 	if (names != "volume")

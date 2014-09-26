@@ -33,14 +33,14 @@ public:
 	bool iContinuation;
 	int index_line;
 	
-	string name;
-	string date;
-	string elements;
-	string phase;
-	string low;
-	string high;
-	string mean;
-	string index;
+	std::string name;
+	std::string date;
+	std::string elements;
+	std::string phase;
+	std::string low;
+	std::string high;
+	std::string mean;
+	std::string index;
 
 
 	BzzVector upper;
@@ -57,18 +57,18 @@ public:
 	vector<double> element_numbers;
 
 	void AssignTemperatures(const double _t_min, const double _t_mean, const double _t_max);
-	void ReadMainData(const string line, const int  iLine);
-	void ReadFirstLine(const string line);
-	void ReadSecondLine(const string line);
-	void ReadThirdLine(const string line);
-	void ReadAdditionalLine(const string line);
+	void ReadMainData(const std::string line, const int  iLine);
+	void ReadFirstLine(const std::string line);
+	void ReadSecondLine(const std::string line);
+	void ReadThirdLine(const std::string line);
+	void ReadAdditionalLine(const std::string line);
 	void Analyze();
 
 private:
 	
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
-	string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
+	std::string name_object;
 };
 
 class OpenSMOKE_CHEMKINInterpreter_SurfaceThermoSpecies : OpenSMOKE_CHEMKINInterpreter_ThermoSpecies

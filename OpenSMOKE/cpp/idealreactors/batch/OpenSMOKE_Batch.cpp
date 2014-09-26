@@ -49,32 +49,32 @@ void OpenSMOKE_Batch::AssignConstantPressure()
 	iConstantPressure = true;
 }
 
-void OpenSMOKE_Batch::AssignEnd(const string units, const double value)
+void OpenSMOKE_Batch::AssignEnd(const std::string units, const double value)
 {
 	TauTotal	= OpenSMOKE_Conversions::conversion_time(value, units);
     assignedEnd = true;
 }
 
-void OpenSMOKE_Batch::AssignVolume(const string units, const double value)
+void OpenSMOKE_Batch::AssignVolume(const std::string units, const double value)
 {
 	volume			= OpenSMOKE_Conversions::conversion_volume(value, units);
 	volumeInitial   = volume;
     assignedVolume	= true;
 }
 
-void OpenSMOKE_Batch::SetConstantExchangeArea(const double value, const string units)
+void OpenSMOKE_Batch::SetConstantExchangeArea(const double value, const std::string units)
 {
 	iUserDefinedExchangeArea = CONSTANT;
 	A = OpenSMOKE_Conversions::conversion_area(value, units);
 }
 
-void OpenSMOKE_Batch::SetVolumeLaw(const double value, const string units)
+void OpenSMOKE_Batch::SetVolumeLaw(const double value, const std::string units)
 {
 	iVolumeLaw = true;
 	alfaVolumeLaw = OpenSMOKE_Conversions::conversion_frequency(value, units);
 }
 
-void OpenSMOKE_Batch::SetUserDefinedExchangeArea(const string fileName)
+void OpenSMOKE_Batch::SetUserDefinedExchangeArea(const std::string fileName)
 {
     iUserDefinedExchangeArea = USERDEFINED;
     ud_A_profile.AssignFromFile(fileName, "AREA");
@@ -457,8 +457,8 @@ void OpenSMOKE_Batch::Solve()
     o.SetMinimumConstraints(xMin);
     o.SetMaximumConstraints(xMax);
 
-    if (iRelativeTolerance == true)	o.SetTollRel(relativeTolerance);
-    if (iAbsoluteTolerance == true)	o.SetTollAbs(absoluteTolerance);
+    if (iRelativeTolerance == true)	o.SetTolRel(relativeTolerance);
+    if (iAbsoluteTolerance == true)	o.SetTolAbs(absoluteTolerance);
 
     {
         countGlobalIterations = -1;  // From -1 to avoid to store results from the first iteration
@@ -491,10 +491,10 @@ void OpenSMOKE_Batch::Solve()
 	CloseFiles();
 }
 
-void OpenSMOKE_Batch::DefineFromFile(const string inputFile)
+void OpenSMOKE_Batch::DefineFromFile(const std::string inputFile)
 {
     double			double_value;
-    string			string_value;
+    std::string			string_value;
     int				int_value;
 	vector<string>  string_vector;
 
@@ -865,7 +865,7 @@ void OpenSMOKE_Batch::SummaryOnFile()
 	int i;
 
 	ofstream fSummary;
-	string file_name = outputFolderName + "/Summary.out";
+	std::string file_name = outputFolderName + "/Summary.out";
 	openOutputFileAndControl(fSummary, file_name);
     fSummary.setf(ios::scientific);
 
@@ -1344,7 +1344,7 @@ OpenSMOKE_Dictionary_Batch::OpenSMOKE_Dictionary_Batch()
 
 void OpenSMOKE_Batch::SaveOnBinaryFile(BzzSave &fOutput)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 
 	int nSteps = countGlobalIterations;			
@@ -1407,7 +1407,7 @@ void OpenSMOKE_Batch::SaveOnBinaryFile(BzzSave &fOutput)
 	}
 }
 
-void OpenSMOKE_Batch::SaveOnBinaryFile(const string filename)
+void OpenSMOKE_Batch::SaveOnBinaryFile(const std::string filename)
 {
 	cout << "Save on binary file..." << endl;
 	BzzSave fOutput;
@@ -1425,7 +1425,7 @@ void OpenSMOKE_Batch::SaveOnBinaryFile(const string filename)
 	{
 		cout << "  -- writing rate of production analysis..." << endl;
 
-		string dummy;
+		std::string dummy;
 		char name[Constants::NAME_SIZE];
 
 		BzzVector RRvector(mix->NumberOfReactions());

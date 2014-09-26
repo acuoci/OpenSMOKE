@@ -32,7 +32,7 @@
 void CompactStoichiometries(BzzVectorInt &index, BzzVector &nu, int &n, vector<string> &names);
 void CompleteGlobalStoichiometries(BzzVectorInt &index, BzzVectorInt &indexGlobal, BzzVector &nu, BzzVector &lambdaGlobal);
 
-void OpenSMOKE_CHEMKINInterpreter_ReactionData::ErrorMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_ReactionData::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:    OpenSMOKE_CHEMKINInterpreter_ReactionData"	<< endl;
@@ -44,7 +44,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::ErrorMessage(const string messag
     exit(-1);
 }
 
-void OpenSMOKE_CHEMKINInterpreter_ReactionData::WarningMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_ReactionData::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_ReactionData"	<< endl;
@@ -330,7 +330,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::CheckStoichiometry(OpenSMOKE_CHE
 			{
 				stringstream sumR; sumR << sumReactants[j];
 				stringstream sumP; sumP << sumProducts[j];
-				string message = "Umbalanced stoichiometry on " + element_names[j] + " element\n";
+				std::string message = "Umbalanced stoichiometry on " + element_names[j] + " element\n";
 				message += "  Reactants: " + sumR.str() + " - Products: " + sumP.str();
 //				ErrorMessage(message);
 				WarningMessage(message);
@@ -369,7 +369,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::CheckStoichiometry(OpenSMOKE_CHE
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::Chebishev(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Chebishev polynomials (CHEB) option";
+	std::string error_message = "Syntax error in Chebishev polynomials (CHEB) option";
 
 	// Checking for syntax errors
 	if (instructions[2] != "/")					ErrorMessage(error_message);
@@ -396,7 +396,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::Chebishev(vector<string> instruc
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::CollisionalEfficiency(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Efficiency of Collision Frequency (COLLEFF) option";
+	std::string error_message = "Syntax error in Efficiency of Collision Frequency (COLLEFF) option";
 
 	if (nInstructions != 1)			ErrorMessage(error_message);
 	
@@ -418,7 +418,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::CollisionalEfficiency(vector<str
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::Duplicate(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Duplicate (DUP || DUPLICATE) option";
+	std::string error_message = "Syntax error in Duplicate (DUP || DUPLICATE) option";
 
 	// Checking for syntax errors
 	if (nInstructions != 1)			ErrorMessage(error_message);
@@ -435,7 +435,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::EnergyLossParameter(vector<strin
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::Fit1(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Power Series (FIT1) option";
+	std::string error_message = "Syntax error in Power Series (FIT1) option";
 
 	// Checking for syntax errors
 	if (nInstructions != 7)			ErrorMessage(error_message);
@@ -468,7 +468,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::Fit1(vector<string> instructions
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::TAR(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in TAR Reaction (TAR) option";
+	std::string error_message = "Syntax error in TAR Reaction (TAR) option";
 
 	// Checking for syntax errors
 	if (nInstructions != 9)			ErrorMessage(error_message);
@@ -504,7 +504,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::TAR(vector<string> instructions)
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::ForwardReactionKineticParameter(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in forward reaction orders (FORD)";
+	std::string error_message = "Syntax error in forward reaction orders (FORD)";
 
 	// Checking for syntax errors
 	if (nInstructions != 5)			ErrorMessage(error_message);
@@ -520,7 +520,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::ForwardReactionKineticParameter(
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::HighPressureLimit(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in High-pressure limits (HIGH) option";
+	std::string error_message = "Syntax error in High-pressure limits (HIGH) option";
 
 	// Checking for syntax errors
 	if (nInstructions != 6)			ErrorMessage(error_message);
@@ -556,7 +556,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::HighPressureLimit(vector<string>
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::JanevLangerReactionRate(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Janev-Langer Reactions (JAN) option";
+	std::string error_message = "Syntax error in Janev-Langer Reactions (JAN) option";
 
 	// Checking for syntax errors
 	if (nInstructions != 12)		ErrorMessage(error_message);
@@ -589,7 +589,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::JanevLangerReactionRate(vector<s
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::LowPressureLimit(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Low-pressure limits (LOW) option";
+	std::string error_message = "Syntax error in Low-pressure limits (LOW) option";
 
 	// Checking for syntax errors
 	if (nInstructions != 6)			ErrorMessage(error_message);
@@ -625,7 +625,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::LowPressureLimit(vector<string> 
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::LandauTellerReaction(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Landau-Teller (LT) option";
+	std::string error_message = "Syntax error in Landau-Teller (LT) option";
 
 	// Checking for syntax errors
 	if (nInstructions != 5)			ErrorMessage(error_message);
@@ -658,7 +658,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::MomentumTransferCollisionFrequen
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::ChebishevPressureLimits(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Chebishev Pressure Limits (PCHEB) option";
+	std::string error_message = "Syntax error in Chebishev Pressure Limits (PCHEB) option";
 
 	if (nInstructions == 5)
 	{		
@@ -694,7 +694,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::ChebishevPressureLimits(vector<s
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::ChebishevTemperatureLimits(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Chebishev Temperature Limits (TCHEB) option";	
+	std::string error_message = "Syntax error in Chebishev Temperature Limits (TCHEB) option";	
 
 	if (nInstructions == 5)
 	{		
@@ -728,7 +728,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::ChebishevTemperatureLimits(vecto
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::PressureLogarithmicInterpolation(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Pressure Logarithmic Interpolation (PLOG) option";
+	std::string error_message = "Syntax error in Pressure Logarithmic Interpolation (PLOG) option";
 
 	// Checking for syntax errors
 	if (nInstructions != 7)			ErrorMessage(error_message);
@@ -760,7 +760,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::PressureLogarithmicInterpolation
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::ReverseRate(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Reverse Rate (REV) option";
+	std::string error_message = "Syntax error in Reverse Rate (REV) option";
 
 	// Checking for syntax errors
 	if (nInstructions != 6)			ErrorMessage(error_message);
@@ -782,7 +782,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::ReverseRate(vector<string> instr
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::LandauTellerReverseReaction(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Reverse Landau Teller reactions (RLT) option";
+	std::string error_message = "Syntax error in Reverse Landau Teller reactions (RLT) option";
 
 	// Checking for syntax errors
 	if (nInstructions != 5)			ErrorMessage(error_message);
@@ -809,7 +809,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::BackwardReactionKineticParameter
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::SRIFallOffReaction(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in SRI parameters (SRI) option";
+	std::string error_message = "Syntax error in SRI parameters (SRI) option";
 
 	// Checking for syntax errors
 	if (nInstructions != 6 && nInstructions != 8)	ErrorMessage(error_message);
@@ -840,7 +840,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::SpeciesTemperatureDependence(vec
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::ThermodynamicConsistency(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Thermodynamic Consistency (CONSISTENCY) option";
+	std::string error_message = "Syntax error in Thermodynamic Consistency (CONSISTENCY) option";
 
 	// Checking for syntax errors
 	if (nInstructions != 1)	ErrorMessage(error_message);
@@ -855,7 +855,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::ThermodynamicConsistency(vector<
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::TROEFallOffReaction(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in TROE parameters (TROE) option";
+	std::string error_message = "Syntax error in TROE parameters (TROE) option";
 
 	// Checking for syntax errors
 	if (nInstructions != 6 && nInstructions != 7)	ErrorMessage(error_message);
@@ -877,7 +877,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::TROEFallOffReaction(vector<strin
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::Units(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in UNITS option";
+	std::string error_message = "Syntax error in UNITS option";
 
 	// Checking for syntax errors
 	if (nInstructions != 4)	ErrorMessage(error_message);
@@ -913,7 +913,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::CollisionCrossSection(vector<str
 void OpenSMOKE_CHEMKINInterpreter_ReactionData::ThirdBodyEfficiencies(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in third-body efficiencies";
+	std::string error_message = "Syntax error in third-body efficiencies";
 
 	// Checking for syntax errors
 	if (nInstructions%4 != 0)	ErrorMessage(error_message);
@@ -1006,7 +1006,7 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::ReactionString()
 		reaction_string_complete += "#";
 	}
 	{
-		string dummy;
+		std::string dummy;
 		stringstream index;
 		if(iReactionBis != 0)	index << iReactionBis;
 		else					index << iReaction;
@@ -1651,12 +1651,12 @@ void OpenSMOKE_CHEMKINInterpreter_ReactionData::CompactStoichiometry()
 	CompactStoichiometries(indexInverse, nuInverse, nProducts, nameInverse);
 }
 
-void OpenSMOKE_CHEMKINInterpreter_ReactionData::WriteWarningMessageOnFile(const string message)
+void OpenSMOKE_CHEMKINInterpreter_ReactionData::WriteWarningMessageOnFile(const std::string message)
 {
 	stringstream string_iReaction;	string_iReaction << iReaction;
 	stringstream string_iLine;		string_iLine << iLine;
 
-	string warning_message;
+	std::string warning_message;
 	warning_message += "Reaction: " + string_iReaction.str() + "\n";
 	warning_message += "Line:     " + string_iLine.str() + "\n";
 	warning_message += message;

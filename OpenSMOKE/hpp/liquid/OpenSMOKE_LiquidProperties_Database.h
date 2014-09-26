@@ -37,10 +37,10 @@ friend class OpenSMOKE_LiquidSpecies;
 public:
 
 	OpenSMOKE_LiquidProperties_Database();
-	void ReadFromFolder(const string folder_name);
-	void SaveOnFile(const string file_name);
-	void LoadFromFile(const string file_name);
-	int  RecognizeSpecies(const string name);
+	void ReadFromFolder(const std::string folder_name);
+	void SaveOnFile(const std::string file_name);
+	void LoadFromFile(const std::string file_name);
+	int  RecognizeSpecies(const std::string name);
 
 private:
 
@@ -113,9 +113,9 @@ private:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_LIQUIDPROPERTIESDATABASE_H

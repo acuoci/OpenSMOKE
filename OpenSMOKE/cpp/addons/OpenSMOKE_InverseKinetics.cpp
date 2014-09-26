@@ -25,6 +25,8 @@
 #include "addons/OpenSMOKE_InverseKinetics.h"
 #include "math.h"
 
+using namespace std;
+
 void inverse_kinetics_non_linear_regression(int model, int ex, BzzVector &b, BzzVector &x, BzzVector &y);
 
 void OpenSMOKE_InverseKinetics::Setup(const int iReaction, double Patm, double Tmin, double Tmax, double deltaT)
@@ -94,7 +96,7 @@ void OpenSMOKE_InverseKinetics::Setup(const int iReaction, double Patm, double T
 	cout << endl;
 	for(i=1;i<=global->NC;i++)
 		if (global->lambdaInverse[iReaction][i] != 0.)
-			cout << mix->names[i] << "\t" << global->lambdaInverse[iReaction][i] << endl;
+			cout << mix->names[i].c_str() << "\t" << global->lambdaInverse[iReaction][i] << endl;
 
 	ofstream fOutput;
 	openOutputFileAndControl(fOutput, "InverseKinetics.out");

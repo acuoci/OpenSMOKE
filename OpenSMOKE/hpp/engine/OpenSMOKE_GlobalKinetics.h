@@ -34,7 +34,7 @@ public:
 	int nReactions;
 
 	void assign_mix(OpenSMOKE_ReactingGas *mixture);
-	void read_from_file(string fileName);
+	void read_from_file(std::string fileName);
 	void GiveMeReactionHeat(const double T, BzzVector &R, double &QReaction);
 	void GiveMeFormationRates(const double T, BzzVector &c, BzzVector &R);
 	void GiveMeSpecificEnthalpy(const double T, BzzVector &omega, double &specificEnthalpy);
@@ -71,8 +71,8 @@ public:
 	void ChangeKineticParameters(BzzVector &newParameters);
 	void SetupOptimization(BzzVectorInt &_iKind, BzzVectorInt &_iReaction, BzzVectorInt &_iSpecies);
 
-    void SensitivityCoefficients(const string fileName, BzzVector &grid, BzzVector &T, BzzMatrix &C);
-    void SensitivityAnalysis(const string fileName, int indexT, int dimBlock,
+    void SensitivityCoefficients(const std::string fileName, BzzVector &grid, BzzVector &T, BzzMatrix &C);
+    void SensitivityAnalysis(const std::string fileName, int indexT, int dimBlock,
                              BzzFactorizedTridiagonalBlocksGauss &J,
                              BzzVector &grid,
                              BzzVector &T, BzzMatrix &C,
@@ -95,7 +95,7 @@ private:
 
 	static const int MAXREACTIONS;
 
-	void ErrorMessage(string message);
+	void ErrorMessage(std::string message);
 
 	void checkInputFile(const char *found, const char *expected);
 	void checkInputFile(const int found, const int expected);
@@ -118,7 +118,7 @@ private:
 
 /*
 
-//	void SetupKineticParametersOptimization(string fileName);
+//	void SetupKineticParametersOptimization(std::string fileName);
 public:
 	int nParameters;
 	BzzVector minValues;

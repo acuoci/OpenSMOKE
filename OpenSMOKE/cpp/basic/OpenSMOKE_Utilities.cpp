@@ -25,7 +25,7 @@
 #include "basic/OpenSMOKE_Conversions.h"
 #include "basic/OpenSMOKE_Constants.h"
 
-int seek_index(string name, vector<string> list_names)
+int seek_index(std::string name, vector<string> list_names)
 {
 	for(int i=0; i<int(list_names.size()); i++)
 		if (name == list_names[i])
@@ -37,14 +37,14 @@ int seek_index(string name, vector<string> list_names)
 	exit(-1);
 }
 
-string GiveMeTimeAndDate()
+std::string GiveMeTimeAndDate()
 {
 	time_t current_time;
 	tm *local_time;
 	
 	time(&current_time);
 	local_time = localtime(&current_time);
-	string time_string = asctime(local_time);
+	std::string time_string = asctime(local_time);
 
 	return time_string;
 }
@@ -276,7 +276,7 @@ void my_itoa(int value, char* str, int base) {
 	
 
 	
-	// Reverse string
+	// Reverse std::string
 	
 	strreverse(str,wstr-1);
 	
@@ -413,7 +413,7 @@ void openOutputFileAndControl_BinaryMode(ofstream &outputFile, const char *fileN
 
 
 
-void openInputFileAndControl(ifstream &inputFile, string fileName)
+void openInputFileAndControl(ifstream &inputFile, std::string fileName)
 {
 	inputFile.open(fileName.c_str(), ios::in);
 	if (!inputFile.is_open()) 
@@ -424,7 +424,7 @@ void openInputFileAndControl(ifstream &inputFile, string fileName)
 	}
 }
 
-void openInputFileAndControl_BinaryMode(ifstream &inputFile, string fileName)
+void openInputFileAndControl_BinaryMode(ifstream &inputFile, std::string fileName)
 {
 	inputFile.open(fileName.c_str(), ios::in | ios::binary);
 	if (!inputFile.is_open()) 
@@ -435,7 +435,7 @@ void openInputFileAndControl_BinaryMode(ifstream &inputFile, string fileName)
 	}
 }
 
-void openOutputFileAndControl(ofstream &outputFile, string fileName)
+void openOutputFileAndControl(ofstream &outputFile, std::string fileName)
 {
 	outputFile.open(fileName.c_str(), ios::out);
 	if (!outputFile.is_open()) 
@@ -446,7 +446,7 @@ void openOutputFileAndControl(ofstream &outputFile, string fileName)
 	}
 }
 
-void openOutputFileAndControl_BinaryMode(ofstream &outputFile, string fileName)
+void openOutputFileAndControl_BinaryMode(ofstream &outputFile, std::string fileName)
 {
 	outputFile.open(fileName.c_str(), ios::out | ios::binary);
 	if (!outputFile.is_open()) 
@@ -613,10 +613,10 @@ void nameList::setup(int _N)
 // **************************************************************************************************** //
 
 
-void OpenSMOKE_logo(string application_name, string version, string date)
+void OpenSMOKE_logo(std::string application_name, std::string version, std::string date)
 {
 	int i;
-	string additional_info = "Version " + version + " - " + date;
+	std::string additional_info = "Version " + version + " - " + date;
 
     cout << endl;
 	cout << "---------------------------------------------------------------------" << endl;
@@ -649,7 +649,7 @@ void OpenSMOKE_logo(string application_name, string version, string date)
 	cout << "" << endl;
 }
 
-void OpenSMOKE_logo(ofstream &fOutput, string application_name)
+void OpenSMOKE_logo(ofstream &fOutput, std::string application_name)
 {
 	int i;
 
@@ -703,7 +703,7 @@ void ParserClass::first_screening(CSimpleOpt args)
         }
         else
         {
-            string message = args.OptionText();
+            std::string message = args.OptionText();
             cout << "Invalid argument: " + message << endl;
             cout << "Press enter to continue..." << endl;
             getchar();
@@ -722,7 +722,7 @@ void ParserClass::setup(int _argc, char* _argv[], CSimpleOpt::SOption *_g_rgOpti
     first_screening(args);
 }
 
-int ParserClass::parse(string label, string &argument)
+int ParserClass::parse(std::string label, std::string &argument)
 {
     CSimpleOpt args(argc, argv, g_rgOptions);
 
@@ -738,7 +738,7 @@ int ParserClass::parse(string label, string &argument)
     return 0;
 }
 
-int ParserClass::parse(string label)
+int ParserClass::parse(std::string label)
 {
     CSimpleOpt args(argc, argv, g_rgOptions);
 
@@ -760,12 +760,12 @@ LinearInterpolation::LinearInterpolation()
 	name_object = "Default name";
 }
 
-void LinearInterpolation::SetName(string name)
+void LinearInterpolation::SetName(std::string name)
 {
 	name_object = name;
 }
 
-void LinearInterpolation::ErrorMessage(const string message)
+void LinearInterpolation::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  Linear Interpolation"		<< endl;
@@ -825,7 +825,7 @@ OpenSMOKE_NuManager::OpenSMOKE_NuManager()
 	nReactions		= 0;
 }
 
-void OpenSMOKE_NuManager::Set(const int index, const string name)
+void OpenSMOKE_NuManager::Set(const int index, const std::string name)
 {
 	index_species	= index;
 	name_species	= name;
@@ -1026,7 +1026,7 @@ void OpenSMOKE_Nu::SparsityPattern(BzzMatrixSparse &M)
 		M(sparse_index[i],  sparse_rows[i]) = 1.;
 }
 
-void OpenSMOKE_Nu::PrintOnFile(const string fileName)
+void OpenSMOKE_Nu::PrintOnFile(const std::string fileName)
 {
 	ofstream fOutput;
 	openOutputFileAndControl(fOutput, fileName);
@@ -1110,7 +1110,7 @@ void OpenSMOKE_RateOfProductionCoefficient::SaveToBinaryFile(BzzSave &fSave, Bzz
 }
 
 
-string GiveMeFileNameFromFullPath(const string pathname)
+std::string GiveMeFileNameFromFullPath(const std::string pathname)
 {
 	size_t found;
 	found = pathname.find_last_of("/\\");
@@ -1118,7 +1118,7 @@ string GiveMeFileNameFromFullPath(const string pathname)
 }
 
 
-string GiveMeFolderPathFromFullPath(const string pathname)
+std::string GiveMeFolderPathFromFullPath(const std::string pathname)
 {
 	size_t found;
 	found = pathname.find_last_of("/\\");
@@ -1130,12 +1130,12 @@ bool caseInsCharCompareN(char a, char b)
 	return(toupper(a) == toupper(b));
 }
 
-bool caseInsCompare(const string& s1, const string& s2) 
+bool caseInsCompare(const std::string& s1, const std::string& s2) 
 {
 	return( (s1.size( ) == s2.size( )) && equal(s1.begin( ), s1.end( ), s2.begin( ), caseInsCharCompareN));
 }
 
-bool CheckForCommentLine(string &line)
+bool CheckForCommentLine(std::string &line)
 {
 	if (line.size() > 0)
 		for(int j=0;j<int(line.size());j++)
@@ -1149,7 +1149,7 @@ bool CheckForCommentLine(string &line)
 	return false;
 }
 
-bool CheckForCommentLineFromStart(string &line)
+bool CheckForCommentLineFromStart(std::string &line)
 {
 	if (line.size() > 0)
 		for(int j=0;j<int(line.size());j++)
@@ -1162,11 +1162,11 @@ bool CheckForCommentLineFromStart(string &line)
 	return false;
 }
 
-bool CheckForEndLine(string &line)
+bool CheckForEndLine(std::string &line)
 {
 	if (line.size() > 0)
 	{
-		string dummy;
+		std::string dummy;
 		stringstream parsed_string(line);
 		parsed_string >> dummy;
 		if (caseInsCompare(dummy,"END") == true) 
@@ -1176,7 +1176,7 @@ bool CheckForEndLine(string &line)
 }
 
 
-bool CheckForBlankLine(const string line)
+bool CheckForBlankLine(const std::string line)
 {
 	if (line.size() == 0)		return true;
 	for(int j=0;j<int(line.size());j++)
@@ -1184,14 +1184,14 @@ bool CheckForBlankLine(const string line)
 	return true;
 }
 
-void CleanFromBlanks(string &name)
+void CleanFromBlanks(std::string &name)
 {
 	StringSubstitutionAll(name, " ", "");
 }
 
-void CleanFromBlanksForThermo(string &name)
+void CleanFromBlanksForThermo(std::string &name)
 {
-	string name_buffer = name;
+	std::string name_buffer = name;
 	for(int j=0;j<int(name_buffer.size());j++)
 		if (name_buffer.at(j) == ' ')	
 		{
@@ -1200,9 +1200,9 @@ void CleanFromBlanksForThermo(string &name)
 		}
 }
 
-void StringSubstitution(string &original, const string old_string, const string new_string)
+void StringSubstitution(std::string &original, const std::string old_string, const std::string new_string)
 {
-	string::size_type i = original.find(old_string);
+	std::string::size_type i = original.find(old_string);
 	if (i != std::string::npos)
 	{
 		original.erase(i, old_string.length( ));
@@ -1210,13 +1210,13 @@ void StringSubstitution(string &original, const string old_string, const string 
 	}
 }
 
-bool StringSubstitutionAll(string &s, const string p, const string new_string)
+bool StringSubstitutionAll(std::string &s, const std::string p, const std::string new_string)
 {
 	bool found = false;
 	if (p!=new_string)
 	{
-		string::size_type n = p.length( );
-		for (string::size_type i = s.find(p); i != string::npos; i = s.find(p))
+		std::string::size_type n = p.length( );
+		for (std::string::size_type i = s.find(p); i != std::string::npos; i = s.find(p))
 		{
 			s.erase(i, n);
 			s.insert(i, new_string);
@@ -1226,24 +1226,24 @@ bool StringSubstitutionAll(string &s, const string p, const string new_string)
 	return found;
 }
 
-int StringFind(const string s, const string subs)
+int StringFind(const std::string s, const std::string subs)
 {
 	int count = 0;
-	string::size_type i = s.find(subs);
+	std::string::size_type i = s.find(subs);
 	if (i != std::string::npos)
 		count++;
 	return count;
 }
 
-bool StringFindSubString(string &s, const string p)
+bool StringFindSubString(std::string &s, const std::string p)
 {
-	string::size_type n = p.length( );
-	for (string::size_type i = s.find(p); i != string::npos; i = s.find(p))
+	std::string::size_type n = p.length( );
+	for (std::string::size_type i = s.find(p); i != std::string::npos; i = s.find(p))
 		return true;
 	return false;
 }
 
-bool IsANumber(const string expression, const int index)
+bool IsANumber(const std::string expression, const int index)
 {
 	if ((expression.at(index) == '0') ||
 		(expression.at(index) == '1') ||
@@ -1263,7 +1263,7 @@ bool IsANumber(const string expression, const int index)
 	return false;
 }
 
-void SeparateNumberFromString(const string expression, string &name, double &number)
+void SeparateNumberFromString(const std::string expression, std::string &name, double &number)
 {
 	int index = -1;
 	bool stringFound = false;
@@ -1293,12 +1293,12 @@ void SeparateNumberFromString(const string expression, string &name, double &num
 	}
 }
 
-int SeparateNumberFromStringForElements(const string expression, string &name, double &number)
+int SeparateNumberFromStringForElements(const std::string expression, std::string &name, double &number)
 {
 	int index = -1;
 	bool stringFound = false;
 	
-	// Locating the first number in the string
+	// Locating the first number in the std::string
 	for(int i=0;i<expression.size();i++)
 		if (IsANumber(expression, i) == true)
 		{
@@ -1325,7 +1325,7 @@ int SeparateNumberFromStringForElements(const string expression, string &name, d
 		return 3;
 	}
 
-/*	string name_buf = expression.substr(0,2);
+/*	std::string name_buf = expression.substr(0,2);
 	if (name_buf[1] == ' ')	
 		name = name_buf[0];
 	else						name = name_buf;
@@ -1336,7 +1336,7 @@ int SeparateNumberFromStringForElements(const string expression, string &name, d
 	if (expression[0] != ' ')
 	{
 		if (expression[1] != ' ')
-		string name_buf = expression.substr(0,2);
+		std::string name_buf = expression.substr(0,2);
 	if (name_buf[1] == ' ')	
 		name = name_buf[0];
 	else						name = name_buf;
@@ -1350,12 +1350,12 @@ int SeparateNumberFromStringForElements(const string expression, string &name, d
 // ---------------------------------------------------------------
 // Line parsing
 // ---------------------------------------------------------------
-void SeparateInstructions(const string line, vector<string> &instructions)
+void SeparateInstructions(const std::string line, vector<string> &instructions)
 {
 	instructions.resize(0);
 	instructions.push_back("instructions");
 		
-	string dummy;
+	std::string dummy;
 	stringstream parsed_string(line);
 	
 	for(;;)
@@ -1370,7 +1370,7 @@ OpenSMOKE_ChebishevPolynomialsReaction::OpenSMOKE_ChebishevPolynomialsReaction(v
 {
 }
 
-void OpenSMOKE_ChebishevPolynomialsReaction::ErrorMessage(const string message)
+void OpenSMOKE_ChebishevPolynomialsReaction::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_ChebishevPolynomialsReaction"	<< endl;
@@ -1380,7 +1380,7 @@ void OpenSMOKE_ChebishevPolynomialsReaction::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_ChebishevPolynomialsReaction::WarningMessage(const string message)
+void OpenSMOKE_ChebishevPolynomialsReaction::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_ChebishevPolynomialsReaction"	<< endl;
@@ -1462,7 +1462,7 @@ OpenSMOKE_LogarithmicPressureReaction::OpenSMOKE_LogarithmicPressureReaction(voi
 {
 }
 
-void OpenSMOKE_LogarithmicPressureReaction::ErrorMessage(const string message)
+void OpenSMOKE_LogarithmicPressureReaction::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LogarithmicPressureReaction"	<< endl;
@@ -1472,7 +1472,7 @@ void OpenSMOKE_LogarithmicPressureReaction::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_LogarithmicPressureReaction::WarningMessage(const string message)
+void OpenSMOKE_LogarithmicPressureReaction::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LogarithmicPressureReaction"	<< endl;
@@ -1590,7 +1590,7 @@ double KineticTemperature(const double Cc, const double Tmean, const double Tatt
 	}
 }
 
-void TokenizeString(const string line, vector<string> &list)
+void TokenizeString(const std::string line, vector<string> &list)
 {
 	char *cstr1;
 	strcpy(cstr1, line.c_str());
@@ -1623,7 +1623,7 @@ void TokenizeString(char *line, vector<string> &list)
 	while((token=strtok(NULL, delim))!=NULL)
 		list.push_back(token);
 
-	string prov;
+	std::string prov;
 	for(int i=1;i<=int(list[0].size());i++)
 		if (list[0].at(i-1) != ' ' && list[0].at(i-1) != '\t')
 			prov.push_back(list[0].at(i-1));
@@ -1634,39 +1634,39 @@ void TokenizeString(char *line, vector<string> &list)
 
 }
 
-string GetLabelIndex(const int count)
+std::string GetLabelIndex(const int count)
 {
 	stringstream number;
 	number << count;
-	string label = "(" + number.str() + ")";
+	std::string label = "(" + number.str() + ")";
 	return label;
 }
 
-string GetNumber(const int count)
+std::string GetNumber(const int count)
 {
 	stringstream number;
 	number << count;
 	return number.str();
 }
 
-void PrintTagOnGnuplotLabel(const int length, ofstream &fOut, const string tag, int &counter)
+void PrintTagOnGnuplotLabel(const int length, ofstream &fOut, const std::string tag, int &counter)
 {
 	stringstream number;
 	number << counter++;
-	string label = tag + "(" + number.str() + ")";
+	std::string label = tag + "(" + number.str() + ")";
 	fOut << setw(length) << left << label;
 }
 
 void PrintHeaderOnBinaryFile(BzzSave &fSave)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 
 	dummy = "V20100417";
 	strcpy(name, dummy.c_str());
 	fSave.fileSave.write((char*) name, sizeof(name));
 	
-	string building_date = GiveMeTimeAndDate();
+	std::string building_date = GiveMeTimeAndDate();
 	dummy = building_date;
 	strcpy(name, dummy.c_str());
 	fSave.fileSave.write((char*) name, sizeof(name));
@@ -1674,7 +1674,7 @@ void PrintHeaderOnBinaryFile(BzzSave &fSave)
 
 void PrintEndOnBinaryFile(BzzSave &fSave)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 
 	dummy = "END";
@@ -1682,7 +1682,7 @@ void PrintEndOnBinaryFile(BzzSave &fSave)
 	fSave.fileSave.write((char*) name, sizeof(name));
 }
 
-void CheckInBinaryFile(BzzLoad &fLoad, const string flag)
+void CheckInBinaryFile(BzzLoad &fLoad, const std::string flag)
 {
 	char dummy[Constants::NAME_SIZE];
 	fLoad.fileLoad.read((char*) dummy, sizeof(dummy));
@@ -1690,21 +1690,21 @@ void CheckInBinaryFile(BzzLoad &fLoad, const string flag)
 	{
 		cout << endl;
 		cout << "File:   " << fLoad.GetFileName()		<< endl;
-		cout << "Error:  " << "Expected: " << flag << " - Found: " << string(dummy)	<< endl;
+		cout << "Error:  " << "Expected: " << flag << " - Found: " << std::string(dummy)	<< endl;
 		cout << "Press a key to continue... "		<< endl;
 		getchar();
 		exit(-1);
 	}
 }
 
-string NextInBinaryFile(BzzLoad &fLoad)
+std::string NextInBinaryFile(BzzLoad &fLoad)
 {
 	char dummy[Constants::NAME_SIZE];
 	fLoad.fileLoad.read((char*) dummy, sizeof(dummy));
 	return dummy;
 }
 
-void PrepareLiquidPropertiesDictionary(const string tag, const string file_name, vector<string> &lines, BzzVectorInt &indexLines)
+void PrepareLiquidPropertiesDictionary(const std::string tag, const std::string file_name, vector<string> &lines, BzzVectorInt &indexLines)
 {
 	const int SIZE = 400;
 	char comment[SIZE];
@@ -1764,22 +1764,22 @@ void PrepareLiquidPropertiesDictionary(const string tag, const string file_name,
 	cout << endl;
 }
 
-string StringToUpper(string strToConvert)
+std::string StringToUpper(std::string strToConvert)
 {
-	//change each element of the string to upper case
+	//change each element of the std::string to upper case
 	for(unsigned int i=0;i<strToConvert.length();i++)
 	{
 		  strToConvert[i] = toupper(strToConvert[i]);
 	}
-	return strToConvert;//return the converted string
+	return strToConvert;//return the converted std::string
 }
 
-string StringToLower(string strToConvert)
+std::string StringToLower(std::string strToConvert)
 {
-	//change each element of the string to lower case
+	//change each element of the std::string to lower case
 	for(unsigned int i=0;i<strToConvert.length();i++)
 	{
 		strToConvert[i] = tolower(strToConvert[i]);
 	}
-	return strToConvert;//return the converted string
+	return strToConvert;//return the converted std::string
 }

@@ -153,7 +153,7 @@ public:
 	bool iSoot;
 
 	// Soot CRECK manager setup
-	void	recognizeSpecies(int NC, string *names, BzzVector &M);
+	void	recognizeSpecies(int NC, std::string *names, BzzVector &M);
 
 	// General purpose functions
 	double	giveSumSmallBins(BzzVector &vector);
@@ -239,7 +239,7 @@ public:
 	bool iPAH;
 
 	// Soot CRECK manager setup
-	void	recognizeSpecies(int NC, string *names, BzzVector &M);
+	void	recognizeSpecies(int NC, std::string *names, BzzVector &M);
 
 	// General purpose functions
 	double	giveSum340nm(BzzVector &vector);

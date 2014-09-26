@@ -18,10 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string>
+#include <algorithm>
 #include "basic/OpenSMOKE_Constants.h"
 #include "surfaceChemistry/OpenSMOKE_SurfaceReaction.h"
 
-void OpenSMOKE_SurfaceReaction::ErrorMessage(const string message)
+void OpenSMOKE_SurfaceReaction::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_SurfaceReaction"	<< endl;
@@ -32,7 +34,7 @@ void OpenSMOKE_SurfaceReaction::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_SurfaceReaction::WarningMessage(const string message)
+void OpenSMOKE_SurfaceReaction::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:	  OpenSMOKE_SurfaceReaction"	<< endl;

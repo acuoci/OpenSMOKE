@@ -38,7 +38,7 @@ class OpenSMOKE_LiquidSpecies
 public:
 
 	OpenSMOKE_LiquidSpecies();
-	void SetName(const string name);
+	void SetName(const std::string name);
 	void SetProperties(OpenSMOKE_LiquidProperties_Database &database);
 	void Summary();
 
@@ -54,8 +54,8 @@ private:
 
 	int CAS;
 
-	string name_extended;
-	string name;
+	std::string name_extended;
+	std::string name;
 
 	
 	double Tc;
@@ -110,9 +110,9 @@ private:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_LIQUIDSPECIES_H

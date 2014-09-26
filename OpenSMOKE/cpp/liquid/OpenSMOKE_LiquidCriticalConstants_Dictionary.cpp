@@ -22,7 +22,7 @@
 #include <iomanip>
 #include "liquid/OpenSMOKE_LiquidCriticalConstants_Dictionary.h"
 
-void OpenSMOKE_LiquidCriticalConstants_Dictionary::ErrorMessage(const string message)
+void OpenSMOKE_LiquidCriticalConstants_Dictionary::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidCriticalConstants_Dictionary"	<< endl;
@@ -33,7 +33,7 @@ void OpenSMOKE_LiquidCriticalConstants_Dictionary::ErrorMessage(const string mes
     exit(-1);
 }
 
-void OpenSMOKE_LiquidCriticalConstants_Dictionary::WarningMessage(const string message)
+void OpenSMOKE_LiquidCriticalConstants_Dictionary::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidCriticalConstants_Dictionary"	<< endl;
@@ -43,7 +43,7 @@ void OpenSMOKE_LiquidCriticalConstants_Dictionary::WarningMessage(const string m
     getchar();
 }
 
-void OpenSMOKE_LiquidCriticalConstants_Dictionary::ErrorMessage(const string message, const int iLine)
+void OpenSMOKE_LiquidCriticalConstants_Dictionary::ErrorMessage(const std::string message, const int iLine)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidCriticalConstants_Dictionary"	<< endl;
@@ -60,7 +60,7 @@ OpenSMOKE_LiquidCriticalConstants_Dictionary::OpenSMOKE_LiquidCriticalConstants_
 	name_object = "[not assigned]";
 }
 
-void OpenSMOKE_LiquidCriticalConstants_Dictionary::ReadFromFile(const string file_name)
+void OpenSMOKE_LiquidCriticalConstants_Dictionary::ReadFromFile(const std::string file_name)
 {
 	vector<string> lines;
 	BzzVectorInt indexLines;
@@ -85,12 +85,12 @@ void OpenSMOKE_LiquidCriticalConstants_Dictionary::ReadFromFile(const string fil
 		ProcessData(lines[indexLines[i]], indexLines[i], i);
 }
 
-void OpenSMOKE_LiquidCriticalConstants_Dictionary::ProcessData(const string line, const int iLine, const int index)
+void OpenSMOKE_LiquidCriticalConstants_Dictionary::ProcessData(const std::string line, const int iLine, const int index)
 {
 	vector<string> instructions;
 	instructions.push_back("instructions");
 		
-	string dummy;
+	std::string dummy;
 	stringstream parsed_string(line);
 
 	for(;;)
@@ -117,7 +117,7 @@ void OpenSMOKE_LiquidCriticalConstants_Dictionary::ProcessData(const string line
 }
 
 
-void OpenSMOKE_LiquidCriticalConstants_Dictionary::WriteToFile(const string file_name)
+void OpenSMOKE_LiquidCriticalConstants_Dictionary::WriteToFile(const std::string file_name)
 {
 	ofstream fOutput;
 	openOutputFileAndControl(fOutput, file_name);
@@ -154,7 +154,7 @@ void OpenSMOKE_LiquidCriticalConstants_Dictionary::WriteToFile(const string file
 
 void OpenSMOKE_LiquidCriticalConstants_Dictionary::SaveToFile(BzzSave &fSave)
 {
-	string dummy= "CONSTANTS";
+	std::string dummy= "CONSTANTS";
 	char name[Constants::NAME_SIZE];
 
 	strcpy(name, dummy.c_str());

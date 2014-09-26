@@ -18,10 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string>
 #include "basic/OpenSMOKE_Constants.h"
 #include "distributions/OpenSMOKE_DoubleDeltaDiracDistribution.h"
 
-void OpenSMOKE_DoubleDeltaDiracDistribution::ErrorMessage(const string message)
+void OpenSMOKE_DoubleDeltaDiracDistribution::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_DoubleDeltaDiracDistribution"			<< endl;
@@ -31,7 +32,7 @@ void OpenSMOKE_DoubleDeltaDiracDistribution::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_DoubleDeltaDiracDistribution::WarningMessage(const string message)
+void OpenSMOKE_DoubleDeltaDiracDistribution::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:    OpenSMOKE_DoubleDeltaDiracDistribution"		<< endl;

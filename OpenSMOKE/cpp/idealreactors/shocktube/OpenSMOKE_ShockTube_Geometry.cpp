@@ -26,7 +26,7 @@
 const double OpenSMOKE_ShockTube_Geometry::pi_over_4  = Constants::pi / 4.;
 const double OpenSMOKE_ShockTube_Geometry::_4_over_pi = 4. / Constants::pi;
 
-void OpenSMOKE_ShockTube_Geometry::ErrorMessage(const string message)
+void OpenSMOKE_ShockTube_Geometry::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_ShockTube_Geometry"		<< endl;
@@ -43,18 +43,18 @@ OpenSMOKE_ShockTube_Geometry::OpenSMOKE_ShockTube_Geometry()
 	name_object	= "Default name";	// Object Name
 }
 
-void OpenSMOKE_ShockTube_Geometry::SetName(const string name)
+void OpenSMOKE_ShockTube_Geometry::SetName(const std::string name)
 {
 	name_object	= name;				// Object Name
 }
 
-void OpenSMOKE_ShockTube_Geometry::Setup(const string fileName)
+void OpenSMOKE_ShockTube_Geometry::Setup(const std::string fileName)
 {
     int i;
-    string label;
-    string variable;
-    string conversion_x;
-    string conversion_y;
+    std::string label;
+    std::string variable;
+    std::string conversion_x;
+    std::string conversion_y;
     BzzVector x_vector;
     BzzVector y_vector;
 
@@ -196,7 +196,7 @@ void OpenSMOKE_ShockTube_Geometry::Update(const double x, double &D, double &Are
     }
 }
 
-void OpenSMOKE_ShockTube_Geometry::Setup(const string fileName, const string name)
+void OpenSMOKE_ShockTube_Geometry::Setup(const std::string fileName, const std::string name)
 {
     int i;
 

@@ -74,32 +74,32 @@ void OpenSMOKE_ShockTube::AssignReflectedShock()
     assignedKindOfReactor = true;
 }
 
-void OpenSMOKE_ShockTube::AssignShockVelocity(const string units, const double value)
+void OpenSMOKE_ShockTube::AssignShockVelocity(const std::string units, const double value)
 {
 	UShock = OpenSMOKE_Conversions::conversion_velocity(value, units);	
     assignedShockVelocity = true;
 }
 
-void OpenSMOKE_ShockTube::SetReflectedShockVelocity(const string units, const double value)
+void OpenSMOKE_ShockTube::SetReflectedShockVelocity(const std::string units, const double value)
 {
 	UReflectedShock = OpenSMOKE_Conversions::conversion_velocity(value, units);	
 }
 
-void OpenSMOKE_ShockTube::AssignShockTemperature(const string units, const double value, const kindInitialCondition _iInitialCondition)
+void OpenSMOKE_ShockTube::AssignShockTemperature(const std::string units, const double value, const kindInitialCondition _iInitialCondition)
 {
 	inletStream->AssignTemperature(value, units);	
     assignedShockTemperature	= true;
 	iInitialCondition			= _iInitialCondition;
 }
 
-void OpenSMOKE_ShockTube::AssignShockPressure(const string units, const double value, const kindInitialCondition _iInitialCondition)
+void OpenSMOKE_ShockTube::AssignShockPressure(const std::string units, const double value, const kindInitialCondition _iInitialCondition)
 {
 	inletStream->AssignPressure(value, units);	
     assignedShockPressure	= true;
 	iInitialCondition		= _iInitialCondition;
 }
 
-void OpenSMOKE_ShockTube::AssignShockDensity(const string units, const double value, const kindInitialCondition _iInitialCondition)
+void OpenSMOKE_ShockTube::AssignShockDensity(const std::string units, const double value, const kindInitialCondition _iInitialCondition)
 {
 	inletStream->AssignDensity(value, units);	
     assignedShockDensity	= true;
@@ -128,13 +128,13 @@ void OpenSMOKE_ShockTube::UnsetBoundaryLayerCorrection()
 	iBoundaryLayerCorrection = false;
 }
 
-void OpenSMOKE_ShockTube::AssignEnd(const string units, const double value)
+void OpenSMOKE_ShockTube::AssignEnd(const std::string units, const double value)
 {
 	TauTotal = OpenSMOKE_Conversions::conversion_time(value, units);	
     assignedEnd = true;
 }
 
-void OpenSMOKE_ShockTube::AssignDiameter(const string units, const double value)
+void OpenSMOKE_ShockTube::AssignDiameter(const std::string units, const double value)
 {
     D       = OpenSMOKE_Conversions::conversion_length(value, units);
     Area    = Constants::pi * D*D / 4.;
@@ -143,7 +143,7 @@ void OpenSMOKE_ShockTube::AssignDiameter(const string units, const double value)
     assignedGeometry = true;
 }
 
-void OpenSMOKE_ShockTube::AssignArea(const string units, const double value)
+void OpenSMOKE_ShockTube::AssignArea(const std::string units, const double value)
 {
     Area    = OpenSMOKE_Conversions::conversion_area(value, units);
     D       = sqrt(4./Constants::pi*Area);
@@ -281,7 +281,7 @@ void OpenSMOKE_ShockTube::SummaryOnFile()
 	int i;
 
 	ofstream fSummary;
-	string file_name = outputFolderName + "/Summary.out";
+	std::string file_name = outputFolderName + "/Summary.out";
 	openOutputFileAndControl(fSummary, file_name);
     fSummary.setf(ios::scientific);
 
@@ -802,10 +802,10 @@ void OpenSMOKE_ShockTube::ReSolve()
 	Solve();
 }
 
-void OpenSMOKE_ShockTube::DefineFromFile(const string inputFile)
+void OpenSMOKE_ShockTube::DefineFromFile(const std::string inputFile)
 {
     double  double_value;
-    string  string_value;
+    std::string  string_value;
     int     int_value;
 	vector<string> string_vector;
 	vector<double>  double_vector;
@@ -1021,8 +1021,8 @@ void OpenSMOKE_ShockTube::Solve()
     o.SetMaximumConstraints(xMax);
 	//o.SetMaxStep(MAX_TIME_STEPS);
 
-    if (iRelativeTolerance == true)	o.SetTollRel(relativeTolerance);
-    if (iAbsoluteTolerance == true)	o.SetTollAbs(absoluteTolerance);
+    if (iRelativeTolerance == true)	o.SetTolRel(relativeTolerance);
+    if (iAbsoluteTolerance == true)	o.SetTolAbs(absoluteTolerance);
 
     {
         countGlobalIterations = -1;  // From -1 to avoid to store results from the first iteration
@@ -1348,7 +1348,7 @@ OpenSMOKE_Dictionary_ShockTube::OpenSMOKE_Dictionary_ShockTube()
 
 void OpenSMOKE_ShockTube::SaveOnBinaryFile(BzzSave &fOutput)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 
 	int nSteps = countGlobalIterations;			
@@ -1418,7 +1418,7 @@ void OpenSMOKE_ShockTube::SaveOnBinaryFile(BzzSave &fOutput)
 	}
 }
 
-void OpenSMOKE_ShockTube::SaveOnBinaryFile(const string filename)
+void OpenSMOKE_ShockTube::SaveOnBinaryFile(const std::string filename)
 {
 	cout << "Save on binary file..." << endl;
 	BzzSave fOutput;
@@ -1436,7 +1436,7 @@ void OpenSMOKE_ShockTube::SaveOnBinaryFile(const string filename)
 	{
 		cout << "  -- writing rate of production analysis..." << endl;
 
-		string dummy;
+		std::string dummy;
 		char name[Constants::NAME_SIZE];
 
 		BzzVector RRvector(mix->NumberOfReactions());

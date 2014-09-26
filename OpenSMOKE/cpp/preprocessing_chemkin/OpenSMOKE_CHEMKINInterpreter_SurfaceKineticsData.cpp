@@ -25,7 +25,7 @@
 #include "preprocessing_chemkin/OpenSMOKE_CHEMKINInterpreter_SurfaceKineticsData.h"
 #include "preprocessing_chemkin/OpenSMOKE_CHEMKINInterpreter_TransportData.h"
 
-void OpenSMOKE_CHEMKINInterpreter_SurfaceKineticsData::ErrorMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_SurfaceKineticsData::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_SurfaceKineticsData"	<< endl;
@@ -36,7 +36,7 @@ void OpenSMOKE_CHEMKINInterpreter_SurfaceKineticsData::ErrorMessage(const string
     exit(-1);
 }
 
-void OpenSMOKE_CHEMKINInterpreter_SurfaceKineticsData::WarningMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_SurfaceKineticsData::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_SurfaceKineticsData"	<< endl;
@@ -62,7 +62,7 @@ void OpenSMOKE_CHEMKINInterpreter_SurfaceKineticsData::Setup(ofstream *_fLog, Op
 	fWarning	= _fWarning; 
 }
 
-void OpenSMOKE_CHEMKINInterpreter_SurfaceKineticsData::RecognizeSpecies(const string name_species, int &index, char &phase)
+void OpenSMOKE_CHEMKINInterpreter_SurfaceKineticsData::RecognizeSpecies(const std::string name_species, int &index, char &phase)
 {
 	for(int i=1;i<=int(gas_species_list.size())-1;i++)
 		if (name_species == gas_species_list[i])

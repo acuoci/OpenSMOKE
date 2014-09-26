@@ -22,7 +22,7 @@
 #include "droplet/OpenSMOKE_DropletMicrogravity_GasRadiation.h"
 
 
-void OpenSMOKE_DropletMicrogravity_GasRadiation::ErrorMessage(const string message)
+void OpenSMOKE_DropletMicrogravity_GasRadiation::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Droplet"	<< endl;
@@ -33,7 +33,7 @@ void OpenSMOKE_DropletMicrogravity_GasRadiation::ErrorMessage(const string messa
     exit(-1);
 }
 
-void OpenSMOKE_DropletMicrogravity_GasRadiation::WarningMessage(const string message)
+void OpenSMOKE_DropletMicrogravity_GasRadiation::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_DropletMicrogravity"	<< endl;

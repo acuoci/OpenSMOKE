@@ -22,7 +22,7 @@
 #include <iomanip>
 #include "liquid/OpenSMOKE_LiquidSpecificHeat_Dictionary.h"
 
-void OpenSMOKE_LiquidSpecificHeat_Dictionary::ErrorMessage(const string message)
+void OpenSMOKE_LiquidSpecificHeat_Dictionary::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidSpecificHeat_Dictionary"	<< endl;
@@ -33,7 +33,7 @@ void OpenSMOKE_LiquidSpecificHeat_Dictionary::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_LiquidSpecificHeat_Dictionary::WarningMessage(const string message)
+void OpenSMOKE_LiquidSpecificHeat_Dictionary::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidSpecificHeat_Dictionary"	<< endl;
@@ -43,7 +43,7 @@ void OpenSMOKE_LiquidSpecificHeat_Dictionary::WarningMessage(const string messag
     getchar();
 }
 
-void OpenSMOKE_LiquidSpecificHeat_Dictionary::ErrorMessage(const string message, const int iLine)
+void OpenSMOKE_LiquidSpecificHeat_Dictionary::ErrorMessage(const std::string message, const int iLine)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidSpecificHeat_Dictionary"	<< endl;
@@ -60,7 +60,7 @@ OpenSMOKE_LiquidSpecificHeat_Dictionary::OpenSMOKE_LiquidSpecificHeat_Dictionary
 	name_object = "[not assigned]";
 }
 
-void OpenSMOKE_LiquidSpecificHeat_Dictionary::ReadFromFile(const string file_name)
+void OpenSMOKE_LiquidSpecificHeat_Dictionary::ReadFromFile(const std::string file_name)
 {
 	vector<string> lines;
 	BzzVectorInt indexLines;
@@ -89,12 +89,12 @@ void OpenSMOKE_LiquidSpecificHeat_Dictionary::ReadFromFile(const string file_nam
 		ProcessData(lines[indexLines[i]], indexLines[i], i);
 }
 
-void OpenSMOKE_LiquidSpecificHeat_Dictionary::ProcessData(const string line, const int iLine, const int index)
+void OpenSMOKE_LiquidSpecificHeat_Dictionary::ProcessData(const std::string line, const int iLine, const int index)
 {
 	vector<string> instructions;
 	instructions.push_back("instructions");
 		
-	string dummy;
+	std::string dummy;
 	stringstream parsed_string(line);
 
 	for(;;)
@@ -130,7 +130,7 @@ void OpenSMOKE_LiquidSpecificHeat_Dictionary::ProcessData(const string line, con
 	else ErrorMessage("Unknown equation...", iLine);
 }
 
-void OpenSMOKE_LiquidSpecificHeat_Dictionary::WriteToFile(const string file_name)
+void OpenSMOKE_LiquidSpecificHeat_Dictionary::WriteToFile(const std::string file_name)
 {
 	ofstream fOutput;
 	openOutputFileAndControl(fOutput, file_name);
@@ -180,7 +180,7 @@ void OpenSMOKE_LiquidSpecificHeat_Dictionary::WriteToFile(const string file_name
 
 void OpenSMOKE_LiquidSpecificHeat_Dictionary::SaveToFile(BzzSave &fSave)
 {
-	string dummy= "SPECIFICHEAT";
+	std::string dummy= "SPECIFICHEAT";
 	char name[Constants::NAME_SIZE];
 
 	BzzVectorInt equation_int(C1.Size());

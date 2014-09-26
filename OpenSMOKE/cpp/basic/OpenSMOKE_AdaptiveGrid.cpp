@@ -22,7 +22,7 @@
 #include "basic/OpenSMOKE_AdaptiveGrid.h"
 
 
-void OpenSMOKE_AdaptiveGrid::ErrorMessage(const string message)
+void OpenSMOKE_AdaptiveGrid::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_AdaptiveGrid"	<< endl;
@@ -33,7 +33,7 @@ void OpenSMOKE_AdaptiveGrid::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_AdaptiveGrid::WarningMessage(const string message)
+void OpenSMOKE_AdaptiveGrid::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_AdaptiveGrid"	<< endl;
@@ -43,7 +43,7 @@ void OpenSMOKE_AdaptiveGrid::WarningMessage(const string message)
     getchar();
 }
 
-void OpenSMOKE_AdaptiveGrid::SetName(const string name)
+void OpenSMOKE_AdaptiveGrid::SetName(const std::string name)
 {
 	name_object = name;
 }

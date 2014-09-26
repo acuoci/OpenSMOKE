@@ -33,7 +33,7 @@ class OpenSMOKE_PostProcessor_RateOfProductionAnalysis
 public:
 
 	OpenSMOKE_PostProcessor_RateOfProductionAnalysis(OpenSMOKE_PostProcessor *post_processor_);
-	void SetName(const string name);
+	void SetName(const std::string name);
 	void ReadFromBinaryFile(BzzLoad &fLoad);
 
 	void CallIntegralAnalysis();
@@ -47,9 +47,9 @@ public:
 
 	void Prepare();
 	void ExportAvailableYAxisReactionRates(vector<string> &y_available);
-	void ImportSelectedAxisReactionRates(int x_axis, vector<int> y_axis, BzzMatrix &x, BzzMatrix &y, string &name_x, string &name_y, vector<string> &names_lines);
+	void ImportSelectedAxisReactionRates(int x_axis, vector<int> y_axis, BzzMatrix &x, BzzMatrix &y, std::string &name_x, std::string &name_y, vector<string> &names_lines);
 	void ExportAvailableYAxisFormationRates(vector<string> &y_available);
-	void ImportSelectedAxisFormationRates(int x_axis, vector<int> y_axis, BzzMatrix &x, BzzMatrix &y, string &name_x, string &name_y, vector<string> &names_lines);
+	void ImportSelectedAxisFormationRates(int x_axis, vector<int> y_axis, BzzMatrix &x, BzzMatrix &y, std::string &name_x, std::string &name_y, vector<string> &names_lines);
 
 private:
 
@@ -70,9 +70,9 @@ private:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_POSTPROCESSOR_RATEOFPRODUCTIONANALYSIS

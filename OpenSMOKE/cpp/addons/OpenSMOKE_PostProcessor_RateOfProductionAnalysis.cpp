@@ -28,7 +28,7 @@
 #include "addons/OpenSMOKE_RateOfProductionAnalysis.h"
 #include "addons/OpenSMOKE_PostProcessor_RateOfProductionAnalysis.h"
 
-void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::ErrorMessage(const string message)
+void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_PostProcessor_RateOfProductionAnalysis"	<< endl;
@@ -39,7 +39,7 @@ void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::ErrorMessage(const string
     exit(-1);
 }
 
-void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::WarningMessage(const string message)
+void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_PostProcessor_RateOfProductionAnalysis"	<< endl;
@@ -49,7 +49,7 @@ void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::WarningMessage(const stri
     getchar();
 }
 
-void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::SetName(const string name)
+void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -66,7 +66,7 @@ void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::ReadFromBinaryFile(BzzLoa
 {
 	char dummy[Constants::NAME_SIZE];
 	fLoad.fileLoad.read((char*) dummy, sizeof(dummy));
-	string version = dummy;
+	std::string version = dummy;
 	if (version != "V20100417")
 		ErrorMessage("This version post processing file is not supported: " + version);
 	cout << "Version: " << version << endl;
@@ -136,7 +136,7 @@ void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::ExportAvailableYAxisForma
 	y_available = list_of_y_available_formation_rates;
 }
 
-void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::ImportSelectedAxisReactionRates(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, string &name_x, string &name_y, vector<string> &names_lines)
+void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::ImportSelectedAxisReactionRates(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, std::string &name_x, std::string &name_y, vector<string> &names_lines)
 {
 	ChangeDimensions(y_axis.size(), post_processor->get_x().Size(), &xAxis);
 	ChangeDimensions(y_axis.size(), post_processor->get_x().Size(), &yAxis);
@@ -155,7 +155,7 @@ void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::ImportSelectedAxisReactio
 	}
 }
 
-void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::ImportSelectedAxisFormationRates(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, string &name_x, string &name_y, vector<string> &names_lines)
+void OpenSMOKE_PostProcessor_RateOfProductionAnalysis::ImportSelectedAxisFormationRates(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, std::string &name_x, std::string &name_y, vector<string> &names_lines)
 {
 	ChangeDimensions(y_axis.size(), post_processor->get_x().Size(), &xAxis);
 	ChangeDimensions(y_axis.size(), post_processor->get_x().Size(), &yAxis);

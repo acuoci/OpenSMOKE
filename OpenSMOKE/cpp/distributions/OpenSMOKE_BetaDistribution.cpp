@@ -21,7 +21,7 @@
 #include "basic/OpenSMOKE_Constants.h"
 #include "distributions/OpenSMOKE_BetaDistribution.h"
 
-void OpenSMOKE_BetaFunction::ErrorMessage(const string message)
+void OpenSMOKE_BetaFunction::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_BetaFunction"			<< endl;
@@ -31,7 +31,7 @@ void OpenSMOKE_BetaFunction::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_BetaFunction::WarningMessage(const string message)
+void OpenSMOKE_BetaFunction::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:    OpenSMOKE_BetaFunction"		<< endl;
@@ -110,7 +110,7 @@ double OpenSMOKE_BetaFunction::at(const double a, const double b)
 	}
 }
 
-void OpenSMOKE_BetaDistribution::ErrorMessage(const string message)
+void OpenSMOKE_BetaDistribution::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_BetaDistribution"			<< endl;
@@ -120,7 +120,7 @@ void OpenSMOKE_BetaDistribution::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_BetaDistribution::WarningMessage(const string message)
+void OpenSMOKE_BetaDistribution::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:    OpenSMOKE_BetaDistribution"		<< endl;

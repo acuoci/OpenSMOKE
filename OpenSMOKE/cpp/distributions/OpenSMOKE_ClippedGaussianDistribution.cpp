@@ -22,7 +22,7 @@
 #include "distributions/OpenSMOKE_ClippedGaussianDistribution.h"
 
 
-void OpenSMOKE_ClippedGaussianDistribution::ErrorMessage(const string message)
+void OpenSMOKE_ClippedGaussianDistribution::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_ClippedGaussianDistribution"			<< endl;
@@ -32,7 +32,7 @@ void OpenSMOKE_ClippedGaussianDistribution::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_ClippedGaussianDistribution::WarningMessage(const string message)
+void OpenSMOKE_ClippedGaussianDistribution::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:    OpenSMOKE_ClippedGaussianDistribution"		<< endl;

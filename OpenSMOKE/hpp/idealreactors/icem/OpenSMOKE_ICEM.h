@@ -58,9 +58,9 @@ public:	// Virtual functions (compulsory)
 	void VideoFinalResult();
 	void VideoGeneralInfo();
 	void VideoSummary();
-	void DefineFromFile(const string inputFile);
+	void DefineFromFile(const std::string inputFile);
 	void Solve();
-	void AssignEnd(const string units, const double value);
+	void AssignEnd(const std::string units, const double value);
 	void EnergyAnalysis(OpenSMOKE_GasStream &outletStream);
 	void ODEPrint(BzzVector &y, double eta);
 	void SummaryOnFile();
@@ -79,15 +79,15 @@ private: // Virtual functions (compulsory)
 
 public: // Specific functions 
 	
-	void AssignClearanceVolume(const string units, const double value);
-	void AssignRotationRate(const string units, const double value);
+	void AssignClearanceVolume(const std::string units, const double value);
+	void AssignRotationRate(const std::string units, const double value);
 	void AssignCompressionRatio(const double value);
 	void AssignArmRatio(const double value);
-	void AssignStartAngle(const string units, const double value);
-	void AssignDiameter(const string units, const double value);
+	void AssignStartAngle(const std::string units, const double value);
+	void AssignDiameter(const std::string units, const double value);
 
-	void SetConstantExchangeArea(const double value, const string units);
-	void SetUserDefinedExchangeArea(const string fileName);
+	void SetConstantExchangeArea(const double value, const std::string units);
+	void SetUserDefinedExchangeArea(const std::string fileName);
 	void UnsetUserDefinedExchangeArea();
 
 	void SetNumberOfCycles(const double value);

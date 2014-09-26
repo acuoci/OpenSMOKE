@@ -30,16 +30,16 @@ public:
 
 	OpenSMOKE_LogFile();
 
-	void Setup(const string file_name);
-	void WriteLogMessage(const string log_message);
+	void Setup(const std::string file_name);
+	void WriteLogMessage(const std::string log_message);
 
 private:
 
-	string		file_name;
+	std::string		file_name;
 	ofstream	fLog;
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif	// OPENSMOKE_LOGFILE

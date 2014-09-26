@@ -25,7 +25,7 @@
 void inverse_kinetics_non_linear_regression_complete(int model, int ex, BzzVector &b, BzzVector &x, BzzVector &y);
 void inverse_kinetics_non_linear_regression_partial(int model, int ex, BzzVector &b, BzzVector &x, BzzVector &y);
 
-void OpenSMOKE_ReactingGas::ErrorMessage(const string message)
+void OpenSMOKE_ReactingGas::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_ReactingGas"		<< endl;
@@ -36,7 +36,7 @@ void OpenSMOKE_ReactingGas::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_ReactingGas::WarningMessage(const string message)
+void OpenSMOKE_ReactingGas::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:	  OpenSMOKE_ReactingGas"	<< endl;
@@ -53,7 +53,7 @@ OpenSMOKE_ReactingGas::OpenSMOKE_ReactingGas()
 
 
 
-void OpenSMOKE_ReactingGas::SetName(const string name)
+void OpenSMOKE_ReactingGas::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -68,10 +68,10 @@ bool OpenSMOKE_ReactingGas::IsTransportModeAvailable()
 	return iTransportMode;
 }
 
-void OpenSMOKE_ReactingGas::SetupBinary(const string pathName)
+void OpenSMOKE_ReactingGas::SetupBinary(const std::string pathName)
 {
-	string fileNameReactions;
-	string fileNameIdealGas;
+	std::string fileNameReactions;
+	std::string fileNameIdealGas;
 	if (binary_version_ == true)
 	{
 		cout << "BINARY " << pathName << endl;
@@ -456,17 +456,17 @@ void OpenSMOKE_ReactingGas::GiveMe_Jalfa_Eatt(	BzzMatrix &JAlfa, OpenSMOKE_NuMan
 {
 }
 
-void OpenSMOKE_ReactingGas::GiveMeIndexOfSpeciesInReactions(const string fileName, BzzVectorIntArray &indices)
+void OpenSMOKE_ReactingGas::GiveMeIndexOfSpeciesInReactions(const std::string fileName, BzzVectorIntArray &indices)
 {
 	char comment[Constants::COMMENT_SIZE];
-	string pathName;
+	std::string pathName;
 
 	ifstream fInput;
 	openInputFileAndControl(fInput, fileName);
 	fInput >> pathName;				fInput.getline(comment, Constants::COMMENT_SIZE);
 	fInput.close();
 
-	string fileNameStoichiometry = pathName + "/stoichiometry.bzz";
+	std::string fileNameStoichiometry = pathName + "/stoichiometry.bzz";
 
 	indices(NR);
 	kinetics.GiveMeIndexOfSpeciesInEachReaction(fileNameStoichiometry, indices);
@@ -499,10 +499,10 @@ void OpenSMOKE_ReactingGas::ComputeKEq(const double T, BzzMatrix &nu, BzzVector 
 		uKeq[i] = exp(-DSReaction[i]+DHReaction[i]-loguRT*sumNuij[i]);
 }
 
-string MirrorString(const string s)
+std::string MirrorString(const std::string s)
 {
-	string reactants;
-	string products;
+	std::string reactants;
+	std::string products;
 	int count = 0;
 	for (int i=0;i<s.size();i++)
 	{
@@ -517,7 +517,7 @@ string MirrorString(const string s)
 	for (int i=count;i<s.size();i++)
 		products += s.at(i);
 
-	string reaction = products + "=>" + reactants;
+	std::string reaction = products + "=>" + reactants;
 
 	return reaction;
 }
@@ -736,7 +736,7 @@ void OpenSMOKE_ReactingGas::VerboseDataKinetics(ofstream &fOutput, const int k, 
 void OpenSMOKE_ReactingGas::SaveOnBinaryFile(BzzSave &fSave)
 {
 	int j;
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 	char name_reaction[Constants::REACTION_NAME_SIZE];
 
@@ -816,7 +816,7 @@ void OpenSMOKE_ReactingGas::ComputeFromConcentrationsAndCorrect(double T, BzzVec
 		kinetics.compositionReactionRates(r,R);	
 }
 
-void OpenSMOKE_ReactingGas::WriteElementsFile(const string fileName)
+void OpenSMOKE_ReactingGas::WriteElementsFile(const std::string fileName)
 {
 	ofstream fOutput;
 	openOutputFileAndControl(fOutput, fileName);

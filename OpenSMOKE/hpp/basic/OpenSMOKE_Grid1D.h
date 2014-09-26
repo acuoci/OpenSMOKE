@@ -30,7 +30,7 @@ private:
 public:
 
 	OpenSMOKE_Grid1D();
-	void SetName(const string name);
+	void SetName(const std::string name);
 	void SetSpherical();
 
 	int Np;
@@ -52,11 +52,11 @@ public:
 	void Construct(const int N, const double LL, const double xcen, const double wmix, const double xAA);
 	void Construct(const int NP, const double xStart, const double Length, 
 				   const double alfaA, const double alfaB, const double fraction_of_points_A, double fraction_of_distance_A);
-	void Construct(const string fileName);
+	void Construct(const std::string fileName);
 	void Construct(BzzVector &coordinates);
 	void ConstructExponential(const int NP, const double LL, const double Beta);
 	
-	void RecoverFromBackUp(const string fileName);
+	void RecoverFromBackUp(const std::string fileName);
 	void RecoverFromBackUp(BzzVector &_x);
 	
 	void RefineDouble();
@@ -85,13 +85,13 @@ private:
 
 	bool iSpherical;
 
-	string name_object;
+	std::string name_object;
 
 	void Allocate();
 	void Build();
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
 };
 

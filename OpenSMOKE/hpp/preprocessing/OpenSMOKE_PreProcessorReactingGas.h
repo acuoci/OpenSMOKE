@@ -34,8 +34,8 @@ public:
 
 	// Main functions
 	int		NumberOfReactions();				// Number of reactions
-	void	PreProcessing(const string pathName, const string fileNameTransport, const string fileNameElements, const string option);
-	void	PreProcessingTransportSensitivity(const string pathName, const string fileNameTransport, const string fileNameElements, const double eps);
+	void	PreProcessing(const std::string pathName, const std::string fileNameTransport, const std::string fileNameElements, const std::string option);
+	void	PreProcessingTransportSensitivity(const std::string pathName, const std::string fileNameTransport, const std::string fileNameElements, const double eps);
 
 	// Reaction rates
 	BzzVector		r;						// Reaction rates [kmol/m3/s]	
@@ -68,8 +68,8 @@ class OpenSMOKE_LennardJonesSensitivityCoefficientsManager
 public:
 
 	OpenSMOKE_LennardJonesSensitivityCoefficientsManager();
-	void Setup(const string file_name, fittingCoefficientSensitivityMode _fittingMode);
-	void SetName(const string name);
+	void Setup(const std::string file_name, fittingCoefficientSensitivityMode _fittingMode);
+	void SetName(const std::string name);
 
 	void GetFittingCoefficients(const fittingCoefficientExtraction fitting, const int j, OpenSMOKE_ReactingGas &mix);
 
@@ -165,10 +165,10 @@ private:
 
 private:
 
-	string name_object;
+	std::string name_object;
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif	// OPENSMOKE_PREPROCESSORREACTINGGAS

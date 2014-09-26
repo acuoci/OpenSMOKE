@@ -148,9 +148,9 @@ private:
 	void SpeciesDensity(double T);
 	void SpeciesThermalDiffusionRatios(const double T);
 
-	void readNames(const string fileName, BzzSave &binaryFile, BzzSave &asciiFile);
-	void readThermodynamics(const string fileName, BzzSave &binaryFile, BzzSave &asciiFile);
-	void readTransportProperties(const string fileName);
+	void readNames(const std::string fileName, BzzSave &binaryFile, BzzSave &asciiFile);
+	void readThermodynamics(const std::string fileName, BzzSave &binaryFile, BzzSave &asciiFile);
+	void readTransportProperties(const std::string fileName);
 
 	void allocate(void);
 	void allocateDiffusivity(void);
@@ -184,11 +184,11 @@ public:
 	BzzMatrix			Djk;
 
 	// Inizializzazione della libreria
-	void Setup(const string fileNames, const string fileTransport, const string fileThermo, const string fileElements, BzzSave &binaryFile, BzzSave &asciiFile);
+	void Setup(const std::string fileNames, const std::string fileTransport, const std::string fileThermo, const std::string fileElements, BzzSave &binaryFile, BzzSave &asciiFile);
 	void Fitting(int nPoints);
 	
-	void SetupFromCHEMKINInterpreter(OpenSMOKE_CHEMKINInterpreter *chemkin, const string file_name);
-	void SetupTransportSensitivity(const string pathName, const string fileNames, const string fileTransport, const string fileThermo, const string fileElements, BzzSave &binaryFile, BzzSave &asciiFile,const double eps);
+	void SetupFromCHEMKINInterpreter(OpenSMOKE_CHEMKINInterpreter *chemkin, const std::string file_name);
+	void SetupTransportSensitivity(const std::string pathName, const std::string fileNames, const std::string fileTransport, const std::string fileThermo, const std::string fileElements, BzzSave &binaryFile, BzzSave &asciiFile,const double eps);
 	
 	void WriteHeaderFile(BzzSave &binaryFile, BzzSave &asciiFile);
 	void WriteSpeciesNames(BzzSave &binaryFile, BzzSave &asciiFile);
@@ -213,11 +213,11 @@ public:
 
 	BzzVector	M;
 	BzzVector	uM;				// Peso molecolare [g/mol]
-	string *names;
+	std::string *names;
 
 	int recognize_species(char* name);
 	int recognize_species_without_exit(char* name);
-    int recognize_species(string name);
+    int recognize_species(std::string name);
 
 
 	int NumberOfSpecies();
@@ -227,20 +227,20 @@ public:
 
 	void SetMinimumTemperature(const double tmin);
 	void SetMaximumTemperature(const double tmax);
-	void SetName(const string name);
-	void SetAuthorName(const string name);
+	void SetName(const std::string name);
+	void SetAuthorName(const std::string name);
 
-	string name_object;
-	string name_author;
-	string building_date;
+	std::string name_object;
+	std::string name_author;
+	std::string building_date;
 
 	double TMIN;
 	double TMAX;
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
-	void ReadElements(const string fileElements, BzzSave &binaryFile, BzzSave &asciiFile);
+	void ReadElements(const std::string fileElements, BzzSave &binaryFile, BzzSave &asciiFile);
 
 	// Element matrix
 	vector<string>	list_of_elements;
@@ -249,7 +249,7 @@ public:
 
 	// Elements
 	BzzVector m_elements;
-	int  recognize_element(const string name);
+	int  recognize_element(const std::string name);
 };
 
 #endif // OPENSMOKE_PREPROCESSORIDEALGAS_H

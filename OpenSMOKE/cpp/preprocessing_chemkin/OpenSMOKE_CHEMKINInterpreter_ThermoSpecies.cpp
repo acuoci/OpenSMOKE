@@ -22,7 +22,7 @@
 #include "preprocessing_chemkin/OpenSMOKE_CHEMKINInterpreter_ThermoSpecies.h"
 #include <sstream>
 
-void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ErrorMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_ThermoSpecies"	<< endl;
@@ -34,7 +34,7 @@ void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ErrorMessage(const string messa
     exit(-1);
 }
 
-void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::WarningMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_ThermoSpecies"	<< endl;
@@ -62,7 +62,7 @@ void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::AssignTemperatures(const double
 	t_max  = _t_max;
 }
 
-void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadMainData(const string line, const int iLine)
+void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadMainData(const std::string line, const int iLine)
 {
 	index_line = iLine;
 
@@ -116,7 +116,7 @@ void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadMainData(const string line,
 	}
 }
 
-void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadFirstLine(const string line)
+void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadFirstLine(const std::string line)
 {		
 	stringstream parsed_string(line);
 
@@ -131,7 +131,7 @@ void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadFirstLine(const string line
 	}
 }
 
-void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadSecondLine(const string line)
+void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadSecondLine(const std::string line)
 {		
 	stringstream parsed_string(line);
 
@@ -146,12 +146,12 @@ void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadSecondLine(const string lin
 	if (last_char != 3)	ErrorMessage("Integer 3 must appear in column 80");
 }
 
-void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadThirdLine(const string line)
+void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadThirdLine(const std::string line)
 {		
 	stringstream parsed_string(line);
 
 	int last_char;
-	string additional;
+	std::string additional;
 	for(int i=1;i<=4;i++)
 		parsed_string >> lower[3+i];
 	parsed_string >> additional; // TODO
@@ -164,13 +164,13 @@ void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadThirdLine(const string line
 	}
 }
 
-void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadAdditionalLine(const string line)
+void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::ReadAdditionalLine(const std::string line)
 {
 	elements += " " + line;
 }
 
 
-void stripSpace(string &str) 
+void stripSpace(std::string &str) 
 {
 	for (int i=0;i<str.length();i++)
 	if (str[i]==' ') 
@@ -180,7 +180,7 @@ void stripSpace(string &str)
 	}
 }
 
-void ParsingAdditionalElements(vector<string> &subelements, const string elements_additional)
+void ParsingAdditionalElements(vector<string> &subelements, const std::string elements_additional)
 {
 	vector<int> pattern(elements_additional.length());
 	for(int i=0;i<elements_additional.length();i++)
@@ -231,7 +231,7 @@ void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::Analyze()
 		subelements.push_back(elements.substr(20, 5));
 		if (elements.length() > 25)
 		{
-			string elements_additional = elements.substr(25, elements.length()-25);
+			std::string elements_additional = elements.substr(25, elements.length()-25);
 			ParsingAdditionalElements(subelements, elements_additional);
 		}
 	}
@@ -240,7 +240,7 @@ void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::Analyze()
 	element_numbers.push_back(0.);
 	for(int i=0;i<subelements.size();i++)
 	{
-		string nameelement;
+		std::string nameelement;
 		double number;
 		int flag = SeparateNumberFromStringForElements(subelements[i], nameelement, number);
 		
@@ -325,7 +325,7 @@ void OpenSMOKE_CHEMKINInterpreter_ThermoSpecies::Analyze()
 	element_numbers.push_back(0.);
 	for(int i=0;i<subelements.size();i++)
 	{
-		string name;
+		std::string name;
 		double number;
 		int flag = SeparateNumberFromStringForElements(subelements[i], name, number);
 		

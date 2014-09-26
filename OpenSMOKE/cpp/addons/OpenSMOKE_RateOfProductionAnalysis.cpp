@@ -21,11 +21,14 @@
 #include <vector>
 #include <iomanip>
 #include <sstream>
+#include <algorithm>
 #include "basic/OpenSMOKE_Utilities.h"
 #include "engine/OpenSMOKE_ReactingGas.h"
 #include "addons/OpenSMOKE_RateOfProductionAnalysis.h"
 
-void OpenSMOKE_RateOfProductionAnalysis::ErrorMessage(const string message)
+using namespace std;
+
+void OpenSMOKE_RateOfProductionAnalysis::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_RateOfProductionAnalysis"	<< endl;
@@ -36,7 +39,7 @@ void OpenSMOKE_RateOfProductionAnalysis::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_RateOfProductionAnalysis::WarningMessage(const string message)
+void OpenSMOKE_RateOfProductionAnalysis::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_RateOfProductionAnalysis"	<< endl;
@@ -46,7 +49,7 @@ void OpenSMOKE_RateOfProductionAnalysis::WarningMessage(const string message)
     getchar();
 }
 
-void OpenSMOKE_RateOfProductionAnalysis::SetName(const string name)
+void OpenSMOKE_RateOfProductionAnalysis::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -276,7 +279,7 @@ void OpenSMOKE_RateOfProductionAnalysis::IntegralRateOfProductionAnalyses()
 	}	
 }
 
-void OpenSMOKE_RateOfProductionAnalysis::PrintRateOfProductionAnalyses(const string fileName, BzzVector  &x, BzzVector &T)
+void OpenSMOKE_RateOfProductionAnalysis::PrintRateOfProductionAnalyses(const std::string fileName, BzzVector  &x, BzzVector &T)
 {
 	ofstream fOutput;
 	openOutputFileAndControl(fOutput, fileName);
@@ -337,7 +340,7 @@ void OpenSMOKE_RateOfProductionAnalysis::PrintRateOfProductionAnalyses_Label(ofs
 	fOutput << endl;
 }
 
-void OpenSMOKE_RateOfProductionAnalysis::PrintIntegralRateOfProductionAnalyses(const string fileName)
+void OpenSMOKE_RateOfProductionAnalysis::PrintIntegralRateOfProductionAnalyses(const std::string fileName)
 {
 	int index;
 	
@@ -551,7 +554,7 @@ void OpenSMOKE_RateOfProductionAnalysis::UnimportantReactions(stringstream &stri
 
 void OpenSMOKE_RateOfProductionAnalysis::SaveOnBinaryFile(BzzSave &fOutput)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 
 	dummy = "ROPA";
@@ -603,7 +606,7 @@ void OpenSMOKE_RateOfProductionAnalysis::SaveOnBinaryFile(BzzSave &fOutput)
 
 
 
-void OpenSMOKE_FluxAnalysis::ErrorMessage(const string message)
+void OpenSMOKE_FluxAnalysis::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_FluxAnalysis"	<< endl;
@@ -614,7 +617,7 @@ void OpenSMOKE_FluxAnalysis::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_FluxAnalysis::WarningMessage(const string message)
+void OpenSMOKE_FluxAnalysis::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_FluxAnalysis"	<< endl;

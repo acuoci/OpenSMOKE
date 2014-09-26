@@ -22,7 +22,7 @@
 #include <iomanip>
 #include "liquid/OpenSMOKE_LiquidDensity_Dictionary.h"
 
-void OpenSMOKE_LiquidDensity_Dictionary::ErrorMessage(const string message)
+void OpenSMOKE_LiquidDensity_Dictionary::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidDensity_Dictionary"	<< endl;
@@ -33,7 +33,7 @@ void OpenSMOKE_LiquidDensity_Dictionary::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_LiquidDensity_Dictionary::WarningMessage(const string message)
+void OpenSMOKE_LiquidDensity_Dictionary::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidDensity_Dictionary"	<< endl;
@@ -43,7 +43,7 @@ void OpenSMOKE_LiquidDensity_Dictionary::WarningMessage(const string message)
     getchar();
 }
 
-void OpenSMOKE_LiquidDensity_Dictionary::ErrorMessage(const string message, const int iLine)
+void OpenSMOKE_LiquidDensity_Dictionary::ErrorMessage(const std::string message, const int iLine)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidDensity_Dictionary"	<< endl;
@@ -60,7 +60,7 @@ OpenSMOKE_LiquidDensity_Dictionary::OpenSMOKE_LiquidDensity_Dictionary()
 	name_object = "[not assigned]";
 }
 
-void OpenSMOKE_LiquidDensity_Dictionary::ReadFromFile(const string file_name)
+void OpenSMOKE_LiquidDensity_Dictionary::ReadFromFile(const std::string file_name)
 {
 	vector<string> lines;
 	BzzVectorInt indexLines;
@@ -88,12 +88,12 @@ void OpenSMOKE_LiquidDensity_Dictionary::ReadFromFile(const string file_name)
 		ProcessData(lines[indexLines[i]], indexLines[i], i);
 }
 
-void OpenSMOKE_LiquidDensity_Dictionary::ProcessData(const string line, const int iLine, const int index)
+void OpenSMOKE_LiquidDensity_Dictionary::ProcessData(const std::string line, const int iLine, const int index)
 {
 	vector<string> instructions;
 	instructions.push_back("instructions");
 		
-	string dummy;
+	std::string dummy;
 	stringstream parsed_string(line);
 
 	for(;;)
@@ -129,7 +129,7 @@ void OpenSMOKE_LiquidDensity_Dictionary::ProcessData(const string line, const in
 	else ErrorMessage("Unknown equation...", iLine);
 }
 
-void OpenSMOKE_LiquidDensity_Dictionary::WriteToFile(const string file_name)
+void OpenSMOKE_LiquidDensity_Dictionary::WriteToFile(const std::string file_name)
 {
 	ofstream fOutput;
 	openOutputFileAndControl(fOutput, file_name);
@@ -178,7 +178,7 @@ void OpenSMOKE_LiquidDensity_Dictionary::WriteToFile(const string file_name)
 
 void OpenSMOKE_LiquidDensity_Dictionary::SaveToFile(BzzSave &fSave)
 {
-	string dummy= "DENSITY";
+	std::string dummy= "DENSITY";
 	char name[Constants::NAME_SIZE];
 
 	BzzVectorInt equation_int(C1.Size());

@@ -185,8 +185,8 @@ void OpenSMOKE_DropletMicrogravity::DAESystemSolutionAgain(BzzDaeSparseObject *o
 	o->SetMaximumConstraints(xMax);
 
 	// Default values: (A) 1e-10      (R) 100*MachEps()
-	o->SetTollRel(data->relTolerances);
-	o->SetTollAbs(data->absTolerances);
+	o->SetTolRel(data->relTolerances);
+	o->SetTolAbs(data->absTolerances);
 
 	double timeStart = BzzGetCpuTime();
 	bzzStop = 0;  

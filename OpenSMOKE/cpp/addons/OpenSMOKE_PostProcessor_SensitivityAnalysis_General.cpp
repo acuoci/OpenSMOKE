@@ -26,20 +26,20 @@
 #include "addons/OpenSMOKE_PostProcessor.h"
 #include "addons/OpenSMOKE_PostProcessor_SensitivityAnalysis_General.h"
 
-void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::ErrorMessage(const string message)
+void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::ErrorMessage(const std::string message)
 {
 }
 
-void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::WarningMessage(const string message)
+void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::WarningMessage(const std::string message)
 {
 }
 
-void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::SetName(const string name)
+void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::SetName(const std::string name)
 {
 	name_object = name;
 }
 
-string OpenSMOKE_PostProcessor_SensitivityAnalysis_General::sensitivity_list() 
+std::string OpenSMOKE_PostProcessor_SensitivityAnalysis_General::sensitivity_list() 
 {
 	return sensitivity_list_;
 }
@@ -256,7 +256,7 @@ void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::GetAdditionalSensitivi
 	GetSensitivityProfiles(iTotal, iLocal, coordinate, index_selection, SMatrix, indices, names_t);
 }
 
-void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::GetMassFractionSensitivityBars(const bool iTotal, const bool iLocal, const double coordinate, const string name, vector<double> &t, vector<int> &it, vector<string> &names_t)
+void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::GetMassFractionSensitivityBars(const bool iTotal, const bool iLocal, const double coordinate, const std::string name, vector<double> &t, vector<int> &it, vector<string> &names_t)
 {
 	int index = 0;
 	for(int j=1;j<=S_NC;j++)
@@ -273,7 +273,7 @@ void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::GetMassFractionSensiti
 	GetSensitivityBars(iTotal, iLocal, coordinate, index_local, t, it, names_t);
 }
 
-void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::GetMassFractionSensitivityProfiles(const bool iTotal, const bool iLocal, const double coordinate, const string name, BzzMatrix &SMatrix, BzzVectorInt &indices, vector<string> &names_t)
+void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::GetMassFractionSensitivityProfiles(const bool iTotal, const bool iLocal, const double coordinate, const std::string name, BzzMatrix &SMatrix, BzzVectorInt &indices, vector<string> &names_t)
 {
 	cout << "Transfer" << endl;
 	cout << S_NC << endl;
@@ -314,7 +314,7 @@ void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::ExportAvailableYAxisSe
 	y_available = list_of_y_available_reaction_rates;
 }
 
-void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::ImportSelectedAxisSensitivityCoefficients(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, string &name_x, string &name_y, vector<string> &names_lines)
+void OpenSMOKE_PostProcessor_SensitivityAnalysis_General::ImportSelectedAxisSensitivityCoefficients(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, std::string &name_x, std::string &name_y, vector<string> &names_lines)
 {
 	ChangeDimensions(y_axis.size(), post_processor->get_x().Size(), &xAxis);
 	ChangeDimensions(y_axis.size(), post_processor->get_x().Size(), &yAxis);

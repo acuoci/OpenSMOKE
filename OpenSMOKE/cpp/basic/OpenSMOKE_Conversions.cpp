@@ -22,7 +22,7 @@
 
 namespace OpenSMOKE_Conversions
 {
-    void ErrorMessage(const string message)
+    void ErrorMessage(const std::string message)
     {
         cout << endl;
         cout << "Conversion Namespace: "        << endl;
@@ -32,7 +32,7 @@ namespace OpenSMOKE_Conversions
         exit(-1);
     }
 
-    double conversion_length(const double value, const string units)
+    double conversion_length(const double value, const std::string units)
     {
                 if (units == "cm") return value*m_from_cm;
         else    if (units == "m")  return value;
@@ -44,7 +44,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-	double conversion_u_length(const double value, const string units)
+	double conversion_u_length(const double value, const std::string units)
     {
                 if (units == "1/cm") return value/m_from_cm;
         else    if (units == "1/m")  return value;
@@ -56,7 +56,7 @@ namespace OpenSMOKE_Conversions
 	return  0.;
     }
 
-    double conversion_area(const double value, const string units)
+    double conversion_area(const double value, const std::string units)
     {
                 if (units == "cm2") return value*m2_from_cm2;
         else    if (units == "m2")  return value;
@@ -68,7 +68,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_volume(const double value, const string units)
+    double conversion_volume(const double value, const std::string units)
     {
                 if (units == "mm3")             return value*m3_from_mm3;
         else    if (units == "m3")              return value;
@@ -86,7 +86,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_specificVolume(const double value, const string units)
+    double conversion_specificVolume(const double value, const std::string units)
     {
 
 				if (units == "m3/kg")   return value;
@@ -99,7 +99,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_pressure(const double value, const string units)
+    double conversion_pressure(const double value, const std::string units)
     {
                 if (units == "atm")  return value*Pa_from_atm;
         else    if (units == "Pa")   return value;
@@ -113,7 +113,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_mass(const double value, const string units)
+    double conversion_mass(const double value, const std::string units)
     {
                 if (units == "g")  return value*kg_from_g;
         else    if (units == "kg") return value;
@@ -124,7 +124,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_time(const double value, const string units)
+    double conversion_time(const double value, const std::string units)
     {
                 if (units == "s")   return value;
         else    if (units == "min") return value*s_from_min;
@@ -135,7 +135,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_energy(const double value, const string units)
+    double conversion_energy(const double value, const std::string units)
     {
                 if (units == "J")       return value;
         else    if (units == "kJ")      return value*J_from_kJ;
@@ -150,7 +150,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_entropy(const double value, const string units)
+    double conversion_entropy(const double value, const std::string units)
     {
                 if (units == "J/K")       return value;
         else    if (units == "kJ/K")      return value*J_from_kJ;
@@ -165,7 +165,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_specificEnergy(const double value, const string units)
+    double conversion_specificEnergy(const double value, const std::string units)
     {
                 if (units == "J/kg")       return value;
         else    if (units == "kJ/kg")      return value*J_from_kJ;
@@ -188,7 +188,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_specificEnergyMolar(const double value, const string units)
+    double conversion_specificEnergyMolar(const double value, const std::string units)
     {
                 if (units == "J/kmol")       return value;
         else    if (units == "kJ/kmol")      return value*J_from_kJ;
@@ -211,7 +211,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_specificEntropy(const double value, const string units)
+    double conversion_specificEntropy(const double value, const std::string units)
     {
                 if (units == "J/kg/K")       return value;
         else    if (units == "kJ/kg/K")      return value*J_from_kJ;
@@ -234,7 +234,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_temperature(const double value, const string units)
+    double conversion_temperature(const double value, const std::string units)
     {
                 if (units == "K")    return value;
         else    if (units == "C")    return value + 273.15;
@@ -245,7 +245,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_frequency(const double value, const string units)
+    double conversion_frequency(const double value, const std::string units)
     {
                 if (units == "Hz")    return value;
 		else    if (units == "1/s")   return value;
@@ -257,7 +257,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_velocity(const double value, const string units)
+    double conversion_velocity(const double value, const std::string units)
     {
 				if (units == "m/s")   	return value;
 		else    if (units == "cm/s")  	return value*m_from_cm;
@@ -275,7 +275,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-    double conversion_area_velocity(const double value, const string units)
+    double conversion_area_velocity(const double value, const std::string units)
     {
 				if (units == "m2/s")   		return value;
 		else    if (units == "cm2/s")  		return value*m_from_cm*m_from_cm;
@@ -293,7 +293,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-	double conversion_massFlowRate(const double value, const string units)
+	double conversion_massFlowRate(const double value, const std::string units)
     {
 				if (units == "kg/s")   	return value;
 		else    if (units == "kg/min")  return value/s_from_min;
@@ -310,7 +310,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-	double conversion_moleFlowRate(const double value, const string units)
+	double conversion_moleFlowRate(const double value, const std::string units)
     {
 				if (units == "kmol/s")   	return value;
 		else    if (units == "kmol/min")	return value/s_from_min;
@@ -324,7 +324,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-	double conversion_volumetricFlowRate(const double value, const string units)
+	double conversion_volumetricFlowRate(const double value, const std::string units)
     {
 				if (units == "m3/s")   	return value;
 		else    if (units == "m3/min")	return value/s_from_min;
@@ -347,7 +347,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-	double conversion_heat_flux(const double value, const string units)
+	double conversion_heat_flux(const double value, const std::string units)
     {
 				if (units == "W/m2")   		return value;
 		else	if (units == "J/m2/s")		return value;
@@ -364,7 +364,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-	double conversion_heat_exchange_coefficient(const double value, const string units)
+	double conversion_heat_exchange_coefficient(const double value, const std::string units)
 	{
 				if (units == "W/m2/K")   		return value;
 		else	if (units == "J/m2/K/s")		return value;
@@ -381,7 +381,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-	double conversion_dynamic_viscosity(const double value, const string units)
+	double conversion_dynamic_viscosity(const double value, const std::string units)
 	{
 				if (units == "kg/m/s")   		return value;
 		else	if (units == "Pa.s")			return value;
@@ -393,7 +393,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-	double conversion_density(const double value, const string units)
+	double conversion_density(const double value, const std::string units)
 	{
 				if (units == "kg/m3")   return value;
 		else	if (units == "g/cm3")	return value*kg_from_g/m3_from_cm3;
@@ -405,7 +405,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-	double conversion_angle(const double value, const string units)
+	double conversion_angle(const double value, const std::string units)
     {
 				if (units == "rad")		return value;
 		else	if (units == "deg")		return value*2.*Constants::pi/360.;
@@ -415,7 +415,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-	double conversion_angular_velocity(const double value, const string units)
+	double conversion_angular_velocity(const double value, const std::string units)
     {
 				if (units == "rad/s")		return value;
 		else	if (units == "rad/min")		return value/60.;
@@ -434,7 +434,7 @@ namespace OpenSMOKE_Conversions
 		return  0.;
     }
 
-	double conversion_valve_flow_coefficient(const double value, const string units)
+	double conversion_valve_flow_coefficient(const double value, const std::string units)
 	{
 				if (units == "kg_sq_m_sq")   	return value;
 		else	if (units == "kg/s/atm_sq")   	return value/sqrt(101325.);

@@ -49,17 +49,17 @@ OpenSMOKE_ICEM::OpenSMOKE_ICEM()
 }
 
 
-void OpenSMOKE_ICEM::AssignEnd(const string units, const double value)
+void OpenSMOKE_ICEM::AssignEnd(const std::string units, const double value)
 {
 }
 
-void OpenSMOKE_ICEM::AssignRotationRate(const string units, const double value)
+void OpenSMOKE_ICEM::AssignRotationRate(const std::string units, const double value)
 {
 	rotation_rate = OpenSMOKE_Conversions::conversion_angular_velocity(value, units);
     assignedRotationRate	= true;
 }
 
-void OpenSMOKE_ICEM::AssignClearanceVolume(const string units, const double value)
+void OpenSMOKE_ICEM::AssignClearanceVolume(const std::string units, const double value)
 {
 	volume_clearance = OpenSMOKE_Conversions::conversion_volume(value, units);
     assignedClearanceVolume	= true;
@@ -77,13 +77,13 @@ void OpenSMOKE_ICEM::AssignArmRatio(const double value)
     assignedArmRatio = true;
 }
 
-void OpenSMOKE_ICEM::AssignStartAngle(const string units, const double value)
+void OpenSMOKE_ICEM::AssignStartAngle(const std::string units, const double value)
 {
 	start_angle = OpenSMOKE_Conversions::conversion_angle(value, units);
     assignedStartAngle	= true;
 }
 
-void OpenSMOKE_ICEM::AssignDiameter(const string units, const double value)
+void OpenSMOKE_ICEM::AssignDiameter(const std::string units, const double value)
 {
 	diameter = OpenSMOKE_Conversions::conversion_length(value, units);
 	area_base = Constants::pi/4.*diameter*diameter;
@@ -95,13 +95,13 @@ void OpenSMOKE_ICEM::SetNumberOfCycles(const double value)
 	number_of_cycles = value; 
 }
 
-void OpenSMOKE_ICEM::SetConstantExchangeArea(const double value, const string units)
+void OpenSMOKE_ICEM::SetConstantExchangeArea(const double value, const std::string units)
 {
 	iUserDefinedExchangeArea = CONSTANT;
 	A = OpenSMOKE_Conversions::conversion_area(value, units);
 }
 
-void OpenSMOKE_ICEM::SetUserDefinedExchangeArea(const string fileName)
+void OpenSMOKE_ICEM::SetUserDefinedExchangeArea(const std::string fileName)
 {
     iUserDefinedExchangeArea = USERDEFINED;
     ud_A_profile.AssignFromFile(fileName, "AREA");
@@ -446,8 +446,8 @@ void OpenSMOKE_ICEM::Solve()
     o.SetMinimumConstraints(xMin);
     o.SetMaximumConstraints(xMax);
 
-    if (iRelativeTolerance == true)	o.SetTollRel(MachEpsFloat()*relativeTolerance);
-    if (iAbsoluteTolerance == true)	o.SetTollAbs(absoluteTolerance);
+    if (iRelativeTolerance == true)	o.SetTolRel(MachEpsFloat()*relativeTolerance);
+    if (iAbsoluteTolerance == true)	o.SetTolAbs(absoluteTolerance);
 
     {
         countGlobalIterations = -1;  // From -1 to avoid to store results from the first iteration
@@ -476,10 +476,10 @@ void OpenSMOKE_ICEM::Solve()
 	CloseFiles();
 }
 
-void OpenSMOKE_ICEM::DefineFromFile(const string inputFile)
+void OpenSMOKE_ICEM::DefineFromFile(const std::string inputFile)
 {
     double			double_value;
-    string			string_value;
+    std::string			string_value;
     int				int_value;
 	vector<string>  string_vector;
 
@@ -837,7 +837,7 @@ void OpenSMOKE_ICEM::SummaryOnFile()
 	int i;
 
 	ofstream fSummary;
-	string file_name = outputFolderName + "/Summary.out";
+	std::string file_name = outputFolderName + "/Summary.out";
 	openOutputFileAndControl(fSummary, file_name);
     fSummary.setf(ios::scientific);
 

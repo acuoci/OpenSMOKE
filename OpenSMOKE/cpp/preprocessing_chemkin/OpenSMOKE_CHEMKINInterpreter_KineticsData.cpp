@@ -25,7 +25,7 @@
 #include "preprocessing_chemkin/OpenSMOKE_CHEMKINInterpreter_KineticsData.h"
 #include "preprocessing_chemkin/OpenSMOKE_CHEMKINInterpreter_TransportData.h"
 
-void OpenSMOKE_CHEMKINInterpreter_KineticsData::ErrorMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_KineticsData::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_KineticsData"	<< endl;
@@ -36,7 +36,7 @@ void OpenSMOKE_CHEMKINInterpreter_KineticsData::ErrorMessage(const string messag
     exit(-1);
 }
 
-void OpenSMOKE_CHEMKINInterpreter_KineticsData::WarningMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_KineticsData::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_KineticsData"	<< endl;
@@ -62,7 +62,7 @@ void OpenSMOKE_CHEMKINInterpreter_KineticsData::Setup(ofstream *_fLog, OpenSMOKE
 	fWarning	= _fWarning; 
 }
 
-int OpenSMOKE_CHEMKINInterpreter_KineticsData::RecognizeSpecies(const string name_species)
+int OpenSMOKE_CHEMKINInterpreter_KineticsData::RecognizeSpecies(const std::string name_species)
 {
 	for(int i=1;i<=int(species_list.size())-1;i++)
 		if (name_species == species_list[i])	return i;
@@ -71,7 +71,7 @@ int OpenSMOKE_CHEMKINInterpreter_KineticsData::RecognizeSpecies(const string nam
 	return -1;
 }
 
-void OpenSMOKE_CHEMKINInterpreter_KineticsData::PrintNamesFile(const string file_name)
+void OpenSMOKE_CHEMKINInterpreter_KineticsData::PrintNamesFile(const std::string file_name)
 {
 	ofstream fOutput;
 	openOutputFileAndControl(fOutput, file_name);
@@ -278,7 +278,7 @@ void OpenSMOKE_CHEMKINInterpreter_KineticsData::CheckReactionRatesReactions()
 	number_of_reactions += indices.Size();
 }
 
-void OpenSMOKE_CHEMKINInterpreter_KineticsData::PrintStoichiometryFile(const string file_name)
+void OpenSMOKE_CHEMKINInterpreter_KineticsData::PrintStoichiometryFile(const std::string file_name)
 {
 	ofstream fOutput;
 	openOutputFileAndControl(fOutput, file_name);
@@ -296,7 +296,7 @@ void OpenSMOKE_CHEMKINInterpreter_KineticsData::PrintStoichiometryFile(const str
 	fOutput.close();
 }
 
-void OpenSMOKE_CHEMKINInterpreter_KineticsData::PrintReactionsFile(const string file_name)
+void OpenSMOKE_CHEMKINInterpreter_KineticsData::PrintReactionsFile(const std::string file_name)
 {
 	ofstream fOutput;
 	openOutputFileAndControl(fOutput, file_name);
@@ -388,7 +388,7 @@ void OpenSMOKE_CHEMKINInterpreter_KineticsData::SummaryOnFile(ofstream &fOutput)
 	fOutput << endl << endl;
 }
 
-void OpenSMOKE_CHEMKINInterpreter_KineticsData::PrintBinaryFile(const string file_name, OpenSMOKE_CHEMKINInterpreter_ThermoData &thermo, OpenSMOKE_CHEMKINInterpreter_TransportData &transport, OpenSMOKE_CHEMKINInterpreter &interp)
+void OpenSMOKE_CHEMKINInterpreter_KineticsData::PrintBinaryFile(const std::string file_name, OpenSMOKE_CHEMKINInterpreter_ThermoData &thermo, OpenSMOKE_CHEMKINInterpreter_TransportData &transport, OpenSMOKE_CHEMKINInterpreter &interp)
 {
 	int number_of_species = species_list.size()-1;
 	int i;
@@ -396,7 +396,7 @@ void OpenSMOKE_CHEMKINInterpreter_KineticsData::PrintBinaryFile(const string fil
 	BzzSave outputFile;
 	BzzSave asciiFile;
 	outputFile('*', file_name);
-	string file_name_ascii = file_name+".ascii";
+	std::string file_name_ascii = file_name+".ascii";
 	asciiFile(file_name_ascii);
 	
 	// Writing number of species and number of reactions

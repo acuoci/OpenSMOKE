@@ -26,7 +26,7 @@
 const double OpenSMOKE_PFR_Geometry::pi_over_4  = Constants::pi / 4.;
 const double OpenSMOKE_PFR_Geometry::_4_over_pi = 4. / Constants::pi;
 
-void OpenSMOKE_PFR_Geometry::ErrorMessage(const string message)
+void OpenSMOKE_PFR_Geometry::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  Plug Flow Reactor Geometry"		<< endl;
@@ -43,18 +43,18 @@ OpenSMOKE_PFR_Geometry::OpenSMOKE_PFR_Geometry()
 	name_object	= "Default name";	// Object Name
 }
 
-void OpenSMOKE_PFR_Geometry::SetName(const string name)
+void OpenSMOKE_PFR_Geometry::SetName(const std::string name)
 {
 	name_object	= name;				// Object Name
 }
 
-void OpenSMOKE_PFR_Geometry::Setup(const string fileName)
+void OpenSMOKE_PFR_Geometry::Setup(const std::string fileName)
 {
     int i;
-    string label;
-    string variable;
-    string conversion_x;
-    string conversion_y;
+    std::string label;
+    std::string variable;
+    std::string conversion_x;
+    std::string conversion_y;
     BzzVector x_vector;
     BzzVector y_vector;
 

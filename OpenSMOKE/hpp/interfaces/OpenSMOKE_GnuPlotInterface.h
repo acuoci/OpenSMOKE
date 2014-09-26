@@ -28,18 +28,18 @@ class OpenSMOKE_GnuPlotInterface
 public:
 
     OpenSMOKE_GnuPlotInterface();
-    OpenSMOKE_GnuPlotInterface(string folderName);
+    OpenSMOKE_GnuPlotInterface(std::string folderName);
 
-    void setPlot(string _title, string _xlabel, string _ylabel);
+    void setPlot(std::string _title, std::string _xlabel, std::string _ylabel);
 
-    void setKey(string _label_1);
-    void setKey(string _label_1, string _label_2);
-    void setKey(string _label_1, string _label_2, string _label_3);
-    void setKey(string _label_1, string _label_2, string _label_3, string _label_4);
-    void setKey(string _label_1, string _label_2, string _label_3,
-                string _label_4, string _label_5);
-    void setKey(string _label_1, string _label_2, string _label_3,
-                string _label_4, string _label_5, string _label_6);
+    void setKey(std::string _label_1);
+    void setKey(std::string _label_1, std::string _label_2);
+    void setKey(std::string _label_1, std::string _label_2, std::string _label_3);
+    void setKey(std::string _label_1, std::string _label_2, std::string _label_3, std::string _label_4);
+    void setKey(std::string _label_1, std::string _label_2, std::string _label_3,
+                std::string _label_4, std::string _label_5);
+    void setKey(std::string _label_1, std::string _label_2, std::string _label_3,
+                std::string _label_4, std::string _label_5, std::string _label_6);
 
     void setKind( char _kind_1);
     void setKind( char _kind_1, char _kind_2);
@@ -53,34 +53,34 @@ public:
     void setLogScaleX();
     void setLogScaleY();
 
-    void plot(string fileFigure, string fileData, int x1, int y1);
-    void plot(string fileFigure, string fileData, int x1, int y1, int x2, int y2);
-    void plot(string fileFigure, string fileData, int x1, int y1, int x2, int y2, int x3, int y3);
-    void plot(string fileFigure, string fileData, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4);
-    void plot(string fileFigure, string fileData, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, 
+    void plot(std::string fileFigure, std::string fileData, int x1, int y1);
+    void plot(std::string fileFigure, std::string fileData, int x1, int y1, int x2, int y2);
+    void plot(std::string fileFigure, std::string fileData, int x1, int y1, int x2, int y2, int x3, int y3);
+    void plot(std::string fileFigure, std::string fileData, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4);
+    void plot(std::string fileFigure, std::string fileData, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, 
 					          int x5, int y5);
-    void plot(string fileFigure, string fileData, int x1, int y1, int x2, int y2, 
+    void plot(std::string fileFigure, std::string fileData, int x1, int y1, int x2, int y2, 
 						  int x3, int y3, int x4, int y4, int x5, int y5, int x6, int y6);
 
-    void plot(string fileFigure, string fileData, BzzVectorInt &x, BzzVectorInt &y);
+    void plot(std::string fileFigure, std::string fileData, BzzVectorInt &x, BzzVectorInt &y);
 
-    void plot(string fileFigure, string fileData_1, string fileData_2, int x, int y);
+    void plot(std::string fileFigure, std::string fileData_1, std::string fileData_2, int x, int y);
 
-    void plot(  string fileFigure, string fileData_1, string fileData_2, string fileData_3,
+    void plot(  std::string fileFigure, std::string fileData_1, std::string fileData_2, std::string fileData_3,
                 int x, int y);
 
 private:
 
         void ResetValues();
-        void plot(string message_a, string message_b);
-        string i2s(int number);
+        void plot(std::string message_a, std::string message_b);
+        std::string i2s(int number);
 
-        string  folderFigure;
-        string *label;
+        std::string  folderFigure;
+        std::string *label;
         char   *kind;
-        string title;
-        string xlabel;
-        string ylabel;
+        std::string title;
+        std::string xlabel;
+        std::string ylabel;
 
         int iSetPlot;
         int iSetLabel;

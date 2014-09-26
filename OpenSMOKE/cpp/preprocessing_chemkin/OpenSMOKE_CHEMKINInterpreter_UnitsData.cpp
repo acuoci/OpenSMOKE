@@ -24,7 +24,7 @@
 #include "basic/OpenSMOKE_WarningFile.h"
 #include "preprocessing_chemkin/OpenSMOKE_CHEMKINInterpreter_UnitsData.h"
 
-void OpenSMOKE_CHEMKINInterpreter_UnitsData::ErrorMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_UnitsData::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_UnitsData"	<< endl;
@@ -35,7 +35,7 @@ void OpenSMOKE_CHEMKINInterpreter_UnitsData::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_CHEMKINInterpreter_UnitsData::WarningMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_UnitsData::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_UnitsData"	<< endl;
@@ -99,7 +99,7 @@ OpenSMOKE_CHEMKINInterpreter_UnitsData::~OpenSMOKE_CHEMKINInterpreter_UnitsData(
 }
 
 
-void OpenSMOKE_CHEMKINInterpreter_UnitsData::Parse_Units(const string units_string)
+void OpenSMOKE_CHEMKINInterpreter_UnitsData::Parse_Units(const std::string units_string)
 {
 	int i;
 	bool success = false;
@@ -125,13 +125,13 @@ void OpenSMOKE_CHEMKINInterpreter_UnitsData::Parse_Units(const string units_stri
 
 	if (success == false)
 	{
-		string units_modified = units_string;
+		std::string units_modified = units_string;
 		StringSubstitutionAll(units_modified, "#",  "-");
 		ErrorMessage("The " + units_modified + " units are not allowed");
 	}
 }
 
-void OpenSMOKE_CHEMKINInterpreter_UnitsData::GiveMeConversionFactor(const string units_string, double &conversion, bool &iEnergy)
+void OpenSMOKE_CHEMKINInterpreter_UnitsData::GiveMeConversionFactor(const std::string units_string, double &conversion, bool &iEnergy)
 {
 	if		(units_string == "CAL#MOLE")		{ conversion = 1.e0; iEnergy=true;}
 	else if (units_string == "KCAL#MOLE")		{ conversion = 1.e3; iEnergy=true;}

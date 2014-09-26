@@ -22,7 +22,7 @@
 #include "basic/OpenSMOKE_Utilities.h"
 #include "distributions/OpenSMOKE_SinIntegralDistribution.h"
 
-void OpenSMOKE_SinIntegralDistribution::ErrorMessage(const string message)
+void OpenSMOKE_SinIntegralDistribution::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_SinIntegralDistribution"			<< endl;
@@ -32,7 +32,7 @@ void OpenSMOKE_SinIntegralDistribution::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_SinIntegralDistribution::WarningMessage(const string message)
+void OpenSMOKE_SinIntegralDistribution::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:    OpenSMOKE_SinIntegralDistribution"		<< endl;

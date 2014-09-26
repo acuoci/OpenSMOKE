@@ -31,8 +31,8 @@ friend class OpenSMOKE_LiquidProperties_Database;
 public:
 
 	OpenSMOKE_LiquidCriticalConstants_Dictionary();
-	void ReadFromFile(const string file_name);
-	void WriteToFile(const string file_name);
+	void ReadFromFile(const std::string file_name);
+	void WriteToFile(const std::string file_name);
 	void SaveToFile(BzzSave &fSave);
 
 private:
@@ -49,14 +49,14 @@ private:
 	vector<string> name_first;
 	vector<string> name_second;
 
-	void ProcessData(const string line, const int iLine, const int index);
+	void ProcessData(const std::string line, const int iLine, const int index);
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void ErrorMessage(const string message, const int iLine);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void ErrorMessage(const std::string message, const int iLine);
+	void WarningMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_LIQUIDCRITICALCONSTANTS_DICTIONARY_H

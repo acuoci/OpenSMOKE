@@ -22,7 +22,7 @@
 #include "idealreactors/flamelet/OpenSMOKE_Flamelet_DataManager.h"
 #include "idealreactors/flamelet/OpenSMOKE_Flamelet.h"
 
-void OpenSMOKE_Flamelet_DataManager::ErrorMessage(const string message)
+void OpenSMOKE_Flamelet_DataManager::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flamelet_DataManager"	<< endl;
@@ -33,7 +33,7 @@ void OpenSMOKE_Flamelet_DataManager::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_Flamelet_DataManager::WarningMessage(const string message)
+void OpenSMOKE_Flamelet_DataManager::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flamelet_DataManager"	<< endl;
@@ -95,7 +95,7 @@ OpenSMOKE_Flamelet_DataManager::OpenSMOKE_Flamelet_DataManager()
 	minimumTemperature = Constants::T_Zero;
 }
 
-void OpenSMOKE_Flamelet_DataManager::SetName(const string name)
+void OpenSMOKE_Flamelet_DataManager::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -110,7 +110,7 @@ void OpenSMOKE_Flamelet_DataManager::Assign(OpenSMOKE_Flamelet *_flamelet)
 	flamelet = _flamelet;
 }
 
-void OpenSMOKE_Flamelet_DataManager::ReadFromFile(const string fileName)
+void OpenSMOKE_Flamelet_DataManager::ReadFromFile(const std::string fileName)
 {
 	DefineFromFile(fileName);
 
@@ -233,11 +233,11 @@ OpenSMOKE_Dictionary_Flamelet::OpenSMOKE_Dictionary_Flamelet()
     Lock();
 }
 
-void OpenSMOKE_Flamelet_DataManager::DefineFromFile(const string inputFile)
+void OpenSMOKE_Flamelet_DataManager::DefineFromFile(const std::string inputFile)
 {
     int     int_value;
 	double  double_value;
-    string  string_value;
+    std::string  string_value;
 	vector<string> string_vector;
 	vector<double> double_vector;
 
@@ -354,42 +354,42 @@ void OpenSMOKE_Flamelet_DataManager::Lock()
 }
 
 
-void OpenSMOKE_Flamelet_DataManager::AssignFuel(const string string_value)
+void OpenSMOKE_Flamelet_DataManager::AssignFuel(const std::string string_value)
 {
 	nameFuel = string_value;
 	jFUEL = mix->recognize_species(nameFuel);
 }
 
-void OpenSMOKE_Flamelet_DataManager::AssignOxidizer(const string string_value)
+void OpenSMOKE_Flamelet_DataManager::AssignOxidizer(const std::string string_value)
 {
 	nameOxidizer = string_value;
 	jO2 = mix->recognize_species(nameOxidizer);
 }
 
-void OpenSMOKE_Flamelet_DataManager::AssignInert(const string string_value)
+void OpenSMOKE_Flamelet_DataManager::AssignInert(const std::string string_value)
 {
 	nameInert = string_value;
 	jINERT = mix->recognize_species(nameInert);
 }
 
-void OpenSMOKE_Flamelet_DataManager::AssignPressure(const string units, const double value)
+void OpenSMOKE_Flamelet_DataManager::AssignPressure(const std::string units, const double value)
 {
     P_Pascal = OpenSMOKE_Conversions::conversion_pressure(value, units);
 	P_atm	 = P_Pascal / OpenSMOKE_Conversions::Pa_from_atm;
 	P_bar	 = P_Pascal / OpenSMOKE_Conversions::Pa_from_bar;
 }
 
-void OpenSMOKE_Flamelet_DataManager::AssignFlameTemperature(const string units, const double value)
+void OpenSMOKE_Flamelet_DataManager::AssignFlameTemperature(const std::string units, const double value)
 {
     Tpeak = OpenSMOKE_Conversions::conversion_temperature(value, units);
 }
 
-void OpenSMOKE_Flamelet_DataManager::AssignFuelTemperature(const string units, const double value)
+void OpenSMOKE_Flamelet_DataManager::AssignFuelTemperature(const std::string units, const double value)
 {
     TC = OpenSMOKE_Conversions::conversion_temperature(value, units);
 }
 
-void OpenSMOKE_Flamelet_DataManager::AssignOxidizerTemperature(const string units, const double value)
+void OpenSMOKE_Flamelet_DataManager::AssignOxidizerTemperature(const std::string units, const double value)
 {
     TO = OpenSMOKE_Conversions::conversion_temperature(value, units);
 }
@@ -522,19 +522,19 @@ void OpenSMOKE_Flamelet_DataManager::SetAbsoluteTolerance(const double double_va
 	iAssignedAbsoluteTolerance = true;
 }
 
-void OpenSMOKE_Flamelet_DataManager::SetEnvironmentTemperature(const string units, const double value)
+void OpenSMOKE_Flamelet_DataManager::SetEnvironmentTemperature(const std::string units, const double value)
 {
 	environmentTemperature = OpenSMOKE_Conversions::conversion_temperature(value, units);
 	iAssignedEnvironmentTemperature = true;
 }
 
-void OpenSMOKE_Flamelet_DataManager::SetEnthalpyDefect(const string units, const double value)
+void OpenSMOKE_Flamelet_DataManager::SetEnthalpyDefect(const std::string units, const double value)
 {
 	enthalpyDefect = OpenSMOKE_Conversions::conversion_specificEnergy(value, units);
 	iEnthalpyDefect = true;
 }
 
-void OpenSMOKE_Flamelet_DataManager::SetMinimumTemperature(const string units, const double value)
+void OpenSMOKE_Flamelet_DataManager::SetMinimumTemperature(const std::string units, const double value)
 {
 	minimumTemperature = OpenSMOKE_Conversions::conversion_temperature(value, units);
 }
@@ -629,7 +629,7 @@ void OpenSMOKE_Flamelet_DataManager::SetReactionRatesOnFile(const vector<string>
 void OpenSMOKE_Flamelet_DataManager::AssignScalarDissipationRates(const vector<string> string_vector)
 {
 	int nScalarDissipationRates = string_vector.size()-1;
-	string units = string_vector[nScalarDissipationRates];
+	std::string units = string_vector[nScalarDissipationRates];
 	ChangeDimensions(nScalarDissipationRates, &listScalarDissipationRates);
 
 	for(int i=1;i<=nScalarDissipationRates;i++)

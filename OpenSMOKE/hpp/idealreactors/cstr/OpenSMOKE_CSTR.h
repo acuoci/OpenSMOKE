@@ -82,10 +82,10 @@ public: // Virtual functions (compulsory)
 	void VideoFinalResult();
 	void VideoGeneralInfo();
 	void VideoSummary();
-	void DefineFromFile(const string inputFile);
+	void DefineFromFile(const std::string inputFile);
 	void Solve();
 	void ReSolve();
-	void AssignEnd(const string units, const double value);
+	void AssignEnd(const std::string units, const double value);
 	void EnergyAnalysis(OpenSMOKE_GasStream &outletStream);
 	void ODEPrint(BzzVector &y, double eta);
 	void SummaryOnFile();
@@ -101,32 +101,32 @@ private: // Virtual functions (compulsory)
 	void UpdateProperties(int jacobianIndex, int indexT);
 	void UpdateTwoEquationModel(BzzVector &y, BzzVector &dy);
 
-	void SaveOnBinaryFile(const string filename);
+	void SaveOnBinaryFile(const std::string filename);
 	void SaveOnBinaryFile(BzzSave &fOutput);
 	void UpdateReactionRates(const double TT, const double PP, BzzVector &xx, BzzVector &rr);
 
 public:	// Specific Functions
 	
-	void AssignResidenceTime(const string units, const double value);
-	void AssignVolume(const string units, const double value);
-	void AssignDiameter(const string units, const double value);
+	void AssignResidenceTime(const std::string units, const double value);
+	void AssignVolume(const std::string units, const double value);
+	void AssignDiameter(const std::string units, const double value);
 
-	void SetUserDefinedVolume(const string fileName);
-	void SetUserDefinedDiameter(const string fileName);
-	void SetUserDefinedResidenceTime(const string fileName);
+	void SetUserDefinedVolume(const std::string fileName);
+	void SetUserDefinedDiameter(const std::string fileName);
+	void SetUserDefinedResidenceTime(const std::string fileName);
 
-	void SetConstantExchangeArea(const double value, const string units);
-	void SetUserDefinedExchangeArea(const string fileName);
+	void SetConstantExchangeArea(const double value, const std::string units);
+	void SetUserDefinedExchangeArea(const std::string fileName);
 	void UnsetUserDefinedExchangeArea();
 
-	void SetInitialTemperature(const double value, const string units);
+	void SetInitialTemperature(const double value, const std::string units);
 	void SetInitialMassFractions(const vector<string> _names, const vector<double> _values);
 	void SetInitialMoleFractions(const vector<string> _names, const vector<double> _values);
 
 	void SetFluctuations(const vector<string> string_vector);
 
-	void SetValveCoefficient(const double value, const string units);
-	void SetPressureOutlet(const double value, const string units);
+	void SetValveCoefficient(const double value, const std::string units);
+	void SetPressureOutlet(const double value, const std::string units);
 
 	void SetHistoryPartial();
 

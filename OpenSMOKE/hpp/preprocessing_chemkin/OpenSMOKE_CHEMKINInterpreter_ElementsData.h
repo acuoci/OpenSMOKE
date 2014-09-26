@@ -38,8 +38,8 @@ public:
 	vector<double> elements_mw;
 
 	void Setup(ofstream *_fLog, OpenSMOKE_WarningFile *_fWarning);
-	bool Parse_Element_Name(const string element_name);
-	void Parse_Isotope_Name(const string isotope_name, const double mw);
+	bool Parse_Element_Name(const std::string element_name);
+	void Parse_Isotope_Name(const std::string isotope_name, const double mw);
 	void Summary();
 	void SummaryOnFile(ofstream &fOutput);
 
@@ -54,9 +54,9 @@ public:
 
 private:
 	
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
-	string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
+	std::string name_object;
 };
 
 #endif // !defined(OPENSMOKE_CHEMKININTERPRETER_ELEMENTSDATA_H)

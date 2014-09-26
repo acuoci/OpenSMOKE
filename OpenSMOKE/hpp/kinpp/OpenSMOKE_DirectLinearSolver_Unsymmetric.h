@@ -88,10 +88,10 @@ protected:
 	
 protected:
 
-	string name_solver_;
-	void ErrorMessage(const string message_);
-	void WarningMessage(const string message_);
-	void MessageOnTheScreen(const string message_);
+	std::string name_solver_;
+	void ErrorMessage(const std::string message_);
+	void WarningMessage(const std::string message_);
+	void MessageOnTheScreen(const std::string message_);
 	void CleanMemory();
 };
 

@@ -45,14 +45,14 @@ class OpenSMOKE_Flame1D_DataManager
 public:
 
 	OpenSMOKE_Flame1D_DataManager();
-	void SetName(const string name);
+	void SetName(const std::string name);
 	void Assign(OpenSMOKE_ReactingGas *_mix);
 	void Assign(OpenSMOKE_Flame1D *_flame);
-	void Setup(const string kind);
+	void Setup(const std::string kind);
 
 	flame1d_physics kind_of_flame;
-	string flameSpeedAnalysisFileName;	
-	string opposedFlameAnalysisFileName;	
+	std::string flameSpeedAnalysisFileName;	
+	std::string opposedFlameAnalysisFileName;	
 
 	bool iGlobalKinetics;
 	bool i2E;
@@ -73,14 +73,14 @@ public:
 	bool iUserDefinedLewisNumbers;
 	bool iDepositionWall;
 
-	void readFromFileForOpposed(const string fileName);
-	void readFromFileForPremixed(const string fileName);
-	void printFileForOpposed(const string fileName,  double vFuel, double vAir);
-	void printFileForPremixed(const string fileName, double MassFlowRate_Updated);
+	void readFromFileForOpposed(const std::string fileName);
+	void readFromFileForPremixed(const std::string fileName);
+	void printFileForOpposed(const std::string fileName,  double vFuel, double vAir);
+	void printFileForPremixed(const std::string fileName, double MassFlowRate_Updated);
 
-	void SetOutputFolder(const string _outputFolderName);
-	void DefineFromFileOpposed(const string inputFile);
-	void DefineFromFilePremixed(const string inputFile);
+	void SetOutputFolder(const std::string _outputFolderName);
+	void DefineFromFileOpposed(const std::string inputFile);
+	void DefineFromFilePremixed(const std::string inputFile);
 
 	void SetDefaultValues();
 
@@ -124,18 +124,18 @@ public:
 	// -------------------------------------------------------------------------------	
 	int jFUEL, jO2, jINERT;
 	double nuINERT;
-	string nameFuel;
-	string nameOxidizer;
-	string nameInert;
+	std::string nameFuel;
+	std::string nameOxidizer;
+	std::string nameInert;
 
 	int nDiff, nGrad;
 	double deltaDiff, deltaGrad;
 	double xcen , wmix;
-	string geometry;
-	string gridKind;
+	std::string geometry;
+	std::string gridKind;
 	double alfa;
 
-	string userDefinedFolderName;
+	std::string userDefinedFolderName;
 	bool iUserDefinedFolderName;
 
 	// User Defined Profiles
@@ -153,8 +153,8 @@ public:
 
 	OpenSMOKE_UD_Profile	ud_temperature_profile;
 	OpenSMOKE_UD_Profile	ud_cross_section_profile;
-	string ud_temperature_profile_file_name;
-	string ud_cross_section_profile_file_name;
+	std::string ud_temperature_profile_file_name;
+	std::string ud_cross_section_profile_file_name;
 
 	int nCold;
 
@@ -213,9 +213,9 @@ public:
 	double adaptive_grid_gamma;
 	double fakeTemperatureThermalConductivityIncrement;
 
-	string	unsteady_flame_file_name;
-	string	qmom_file_name;
-	string  twoEquation_file_name;
+	std::string	unsteady_flame_file_name;
+	std::string	qmom_file_name;
+	std::string  twoEquation_file_name;
 
 	void AssignFuelMassFractions(BzzVector &omega_fuel);
 
@@ -241,33 +241,36 @@ public:
 	unsigned int bin_index_final;
 	double bin_density_B;
 
+	bool iCorrectDiffusionFormulation;
+	bool iPhysicalSootDiffusionCoefficients;
+
 private:
 
 	ifstream fInput;
 	ofstream fOutput;
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
 	void CheckDictionary(OpenSMOKE_Dictionary_Flame1D &dictionary);
 	void CheckDictionaryForOpposedFlames(OpenSMOKE_Dictionary_Flame1D &dictionary);
 	void CheckDictionaryForPremixedFlames(OpenSMOKE_Dictionary_Flame1D &dictionary);
-	void CopyInputFile(const string inputFile);
-	void PasteInputFile(const string fileName);
+	void CopyInputFile(const std::string inputFile);
+	void PasteInputFile(const std::string fileName);
 
-	void AssignPressure(const string string_value, const double double_value);
-    void AssignDistance(const string string_value, const double double_value);
-    void AssignFuelVelocity(const string string_value, const double double_value);
-    void AssignOxidizerVelocity(const string string_value, const double double_value);
-    void AssignFuelTemperature(const string string_value, const double double_value);
-    void AssignOxidizerTemperature(const string string_value, const double double_value);
-    void AssignTemperaturePeak(const string string_value, const double double_value);
+	void AssignPressure(const std::string string_value, const double double_value);
+    void AssignDistance(const std::string string_value, const double double_value);
+    void AssignFuelVelocity(const std::string string_value, const double double_value);
+    void AssignOxidizerVelocity(const std::string string_value, const double double_value);
+    void AssignFuelTemperature(const std::string string_value, const double double_value);
+    void AssignOxidizerTemperature(const std::string string_value, const double double_value);
+    void AssignTemperaturePeak(const std::string string_value, const double double_value);
     
-    void AssignGeometry(const string string_value);
-    void AssignFuel(const string string_value);
-    void AssignOxidizer(const string string_value);
-    void AssignInert(const string string_value);
+    void AssignGeometry(const std::string string_value);
+    void AssignFuel(const std::string string_value);
+    void AssignOxidizer(const std::string string_value);
+    void AssignInert(const std::string string_value);
 	void AssignOutputSpecies(const vector<string> string_vector);
 	void AssignGridPoints(const int int_value);
     void AssignFuelMassFractions(const vector<string> string_vector, const vector<double> double_vector);
@@ -275,13 +278,13 @@ private:
     void AssignOxidizerMassFractions(const vector<string> string_vector, const vector<double> double_vector);
     void AssignOxidizerMoleFractions(const vector<string> string_vector, const vector<double> double_vector);
 
-	void SetGrid(const string string_value);
-	void SetFlameThickness(const string string_value, const double double_value);
-    void SetFlamePosition(const string string_value, const double double_value);
+	void SetGrid(const std::string string_value);
+	void SetFlameThickness(const std::string string_value, const double double_value);
+    void SetFlamePosition(const std::string string_value, const double double_value);
 	void SetPeaks(const vector<string> string_vector, const vector<double> double_vector);
-    void SetInitialTemperatureProfile(const string string_value);
-    void SetFixedTemperatureProfile(const string string_value);
-    void SetFixedTemperatureProfileProvisional(const string string_value);
+    void SetInitialTemperatureProfile(const std::string string_value);
+    void SetFixedTemperatureProfile(const std::string string_value);
+    void SetFixedTemperatureProfileProvisional(const std::string string_value);
 	void SetVideoSteps(const int int_value);
 	void SetFileSteps(const int int_value);
 	void SetBackupSteps(const int int_value);
@@ -291,12 +294,13 @@ private:
 	void SetNlsRelativeTolerance(const double double_value);
 	void SetNlsAbsoluteTolerance(const double double_value);
 
-	void SetFuelRadialGradient(const string units, const double value);
-	void SetOxidizerRadialGradient(const string units, const double value);
-	void SetEnvironmentTemperature(const string units, const double value);
+	void SetFuelRadialGradient(const std::string units, const double value);
+	void SetOxidizerRadialGradient(const std::string units, const double value);
+	void SetEnvironmentTemperature(const std::string units, const double value);
 	void SetGasRadiation();
-	void SetSootRadiation(const string value);
+	void SetSootRadiation(const std::string value);
 	void SetSoretEffect();
+	void SetPhysicalSootDiffusionCoefficients();
 	void SetThermophoreticEffect();
 	void SetLewisNumbers();
 	void SetUnityLewisNumbers();
@@ -316,7 +320,7 @@ private:
 	void SetReactionRatesOnFile(const vector<string> _names);
 	void SetBINDensities(const vector<string> _names);
 	void SetSingleContributions(const vector<string> _names);
-	void SetAdaptiveGrid(const string name);
+	void SetAdaptiveGrid(const std::string name);
 	void SetAdaptiveGridCoefficients(const vector<string> values);
 	void SetTurbulentDiffusivity(const double value);
 	void SetExperimentOnFile(const vector<string> _names);
@@ -324,35 +328,37 @@ private:
 	void SetChangeActivationEnergy(const vector<string> _names);
 	void SetChangeDiffusivity(const vector<string> _names);
 	void SetChangeFormationEnthalpy(const vector<string> _names);
-	void SetLennardJonesMode(const string _option);
+	void SetLennardJonesMode(const std::string _option);
 	void SetElementFluxAnalysisOnFile(const vector<string> _names);
 	void SetGlobalElementFluxAnalysisOnFile(const vector<string> _names);
-	void SetChangeFakeTemperatureThermalConductivity(const double value, const string units);
+	void SetChangeFakeTemperatureThermalConductivity(const double value, const std::string units);
 
 	void SetRobustTemperature();
 	void SetVerboseMixtureProperties();
 
 	void SetMaximumIntegrationOrder(const int int_value);
-	void SetInitialTimeStep(const string units, const double value);
+	void SetInitialTimeStep(const std::string units, const double value);
 
 	void SetDepositionWall();
 
 	// Specific for premixed flames
-	void AssignMassFlowRate(const string units, const double value);
-	void AssignInletVelocity(const string units, const double value);
-	void AssignInletTemperature(const string units, const double value);
-	void AssignCrossSection(const string units, const double value);
+	void AssignMassFlowRate(const std::string units, const double value);
+	void AssignInletVelocity(const std::string units, const double value);
+	void AssignInletTemperature(const std::string units, const double value);
+	void AssignCrossSection(const std::string units, const double value);
 	void AssignInletMassFractions(const vector<string> names, const vector<double> values);
 	void AssignInletMoleFractions(const vector<string> names, const vector<double> values);
 	
-	void SetOutletTemperature(const string units, const double value);
+	void SetOutletTemperature(const std::string units, const double value);
 	void SetOutletMassFractions(const vector<string> names, const vector<double> values);
 	void SetOutletMoleFractions(const vector<string> names, const vector<double> values);
 	void SetFlameSpeedIndex(const int int_value);
-	void SetFlameSpeedTemperature(const string units, const double value);
+	void SetFlameSpeedTemperature(const std::string units, const double value);
 	void SetStretchingFactor(const double double_value);
-	void SetCrossSectionProfile(const string string_value);
+	void SetCrossSectionProfile(const std::string string_value);
 	void SetCrossSectionMIT();
+
+	void SetUncorrectDiffusionFormulation();
 
 	void AssignEquivalenceRatioForPremixedFlames(const double value);
 	void AssignFuelMassFractionsForPremixedFlames(const vector<string> names, const vector<double> values);
@@ -409,8 +415,6 @@ private:
 	int indexLineOxidizerVelocity;
 	int indexLineEquivalenceRatio;
 	int indexLineFlameSpeedIndex;
-
-
 
 public:
 

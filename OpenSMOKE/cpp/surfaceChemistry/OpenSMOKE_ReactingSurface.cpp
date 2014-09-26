@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string>
 #include "basic/OpenSMOKE_Constants.h"
 #include "surfaceChemistry/OpenSMOKE_SurfaceMaterial.h"
 #include "surfaceChemistry/OpenSMOKE_SurfaceSite.h"
@@ -27,7 +28,7 @@
 #include "surfaceChemistry/OpenSMOKE_SurfaceThermodynamics.h"
 
 
-void OpenSMOKE_ReactingSurface::ErrorMessage(const string message)
+void OpenSMOKE_ReactingSurface::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_ReactingSurface"	<< endl;
@@ -38,7 +39,7 @@ void OpenSMOKE_ReactingSurface::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_ReactingSurface::WarningMessage(const string message)
+void OpenSMOKE_ReactingSurface::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:	  OpenSMOKE_ReactingSurface"	<< endl;
@@ -47,7 +48,7 @@ void OpenSMOKE_ReactingSurface::WarningMessage(const string message)
 	cout << endl;
 }
 
-void OpenSMOKE_ReactingSurface::ReadFromBinaryFile(const string fileName)
+void OpenSMOKE_ReactingSurface::ReadFromBinaryFile(const std::string fileName)
 {
 	char dummy[Constants::NAME_SIZE];
 
@@ -57,7 +58,7 @@ void OpenSMOKE_ReactingSurface::ReadFromBinaryFile(const string fileName)
 	cout << " * Reading surface kinetic scheme..." << endl;
 
 	binaryFile.fileLoad.read((char*) dummy, sizeof(dummy));
-	string version = dummy;
+	std::string version = dummy;
 	if		(version == "Surface110514")	iVersion = Surface110514;
 	else ErrorMessage("This version is not supported: " + version);
 

@@ -24,7 +24,7 @@
 #include "engine/OpenSMOKE_ReactingGas.h"
 #include "addons/OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D.h"
 
-void OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D::ErrorMessage(const string message)
+void OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D"	<< endl;
@@ -35,7 +35,7 @@ void OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D::ErrorMessage(const string 
     exit(-1);
 }
 
-void OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D::WarningMessage(const string message)
+void OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D"	<< endl;
@@ -45,7 +45,7 @@ void OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D::WarningMessage(const strin
     getchar();
 }
 
-void OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D::SetName(const string name)
+void OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -112,7 +112,7 @@ void OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D::PrintOnFile(	BzzVector &x,
 																	vector<string> list_of_names, BzzMatrix &S, BzzMatrix &Diffusivity)
 {
 	int j;
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 	char name_reaction[Constants::REACTION_NAME_SIZE];
 
@@ -132,7 +132,7 @@ void OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D::PrintOnFile(	BzzVector &x,
 	fOutput.fileSave.write((char*) name, sizeof(name));
 	cout << dummy << endl;
 	
-	string building_date = GiveMeTimeAndDate();
+	std::string building_date = GiveMeTimeAndDate();
 	dummy = building_date;
 	strcpy(name, dummy.c_str());
 	fOutput.fileSave.write((char*) name, sizeof(name));

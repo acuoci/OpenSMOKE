@@ -18,10 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string>
 #include <iomanip>
 #include "kinpp/OpenSMOKE_DirectLinearSolver_Unsymmetric.h"
 
-void OpenSMOKE_DirectLinearSolver_Unsymmetric::ErrorMessage(const string message_)
+void OpenSMOKE_DirectLinearSolver_Unsymmetric::ErrorMessage(const std::string message_)
 {
     cout << endl;
     cout << "Class: " << name_solver_			<< endl;
@@ -31,7 +32,7 @@ void OpenSMOKE_DirectLinearSolver_Unsymmetric::ErrorMessage(const string message
     exit(-1);
 }
 
-void OpenSMOKE_DirectLinearSolver_Unsymmetric::WarningMessage(const string message_)
+void OpenSMOKE_DirectLinearSolver_Unsymmetric::WarningMessage(const std::string message_)
 {
     cout << endl;
     cout << "Class:	  " << name_solver_	<< endl;
@@ -39,7 +40,7 @@ void OpenSMOKE_DirectLinearSolver_Unsymmetric::WarningMessage(const string messa
 	cout << endl;
 }
 
-void OpenSMOKE_DirectLinearSolver_Unsymmetric::MessageOnTheScreen(const string message_)
+void OpenSMOKE_DirectLinearSolver_Unsymmetric::MessageOnTheScreen(const std::string message_)
 {
 	cout << endl;
 	cout << "|| ********************************************************************************** ||" << endl;

@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string>
 #include "basic/OpenSMOKE_Constants.h"
 #include "distributions/OpenSMOKE_GammaFunction.h"
 
@@ -30,7 +31,7 @@ const double OpenSMOKE_GammaFunction::c6 =  0.482199394;
 const double OpenSMOKE_GammaFunction::c7 = -0.193527818;
 const double OpenSMOKE_GammaFunction::c8 =  0.035868343;
 
-void OpenSMOKE_GammaFunction::ErrorMessage(const string message)
+void OpenSMOKE_GammaFunction::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_GammaFunction"			<< endl;
@@ -40,7 +41,7 @@ void OpenSMOKE_GammaFunction::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_GammaFunction::WarningMessage(const string message)
+void OpenSMOKE_GammaFunction::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:    OpenSMOKE_GammaFunction"		<< endl;

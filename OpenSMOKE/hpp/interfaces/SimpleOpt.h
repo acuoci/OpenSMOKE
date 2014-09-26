@@ -50,7 +50,7 @@
     -   supports options which do not use a switch character. i.e. a special 
         word which is construed as an option. 
         e.g. "foo.exe open /directory/file.txt" 
-    -   supports clumping of multiple short options (no arguments) in a string 
+    -   supports clumping of multiple short options (no arguments) in a std::string 
         e.g. "foo.exe -abcdef file1" <==> "foo.exe -a -b -c -d -e -f file1"
     -   automatic recognition of a single slash as equivalent to a single 
         hyphen on Windows, e.g. "/f FILE" is equivalent to "-f FILE".
@@ -203,7 +203,7 @@ ShowFiles(args.FileCount(), args.Files());
 # define SO_STATICBUF   SO_MAX_ARGS
 #else
 # include <stdlib.h>    // malloc, free
-# include <string.h>    // memcpy
+# include <string>    // memcpy
 # define SO_STATICBUF   50
 #endif
 
@@ -252,7 +252,7 @@ enum _ESOFlags
     SO_O_SHORTARG    = 0x0004, 
 
     /*! Permit single character options to be clumped into a single 
-        option string. e.g. "-a -b -c" <==> "-abc" */
+        option std::string. e.g. "-a -b -c" <==> "-abc" */
     SO_O_CLUMP       = 0x0008, 
 
     /*! Process the entire argv array for options, including the 
@@ -342,7 +342,7 @@ public:
         /*! ID to return for this flag. Optional but must be >= 0 */
         int nId;        
 
-        /*! arg string to search for, e.g.  "open", "-", "-f", "--file" 
+        /*! arg std::string to search for, e.g.  "open", "-", "-f", "--file" 
             Note that on Windows the slash option marker will be converted
             to a hyphen so that "-f" will also match "/f". */
         const SOCHAR * pszArg;
@@ -512,7 +512,7 @@ private:
     int LookupOption(const SOCHAR * a_pszOption) const;
     int CalcMatch(const SOCHAR *a_pszSource, const SOCHAR *a_pszTest) const;
 
-    // Find the '=' character within a string.
+    // Find the '=' character within a std::string.
     inline SOCHAR * FindEquals(SOCHAR *s) const {
         while (*s && *s != (SOCHAR)'=') ++s;
         return *s ? s : NULL;
@@ -605,7 +605,7 @@ CSimpleOptTempl<SOCHAR>::Next()
     }
 #endif
 
-    // process a clumped option string if appropriate
+    // process a clumped option std::string if appropriate
     if (m_pszClump && *m_pszClump) {
         // silently discard invalid clumped option
         bool bIsValid = NextClumped();
@@ -639,7 +639,7 @@ CSimpleOptTempl<SOCHAR>::Next()
         // find this option in the options table
         cFirst = PrepareArg(pszArg);
         if (pszArg[0] == (SOCHAR)'-') {
-            // find any combined argument string and remove equals sign
+            // find any combined argument std::string and remove equals sign
             m_pszOptionArg = FindEquals(pszArg);
             if (m_pszOptionArg) {
                 *m_pszOptionArg++ = (SOCHAR)'\0';
@@ -670,7 +670,7 @@ CSimpleOptTempl<SOCHAR>::Next()
                 }
             }
 
-            // test for a clumped short-form option string and we didn't
+            // test for a clumped short-form option std::string and we didn't
             // match on the short-form argument above
             if (nTableIdx < 0 && HasFlag(SO_O_CLUMP))  {
                 m_pszClump = &pszArg[1];
@@ -831,7 +831,7 @@ CSimpleOptTempl<SOCHAR>::NextClumped()
     if (nArgType == SO_REQ_CMB && *m_pszClump) {
         m_nOptionId = m_rgOptions[nTableIdx].nId;
         m_pszOptionArg = m_pszClump;
-        while (*m_pszClump) ++m_pszClump; // must point to an empty string
+        while (*m_pszClump) ++m_pszClump; // must point to an empty std::string
         return true;
     }
 
@@ -959,13 +959,13 @@ CSimpleOptTempl<SOCHAR>::CalcMatch(
         return 0;
     }
 
-    // if we haven't exhausted the test string then it is not a match
+    // if we haven't exhausted the test std::string then it is not a match
     // i.e. "--mantle" will not best-fit match to "--mandate" at all.
     if (*a_pszTest) {
         return 0;
     }
 
-    // partial match to the current length of the test string
+    // partial match to the current length of the test std::string
     return nLen;
 }
 

@@ -33,7 +33,7 @@
 void CompactStoichiometries(BzzVectorInt &index, vector<char> &phase, BzzVector &nu, int &n, vector<string> &names);
 void SurfaceCompleteGlobalStoichiometries(BzzVectorInt &index, BzzVectorInt &indexGlobal, BzzVector &nu, BzzVector &lambdaGlobal);
 
-void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::ErrorMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:    OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData"	<< endl;
@@ -45,7 +45,7 @@ void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::ErrorMessage(const string
     exit(-1);
 }
 
-void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::WarningMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData"	<< endl;
@@ -324,7 +324,7 @@ void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::ReactionString()
 	}
 	
 	{
-		string dummy;
+		std::string dummy;
 		stringstream index;
 		if(iReactionBis != 0)	index << iReactionBis;
 		else					index << iReaction;
@@ -385,7 +385,7 @@ void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::CheckStoichiometry(OpenSM
 			{
 				stringstream sumR; sumR << sumReactants[j];
 				stringstream sumP; sumP << sumProducts[j];
-				string message = "Umbalanced stoichiometry on " + element_names[j] + " element\n";
+				std::string message = "Umbalanced stoichiometry on " + element_names[j] + " element\n";
 				message += "  Reactants: " + sumR.str() + " - Products: " + sumP.str();
 				ErrorMessage(message);
 			}
@@ -626,7 +626,7 @@ void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::PrintOnBinaryFile(BzzSave
 void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::StickyReaction(vector<string> instructions, OpenSMOKE_CHEMKINInterpreter_ThermoData &thermo, OpenSMOKE_PreProcessorSurfaceMaterial &material, BzzVectorInt &gas_indices, BzzVectorInt &site_indices)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Sticky Reaction (STICK) option";
+	std::string error_message = "Syntax error in Sticky Reaction (STICK) option";
 	
 	// Checking for syntax errors
 	if (nInstructions != 1)	ErrorMessage(error_message);
@@ -671,7 +671,7 @@ void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::CoverageDependentReaction
 {
 	
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in CoverageDependent Reaction (COV) option";
+	std::string error_message = "Syntax error in CoverageDependent Reaction (COV) option";
 	
 	// Checking for syntax errors
 	if (nInstructions != 7)							ErrorMessage(error_message);
@@ -700,7 +700,7 @@ void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::CoverageDependentReaction
 void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::LangmuirHinshelwoodReactions(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Langmuir-Hinshelwood Reaction (LANG) option";
+	std::string error_message = "Syntax error in Langmuir-Hinshelwood Reaction (LANG) option";
 	
 	// Checking for syntax errors
 	if (nInstructions != 8)							ErrorMessage(error_message);
@@ -748,7 +748,7 @@ void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::LangmuirHinshelwoodReacti
 void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::LangmuirHinshelwoodDenominatorExponentParameter(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Langmuir-Hinshelwood Denominator Exponent Parameter (LHDE) option";
+	std::string error_message = "Syntax error in Langmuir-Hinshelwood Denominator Exponent Parameter (LHDE) option";
 	
 	// Checking for syntax errors
 	if (nInstructions != 4)							ErrorMessage(error_message);
@@ -766,7 +766,7 @@ void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::LangmuirHinshelwoodDenomi
 void OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData::LangmuirHinshelwoodEquilibriumPressure(vector<string> instructions)
 {
 	int nInstructions = instructions.size()-1;
-	string error_message = "Syntax error in Langmuir-Hinshelwood Equilibrium Pressure (LHPR) option";
+	std::string error_message = "Syntax error in Langmuir-Hinshelwood Equilibrium Pressure (LHPR) option";
 	
 	// Checking for syntax errors
 	if (nInstructions != 4)							ErrorMessage(error_message);

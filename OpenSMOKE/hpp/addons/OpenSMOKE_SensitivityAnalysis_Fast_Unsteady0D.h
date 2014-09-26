@@ -46,8 +46,8 @@ friend  class OpenSMOKE_Kinetics;
 public:
 
 	OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D();
-	void SetName(const string name);
-	void Initialize(const kind_of_sensitivity_analysis kind_, const kind_of_integration integration_, OpenSMOKE_ReactingGas *_mix, BzzVectorInt &_indices, const string path_name);
+	void SetName(const std::string name);
+	void Initialize(const kind_of_sensitivity_analysis kind_, const kind_of_integration integration_, OpenSMOKE_ReactingGas *_mix, BzzVectorInt &_indices, const std::string path_name);
 	void Update(const double tCurrent, BzzMatrix &J, const double T, 
 				const double P_Pascal, const double rho, const double Cp, const double v, BzzVector &X);
 
@@ -56,7 +56,7 @@ public:
 				BzzVector &x, BzzVector &r);
 
 	void UpdateOutputFile(const double t, BzzVector &x);
-	void MoveFromFiles(const string fileName, const int N, BzzSave &fOutput, const string tag);
+	void MoveFromFiles(const std::string fileName, const int N, BzzSave &fOutput, const std::string tag);
 
 	
 	void VideoSummary();
@@ -67,16 +67,16 @@ public:
 	inline int NumberOfCoefficients()			{ return NV*NP; }
 	inline kind_of_integration Integration()	{ return integration; }
 
-	void PrepareBinaryFile(BzzSave &fOutput, const int N, BzzMatrix &S, const string tag);
+	void PrepareBinaryFile(BzzSave &fOutput, const int N, BzzMatrix &S, const std::string tag);
 	void SaveOnBinaryFile(BzzSave &fOutput);
 	void CloseBinaryFile(BzzSave &fOutput);
 	void Close();
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
 private:
 
@@ -120,7 +120,7 @@ private:
 	double	threshold_normalization;
 
 	ofstream fOutput;
-	void PrepareOutputFile(const string file_name);
+	void PrepareOutputFile(const std::string file_name);
 	void UpdateOutputFile(const double t);
 	void Populate_S_S();
 

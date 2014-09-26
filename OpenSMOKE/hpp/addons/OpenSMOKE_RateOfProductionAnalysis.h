@@ -36,7 +36,7 @@ friend  class OpenSMOKE_Kinetics;
 public:
 
 	OpenSMOKE_RateOfProductionAnalysis();
-	void SetName(const string name);
+	void SetName(const std::string name);
 
 	void Initialize(OpenSMOKE_ReactingGas *mix, BzzVectorInt &_indices);
 	void SetNumberOfPoints(const int N_);
@@ -45,8 +45,8 @@ public:
 	void Run(BzzMatrix &r, BzzVector &x, const double xA, const double xB);
 	
 	// Print ASCII Files
-	void PrintRateOfProductionAnalyses(const string fileName, BzzVector  &x, BzzVector &T);
-	void PrintIntegralRateOfProductionAnalyses(const string fileName);
+	void PrintRateOfProductionAnalyses(const std::string fileName, BzzVector  &x, BzzVector &T);
+	void PrintIntegralRateOfProductionAnalyses(const std::string fileName);
 
 	// Print Binary Files
 	void SaveOnBinaryFile(BzzSave &fOutput);
@@ -84,9 +84,9 @@ private:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
 };
 
@@ -108,9 +108,9 @@ public:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 	
 	void BuildNuMatrix(OpenSMOKE_Kinetics *kinetics);
 	

@@ -24,7 +24,7 @@
 #include "engine/OpenSMOKE_ReactingGas.h"
 #include <sstream>
 
-void OpenSMOKE_CHEMKINInterpreter::ErrorMessage(const int iLine, const string message)
+void OpenSMOKE_CHEMKINInterpreter::ErrorMessage(const int iLine, const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter "	<< endl;
@@ -36,7 +36,7 @@ void OpenSMOKE_CHEMKINInterpreter::ErrorMessage(const int iLine, const string me
     exit(-1);
 }
 
-void OpenSMOKE_CHEMKINInterpreter::WarningMessage(const int iLine, const string message)
+void OpenSMOKE_CHEMKINInterpreter::WarningMessage(const int iLine, const std::string message)
 {
     cout << endl;
     cout << "Class:    OpenSMOKE_CHEMKINInterpreter"	<< endl;
@@ -73,27 +73,27 @@ OpenSMOKE_CHEMKINInterpreter::OpenSMOKE_CHEMKINInterpreter()
 	startReactions	= 0;
 }
 
-string OpenSMOKE_CHEMKINInterpreter::nameKineticsFile()
+std::string OpenSMOKE_CHEMKINInterpreter::nameKineticsFile()
 {
 	return name_kinetics_file;
 }
 
-string OpenSMOKE_CHEMKINInterpreter::nameSurfaceKineticsFile()
+std::string OpenSMOKE_CHEMKINInterpreter::nameSurfaceKineticsFile()
 {
 	return name_surface_kinetics_file;
 }
 
-string OpenSMOKE_CHEMKINInterpreter::nameThermoFile()
+std::string OpenSMOKE_CHEMKINInterpreter::nameThermoFile()
 {
 	return name_thermo_file;
 }
 
-string OpenSMOKE_CHEMKINInterpreter::nameTransportFile()
+std::string OpenSMOKE_CHEMKINInterpreter::nameTransportFile()
 {
 	return name_transport_file;
 }
 
-string OpenSMOKE_CHEMKINInterpreter::nameOutputFolder()
+std::string OpenSMOKE_CHEMKINInterpreter::nameOutputFolder()
 {
 	return name_output_folder;
 }
@@ -121,47 +121,47 @@ void OpenSMOKE_CHEMKINInterpreter::SetFittingPoints(const int fittingpoints)
 		ErrorMessage(0, "Please check your number of fitting points!");
 }
 
-void OpenSMOKE_CHEMKINInterpreter::SetName(const string name)
+void OpenSMOKE_CHEMKINInterpreter::SetName(const std::string name)
 {
 	name_object = name;
 }
 
-void OpenSMOKE_CHEMKINInterpreter::SetAuthorName(const string name)
+void OpenSMOKE_CHEMKINInterpreter::SetAuthorName(const std::string name)
 {
 	name_author = name;
 }
 
-void OpenSMOKE_CHEMKINInterpreter::SetKineticFileName(const string name)
+void OpenSMOKE_CHEMKINInterpreter::SetKineticFileName(const std::string name)
 {
 	name_kinetics_file = name;
 }
 
-void OpenSMOKE_CHEMKINInterpreter::SetSurfaceKineticFileName(const string name)
+void OpenSMOKE_CHEMKINInterpreter::SetSurfaceKineticFileName(const std::string name)
 {
 	iSurfaceKinetics = true;
 	name_surface_kinetics_file = name;
 }
 
-void OpenSMOKE_CHEMKINInterpreter::SetThermodynamicFileName(const string name)
+void OpenSMOKE_CHEMKINInterpreter::SetThermodynamicFileName(const std::string name)
 {
 	name_thermo_file = name;
 }
 
-void OpenSMOKE_CHEMKINInterpreter::SetTransportFileName(const string name)
+void OpenSMOKE_CHEMKINInterpreter::SetTransportFileName(const std::string name)
 {
 	name_transport_file = name;
 }
 
-void OpenSMOKE_CHEMKINInterpreter::SetReducedListFileName(const string name)
+void OpenSMOKE_CHEMKINInterpreter::SetReducedListFileName(const std::string name)
 {
 	name_reduced_list_file = name;
 }
 
-void OpenSMOKE_CHEMKINInterpreter::SetOutputFolderName(const string name)
+void OpenSMOKE_CHEMKINInterpreter::SetOutputFolderName(const std::string name)
 {
 	name_output_folder = name;
 
-	string MSDOScommand = "mkdir " + name_output_folder;
+	std::string MSDOScommand = "mkdir " + name_output_folder;
 	system(MSDOScommand.c_str());
 
 	name_ascii_folder = name_output_folder;
@@ -469,7 +469,7 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingElements(const int iLine, vector<strin
 
 	for(i=1;i<=indexSlash.Size()/2;i++)
 	{
-		string parsed_string;
+		std::string parsed_string;
 		int iBegin	= indexSlash[(i-1)*2+1];
 		int iEnd	= indexSlash[(i-1)*2+2];
 		if (iEnd != iBegin+2)
@@ -563,7 +563,7 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingReactions(const int iReaction, const i
 	}
 
 	int i;
-	string whole_reaction;
+	std::string whole_reaction;
 	for(i=1;i<=number_of_instructions-3;i++)
 		whole_reaction+= (instructions[i] + " ");
 
@@ -572,8 +572,8 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingReactions(const int iReaction, const i
 	vector<string> stoichiometry;
 	stoichiometry.push_back("stoichiometry");
 		
-	string dummy;
-	string dummy_complete;
+	std::string dummy;
+	std::string dummy_complete;
 	stringstream parsed_string(whole_reaction);
 
 	int index;
@@ -608,7 +608,7 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingReactions(const int iReaction, const i
 		bool iWarning = false;
 		for(i=1;i<=index-1;i++)
 		{
-			string name;
+			std::string name;
 			double number;
 
 			SeparateNumberFromString(stoichiometry[i], name, number);
@@ -639,7 +639,7 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingReactions(const int iReaction, const i
 		bool iWarning = false;
 		for(i=index+1;i<=int(stoichiometry.size())-1;i++)
 		{
-			string name;
+			std::string name;
 			double number;
 
 			SeparateNumberFromString(stoichiometry[i], name, number);
@@ -672,7 +672,7 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingReactionsAdditional(const int i, const
 	int number_of_instructions = instructions.size()-1;
 	if (number_of_instructions >= 1)
 	{
-		string instruction = instructions[1];
+		std::string instruction = instructions[1];
 
 		     if (caseInsCompare("CHEB", instruction))
 			kinetics.reaction[i].Chebishev(instructions);
@@ -739,7 +739,7 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingReactionsAdditional(const int k
 	int number_of_instructions = instructions.size()-1;
 	if (number_of_instructions >= 1)
 	{
-		string instruction = instructions[1];
+		std::string instruction = instructions[1];
 
 		if (caseInsCompare("STICK", instruction))
 			material[k].surfaceKinetics.reaction[i].StickyReaction(instructions, thermo, material[k], indices_species_thermo_database, indices_site_thermo_database);
@@ -760,7 +760,7 @@ OpenSMOKE_CHEMKINInterpreter::~OpenSMOKE_CHEMKINInterpreter()
 
 }
 
-void OpenSMOKE_CHEMKINInterpreter::AddSpaces(string &line, const char symbol)
+void OpenSMOKE_CHEMKINInterpreter::AddSpaces(std::string &line, const char symbol)
 {
 	int length = line.size();
 
@@ -779,7 +779,7 @@ void OpenSMOKE_CHEMKINInterpreter::AddSpaces(string &line, const char symbol)
 	}
 }
 
-void OpenSMOKE_CHEMKINInterpreter::PrintIdealGasBinaryFile(const string file_name)
+void OpenSMOKE_CHEMKINInterpreter::PrintIdealGasBinaryFile(const std::string file_name)
 {
 	OpenSMOKE_PreProcessorIdealGas preprocessor;
 	preprocessor.SetupFromCHEMKINInterpreter(this, file_name);
@@ -831,7 +831,7 @@ void OpenSMOKE_CHEMKINInterpreter::WriteAdditionalFiles()
 {
 }
 
-void OpenSMOKE_CHEMKINInterpreter::PrintSummaryFile(const string file_name)
+void OpenSMOKE_CHEMKINInterpreter::PrintSummaryFile(const std::string file_name)
 {	
 	ofstream fSummary;
 	openOutputFileAndControl(fSummary, file_name);
@@ -870,7 +870,7 @@ void OpenSMOKE_CHEMKINInterpreter::PrintSummaryFile(const string file_name)
 
 void OpenSMOKE_CHEMKINInterpreter::PrintBuzziFiles()
 {
-	string MSDOS_command = "mkdir " + name_ascii_folder;
+	std::string MSDOS_command = "mkdir " + name_ascii_folder;
 	system(MSDOS_command.c_str());
 	
 	kinetics.PrintNamesFile(name_ascii_folder + "/names.bzz");
@@ -903,10 +903,10 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingReactions()
 		kinetics.reaction[i].Setup(energy_factor, frequency_factor);
 }
 
-void OpenSMOKE_CHEMKINInterpreter::WriteReducedScheme(string fileName)
+void OpenSMOKE_CHEMKINInterpreter::WriteReducedScheme(std::string fileName)
 {
 	int n;
-	string checkstring;
+	std::string checkstring;
 
 	ifstream fInput;
 	openInputFileAndControl(fInput, fileName);
@@ -936,7 +936,7 @@ void OpenSMOKE_CHEMKINInterpreter::WriteReducedScheme(string fileName)
 				if (i < kinetics.number_of_reactions)
 					for (int j=1;j<=kinetics.lineReactionIndex[i+1]-kinetics.lineReactionIndex[i];j++)
 					{
-						string line = lines[kinetics.lineReactionIndex[i]+j-1];
+						std::string line = lines[kinetics.lineReactionIndex[i]+j-1];
 						StringSubstitutionAll(line, " #DIRECT# ", " => ");
 						StringSubstitutionAll(line, " #REVERSIBLE# ", " = ");
 						StringSubstitutionAll(line, " + M ", "(+M)");
@@ -946,7 +946,7 @@ void OpenSMOKE_CHEMKINInterpreter::WriteReducedScheme(string fileName)
 				else if (i == kinetics.number_of_reactions)
 					for (int j=1;j<=lines.size()-kinetics.lineReactionIndex[i]-1;j++)
 					{
-						string line = lines[kinetics.lineReactionIndex[i]+j-1];
+						std::string line = lines[kinetics.lineReactionIndex[i]+j-1];
 						StringSubstitutionAll(line, " #DIRECT# ", " => ");
 						StringSubstitutionAll(line, " #REVERSIBLE# ", " = ");
 						StringSubstitutionAll(line, " + M ", "(+M)");
@@ -987,7 +987,7 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingReactionsAdditionalData()
 		vector<string> instructions;
 		instructions.push_back("instructions");
 	
-		string dummy;
+		std::string dummy;
 		stringstream parsed_string(lines[j]);
 		for(;;)
 		{
@@ -1014,7 +1014,7 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingReactionsAdditionalData()
 			vector<string> instructions;
 			instructions.push_back("instructions");
 	
-			string dummy;
+			std::string dummy;
 			stringstream parsed_string(lines[j+k]);
 			for(;;)
 			{
@@ -1042,7 +1042,7 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingSpecies()
 
 		if (iSkip == false)
 		{
-			string dummy;
+			std::string dummy;
 			stringstream parsed_string(lines[i]);
 
 			for(;;)
@@ -1073,7 +1073,7 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingElements()
 
 		if (iSkip == false)
 		{
-			string dummy;
+			std::string dummy;
 			stringstream parsed_string(lines[i]);
 
 			for(;;)
@@ -1098,7 +1098,7 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingUnits()
 			int j;
 			for(j=startUnits[i]+1;j<=number_of_lines;j++)
 			{
-				string dummy;
+				std::string dummy;
 				stringstream parsed_string(lines[j]);
 
 				parsed_string >> dummy;
@@ -1112,7 +1112,7 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingUnits()
 			finalUnits.Append(j-1);
 			vector<string> instructions;
 			instructions.push_back("instructions");
-			string dummy;
+			std::string dummy;
 			for(j=startUnits[i];j<=finalUnits[finalUnits.Size()];j++)
 			{
 				stringstream parsed_string(lines[j]);
@@ -1134,7 +1134,7 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingUnits()
 	vector<string> instructions;
 	instructions.push_back("instructions");
 	
-	string dummy;
+	std::string dummy;
 	stringstream parsed_string(lines[startReactions]);
 
 	for(;;)
@@ -1214,7 +1214,7 @@ void OpenSMOKE_CHEMKINInterpreter::ParsingSections()
 {
 	for(int i=1;i<=number_of_lines;i++)
 	{
-		string dummy;
+		std::string dummy;
 		stringstream parsed_string(lines[i]);
 
 		parsed_string >> dummy;
@@ -1241,7 +1241,7 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingSections()
 	BzzVectorInt surface_start_material;
 	for(int i=1;i<=surface_number_of_lines;i++)
 	{
-		string dummy;
+		std::string dummy;
 		stringstream parsed_string(surface_lines[i]);
 
 		parsed_string >> dummy;
@@ -1266,7 +1266,7 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingSections()
 
 		for(int i=material[k].start_material_section;i<=material[k].end_material_section;i++)
 		{
-			string dummy;
+			std::string dummy;
 			stringstream parsed_string(surface_lines[i]);
 
 			parsed_string >> dummy;
@@ -1366,7 +1366,7 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingMaterials()
 {
 	for(int k=1;k<=nSurfaceMaterials;k++)
 	{
-		string dummy;
+		std::string dummy;
 		stringstream parsed_string(surface_lines[material[k].start_material_section]);
 
 		// Read Material Key word
@@ -1419,11 +1419,11 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingSites()
 					if (material[k].start_bulks.Size() > 0)
 						stop_line = material[k].start_bulks[1] -1;
 
-				string site_lines;
+				std::string site_lines;
 				for(int i=start_line;i<=stop_line;i++)
 					site_lines += surface_lines[i] + " ";
 
-				string dummy;
+				std::string dummy;
 				stringstream parsed_string(site_lines);
 
 				// Read Material Key word
@@ -1500,7 +1500,7 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingSites()
 			for (int i=1;i<=material[k].site_occupancy[j].Size();i++)
 			{
 				bool iAlreadyAvailable = false;
-				string focus = material[k].site_species_names[j][i];
+				std::string focus = material[k].site_species_names[j][i];
 				for(int n=1;n<=material[k].surfaceKinetics.site_species_list.size()-1;n++)
 					if (material[k].surfaceKinetics.site_species_list[n] == focus)
 					{
@@ -1553,11 +1553,11 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingBulk()
 				if (j<material[k].nSurfaceBulks)
 					stop_line = material[k].start_bulks[j+1]-1;
 
-				string bulk_lines;
+				std::string bulk_lines;
 				for(int i=start_line;i<=stop_line;i++)
 					bulk_lines += surface_lines[i] + " ";
 
-				string dummy;
+				std::string dummy;
 				stringstream parsed_string(bulk_lines);
 
 				// Read Material Key word
@@ -1627,7 +1627,7 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingBulk()
 			for (int i=1;i<=material[k].bulk_density[j].Size();i++)
 			{
 				bool iAlreadyAvailable = false;
-				string focus = material[k].bulk_species_names[j][i];
+				std::string focus = material[k].bulk_species_names[j][i];
 				for(int n=1;n<=material[k].surfaceKinetics.bulk_species_list.size()-1;n++)
 					if (material[k].surfaceKinetics.bulk_species_list[n] == focus)
 					{
@@ -1663,7 +1663,7 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingBulk()
 			for (int i=1;i<=material[k].surfaceKinetics.bulk_species_list.size()-1;i++)
 			{
 				bool iAlreadyAvailable = false;
-				string focus = material[k].surfaceKinetics.bulk_species_list[i];
+				std::string focus = material[k].surfaceKinetics.bulk_species_list[i];
 				for(int n=1;n<=bulk_species_global_list.size()-1;n++)
 					if (bulk_species_global_list[n] == focus)
 					{
@@ -1685,7 +1685,7 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingBulk()
 			for (int i=1;i<=material[k].surfaceKinetics.site_species_list.size()-1;i++)
 			{
 				bool iAlreadyAvailable = false;
-				string focus = material[k].surfaceKinetics.site_species_list[i];
+				std::string focus = material[k].surfaceKinetics.site_species_list[i];
 				for(int n=1;n<=site_species_global_list.size()-1;n++)
 					if (site_species_global_list[n] == focus)
 					{
@@ -1748,7 +1748,7 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingReactionsAdditionalData()
 			vector<string> instructions;
 			instructions.push_back("instructions");
 	
-			string dummy;
+			std::string dummy;
 			stringstream parsed_string(surface_lines[j]);
 			for(;;)
 			{
@@ -1776,7 +1776,7 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingReactionsAdditionalData()
 				vector<string> instructions;
 				instructions.push_back("instructions");
 	
-				string dummy;
+				std::string dummy;
 				stringstream parsed_string(surface_lines[j+kk]);
 				for(;;)
 				{
@@ -1801,7 +1801,7 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingReactions(const int k, const in
 	}
 
 	int i;
-	string whole_reaction;
+	std::string whole_reaction;
 	for(i=1;i<=number_of_instructions-3;i++)
 		whole_reaction+= (instructions[i] + " ");
 
@@ -1810,8 +1810,8 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingReactions(const int k, const in
 	vector<string> stoichiometry;
 	stoichiometry.push_back("stoichiometry");
 		
-	string dummy;
-	string dummy_complete;
+	std::string dummy;
+	std::string dummy_complete;
 	stringstream parsed_string(whole_reaction);
 
 	int index;
@@ -1839,7 +1839,7 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingReactions(const int k, const in
 		bool iWarning = false;
 		for(i=1;i<=index-1;i++)
 		{
-			string name;
+			std::string name;
 			double number;
 
 			SeparateNumberFromString(stoichiometry[i], name, number);
@@ -1874,7 +1874,7 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceParsingReactions(const int k, const in
 		bool iWarning = false;
 		for(i=index+1;i<=int(stoichiometry.size())-1;i++)
 		{
-			string name;
+			std::string name;
 			double number;
 
 			SeparateNumberFromString(stoichiometry[i], name, number);
@@ -1997,9 +1997,9 @@ void OpenSMOKE_CHEMKINInterpreter::SurfaceSummaryOnFile()
 	fOutput.close();
 }
 
-void OpenSMOKE_CHEMKINInterpreter::PrintSurfaceBinaryFile(const string file_name)
+void OpenSMOKE_CHEMKINInterpreter::PrintSurfaceBinaryFile(const std::string file_name)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 
 	// Write On Binary File
@@ -2007,7 +2007,7 @@ void OpenSMOKE_CHEMKINInterpreter::PrintSurfaceBinaryFile(const string file_name
 	binaryFile('*', file_name);
 	getchar();
 	BzzSave asciiFile;
-	string file_name_ascii = file_name+".ascii";
+	std::string file_name_ascii = file_name+".ascii";
 	asciiFile(file_name_ascii);
 	
 

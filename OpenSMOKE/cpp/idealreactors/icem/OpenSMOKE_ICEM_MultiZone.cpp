@@ -95,29 +95,29 @@ void OpenSMOKE_ICEM_MultiZone::AssignEngineModel(const icem_multizone_models val
 	}
 }
 
-void OpenSMOKE_ICEM_MultiZone::AssignEnd(const string units, const double value)
+void OpenSMOKE_ICEM_MultiZone::AssignEnd(const std::string units, const double value)
 {
 }
 
-void OpenSMOKE_ICEM_MultiZone::AssignRotationRate(const string units, const double value)
+void OpenSMOKE_ICEM_MultiZone::AssignRotationRate(const std::string units, const double value)
 {
 	rotation_rate = OpenSMOKE_Conversions::conversion_angular_velocity(value, units);
     assignedRotationRate	= true;
 }
 
-void OpenSMOKE_ICEM_MultiZone::AssignClearanceVolume(const string units, const double value)
+void OpenSMOKE_ICEM_MultiZone::AssignClearanceVolume(const std::string units, const double value)
 {
 	volume_clearance = OpenSMOKE_Conversions::conversion_volume(value, units);
     assignedClearanceVolume	= true;
 }
 
-void OpenSMOKE_ICEM_MultiZone::AssignTotalDisplacement(const string units, const double value)
+void OpenSMOKE_ICEM_MultiZone::AssignTotalDisplacement(const std::string units, const double value)
 {
 	volume_displacement_total = OpenSMOKE_Conversions::conversion_volume(value, units);
     assignedTotalDisplacement = true;
 }
 
-void OpenSMOKE_ICEM_MultiZone::AssignCrevicesVolume(const string units, const double value)
+void OpenSMOKE_ICEM_MultiZone::AssignCrevicesVolume(const std::string units, const double value)
 {
 	volume_crevices = OpenSMOKE_Conversions::conversion_volume(value, units);
     assignedCrevicesVolume	= true;
@@ -156,32 +156,32 @@ void OpenSMOKE_ICEM_MultiZone::AssignExhaustRatio(const double value)
 	fRecycle.setf(ios::scientific);
 }
 
-void OpenSMOKE_ICEM_MultiZone::AssignStartAngle(const string units, const double value)
+void OpenSMOKE_ICEM_MultiZone::AssignStartAngle(const std::string units, const double value)
 {
 	start_angle = OpenSMOKE_Conversions::conversion_angle(value, units);
     assignedStartAngle	= true;
 }
 
-void OpenSMOKE_ICEM_MultiZone::AssignEndAngle(const string units, const double value)
+void OpenSMOKE_ICEM_MultiZone::AssignEndAngle(const std::string units, const double value)
 {
 	end_angle = OpenSMOKE_Conversions::conversion_angle(value, units);
     assignedEndAngle	= true;
 }
 
-void OpenSMOKE_ICEM_MultiZone::AssignDiameter(const string units, const double value)
+void OpenSMOKE_ICEM_MultiZone::AssignDiameter(const std::string units, const double value)
 {
 	diameter_cylinder  = OpenSMOKE_Conversions::conversion_length(value, units);
 	area_cylinder_base = Constants::pi/4.*diameter_cylinder*diameter_cylinder;
     assignedDiameter   = true;
 }
 
-void OpenSMOKE_ICEM_MultiZone::SetPlugFlowTime(const string units, const double value)
+void OpenSMOKE_ICEM_MultiZone::SetPlugFlowTime(const std::string units, const double value)
 {
 	iPlugFlowExhaustGases = true;
 	plugFlowExhaustGasesTime  = OpenSMOKE_Conversions::conversion_time(value, units);
 }
 
-void OpenSMOKE_ICEM_MultiZone::SetPlugFlowInletTemperature(const string units, const double value)
+void OpenSMOKE_ICEM_MultiZone::SetPlugFlowInletTemperature(const std::string units, const double value)
 {
 	iPlugFlowExhaustGasesInletTemperature = true;
 	plugFlowExhaustGasesInletTemperature  = OpenSMOKE_Conversions::conversion_temperature(value, units);
@@ -217,7 +217,7 @@ void OpenSMOKE_ICEM_MultiZone::AssignNumberOfCycles(const int value)
 	assignedNumberOfCycles	= true;
 }
 
-void OpenSMOKE_ICEM_MultiZone::SetConstantExchangeArea(const double value, const string units)
+void OpenSMOKE_ICEM_MultiZone::SetConstantExchangeArea(const double value, const std::string units)
 {
 	iUserDefinedExchangeArea = CONSTANT;
 	area_cylinder_total = OpenSMOKE_Conversions::conversion_area(value, units);
@@ -228,7 +228,7 @@ void OpenSMOKE_ICEM_MultiZone::SetExchangeAreaModel(const icem_exchange_area_mod
 	icem_exchange_area_model = value;
 }
 
-void OpenSMOKE_ICEM_MultiZone::SetUserDefinedExchangeArea(const string fileName)
+void OpenSMOKE_ICEM_MultiZone::SetUserDefinedExchangeArea(const std::string fileName)
 {
     iUserDefinedExchangeArea = USERDEFINED;
     ud_A_profile.AssignFromFile(fileName, "AREA");
@@ -271,7 +271,7 @@ void OpenSMOKE_ICEM_MultiZone::SetMonteCarloMixing()
 	iMonteCarloMixing = true;
 }
 
-void OpenSMOKE_ICEM_MultiZone::SetMicromixingTime(const double value, const string units)
+void OpenSMOKE_ICEM_MultiZone::SetMicromixingTime(const double value, const std::string units)
 {
 	TauMixing = OpenSMOKE_Conversions::conversion_time(value, units);
 }
@@ -293,7 +293,7 @@ void OpenSMOKE_ICEM_MultiZone::SetZoneInitialConditions(const vector<string> str
 		int		index = atoi(string_vector[5*(j-1)].c_str());
 		double  mass_fraction = atof(string_vector[5*(j-1)+1].c_str());
 		double  temperature = atof(string_vector[5*(j-1)+2].c_str());
-		string  temperature_units = string_vector[5*(j-1)+3];
+		std::string  temperature_units = string_vector[5*(j-1)+3];
 		double  external_exchange = atof(string_vector[5*(j-1)+4].c_str());
 
 		if (index != zone_count)	ErrorMessage("The zone indices must be ordered. Please check yor input for zones...");
@@ -470,7 +470,7 @@ void OpenSMOKE_ICEM_MultiZone::SetHeatTransferModel_WoschniParameters(const vect
 	int n = string_vector.size();
 	for(int j=0;j<n;j+=2)
 	{
-		string option_string = string_vector[j];
+		std::string option_string = string_vector[j];
 		double option_value  = atof(string_vector[j+1].c_str());
 
 			 if (option_string == "alfa")	woschni_alfa		= option_value;	
@@ -490,7 +490,7 @@ void OpenSMOKE_ICEM_MultiZone::SetHeatTransferModel_AssanisParameters(const vect
 	int n = string_vector.size();
 	for(int j=0;j<n;j+=2)
 	{
-		string option_string = string_vector[j];
+		std::string option_string = string_vector[j];
 		double option_value  = atof(string_vector[j+1].c_str());
 
 			 if (option_string == "alfa")	assanis_alfa		= option_value;	
@@ -510,7 +510,7 @@ void OpenSMOKE_ICEM_MultiZone::SetHeatTransferModel_HohenbergParameters(const ve
 	int n = string_vector.size();
 	for(int j=0;j<n;j+=2)
 	{
-		string option_string = string_vector[j];
+		std::string option_string = string_vector[j];
 		double option_value  = atof(string_vector[j+1].c_str());
 
 			 if (option_string == "alfa")	hohenberg_alfa	= option_value;	
@@ -527,7 +527,7 @@ void OpenSMOKE_ICEM_MultiZone::SetHeatTransferModel_AnnandParameters(const vecto
 	int n = string_vector.size();
 	for(int j=0;j<n;j+=2)
 	{
-		string option_string = string_vector[j];
+		std::string option_string = string_vector[j];
 		double option_value  = atof(string_vector[j+1].c_str());
 
 			 if (option_string == "alfa")	annand_alfa	= option_value;	
@@ -1639,8 +1639,8 @@ void OpenSMOKE_ICEM_MultiZone::Solve()
 				dae_single.MyStepPrint();
 				dae_single.SetMinimumConstraints(xMin);
 				dae_single.SetMaximumConstraints(xMax);
-				if (iAbsoluteTolerance == true)	dae_single.SetTollAbs(absoluteTolerance);
-				if (iRelativeTolerance == true)	dae_single.SetTollRel(relativeTolerance*MachEpsFloat());
+				if (iAbsoluteTolerance == true)	dae_single.SetTolAbs(absoluteTolerance);
+				if (iRelativeTolerance == true)	dae_single.SetTolRel(relativeTolerance*MachEpsFloat());
 				
 				{
 					countGlobalIterations = -1;  // From -1 to avoid to store results from the first iteration
@@ -1672,7 +1672,7 @@ void OpenSMOKE_ICEM_MultiZone::Solve()
 				if (iAbsoluteTolerance == true)	
 				{
 					cout << "Absolute tolerance: " << absoluteTolerance << endl;
-					dae_sparse.SetTollAbs(absoluteTolerance);
+					dae_sparse.SetTolAbs(absoluteTolerance);
 				}
 				else
 					cout << "Absolute tolerance (default): " << 1.e-10 << endl;
@@ -1680,7 +1680,7 @@ void OpenSMOKE_ICEM_MultiZone::Solve()
 				if (iRelativeTolerance == true)	
 				{
 					cout << "Relative tolerance: " << relativeTolerance*MachEpsFloat() << endl;
-					dae_sparse.SetTollRel(relativeTolerance*MachEpsFloat());
+					dae_sparse.SetTolRel(relativeTolerance*MachEpsFloat());
 				}
 				else 
 					cout << "Relative tolerance (default): " << 100*MachEpsFloat() << endl;
@@ -1993,8 +1993,8 @@ void OpenSMOKE_ICEM_MultiZone::Solve()
 				ode[jGlobal].SetMinimumConstraints(xMin);
 				ode[jGlobal].SetMaximumConstraints(xMax);
 
-		//		if (iAbsoluteTolerance == true)	ode[jGlobal].SetTollAbs(absoluteTolerance);
-		//		if (iRelativeTolerance == true)	ode[jGlobal].SetTollRel(fRelTol);
+		//		if (iAbsoluteTolerance == true)	ode[jGlobal].SetTolAbs(absoluteTolerance);
+		//		if (iRelativeTolerance == true)	ode[jGlobal].SetTolRel(fRelTol);
 
 				ode[jGlobal](t+deltat,t+deltat);
 
@@ -2070,10 +2070,10 @@ void OpenSMOKE_ICEM_MultiZone::ResetSpecies(BzzMatrix &species)
 	cout << "Done!" << endl;
 }
 
-void OpenSMOKE_ICEM_MultiZone::DefineFromFile(const string inputFile)
+void OpenSMOKE_ICEM_MultiZone::DefineFromFile(const std::string inputFile)
 {
     double			double_value;
-    string			string_value;
+    std::string			string_value;
     int				int_value;
 	vector<string>  string_vector;
 
@@ -3525,7 +3525,7 @@ void MyNLSSystem_ICEM_MultiZone_Gaussian::assignICEM(OpenSMOKE_ICEM_MultiZone *i
 
 void OpenSMOKE_ICEM_MultiZone::SaveOnBinaryFile(BzzSave &fOutput)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 
 	int nSteps = countGlobalIterations;			
@@ -3595,7 +3595,7 @@ void OpenSMOKE_ICEM_MultiZone::SaveOnBinaryFile(BzzSave &fOutput)
 	}
 }
 
-void OpenSMOKE_ICEM_MultiZone::SaveOnBinaryFile(const string filename)
+void OpenSMOKE_ICEM_MultiZone::SaveOnBinaryFile(const std::string filename)
 {
 	cout << "Save on binary file..." << endl;
 	BzzSave fOutput;
@@ -3613,7 +3613,7 @@ void OpenSMOKE_ICEM_MultiZone::SaveOnBinaryFile(const string filename)
 	{
 		cout << "  -- writing rate of production analysis..." << endl;
 
-		string dummy;
+		std::string dummy;
 		char name[Constants::NAME_SIZE];
 
 		BzzVector RRvector(mix->NumberOfReactions());

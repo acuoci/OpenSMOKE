@@ -45,19 +45,19 @@ class OpenSMOKE_PostProcessor
 public:
 
 	OpenSMOKE_PostProcessor();
-	void SetName(const string name);
+	void SetName(const std::string name);
 
-	void ReadFromBinaryFile(const string fileName);
+	void ReadFromBinaryFile(const std::string fileName);
 
 	int NC;							// number of species
 	int NR;							// number of reactions
-	string *names;					// names of species
-	string *reactions;				// names of reactions
+	std::string *names;					// names of species
+	std::string *reactions;				// names of reactions
 	BzzVector M;
 	kind_of_reacting_system kind;
 	OpenSMOKE_ReactingGas	*mix;	// Pointer to gas mixture
 
-	string ExportMainXAxis();
+	std::string ExportMainXAxis();
 	void ExportAvailableXAxis(vector<string> &x_axis);
 	void ExportAvailableYAxis(vector<string> &y_axis);
 	void ExportAvailableYAxisReactionRates(vector<string> &y_axis);
@@ -70,10 +70,10 @@ public:
 	void ExportSensitivitySpeciesNames(vector<string> &species_names, const int index);
 	
 	// ROPA
-	void ImportSelectedAxis(int x_axis, vector<int> y_axis, BzzMatrix &x, BzzMatrix &y, string &name_x, string &name_y, vector<string> &names_lines);
-	void ImportSelectedAxisReactionRates(int x_axis, vector<int> y_axis, BzzMatrix &x, BzzMatrix &y, string &name_x, string &name_y, vector<string> &names_lines);
-	void ImportSelectedAxisFormationRates(int x_axis, vector<int> y_axis, BzzMatrix &x, BzzMatrix &y, string &name_x, string &name_y, vector<string> &names_lines);
-	void ImportSelectedAxisSensitivityCoefficients(int x_axis, vector<int> y_axis, BzzMatrix &x, BzzMatrix &y, string &name_x, string &name_y, vector<string> &names_lines);
+	void ImportSelectedAxis(int x_axis, vector<int> y_axis, BzzMatrix &x, BzzMatrix &y, std::string &name_x, std::string &name_y, vector<string> &names_lines);
+	void ImportSelectedAxisReactionRates(int x_axis, vector<int> y_axis, BzzMatrix &x, BzzMatrix &y, std::string &name_x, std::string &name_y, vector<string> &names_lines);
+	void ImportSelectedAxisFormationRates(int x_axis, vector<int> y_axis, BzzMatrix &x, BzzMatrix &y, std::string &name_x, std::string &name_y, vector<string> &names_lines);
+	void ImportSelectedAxisSensitivityCoefficients(int x_axis, vector<int> y_axis, BzzMatrix &x, BzzMatrix &y, std::string &name_x, std::string &name_y, vector<string> &names_lines);
 	
 	void ImportIntegralROPA(const int index, vector<double> &p, vector<double> &d, vector<int> &ip, vector<int> &id, vector<string> &names_p, vector<string> &names_d);
 	void ImportIntegralROPA(const int index, vector<double> &t, vector<int> &it, vector<string> &names_t);
@@ -84,11 +84,11 @@ public:
 
 	// Sensitivity - Bars
 	void ImportAdditionalSensitivityBars(const bool iTotal, const bool iLocal, const double coordinate, vector<double> &t, vector<int> &it, vector<string> &names_t, const int index, const int index_selection);
-	void ImportMassFractionSensitivityBars(const bool iTotal, const bool iLocal, const double coordinate, const string name, vector<double> &t, vector<int> &it, vector<string> &names_t, const int index);
+	void ImportMassFractionSensitivityBars(const bool iTotal, const bool iLocal, const double coordinate, const std::string name, vector<double> &t, vector<int> &it, vector<string> &names_t, const int index);
 
 	// Sensitivity - Profiles
 	void ImportAdditionalSensitivityProfiles(const bool iTotal, const bool iLocal, const double coordinate, BzzMatrix &SMatrix, BzzVectorInt &indices, vector<string> &names_t, const int index, const int index_selection);
-	void ImportMassFractionSensitivityProfiles(const bool iTotal, const bool iLocal, const double coordinate, const string name,BzzMatrix &SMatrix, BzzVectorInt &indices, vector<string> &names_t, const int index);
+	void ImportMassFractionSensitivityProfiles(const bool iTotal, const bool iLocal, const double coordinate, const std::string name,BzzMatrix &SMatrix, BzzVectorInt &indices, vector<string> &names_t, const int index);
 
 	void SetFocusSensitivityProfiles(const bool additional_index, const int index);
 
@@ -112,7 +112,7 @@ public:
 
 	BzzVector get_x();
 
-	string sensitivity_list(const int index);
+	std::string sensitivity_list(const int index);
 	int startSensitivityAdditional;
 
 private:
@@ -131,17 +131,17 @@ private:
 
 	OpenSMOKE_PostProcessor_RateOfProductionAnalysis *ropa;
 
-	string nameFileLoad;
+	std::string nameFileLoad;
 	BzzLoad fLoad;
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
-	void Check(const string flag);
-	string Next();
+	void Check(const std::string flag);
+	std::string Next();
 
 	bool iROPA_;
 	bool iSensitivity_;
