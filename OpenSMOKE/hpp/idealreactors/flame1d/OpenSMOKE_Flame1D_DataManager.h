@@ -242,7 +242,7 @@ public:
 	double bin_density_B;
 
 	bool iCorrectDiffusionFormulation;
-	bool iPhysicalSootDiffusionCoefficients;
+	int iPhysicalSootDiffusionCoefficients;
 
 private:
 
@@ -300,7 +300,7 @@ private:
 	void SetGasRadiation();
 	void SetSootRadiation(const std::string value);
 	void SetSoretEffect();
-	void SetPhysicalSootDiffusionCoefficients();
+	void SetPhysicalSootDiffusionCoefficients(const int value);
 	void SetThermophoreticEffect();
 	void SetLewisNumbers();
 	void SetUnityLewisNumbers();

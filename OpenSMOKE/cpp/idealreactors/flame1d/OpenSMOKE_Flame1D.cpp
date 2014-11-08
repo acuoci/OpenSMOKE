@@ -2231,7 +2231,7 @@ void OpenSMOKE_Flame1D::properties(int ReactionON, int jacobianIndex, BzzVectorI
 				Dm[i][j] = lambda[i]/rho[i]/Cp[i] / data->user_defined_lewis_numbers[j];
 	}
 
-	if (data->iPhysicalSootDiffusionCoefficients == true)
+	if (data->iPhysicalSootDiffusionCoefficients != 0)
 	{
 		unsigned int jBIN1A = 0;
 		double MWBIN1A = 0.;
@@ -2252,7 +2252,7 @@ void OpenSMOKE_Flame1D::properties(int ReactionON, int jacobianIndex, BzzVectorI
 			{
 				if (mix->names[j].compare(0, 3, "BIN") == 0)
 				{
-					const double MWratio = mix->M[j] / MWBIN1A;
+					double MWratio = min(mix->M[j] / MWBIN1A, pow(2., double(data->iPhysicalSootDiffusionCoefficients)));
 					const double correctionCoefficient = pow(MWratio, -0.681);
 					for (i = 1; i <= Np; i++)
 						Dm[i][j] = Dm[i][jBIN1A] * correctionCoefficient;

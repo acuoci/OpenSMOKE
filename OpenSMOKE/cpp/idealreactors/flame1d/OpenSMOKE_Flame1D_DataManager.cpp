@@ -180,7 +180,7 @@ OpenSMOKE_Flame1D_DataManager::OpenSMOKE_Flame1D_DataManager()
 	bin_density_B = 0.;
 
 	iCorrectDiffusionFormulation = true;
-	iPhysicalSootDiffusionCoefficients = false;
+	iPhysicalSootDiffusionCoefficients = 0;
 }
 
 void OpenSMOKE_Flame1D_DataManager::SetName(const std::string name)
@@ -215,7 +215,7 @@ void OpenSMOKE_Flame1D_DataManager::SetDefaultValues()
 	iUnityLewisNumbers					= false;
 	iVerboseMixtureProperties			= false;
 	iFakeTemperatureThermalConductivity = false;
-	iPhysicalSootDiffusionCoefficients  = false;
+	iPhysicalSootDiffusionCoefficients  = 0;
 }
 
 void OpenSMOKE_Flame1D_DataManager::Setup(const std::string kind)
@@ -398,7 +398,7 @@ OpenSMOKE_Dictionary_Flame1D::OpenSMOKE_Dictionary_Flame1D()
 	Add("#ThermophoreticEffect",	'O', 'N', "Thermophoretic effect");
 	Add("#VerboseMixtureProperties",'O', 'N', "Verbose mixture properties");
 
-	Add("#PhysicalSootDiffusionCoefficients", 'O', 'N', "Physical soot diffusion coefficients");
+	Add("#PhysicalSootDiffusionCoefficients", 'O', 'I', "Physical soot diffusion coefficients (BIN where to cut)");
 
 	Add("#UncorrectDiffusionFormulation", 'O', 'N', "Uncorrect diffusion formulation: omega*V = -D*grad(omega)");
 
@@ -774,8 +774,8 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionary(OpenSMOKE_Dictionary_Flame1D
 	if (dictionary.Return("#SoretEffect"))	
 		SetSoretEffect();
 
-	if (dictionary.Return("#PhysicalSootDiffusionCoefficients"))
-		SetPhysicalSootDiffusionCoefficients();
+	if (dictionary.Return("#PhysicalSootDiffusionCoefficients", int_value))
+		SetPhysicalSootDiffusionCoefficients(int_value);
 
 	if (dictionary.Return("#ThermophoreticEffect"))	
 		SetThermophoreticEffect();
@@ -1643,9 +1643,9 @@ void OpenSMOKE_Flame1D_DataManager::SetSoretEffect()
 	iSoretEffect = true;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetPhysicalSootDiffusionCoefficients()
+void OpenSMOKE_Flame1D_DataManager::SetPhysicalSootDiffusionCoefficients(const int value)
 {
-	iPhysicalSootDiffusionCoefficients = true;
+	iPhysicalSootDiffusionCoefficients = value;
 }
 
 void OpenSMOKE_Flame1D_DataManager::SetThermophoreticEffect()
