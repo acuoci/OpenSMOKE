@@ -53,24 +53,24 @@ OpenSMOKE_CSTR::OpenSMOKE_CSTR()
 	Setup();
 }
 
-void OpenSMOKE_CSTR::AssignEnd(const string units, const double value)
+void OpenSMOKE_CSTR::AssignEnd(const std::string units, const double value)
 {
 	tEnd = OpenSMOKE_Conversions::conversion_time(value, units);
 }
 
-void OpenSMOKE_CSTR::SetValveCoefficient(const double value, const string units)
+void OpenSMOKE_CSTR::SetValveCoefficient(const double value, const std::string units)
 {
 	KValve = OpenSMOKE_Conversions::conversion_valve_flow_coefficient(value, units);
 	PressureOutlet = inletStream->P;
 	iSetGasDischargeLaw = true;
 }
 
-void OpenSMOKE_CSTR::SetPressureOutlet(const double value, const string units)
+void OpenSMOKE_CSTR::SetPressureOutlet(const double value, const std::string units)
 {
 	PressureOutlet = OpenSMOKE_Conversions::conversion_pressure(value, units);
 }
 
-void OpenSMOKE_CSTR::AssignResidenceTime(const string units, const double value)
+void OpenSMOKE_CSTR::AssignResidenceTime(const std::string units, const double value)
 {
 	iResidenceTime = true;
 
@@ -79,7 +79,7 @@ void OpenSMOKE_CSTR::AssignResidenceTime(const string units, const double value)
 	assignedEnd			= true;
 }
 
-void OpenSMOKE_CSTR::AssignVolume(const string units, const double value)
+void OpenSMOKE_CSTR::AssignVolume(const std::string units, const double value)
 {
 	iResidenceTime = false;
 
@@ -92,7 +92,7 @@ void OpenSMOKE_CSTR::AssignVolume(const string units, const double value)
 	assignedEnd			= true;
 }
 
-void OpenSMOKE_CSTR::AssignDiameter(const string units, const double value)
+void OpenSMOKE_CSTR::AssignDiameter(const std::string units, const double value)
 {
 	iResidenceTime = false;
 
@@ -105,7 +105,7 @@ void OpenSMOKE_CSTR::AssignDiameter(const string units, const double value)
 	assignedEnd			= true;
 }
 
-void OpenSMOKE_CSTR::SetUserDefinedDiameter(const string fileName)
+void OpenSMOKE_CSTR::SetUserDefinedDiameter(const std::string fileName)
 {
 	iResidenceTime = false;
 
@@ -118,7 +118,7 @@ void OpenSMOKE_CSTR::SetUserDefinedDiameter(const string fileName)
 	assignedEnd			= true;
 }
 
-void OpenSMOKE_CSTR::SetUserDefinedResidenceTime(const string fileName)
+void OpenSMOKE_CSTR::SetUserDefinedResidenceTime(const std::string fileName)
 {
 	iResidenceTime = true;
 
@@ -129,7 +129,7 @@ void OpenSMOKE_CSTR::SetUserDefinedResidenceTime(const string fileName)
 	assignedEnd			= true;
 }
 
-void OpenSMOKE_CSTR::SetUserDefinedVolume(const string fileName)
+void OpenSMOKE_CSTR::SetUserDefinedVolume(const std::string fileName)
 {
 	iResidenceTime = false;
 
@@ -142,7 +142,7 @@ void OpenSMOKE_CSTR::SetUserDefinedVolume(const string fileName)
 	assignedEnd			= true;
 }
 
-void OpenSMOKE_CSTR::SetInitialTemperature(const double value, const string units)
+void OpenSMOKE_CSTR::SetInitialTemperature(const double value, const std::string units)
 {
 	Tinitial = OpenSMOKE_Conversions::conversion_temperature(value, units);
 	iSetInitialTemperature = true;
@@ -224,14 +224,14 @@ void OpenSMOKE_CSTR::Update(const double t)
 	}
 }
 
-void OpenSMOKE_CSTR::SetUserDefinedExchangeArea(const string fileName)
+void OpenSMOKE_CSTR::SetUserDefinedExchangeArea(const std::string fileName)
 {
     iUserDefinedExchangeArea = USERDEFINED;
     ud_Ae_profile.AssignFromFile(fileName, "AREA");
 	ud_Ae_profile.SetName(name_object + " - Exchange Area Profile");
 }
 
-void OpenSMOKE_CSTR::SetConstantExchangeArea(const double value, const string units)
+void OpenSMOKE_CSTR::SetConstantExchangeArea(const double value, const std::string units)
 {
 	iUserDefinedExchangeArea = CONSTANT;
 	Ae = OpenSMOKE_Conversions::conversion_area(value, units);
@@ -256,9 +256,9 @@ void OpenSMOKE_CSTR::SetFluctuations(const vector<string> string_vector)
 		double semiAmplitude;
 		double tWall;
 
-		string s1 = string_vector[3*(j-1)+0];
-		string s2 = string_vector[3*(j-1)+1];
-		string s3 = string_vector[3*(j-1)+2];
+		std::string s1 = string_vector[3*(j-1)+0];
+		std::string s2 = string_vector[3*(j-1)+1];
+		std::string s3 = string_vector[3*(j-1)+2];
 		
 		if (s1 == "T")
 			mean = OpenSMOKE_Conversions::conversion_temperature(atof(s2.c_str()), s3);
@@ -486,8 +486,8 @@ void OpenSMOKE_CSTR::Solve()
     o.SetMaximumConstraints(xMax);
 	//o.SetMaxStep(MAX_TIME_STEPS);
 
-    if (iRelativeTolerance == true)	o.SetTollRel(relativeTolerance);
-    if (iAbsoluteTolerance == true)	o.SetTollAbs(absoluteTolerance);
+    if (iRelativeTolerance == true)	o.SetTolRel(relativeTolerance);
+    if (iAbsoluteTolerance == true)	o.SetTolAbs(absoluteTolerance);
 
     {
         countGlobalIterations = -1;  // From -1 to avoid to store results from the first iteration
@@ -929,10 +929,10 @@ void OpenSMOKE_CSTR::ODESystem_NonIsothermal_GasDischargeLaw_CSTR(BzzVector &y, 
 	dy[NC+2] = dmass_total;
 }
 
-void OpenSMOKE_CSTR::DefineFromFile(const string inputFile)
+void OpenSMOKE_CSTR::DefineFromFile(const std::string inputFile)
 {
     double  double_value;
-    string  string_value;
+    std::string  string_value;
     int     int_value;
 	vector<string> string_vector;
 	vector<double> double_vector;
@@ -1342,7 +1342,7 @@ void OpenSMOKE_CSTR::VideoSummary()
 void OpenSMOKE_CSTR::SummaryOnFile()
 {
 	int i;
-	string file_name = outputFolderName + "/Summary.out";
+	std::string file_name = outputFolderName + "/Summary.out";
 	ofstream fSummary;
 	openOutputFileAndControl(fSummary, file_name);
     fSummary.setf(ios::scientific);
@@ -1602,7 +1602,7 @@ void OpenSMOKE_CSTR::ODEPrint(BzzVector &y, double t)
 
 					stringstream tag;
 					tag << index_local_ElementFluxAnalysis[1];
-					string name_file = outputFolderName + "/FluxAnalysis_" + tag.str();
+					std::string name_file = outputFolderName + "/FluxAnalysis_" + tag.str();
 					ElementFluxAnalysis.Run(name_file, rForward, rBackward);
 					index_local_ElementFluxAnalysis.DeleteElement(1);
 				}
@@ -1866,7 +1866,7 @@ void OpenSMOKE_Fluctuations::Update(const double t)
 
 void OpenSMOKE_CSTR::SaveOnBinaryFile(BzzSave &fOutput)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 
 	int nSteps = countGlobalIterations;			
@@ -1929,7 +1929,7 @@ void OpenSMOKE_CSTR::SaveOnBinaryFile(BzzSave &fOutput)
 	}
 }
 
-void OpenSMOKE_CSTR::SaveOnBinaryFile(const string filename)
+void OpenSMOKE_CSTR::SaveOnBinaryFile(const std::string filename)
 {
 	cout << "Save on binary file..." << endl;
 	BzzSave fOutput;
@@ -1947,7 +1947,7 @@ void OpenSMOKE_CSTR::SaveOnBinaryFile(const string filename)
 	{
 		cout << "  -- writing rate of production analysis..." << endl;
 
-		string dummy;
+		std::string dummy;
 		char name[Constants::NAME_SIZE];
 
 		BzzVector RRvector(mix->NumberOfReactions());

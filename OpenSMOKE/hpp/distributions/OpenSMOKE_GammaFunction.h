@@ -33,8 +33,8 @@ public:
 
 private:
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
 	double PolynomialExpansion(const double y);
 	double RecursionFormula(const double y);

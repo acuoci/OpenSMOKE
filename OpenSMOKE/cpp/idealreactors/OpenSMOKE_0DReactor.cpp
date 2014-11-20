@@ -34,7 +34,7 @@ const int       OpenSMOKE_0DReactor::MAX_TIME_STEPS				=  12000;
 const int       OpenSMOKE_0DReactor::MINUSONE					= -1;
 const double    OpenSMOKE_0DReactor::MAXERRORONMASSFRACTIONS	=  1.e-5;
 
-void OpenSMOKE_0DReactor::ErrorMessage(const string message)
+void OpenSMOKE_0DReactor::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Parent: OpenSMOKE_0DReactor"	<< endl;
@@ -46,7 +46,7 @@ void OpenSMOKE_0DReactor::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_0DReactor::WarningMessage(const string message)
+void OpenSMOKE_0DReactor::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Parent:  OpenSMOKE_0DReactor"	<< endl;
@@ -187,7 +187,7 @@ void OpenSMOKE_0DReactor::AssignEnergy(const bool _iEnergy)
     assignedEnergy = true;
 }
 
-void OpenSMOKE_0DReactor::SetName(const string name)
+void OpenSMOKE_0DReactor::SetName(const std::string name)
 {
     name_object = name;
 }
@@ -244,7 +244,7 @@ void OpenSMOKE_0DReactor::UnsetAbsoluteTolerance()
     iAbsoluteTolerance = false;
 }
 
-void OpenSMOKE_0DReactor::SetUserDefinedTemperature(const string fileName)
+void OpenSMOKE_0DReactor::SetUserDefinedTemperature(const std::string fileName)
 {
     iUserDefinedTemperature = true;
     ud_temperature_profile.AssignFromFile(fileName, "TEMPERATURE");
@@ -263,7 +263,7 @@ void OpenSMOKE_0DReactor::UnsetUserDefinedTemperature()
     iUserDefinedTemperature = false;
 }
 
-void OpenSMOKE_0DReactor::SetUserDefinedHeatFlux(const string fileName)
+void OpenSMOKE_0DReactor::SetUserDefinedHeatFlux(const std::string fileName)
 {
     iUserDefinedHeatFlux = USERDEFINED;
     ud_Qe_profile.AssignFromFile(fileName, "HEAT_FLUX");
@@ -275,7 +275,7 @@ void OpenSMOKE_0DReactor::UnsetUserDefinedHeatFlux()
     iUserDefinedHeatFlux = NONE;
 }
 
-void OpenSMOKE_0DReactor::SetUserDefinedHeatExchangeCoefficient(const string fileName)
+void OpenSMOKE_0DReactor::SetUserDefinedHeatExchangeCoefficient(const std::string fileName)
 {
     iUserDefinedHeatExchangeCoefficient = USERDEFINED;
     ud_U_profile.AssignFromFile(fileName, "HEAT_TRANSFER_COEFFICIENT");
@@ -287,7 +287,7 @@ void OpenSMOKE_0DReactor::UnsetUserDefinedHeatExchangeCoefficient()
     iUserDefinedHeatExchangeCoefficient = NONE;
 }
 
-void OpenSMOKE_0DReactor::SetUserDefinedAmbientTemperature(const string fileName)
+void OpenSMOKE_0DReactor::SetUserDefinedAmbientTemperature(const std::string fileName)
 {
     iUserDefinedAmbientTemperature = USERDEFINED;
     ud_Tambient_profile.AssignFromFile(fileName, "TEMPERATURE");
@@ -350,25 +350,25 @@ void OpenSMOKE_0DReactor::SetPostProcessing()
 	SetHistory();
 }
 
-void OpenSMOKE_0DReactor::SetConstantHeatFlux(const double value, const string units)
+void OpenSMOKE_0DReactor::SetConstantHeatFlux(const double value, const std::string units)
 {
 	iUserDefinedHeatFlux = CONSTANT;
 	Qe = OpenSMOKE_Conversions::conversion_heat_flux(value, units);
 }
 
-void OpenSMOKE_0DReactor::SetConstantHeatExchangeCoefficient(const double value, const string units)
+void OpenSMOKE_0DReactor::SetConstantHeatExchangeCoefficient(const double value, const std::string units)
 {
 	iUserDefinedHeatExchangeCoefficient = CONSTANT;
 	U = OpenSMOKE_Conversions::conversion_heat_exchange_coefficient(value, units);
 }
 
-void OpenSMOKE_0DReactor::SetConstantAmbientTemperature(const double value, const string units)
+void OpenSMOKE_0DReactor::SetConstantAmbientTemperature(const double value, const std::string units)
 {
 	iUserDefinedAmbientTemperature = CONSTANT;
 	Tambient = OpenSMOKE_Conversions::conversion_temperature(value, units);
 }
 
-void OpenSMOKE_0DReactor::SetViscosity(const double value, const string units)
+void OpenSMOKE_0DReactor::SetViscosity(const double value, const std::string units)
 {
 	iUserDefinedViscosity = true;
 	Viscosity = OpenSMOKE_Conversions::conversion_dynamic_viscosity(value, units);
@@ -380,7 +380,7 @@ void OpenSMOKE_0DReactor::UnsetViscosity()
 	Viscosity = 0.;
 }
 
-void OpenSMOKE_0DReactor::SetOptions(const string option)
+void OpenSMOKE_0DReactor::SetOptions(const std::string option)
 {
     if (option == "NOTHING")
     {
@@ -389,7 +389,7 @@ void OpenSMOKE_0DReactor::SetOptions(const string option)
         ErrorMessage("This option is not allowed: " + option);
 }
 
-void OpenSMOKE_0DReactor::SetOutputFolder(const string _outputFolderName)
+void OpenSMOKE_0DReactor::SetOutputFolder(const std::string _outputFolderName)
 {
     outputFolderName			= _outputFolderName;
     outputName					=  outputFolderName + "/" + out_name;
@@ -488,7 +488,7 @@ void OpenSMOKE_0DReactor::SetElementFluxAnalysisOnFile(const vector<string> _nam
 
 void OpenSMOKE_0DReactor::SetLocalElementFluxAnalysisOnFile(const vector<string> _names)
 {
-	string units = _names[_names.size()-1];
+	std::string units = _names[_names.size()-1];
 	for(unsigned int j=1;j<=_names.size()-1;j++)
 		index_local_ElementFluxAnalysis.Append(OpenSMOKE_Conversions::conversion_time(atof(_names[j-1].c_str()), units));
 	iVerboseLocalElementFluxAnalysis = true;
@@ -500,14 +500,14 @@ void OpenSMOKE_0DReactor::SetExperimentOnFile(const vector<string> _names)
 	GiveMeIndicesAndNames(*mix, _names, index_Experiment, names_Experiment);
 	iVerboseExperiment = true;
 
-	string nameFolderExperiments;
+	std::string nameFolderExperiments;
 	#if LINUX_SO==1
 		nameFolderExperiments = outputFolderName + "/Exp";
 	#else
 		nameFolderExperiments = outputFolderName + "\\Exp";
 	#endif
 	
-	string MSDOScommand = "mkdir " + nameFolderExperiments;
+	std::string MSDOScommand = "mkdir " + nameFolderExperiments;
 	system(MSDOScommand.c_str());
 }
 
@@ -588,7 +588,7 @@ void OpenSMOKE_0DReactor::PrepareFiles()
 	if (iVerbose == true)
     {
         // Create output folder
-        string message = "mkdir " + outputFolderName;
+        std::string message = "mkdir " + outputFolderName;
         system(message.c_str());
 
         openOutputFileAndControl(fOutput, outputName.c_str());
@@ -658,7 +658,7 @@ void OpenSMOKE_0DReactor::PrepareFiles()
 		if (iVerbose == true)
 		{
 			// Create output folder
-			string instruction;
+			std::string instruction;
 			instruction = "copy " + mix->path_complete + "\\idealgas.bin " + outputFolderName + "\\idealgas.bin /Y";
 			system(instruction.c_str());
 			instruction = "copy " + mix->path_complete + "\\reactions.bin " + outputFolderName + "\\reactions.bin /Y";

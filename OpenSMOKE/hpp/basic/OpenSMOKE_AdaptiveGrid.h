@@ -30,7 +30,7 @@ class OpenSMOKE_AdaptiveGrid
 public:
 
 	OpenSMOKE_AdaptiveGrid();
-	void SetName(const string name);
+	void SetName(const std::string name);
 
 	void SetModel(adaptive_grid_model _model);
 	void SetConstants(const double _alfa, const double _beta, const double _gamma);
@@ -68,9 +68,9 @@ private:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif // !defined(OPENSMOKE_ADAPTIVEGRID)

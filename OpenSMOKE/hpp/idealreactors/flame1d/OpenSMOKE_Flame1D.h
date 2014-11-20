@@ -96,7 +96,7 @@ public:
 
 	OpenSMOKE_Flame1D();
 	
-	void SetName(const string name);
+	void SetName(const std::string name);
 	void Assign(OpenSMOKE_Flame1D_DataManager *_data);
 	void Assign(OpenSMOKE_Flame1D_ScheduleClass *_operations);
 	void Assign(OpenSMOKE_ReactingGas  *_mix);
@@ -104,7 +104,7 @@ public:
 
 	void Run();
 	void FoldersAndFilesManager();
-	void FoldersAndFilesManager(const string backupFolder);
+	void FoldersAndFilesManager(const std::string backupFolder);
 	
 	void ReRun();
 	void PasteFromExternalSolution(OpenSMOKE_Flame1D_Solution &solution);
@@ -211,16 +211,16 @@ public:
 
 	// Print Functions
 	// ---------------------------------------------------------------------------
-	void printOnFile(const string fileNameOutput);
+	void printOnFile(const std::string fileNameOutput);
 	void PrintXMLFile(const std::string file_name);
-	void printBackUpOnlyInputData(const string fileName);
-	void printBackUpOnlyData(const string fileName);
+	void printBackUpOnlyInputData(const std::string fileName);
+	void printBackUpOnlyData(const std::string fileName);
 	void DAE_ODE_myPrint(BzzVector &v, double time);
 
 
 	// BackUp Functions
 	// ---------------------------------------------------------------------------
-	void recoverFromBackUp(const string fileName);
+	void recoverFromBackUp(const std::string fileName);
 
 
 	// Refine Grid
@@ -229,18 +229,18 @@ public:
 	void refineGridPeak(double fraction);
 	void refineFlameBase();
 	void refineFlameBase(const double xA, const double xB);
-	bool newPoints(const string string_kind, char index);
+	bool newPoints(const std::string string_kind, char index);
 	void adaptGrid(const int iOption);
 	void refineBase();
 	void refineAttachPoint();
 	void refineStagnationPlane(const double fraction);
 
-	string nameOutputFolder; 
-	string nameFolderBackupData;
-	string nameFileBackupInputData;
-	string nameFolderUnsteadyData;
-	string nameFolderSteadyData;
-	string nameFolderAdditionalData;
+	std::string nameOutputFolder; 
+	std::string nameFolderBackupData;
+	std::string nameFileBackupInputData;
+	std::string nameFolderUnsteadyData;
+	std::string nameFolderSteadyData;
+	std::string nameFolderAdditionalData;
 	
 	void unsteady_boundary_conditions(double &time);
 	OpenSMOKE_Flame1D_OscillatingBoundary unsteady;
@@ -335,21 +335,21 @@ private:
 	// Residuals
 	// -------------------------------------------------------------------------------	
 	void give_Opposed_DU_DG_DH();
-	void give_Opposed_DW(const string string_kind);
+	void give_Opposed_DW(const std::string string_kind);
 	void give_Opposed_DW(const int i);
 	void give_Opposed_DT(double t);
 
 	void give_Twin_DU_DG_DH();
-	void give_Twin_DW(const string string_kind);
+	void give_Twin_DW(const std::string string_kind);
 	void give_Twin_DT(double t);
 
-	void give_Premixed_DW(const string string_kind);
+	void give_Premixed_DW(const std::string string_kind);
 	void give_Premixed_DT();
 
 	
 	// BackUp Functions
 	// ---------------------------------------------------------------------------
-	void recoverVariables(const string fileName);
+	void recoverVariables(const std::string fileName);
 
 	// Refining Grid
 	// ---------------------------------------------------------------------------
@@ -403,7 +403,7 @@ private:
 	void DAESystemSolution(BzzDaeSparseObject *o, double tEnd);
 	void ODESystemSolution(BzzOdeSparseStiffObject &o, double tEnd);
 
-//	void nonLinearSystemSolutionWithControl(const string string_kind, BzzNonLinearSystemSparseObject &o, int dimensionBlock);
+//	void nonLinearSystemSolutionWithControl(const std::string string_kind, BzzNonLinearSystemSparseObject &o, int dimensionBlock);
 	void nonLinearSystemSolutionWithControl_FlameSpeed(const double t);
 	void nonLinearSystemSolutionWithControl_Opposed(const double time_first);
 	void nonLinearSystemSolutionWithControl_Twin(const double time_first);
@@ -432,9 +432,9 @@ private:
 
 	void give_Premixed_DH();
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 	
 	// QMOM
 	OpenSMOKE_QMOM_Module qmom;
@@ -454,7 +454,7 @@ private:
 	BzzMatrix A_x_rho_x_Diffe;
 	BzzVector momentsC;
 
-	void assign_qmom_module_from_file(OpenSMOKE_ReactingGas &mix, const string fileName);
+	void assign_qmom_module_from_file(OpenSMOKE_ReactingGas &mix, const std::string fileName);
 	void allocate_QMOM_Np();
 	void allocate_QMOM_N();
 	void initial_conditions_qmom_module();
@@ -471,8 +471,8 @@ private:
 
 	// Sensitivity
 	kindOfSensitivityParameter kindOfSensitivity;
-	void final_sensitivity_analysis(string kindOfProblem,  BzzNonLinearSystemSparseObject &nls, BzzSave &fBinary);
-	void final_sensitivity_analysis_transport_properties(string kindOfProblem,  BzzNonLinearSystemSparseObject &nls,
+	void final_sensitivity_analysis(std::string kindOfProblem,  BzzNonLinearSystemSparseObject &nls, BzzSave &fBinary);
+	void final_sensitivity_analysis_transport_properties(std::string kindOfProblem,  BzzNonLinearSystemSparseObject &nls,
 									BzzVector &xSolution,  BzzVector &fSolution, BzzSave &fBinary);
 
 	// Reaction Flow Analysis
@@ -486,7 +486,7 @@ private:
 
 	// Save on binary file
 	void SaveOnBinaryFile(BzzSave &fOutput);
-	void SaveOnBinaryFile(const string filename, const bool iSensitivity, const flame1d_model NLS_KIND);
+	void SaveOnBinaryFile(const std::string filename, const bool iSensitivity, const flame1d_model NLS_KIND);
 
 	void SolveODE_SingleReactors(const double tEnd);
 };

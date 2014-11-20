@@ -30,17 +30,17 @@ public:
 
 	OpenSMOKE_WarningFile();
 
-	void Setup(const string file_name);
-	void WriteWarningMessage(const string warning_message);
+	void Setup(const std::string file_name);
+	void WriteWarningMessage(const std::string warning_message);
 
 private:
 
 	int			iWarning;
-	string		file_name;
+	std::string		file_name;
 	ofstream	fWarning;
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif	// OPENSMOKE_WARNINGFILE

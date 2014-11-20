@@ -55,7 +55,7 @@ void DAE_ODE_Print(BzzVector &x, double t)
 //																								   //
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void OpenSMOKE_Flame1D::ErrorMessage(const string message)
+void OpenSMOKE_Flame1D::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Caronte"	<< endl;
@@ -66,7 +66,7 @@ void OpenSMOKE_Flame1D::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_Flame1D::WarningMessage(const string message)
+void OpenSMOKE_Flame1D::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Caronte"	<< endl;
@@ -82,7 +82,7 @@ OpenSMOKE_Flame1D::OpenSMOKE_Flame1D()
 	iUnsteadyFromBackUp = 0;
 }
 
-void OpenSMOKE_Flame1D::SetName(const string name)
+void OpenSMOKE_Flame1D::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -2230,6 +2230,36 @@ void OpenSMOKE_Flame1D::properties(int ReactionON, int jacobianIndex, BzzVectorI
 			for(j=1;j<=NC;j++)
 				Dm[i][j] = lambda[i]/rho[i]/Cp[i] / data->user_defined_lewis_numbers[j];
 	}
+
+	if (data->iPhysicalSootDiffusionCoefficients != 0)
+	{
+		unsigned int jBIN1A = 0;
+		double MWBIN1A = 0.;
+
+		for (int j = 1; j <= NC; j++)
+		{
+			if (mix->names[j] == "BIN1A")
+			{
+				jBIN1A = j;
+				MWBIN1A = mix->M[j];
+				break;
+			}
+		}
+
+		if (jBIN1A > 0)
+		{
+			for (int j = 1; j <= NC; j++)
+			{
+				if (mix->names[j].compare(0, 3, "BIN") == 0)
+				{
+					double MWratio = min(mix->M[j] / MWBIN1A, pow(2., double(data->iPhysicalSootDiffusionCoefficients)));
+					const double correctionCoefficient = pow(MWratio, -0.681);
+					for (i = 1; i <= Np; i++)
+						Dm[i][j] = Dm[i][jBIN1A] * correctionCoefficient;
+				}
+			}
+		}
+	}
 }
 
 void OpenSMOKE_Flame1D::properties(int ReactionON)
@@ -2430,246 +2460,498 @@ void OpenSMOKE_Flame1D::compute_vStarOpposed()
 
 void OpenSMOKE_Flame1D::compute_vStarOpposed()
 {
-	int i, j;
-
-	// Fake mass and mole fractions
+	// The diffusion contribution are calculated as: omega*V = -D*omega/X*grad(X), i.e. omega*V = -D*MW/MWmix*grad(X)
+	// This is the correct formulation, but it is different from whatwe use in OpenFOAM
+	if (data->iCorrectDiffusionFormulation == true)
 	{
-		BzzVector aux_c(Np);
-		for(i=1;i<=Np;i++)
+		int i, j;
+
+		// Fake mass and mole fractions
 		{
-			aux_c = W.GetRow(i);
-			double sum = aux_c.GetSumElements();
-			for(j=1;j<=NC;j++)	
-				W_c[i][j] = W[i][j]/sum;
-		}
-		mix->GetMWAndMoleFractionsFromMassFractions(MW_c, X_c, W_c);
-	}
-
-	// Correction velocity
-	vc = 0.;
-	
-	bool correction_velocity_only_fick = true;
-
-	// Correction applied only to Fick contribution
-	if (correction_velocity_only_fick == true)
-	{
-		// No Soret Effect
-		if (data->iSoretEffect == false)
-		{
-			if (data->iThermophoreticEffect == false)
+			BzzVector aux_c(Np);
+			for (i = 1; i <= Np; i++)
 			{
-				for(i=1;i<=Ni;i++)
-					for(j=1;j<=NC;j++)
-					{
-						vFick[i][j] = -Dm[i][j] * mix->M[j]/MW_c[i] * (X_c[i+1][j]-X_c[i][j])*grid.udxe[i];
-						vc[i] -= vFick[i][j];
-					}
-				
-					for(j=1;j<=NC;j++)
-					{
-						vFick[Np][j] = -Dm[Np][j] * mix->M[j]/MW_c[Np] * (X_c[Np][j]-X_c[Np-1][j])*grid.udxw[Np];
-						vc[Np] -= vFick[Np][j];
-					}
+				aux_c = W.GetRow(i);
+				double sum = aux_c.GetSumElements();
+				for (j = 1; j <= NC; j++)
+					W_c[i][j] = W[i][j] / sum;
 			}
-			else
-			{
-				BzzVector dT_over_dx(Np);
-				grid.FirstDerivative('B', T, dT_over_dx);
-
-				for(i=1;i<=Ni;i++)
-				{
-					
-					const double Vt = -0.55*mu[i]/rho[i]/T[i]*dT_over_dx[i];
-					for(j=1;j<=mix->polimiSoot->bin_indices().Size();j++)
-						 vThermophoretic[i][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[i][mix->polimiSoot->bin_indices()[j]];
-
-					for(j=1;j<=NC;j++)
-					{
-						vFick[i][j] = -Dm[i][j] * mix->M[j]/MW_c[i] * (X_c[i+1][j]-X_c[i][j])*grid.udxe[i];
-						vc[i] -= vFick[i][j];
-					}
-				}
-					
-				const double Vt = -0.55*mu[Np]/rho[Np]/T[Np]*dT_over_dx[Np];
-				for(j=1;j<=mix->polimiSoot->bin_indices().Size();j++)
-					vThermophoretic[Np][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[Np][mix->polimiSoot->bin_indices()[j]];;
-
-				for(j=1;j<=NC;j++)
-				{
-					vFick[Np][j] = -Dm[Np][j] * mix->M[j]/MW_c[Np] * (X_c[Np][j]-X_c[Np-1][j])*grid.udxw[Np];
-					vc[Np] -= vFick[Np][j];
-				}
-			}
+			mix->GetMWAndMoleFractionsFromMassFractions(MW_c, X_c, W_c);
 		}
 
-		else	// Soret effect: inclusion of thermal diffusion velocities
-		{
-			if (data->iThermophoreticEffect == false)
-			{
-				for(i=1;i<=Ni;i++)
-					for(j=1;j<=NC;j++)
-					{
-						vFick[i][j] = -Dm[i][j] * mix->M[j]/MW_c[i] *( (X_c[i+1][j]-X_c[i][j])*grid.udxe[i] + Teta[i][j]/T[i]*(T[i+1]-T[i])*grid.udxe[i] );
-						vc[i] -= vFick[i][j];
-					}
-				
-					for(j=1;j<=NC;j++)
-					{
-						vFick[Np][j] = -Dm[Np][j]*mix->M[j]/MW_c[Np]*( (X_c[Np][j]-X_c[Np-1][j])*grid.udxw[Np] + Teta[Np][j]/T[Np]*(T[Np]-T[Np-1])*grid.udxw[Np] );
-						vc[Np] -= vFick[Np][j];
-					}
-			}
-			else
-			{
-				BzzVector dT_over_dx(Np);
-				grid.FirstDerivative('B', T, dT_over_dx);
+		// Correction velocity
+		vc = 0.;
 
-				for(i=1;i<=Ni;i++)
-				{
-					const double Vt = -0.55*mu[i]/rho[i]/T[i]*dT_over_dx[i];
-					for(j=1;j<=mix->polimiSoot->bin_indices().Size();j++)
-						 vThermophoretic[i][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[i][mix->polimiSoot->bin_indices()[j]];;
-
-					for(j=1;j<=NC;j++)
-					{
-						vFick[i][j] = -Dm[i][j] * mix->M[j]/MW_c[i] *( (X_c[i+1][j]-X_c[i][j])*grid.udxe[i] + Teta[i][j]/T[i]*(T[i+1]-T[i])*grid.udxe[i] );
-						vc[i] -= vFick[i][j];
-					}
-				}
-
-				const double Vt = -0.55*mu[Np]/rho[Np]/T[Np]*dT_over_dx[Np];
-				for(j=1;j<=mix->polimiSoot->bin_indices().Size();j++)
-					vThermophoretic[Np][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[Np][mix->polimiSoot->bin_indices()[j]];
-
-				for(j=1;j<=NC;j++)
-				{
-					vFick[Np][j] = -Dm[Np][j]*mix->M[j]/MW_c[Np]*( (X_c[Np][j]-X_c[Np-1][j])*grid.udxw[Np] + Teta[Np][j]/T[Np]*(T[Np]-T[Np-1])*grid.udxw[Np] );
-					vc[Np] -= vFick[Np][j];
-				}
-			}
-		}
-
+		bool correction_velocity_only_fick = true;
 
 		// Correction applied only to Fick contribution
+		if (correction_velocity_only_fick == true)
 		{
-			for(i=1;i<=Np;i++)
-				for(j=1;j<=NC;j++)
-					vFick[i][j]+=vc[i]*W_c[i][j];
+			// No Soret Effect
+			if (data->iSoretEffect == false)
+			{
+				if (data->iThermophoreticEffect == false)
+				{
+					for (i = 1; i <= Ni; i++)
+					for (j = 1; j <= NC; j++)
+					{
+						vFick[i][j] = -Dm[i][j] * mix->M[j] / MW_c[i] * (X_c[i + 1][j] - X_c[i][j])*grid.udxe[i];
+						vc[i] -= vFick[i][j];
+					}
 
-			for(i=1;i<=Np;i++)
-				for(j=1;j<=NC;j++)
+					for (j = 1; j <= NC; j++)
+					{
+						vFick[Np][j] = -Dm[Np][j] * mix->M[j] / MW_c[Np] * (X_c[Np][j] - X_c[Np - 1][j])*grid.udxw[Np];
+						vc[Np] -= vFick[Np][j];
+					}
+				}
+				else
+				{
+					BzzVector dT_over_dx(Np);
+					grid.FirstDerivative('B', T, dT_over_dx);
+
+					for (i = 1; i <= Ni; i++)
+					{
+
+						const double Vt = -0.55*mu[i] / rho[i] / T[i] * dT_over_dx[i];
+						for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+							vThermophoretic[i][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[i][mix->polimiSoot->bin_indices()[j]];
+
+						for (j = 1; j <= NC; j++)
+						{
+							vFick[i][j] = -Dm[i][j] * mix->M[j] / MW_c[i] * (X_c[i + 1][j] - X_c[i][j])*grid.udxe[i];
+							vc[i] -= vFick[i][j];
+						}
+					}
+
+					const double Vt = -0.55*mu[Np] / rho[Np] / T[Np] * dT_over_dx[Np];
+					for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+						vThermophoretic[Np][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[Np][mix->polimiSoot->bin_indices()[j]];;
+
+					for (j = 1; j <= NC; j++)
+					{
+						vFick[Np][j] = -Dm[Np][j] * mix->M[j] / MW_c[Np] * (X_c[Np][j] - X_c[Np - 1][j])*grid.udxw[Np];
+						vc[Np] -= vFick[Np][j];
+					}
+				}
+			}
+
+			else	// Soret effect: inclusion of thermal diffusion velocities
+			{
+				if (data->iThermophoreticEffect == false)
+				{
+					for (i = 1; i <= Ni; i++)
+					for (j = 1; j <= NC; j++)
+					{
+						vFick[i][j] = -Dm[i][j] * mix->M[j] / MW_c[i] * ((X_c[i + 1][j] - X_c[i][j])*grid.udxe[i] + Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]);
+						vc[i] -= vFick[i][j];
+					}
+
+					for (j = 1; j <= NC; j++)
+					{
+						vFick[Np][j] = -Dm[Np][j] * mix->M[j] / MW_c[Np] * ((X_c[Np][j] - X_c[Np - 1][j])*grid.udxw[Np] + Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]);
+						vc[Np] -= vFick[Np][j];
+					}
+				}
+				else
+				{
+					BzzVector dT_over_dx(Np);
+					grid.FirstDerivative('B', T, dT_over_dx);
+
+					for (i = 1; i <= Ni; i++)
+					{
+						const double Vt = -0.55*mu[i] / rho[i] / T[i] * dT_over_dx[i];
+						for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+							vThermophoretic[i][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[i][mix->polimiSoot->bin_indices()[j]];;
+
+						for (j = 1; j <= NC; j++)
+						{
+							vFick[i][j] = -Dm[i][j] * mix->M[j] / MW_c[i] * ((X_c[i + 1][j] - X_c[i][j])*grid.udxe[i] + Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]);
+							vc[i] -= vFick[i][j];
+						}
+					}
+
+					const double Vt = -0.55*mu[Np] / rho[Np] / T[Np] * dT_over_dx[Np];
+					for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+						vThermophoretic[Np][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[Np][mix->polimiSoot->bin_indices()[j]];
+
+					for (j = 1; j <= NC; j++)
+					{
+						vFick[Np][j] = -Dm[Np][j] * mix->M[j] / MW_c[Np] * ((X_c[Np][j] - X_c[Np - 1][j])*grid.udxw[Np] + Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]);
+						vc[Np] -= vFick[Np][j];
+					}
+				}
+			}
+
+
+			// Correction applied only to Fick contribution
+			{
+				for (i = 1; i <= Np; i++)
+				for (j = 1; j <= NC; j++)
+					vFick[i][j] += vc[i] * W_c[i][j];
+
+				for (i = 1; i <= Np; i++)
+				for (j = 1; j <= NC; j++)
 					vStar[i][j] = vFick[i][j] + vThermophoretic[i][j];
+			}
+		}
+
+		// Correction applied to both the contributions
+		else
+		{
+			// No Soret Effect
+			if (data->iSoretEffect == false)
+			{
+				if (data->iThermophoreticEffect == false)
+				{
+					for (i = 1; i <= Ni; i++)
+					for (j = 1; j <= NC; j++)
+					{
+						vStar[i][j] = -Dm[i][j] * mix->M[j] / MW_c[i] * (X_c[i + 1][j] - X_c[i][j])*grid.udxe[i];
+						vc[i] -= vStar[i][j];
+					}
+
+					for (j = 1; j <= NC; j++)
+					{
+						vStar[Np][j] = -Dm[Np][j] * mix->M[j] / MW_c[Np] * (X_c[Np][j] - X_c[Np - 1][j])*grid.udxw[Np];
+						vc[Np] -= vStar[Np][j];
+					}
+				}
+				else
+				{
+					BzzVector dT_over_dx(Np);
+					grid.FirstDerivative('C', T, dT_over_dx);
+
+					for (i = 1; i <= Ni; i++)
+					{
+
+						const double Vt = -0.55*mu[i] / rho[i] / T[i] * dT_over_dx[i];
+						for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+							vThermophoretic[i][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[i][mix->polimiSoot->bin_indices()[j]];
+
+						for (j = 1; j <= NC; j++)
+						{
+							vStar[i][j] = -Dm[i][j] * mix->M[j] / MW_c[i] * (X_c[i + 1][j] - X_c[i][j])*grid.udxe[i] + vThermophoretic[i][j];
+							vc[i] -= vStar[i][j];
+						}
+					}
+
+					const double Vt = -0.55*mu[Np] / rho[Np] / T[Np] * dT_over_dx[Np];
+					for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+						vThermophoretic[Np][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[Np][mix->polimiSoot->bin_indices()[j]];;
+
+					for (j = 1; j <= NC; j++)
+					{
+						vStar[Np][j] = -Dm[Np][j] * mix->M[j] / MW_c[Np] * (X_c[Np][j] - X_c[Np - 1][j])*grid.udxw[Np] + vThermophoretic[Np][j];
+						vc[Np] -= vStar[Np][j];
+					}
+				}
+			}
+
+			else	// Soret effect: inclusion of thermal diffusion velocities
+			{
+				if (data->iThermophoreticEffect == false)
+				{
+					for (i = 1; i <= Ni; i++)
+					for (j = 1; j <= NC; j++)
+					{
+						vStar[i][j] = -Dm[i][j] * mix->M[j] / MW_c[i] * ((X_c[i + 1][j] - X_c[i][j])*grid.udxe[i] + Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]);
+						vc[i] -= vStar[i][j];
+					}
+
+					for (j = 1; j <= NC; j++)
+					{
+						vStar[Np][j] = -Dm[Np][j] * mix->M[j] / MW_c[Np] * ((X_c[Np][j] - X_c[Np - 1][j])*grid.udxw[Np] + Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]);
+						vc[Np] -= vStar[Np][j];
+					}
+				}
+				else
+				{
+					BzzVector dT_over_dx(Np);
+					grid.FirstDerivative('C', T, dT_over_dx);
+
+					for (i = 1; i <= Ni; i++)
+					{
+						const double Vt = -0.55*mu[i] / rho[i] / T[i] * dT_over_dx[i];
+						for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+							vThermophoretic[i][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[i][mix->polimiSoot->bin_indices()[j]];;
+
+						for (j = 1; j <= NC; j++)
+						{
+							vStar[i][j] = -Dm[i][j] * mix->M[j] / MW_c[i] * ((X_c[i + 1][j] - X_c[i][j])*grid.udxe[i] + Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]) + vThermophoretic[i][j];
+							vc[i] -= vStar[i][j];
+						}
+					}
+
+					const double Vt = -0.55*mu[Np] / rho[Np] / T[Np] * dT_over_dx[Np];
+					for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+						vThermophoretic[Np][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[Np][mix->polimiSoot->bin_indices()[j]];
+
+					for (j = 1; j <= NC; j++)
+					{
+						vStar[Np][j] = -Dm[Np][j] * mix->M[j] / MW_c[Np] * ((X_c[Np][j] - X_c[Np - 1][j])*grid.udxw[Np] + Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]) + vThermophoretic[Np][j];
+						vc[Np] -= vStar[Np][j];
+					}
+				}
+			}
+
+
+			// Correction applied only to Fick contribution
+			{
+				for (i = 1; i <= Np; i++)
+				for (j = 1; j <= NC; j++)
+					vStar[i][j] += vc[i] * W_c[i][j];
+			}
 		}
 	}
 
-	// Correction applied to both the contributions
+	// The diffusion contribution are calculated as: omega*V = -D*grad(omega)
+	// In principle this is not correct, but it is what is done in OpenFOAM
 	else
 	{
-		// No Soret Effect
-		if (data->iSoretEffect == false)
+		int i, j;
+
+		// Fake mass and mole fractions
 		{
-			if (data->iThermophoreticEffect == false)
+			BzzVector aux_c(Np);
+			for (i = 1; i <= Np; i++)
 			{
-				for(i=1;i<=Ni;i++)
-					for(j=1;j<=NC;j++)
-					{
-						vStar[i][j] = -Dm[i][j] * mix->M[j]/MW_c[i] * (X_c[i+1][j]-X_c[i][j])*grid.udxe[i];
-						vc[i] -= vStar[i][j];
-					}
-				
-					for(j=1;j<=NC;j++)
-					{
-						vStar[Np][j] = -Dm[Np][j] * mix->M[j]/MW_c[Np] * (X_c[Np][j]-X_c[Np-1][j])*grid.udxw[Np];
-						vc[Np] -= vStar[Np][j];
-					}
+				aux_c = W.GetRow(i);
+				double sum = aux_c.GetSumElements();
+				for (j = 1; j <= NC; j++)
+					W_c[i][j] = W[i][j] / sum;
 			}
-			else
-			{
-				BzzVector dT_over_dx(Np);
-				grid.FirstDerivative('C', T, dT_over_dx);
-
-				for(i=1;i<=Ni;i++)
-				{
-					
-					const double Vt = -0.55*mu[i]/rho[i]/T[i]*dT_over_dx[i];
-					for(j=1;j<=mix->polimiSoot->bin_indices().Size();j++)
-						 vThermophoretic[i][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[i][mix->polimiSoot->bin_indices()[j]];
-
-					for(j=1;j<=NC;j++)
-					{
-						vStar[i][j] = -Dm[i][j] * mix->M[j]/MW_c[i] * (X_c[i+1][j]-X_c[i][j])*grid.udxe[i] + vThermophoretic[i][j];
-						vc[i] -= vStar[i][j];
-					}
-				}
-					
-				const double Vt = -0.55*mu[Np]/rho[Np]/T[Np]*dT_over_dx[Np];
-				for(j=1;j<=mix->polimiSoot->bin_indices().Size();j++)
-					vThermophoretic[Np][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[Np][mix->polimiSoot->bin_indices()[j]];;
-
-				for(j=1;j<=NC;j++)
-				{
-					vStar[Np][j] = -Dm[Np][j] * mix->M[j]/MW_c[Np] * (X_c[Np][j]-X_c[Np-1][j])*grid.udxw[Np] + vThermophoretic[Np][j];
-					vc[Np] -= vStar[Np][j];
-				}
-			}
+			mix->GetMWAndMoleFractionsFromMassFractions(MW_c, X_c, W_c);
 		}
 
-		else	// Soret effect: inclusion of thermal diffusion velocities
-		{
-			if (data->iThermophoreticEffect == false)
-			{
-				for(i=1;i<=Ni;i++)
-					for(j=1;j<=NC;j++)
-					{
-						vStar[i][j] = -Dm[i][j] * mix->M[j]/MW_c[i] *( (X_c[i+1][j]-X_c[i][j])*grid.udxe[i] + Teta[i][j]/T[i]*(T[i+1]-T[i])*grid.udxe[i] );
-						vc[i] -= vStar[i][j];
-					}
-				
-					for(j=1;j<=NC;j++)
-					{
-						vStar[Np][j] = -Dm[Np][j]*mix->M[j]/MW_c[Np]*( (X_c[Np][j]-X_c[Np-1][j])*grid.udxw[Np] + Teta[Np][j]/T[Np]*(T[Np]-T[Np-1])*grid.udxw[Np] );
-						vc[Np] -= vStar[Np][j];
-					}
-			}
-			else
-			{
-				BzzVector dT_over_dx(Np);
-				grid.FirstDerivative('C', T, dT_over_dx);
+		// Correction velocity
+		vc = 0.;
 
-				for(i=1;i<=Ni;i++)
-				{
-					const double Vt = -0.55*mu[i]/rho[i]/T[i]*dT_over_dx[i];
-					for(j=1;j<=mix->polimiSoot->bin_indices().Size();j++)
-						 vThermophoretic[i][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[i][mix->polimiSoot->bin_indices()[j]];;
-
-					for(j=1;j<=NC;j++)
-					{
-						vStar[i][j] = -Dm[i][j] * mix->M[j]/MW_c[i] *( (X_c[i+1][j]-X_c[i][j])*grid.udxe[i] + Teta[i][j]/T[i]*(T[i+1]-T[i])*grid.udxe[i] ) + vThermophoretic[i][j];
-						vc[i] -= vStar[i][j];
-					}
-				}
-
-				const double Vt = -0.55*mu[Np]/rho[Np]/T[Np]*dT_over_dx[Np];
-				for(j=1;j<=mix->polimiSoot->bin_indices().Size();j++)
-					vThermophoretic[Np][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[Np][mix->polimiSoot->bin_indices()[j]];
-
-				for(j=1;j<=NC;j++)
-				{
-					vStar[Np][j] = -Dm[Np][j]*mix->M[j]/MW_c[Np]*( (X_c[Np][j]-X_c[Np-1][j])*grid.udxw[Np] + Teta[Np][j]/T[Np]*(T[Np]-T[Np-1])*grid.udxw[Np] ) + vThermophoretic[Np][j];
-					vc[Np] -= vStar[Np][j];
-				}
-			}
-		}
-
+		bool correction_velocity_only_fick = true;
 
 		// Correction applied only to Fick contribution
+		if (correction_velocity_only_fick == true)
 		{
-			for(i=1;i<=Np;i++)
-				for(j=1;j<=NC;j++)
-					vStar[i][j]+=vc[i]*W_c[i][j];
+			// No Soret Effect
+			if (data->iSoretEffect == false)
+			{
+				if (data->iThermophoreticEffect == false)
+				{
+					for (i = 1; i <= Ni; i++)
+					for (j = 1; j <= NC; j++)
+					{
+						vFick[i][j] = -Dm[i][j] * (W_c[i + 1][j] - W_c[i][j])*grid.udxe[i];
+						vc[i] -= vFick[i][j];
+					}
+
+					for (j = 1; j <= NC; j++)
+					{
+						vFick[Np][j] = -Dm[Np][j] * (W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np];
+						vc[Np] -= vFick[Np][j];
+					}
+				}
+				else
+				{
+					BzzVector dT_over_dx(Np);
+					grid.FirstDerivative('B', T, dT_over_dx);
+
+					for (i = 1; i <= Ni; i++)
+					{
+
+						const double Vt = -0.55*mu[i] / rho[i] / T[i] * dT_over_dx[i];
+						for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+							vThermophoretic[i][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[i][mix->polimiSoot->bin_indices()[j]];
+
+						for (j = 1; j <= NC; j++)
+						{
+							vFick[i][j] = -Dm[i][j] * (W_c[i + 1][j] - W_c[i][j])*grid.udxe[i];
+							vc[i] -= vFick[i][j];
+						}
+					}
+
+					const double Vt = -0.55*mu[Np] / rho[Np] / T[Np] * dT_over_dx[Np];
+					for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+						vThermophoretic[Np][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[Np][mix->polimiSoot->bin_indices()[j]];;
+
+					for (j = 1; j <= NC; j++)
+					{
+						vFick[Np][j] = -Dm[Np][j] * (W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np];
+						vc[Np] -= vFick[Np][j];
+					}
+				}
+			}
+
+			else	// Soret effect: inclusion of thermal diffusion velocities
+			{
+				if (data->iThermophoreticEffect == false)
+				{
+					for (i = 1; i <= Ni; i++)
+					for (j = 1; j <= NC; j++)
+					{
+						vFick[i][j] = -Dm[i][j] * ((W_c[i + 1][j] - W_c[i][j])*grid.udxe[i] + Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]);
+						vc[i] -= vFick[i][j];
+					}
+
+					for (j = 1; j <= NC; j++)
+					{
+						vFick[Np][j] = -Dm[Np][j] * ((W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np] + Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]);
+						vc[Np] -= vFick[Np][j];
+					}
+				}
+				else
+				{
+					BzzVector dT_over_dx(Np);
+					grid.FirstDerivative('B', T, dT_over_dx);
+
+					for (i = 1; i <= Ni; i++)
+					{
+						const double Vt = -0.55*mu[i] / rho[i] / T[i] * dT_over_dx[i];
+						for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+							vThermophoretic[i][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[i][mix->polimiSoot->bin_indices()[j]];;
+
+						for (j = 1; j <= NC; j++)
+						{
+							vFick[i][j] = -Dm[i][j] * ((W_c[i + 1][j] - W_c[i][j])*grid.udxe[i] + Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]);
+							vc[i] -= vFick[i][j];
+						}
+					}
+
+					const double Vt = -0.55*mu[Np] / rho[Np] / T[Np] * dT_over_dx[Np];
+					for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+						vThermophoretic[Np][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[Np][mix->polimiSoot->bin_indices()[j]];
+
+					for (j = 1; j <= NC; j++)
+					{
+						vFick[Np][j] = -Dm[Np][j] * ((W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np] + Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]);
+						vc[Np] -= vFick[Np][j];
+					}
+				}
+			}
+
+
+			// Correction applied only to Fick contribution
+			{
+				for (i = 1; i <= Np; i++)
+				for (j = 1; j <= NC; j++)
+					vFick[i][j] += vc[i] * W_c[i][j];
+
+				for (i = 1; i <= Np; i++)
+				for (j = 1; j <= NC; j++)
+					vStar[i][j] = vFick[i][j] + vThermophoretic[i][j];
+			}
+		}
+
+		// Correction applied to both the contributions
+		else
+		{
+			// No Soret Effect
+			if (data->iSoretEffect == false)
+			{
+				if (data->iThermophoreticEffect == false)
+				{
+					for (i = 1; i <= Ni; i++)
+					for (j = 1; j <= NC; j++)
+					{
+						vStar[i][j] = -Dm[i][j] * (W_c[i + 1][j] - W_c[i][j])*grid.udxe[i];
+						vc[i] -= vStar[i][j];
+					}
+
+					for (j = 1; j <= NC; j++)
+					{
+						vStar[Np][j] = -Dm[Np][j] * (W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np];
+						vc[Np] -= vStar[Np][j];
+					}
+				}
+				else
+				{
+					BzzVector dT_over_dx(Np);
+					grid.FirstDerivative('C', T, dT_over_dx);
+
+					for (i = 1; i <= Ni; i++)
+					{
+
+						const double Vt = -0.55*mu[i] / rho[i] / T[i] * dT_over_dx[i];
+						for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+							vThermophoretic[i][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[i][mix->polimiSoot->bin_indices()[j]];
+
+						for (j = 1; j <= NC; j++)
+						{
+							vStar[i][j] = -Dm[i][j] * (W_c[i + 1][j] - W_c[i][j])*grid.udxe[i] + vThermophoretic[i][j];
+							vc[i] -= vStar[i][j];
+						}
+					}
+
+					const double Vt = -0.55*mu[Np] / rho[Np] / T[Np] * dT_over_dx[Np];
+					for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+						vThermophoretic[Np][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[Np][mix->polimiSoot->bin_indices()[j]];;
+
+					for (j = 1; j <= NC; j++)
+					{
+						vStar[Np][j] = -Dm[Np][j] * (W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np] + vThermophoretic[Np][j];
+						vc[Np] -= vStar[Np][j];
+					}
+				}
+			}
+
+			else	// Soret effect: inclusion of thermal diffusion velocities
+			{
+				if (data->iThermophoreticEffect == false)
+				{
+					for (i = 1; i <= Ni; i++)
+					for (j = 1; j <= NC; j++)
+					{
+						vStar[i][j] = -Dm[i][j] * ((W_c[i + 1][j] - W_c[i][j])*grid.udxe[i] + Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]);
+						vc[i] -= vStar[i][j];
+					}
+
+					for (j = 1; j <= NC; j++)
+					{
+						vStar[Np][j] = -Dm[Np][j] * ((W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np] + Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]);
+						vc[Np] -= vStar[Np][j];
+					}
+				}
+				else
+				{
+					BzzVector dT_over_dx(Np);
+					grid.FirstDerivative('C', T, dT_over_dx);
+
+					for (i = 1; i <= Ni; i++)
+					{
+						const double Vt = -0.55*mu[i] / rho[i] / T[i] * dT_over_dx[i];
+						for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+							vThermophoretic[i][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[i][mix->polimiSoot->bin_indices()[j]];;
+
+						for (j = 1; j <= NC; j++)
+						{
+							vStar[i][j] = -Dm[i][j] * ((W_c[i + 1][j] - W_c[i][j])*grid.udxe[i] + Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]) + vThermophoretic[i][j];
+							vc[i] -= vStar[i][j];
+						}
+					}
+
+					const double Vt = -0.55*mu[Np] / rho[Np] / T[Np] * dT_over_dx[Np];
+					for (j = 1; j <= mix->polimiSoot->bin_indices().Size(); j++)
+						vThermophoretic[Np][mix->polimiSoot->bin_indices()[j]] = Vt*W_c[Np][mix->polimiSoot->bin_indices()[j]];
+
+					for (j = 1; j <= NC; j++)
+					{
+						vStar[Np][j] = -Dm[Np][j] * ((W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np] + Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]) + vThermophoretic[Np][j];
+						vc[Np] -= vStar[Np][j];
+					}
+				}
+			}
+
+
+			// Correction applied only to Fick contribution
+			{
+				for (i = 1; i <= Np; i++)
+				for (j = 1; j <= NC; j++)
+					vStar[i][j] += vc[i] * W_c[i][j];
+			}
 		}
 	}
 }
+
+
 
 void OpenSMOKE_Flame1D::compute_vStarPremixed()
 {
@@ -3350,7 +3632,7 @@ void OpenSMOKE_Flame1D::setTemperatureAndMassFractionProfiles(const flame1d_igni
 //																								   //
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void OpenSMOKE_Flame1D::printOnFile(const string fileNameOutput)
+void OpenSMOKE_Flame1D::printOnFile(const std::string fileNameOutput)
 {
 	int i, j;
 
@@ -3364,7 +3646,7 @@ void OpenSMOKE_Flame1D::printOnFile(const string fileNameOutput)
 		ofstream fSoot;
 		if ( data->kind_of_subphysics == FLAME1D_SUBPHYSICS_SOOT )
 		{
-			string fileName;
+			std::string fileName;
 			fileName  = nameFolderAdditionalData + "/Soot_2E.out";
 			openOutputFileAndControl(fSoot, fileName);
 			fSoot.setf(ios::scientific);
@@ -3378,7 +3660,7 @@ void OpenSMOKE_Flame1D::printOnFile(const string fileNameOutput)
 		{
 			fOutput << setw(20) << left << 1.e2*grid.x[i]; 
 			fOutput << setw(20) << left << U[i];
-			fOutput << setw(20) << left << 2.e2*U[i]*urho[i];
+			fOutput << setw(20) << left << 100.*(nGeometry-1.)*U[i]*urho[i];
 			fOutput << setw(20) << left << G[i];
 			fOutput << setw(20) << left << H[i];
 			fOutput << setw(20) << left << T[i];
@@ -3443,7 +3725,7 @@ void OpenSMOKE_Flame1D::printOnFile(const string fileNameOutput)
 		ofstream fSoot;
 		if ( data->kind_of_subphysics == FLAME1D_SUBPHYSICS_SOOT )
 		{
-			string fileName;
+			std::string fileName;
 			fileName = nameFolderAdditionalData + "/Soot_2E.out";
 			openOutputFileAndControl(fSoot, fileName);
 			fSoot.setf(ios::scientific);
@@ -3523,7 +3805,7 @@ void OpenSMOKE_Flame1D::printOnFile(const string fileNameOutput)
 
 	if (mix->polimiSoot->IsSoot() == true)
 	{
-		string fileName;
+		std::string fileName;
 
 		ofstream fSoot;
 		ofstream fSootDistribution;
@@ -3638,7 +3920,7 @@ void OpenSMOKE_Flame1D::printOnFile(const string fileNameOutput)
 
 	if (data->iLewisNumbers == true)
 	{
-		string fileName;
+		std::string fileName;
 
 		ofstream fLewis;
 		fileName = nameFolderAdditionalData + "/Lewis.out";
@@ -3687,7 +3969,7 @@ void OpenSMOKE_Flame1D::printOnFile(const string fileNameOutput)
 
 	if (data->iSoretEffect == true)
 	{
-		string fileName;
+		std::string fileName;
 
 		ofstream fSoret;
 		fileName = nameFolderAdditionalData + "/Soret.out";
@@ -3711,7 +3993,7 @@ void OpenSMOKE_Flame1D::printOnFile(const string fileNameOutput)
 
 	if (data->iAssignedFormationRates == true)
 	{
-		string fileName;
+		std::string fileName;
 
 		ofstream fFormationRates;
 		fileName = nameFolderAdditionalData + "/FormationRates.out";
@@ -3735,7 +4017,7 @@ void OpenSMOKE_Flame1D::printOnFile(const string fileNameOutput)
 
 	if (data->iAssignedExperiment == true)
 	{
-		string fileName;
+		std::string fileName;
 		double threshold = 1.e-6;
 
 		ofstream fExperiment;
@@ -3771,7 +4053,7 @@ void OpenSMOKE_Flame1D::printOnFile(const string fileNameOutput)
 
 	if (data->iAssignedReactionRates == true)
 	{
-		string fileName;
+		std::string fileName;
 
 		ofstream fReactionRates;
 		fileName = nameFolderAdditionalData + "/ReactionRates.out";
@@ -3802,7 +4084,7 @@ void OpenSMOKE_Flame1D::printOnFile(const string fileNameOutput)
 
 	if (data->iVerboseMixtureProperties == true)
 	{
-		string fileName;
+		std::string fileName;
 
 		ofstream fProperties;
 		fileName = nameFolderAdditionalData + "/MixtureProperties.out";
@@ -3833,7 +4115,7 @@ void OpenSMOKE_Flame1D::printOnFile(const string fileNameOutput)
 
 	if (data->iSingleContributions == true)
 	{
-		string fileName;
+		std::string fileName;
 
 		ofstream fSingleContributions;
 		fileName = nameFolderAdditionalData + "/SingleContributions.out";
@@ -3859,7 +4141,7 @@ void OpenSMOKE_Flame1D::printOnFile(const string fileNameOutput)
 	bool iPrintVerbose = true;
 	if (iPrintVerbose == true)
 	{
-		string fileName;
+		std::string fileName;
 
 		ofstream fVerbose;
 		fileName = nameFolderAdditionalData + "/Verbose.out";
@@ -4144,7 +4426,7 @@ void OpenSMOKE_Flame1D::GnuPlotInterface(ofstream &fOutput)
 	
 		if ( data->kind_of_subphysics == FLAME1D_SUBPHYSICS_QMOM ) 
 		{
-			string fileName;
+			std::string fileName;
 			fileName = nameFolderAdditionalData + "/Soot_QMOM.out";
 			openOutputFileAndControl(fSootQMOM, fileName);
 			fSootQMOM.setf(ios::scientific);
@@ -4184,7 +4466,7 @@ void OpenSMOKE_Flame1D::GnuPlotInterface(ofstream &fOutput)
 	
 		if ( data->kind_of_subphysics == FLAME1D_SUBPHYSICS_QMOM )
 		{
-			string fileName;
+			std::string fileName;
 			fileName = nameFolderAdditionalData + "/Soot_QMOM.out";
 			openOutputFileAndControl(fSootQMOM, fileName);
 			fSootQMOM.setf(ios::scientific);
@@ -4346,9 +4628,9 @@ void OpenSMOKE_Flame1D::DAE_ODE_myPrint(BzzVector &v, double time)
 	if(data->iterationBackUpCounter == data->nStepsBackUp)
 	{
 		stringstream iteration;
-		string iterationComplete;
-		string fileName_BackUp;
-		string fileName_BackUpInputData;
+		std::string iterationComplete;
+		std::string fileName_BackUp;
+		std::string fileName_BackUpInputData;
 		
 		if		(data->iteration > 9999)	iterationComplete = "";
 		else if (data->iteration > 999)	iterationComplete = "0";
@@ -4728,13 +5010,13 @@ void OpenSMOKE_Flame1D::nonLinearSystem_Opposed_ColdReduced(BzzVector &x, BzzVec
 	// 5. Equazioni
 	// --------------------------------------------------------------------------------------
 		for(j=1;j<=data->nCold-1;j++)
-			dW[1][data->iX[j]] = rho[1]*(2.*U[1]*urho[1]*W[1][data->iX[j]] + vStar[1][data->iX[j]]) - BCW_C[data->iX[j]];
+			dW[1][data->iX[j]] = rho[1]*((nGeometry-1.)*U[1]*urho[1]*W[1][data->iX[j]] + vStar[1][data->iX[j]]) - BCW_C[data->iX[j]];
 		dW[1][data->iX[data->nCold]] = W[1][data->iX[data->nCold]] - sumW[1];
 
 		for(i=2;i<=Ni;i++)
 		{
 			for(j=1;j<=data->nCold-1;j++)
-				dW[i][data->iX[j]] = - (   2.*U[i]*diffW[i][data->iX[j]]
+				dW[i][data->iX[j]] = -((nGeometry-1.)*U[i] * diffW[i][data->iX[j]]
 				               - R[i][data->iX[j]]
 						       + (rhoe[i]*vStar[i][data->iX[j]] - rhow[i]*vStar[i-1][data->iX[j]])*grid.udxc_over_2[i]
 							 ) * urho[i];
@@ -4742,7 +5024,7 @@ void OpenSMOKE_Flame1D::nonLinearSystem_Opposed_ColdReduced(BzzVector &x, BzzVec
 		}
 
 		for(j=1;j<=data->nCold-1;j++)
-			dW[Np][data->iX[j]] = rho[Np]*(2.*U[Np]*urho[Np]*W[Np][data->iX[j]] + vStar[Np][data->iX[j]]) - BCW_O[data->iX[j]];
+			dW[Np][data->iX[j]] = rho[Np] * ((nGeometry-1.)*U[Np] * urho[Np] * W[Np][data->iX[j]] + vStar[Np][data->iX[j]]) - BCW_O[data->iX[j]];
 		dW[Np][data->iX[data->nCold]] = W[Np][data->iX[data->nCold]] - sumW[Np];
 
 
@@ -5134,7 +5416,7 @@ void calculate_recursions(int Np, BzzMatrixInt &A, BzzVectorInt &V, BzzVector &w
 		}
 }
 
-bool OpenSMOKE_Flame1D::newPoints(const string string_kind, char index)
+bool OpenSMOKE_Flame1D::newPoints(const std::string string_kind, char index)
 {
 	int  i;
 	int  nDim;
@@ -6390,7 +6672,7 @@ void OpenSMOKE_Flame1D::solveDAE_Opposed(int Hot_Or_Cold, const flame1d_model st
 	ChangeDimensions(dimensionBlock*Np, &xMax);
 	ChangeDimensions(dimensionBlock*Np, &inDerAlg);
 	
-	string nameUnsteadyFile;
+	std::string nameUnsteadyFile;
 
 	if (data->iUnsteady == true)
 	{
@@ -6587,7 +6869,7 @@ void OpenSMOKE_Flame1D::solveDAE_Twin(int Hot_Or_Cold, const flame1d_model strin
 	ChangeDimensions(dimensionBlock*Np, &xMax);
 	ChangeDimensions(dimensionBlock*Np, &inDerAlg);
 	
-	string nameUnsteadyFile;
+	std::string nameUnsteadyFile;
 
 	if (data->iUnsteady == true)
 	{
@@ -6770,7 +7052,7 @@ void OpenSMOKE_Flame1D::solveDAE_Premixed(const flame1d_model string_kind, doubl
 	
 	if (data->iUnsteady == true)
 	{
-		string nameUnsteadyFile;
+		std::string nameUnsteadyFile;
 		nameUnsteadyFile = nameFolderUnsteadyData + "/Unsteady.out";
 		openOutputFileAndControl(fUnsteady, nameUnsteadyFile);
 		fUnsteady.setf(ios::scientific);
@@ -6931,7 +7213,7 @@ void OpenSMOKE_Flame1D::solveODE_Premixed(const flame1d_model string_kind, doubl
 	
 	if (data->iUnsteady == true)
 	{
-		string nameUnsteadyFile;
+		std::string nameUnsteadyFile;
 		nameUnsteadyFile = nameFolderUnsteadyData + "/Unsteady.out";
 		openOutputFileAndControl(fUnsteady, nameUnsteadyFile);
 		fUnsteady.setf(ios::scientific);
@@ -6999,16 +7281,16 @@ void OpenSMOKE_Flame1D::give_Opposed_DU_DG_DH()
 	if (data->iPoolFire == POOL_FIRE_TASSIGNED || data->iPoolFire == POOL_FIRE_EQUILIBRIUM)
 	{
 		double DHvap = data->pool_fire_liquid_species->Hv(T[1]) * data->correctionFactorVaporizationHeat;
-		dU[1] = 2.*U[1]*DHvap - lambda[1]*(T[2]-T[1])*grid.udxe[1];
-		data->VC = 2.*U[1]/rho[1];
+		dU[1] = (nGeometry-1.)*U[1] * DHvap - lambda[1] * (T[2] - T[1])*grid.udxe[1];
+		data->VC = (nGeometry-1.)*U[1] / rho[1];
 	}
 
 	if (data->iPoolFire == POOL_FIRE_LIQUIDPOOL)
 	{
 		double lambdaLiquid = data->pool_fire_liquid_species->lambda(0.50*(T[1]+data->pool_fire_feed_temperature));
 		double DHvap = data->pool_fire_liquid_species->Hv(T[1]) * data->correctionFactorVaporizationHeat;
-		dU[1] = 2.*U[1]*DHvap - lambda[1]*(T[2]-T[1])*grid.udxe[1] + lambdaLiquid*(T[1]-data->pool_fire_feed_temperature)/data->pool_fire_depth;
-		data->VC = 2.*U[1]/rho[1];
+		dU[1] = (nGeometry-1.)*U[1] * DHvap - lambda[1] * (T[2] - T[1])*grid.udxe[1] + lambdaLiquid*(T[1] - data->pool_fire_feed_temperature) / data->pool_fire_depth;
+		data->VC = (nGeometry-1.)*U[1] / rho[1];
 	}
 	
 	for(i=2;i<=Ni;i++)
@@ -7058,7 +7340,7 @@ void OpenSMOKE_Flame1D::give_Twin_DU_DG_DH()
 	dH[Np] = U[Np]; 
 }			
 
-void OpenSMOKE_Flame1D::give_Opposed_DW(const string string_kind)
+void OpenSMOKE_Flame1D::give_Opposed_DW(const std::string string_kind)
 {
 	int i, j;
 
@@ -7085,37 +7367,37 @@ void OpenSMOKE_Flame1D::give_Opposed_DW(const string string_kind)
 	// Equazioni
 	// --------------------------------------------------------------------------------------
 	for(j=1;j<=NC;j++)
-		dW[1][j] = rho[1]*(2.*U[1]*urho[1]*W[1][j] + vStar[1][j]) - BCW_C[j];
+		dW[1][j] = rho[1] * ((nGeometry-1.)*U[1] * urho[1] * W[1][j] + vStar[1][j]) - BCW_C[j];
 	
 	for(i=2;i<=Ni;i++)
 		for(j=1;j<=NC;j++)
-			dW[i][j] = - (   2.*U[i]*diffW[i][j]
+			dW[i][j] = -((nGeometry-1.)*U[i] * diffW[i][j]
 			               - R[i][j]
 					       + (rhoe[i]*vStar[i][j] - rhow[i]*vStar[i-1][j])*grid.udxc_over_2[i]
 						 ) * urho[i];
 
 	for(j=1;j<=NC;j++)
-		dW[Np][j] = rho[Np]*(2.*U[Np]*urho[Np]*W[Np][j] + vStar[Np][j]) - BCW_O[j];
+		dW[Np][j] = rho[Np] * ((nGeometry-1.)*U[Np] * urho[Np] * W[Np][j] + vStar[Np][j]) - BCW_O[j];
 
 	if(data->iDepositionWall == true)
 	{	
 		// Gas phase species
 		for(j=1;j<=NC;j++)
-			dW[Np][j] = 2.*U[Np]*W[Np][j] + rho[Np]*vStar[Np][j]- BCW_O[j];
+			dW[Np][j] = (nGeometry-1.)*U[Np] * W[Np][j] + rho[Np] * vStar[Np][j] - BCW_O[j];
 
 		// Soot species
 		for(int j=1;j<=mix->polimiSoot->bin_indices().Size();j++)
 		{
 			const int jj = mix->polimiSoot->bin_indices()[j];
-			dW[Np][jj] = 2.*U[Np]*W[Np][jj] + rho[Np]*vStar[Np][jj] - rho[Np]*vThermophoretic[Np][jj];
+			dW[Np][jj] = (nGeometry-1.)*U[Np] * W[Np][jj] + rho[Np] * vStar[Np][jj] - rho[Np] * vThermophoretic[Np][jj];
 		}
 	}
 	
 	if (data->iPoolFire == POOL_FIRE_TASSIGNED || data->iPoolFire == POOL_FIRE_EQUILIBRIUM || data->iPoolFire == POOL_FIRE_LIQUIDPOOL)
 	{
 		for(j=1;j<=NC;j++)
-			dW[1][j] = rho[1]*(2.*U[1]*urho[1]*W[1][j] + vStar[1][j]);
-		dW[1][data->jFUEL] = 2.*U[1]*(1.-W[1][data->jFUEL]) - rho[1]*vStar[1][data->jFUEL];
+			dW[1][j] = rho[1] * ((nGeometry-1.)*U[1] * urho[1] * W[1][j] + vStar[1][j]);
+		dW[1][data->jFUEL] = (nGeometry-1.)*U[1] * (1. - W[1][data->jFUEL]) - rho[1] * vStar[1][data->jFUEL];
 	}
 
 	if (data->iSingleContributions == true)
@@ -7126,14 +7408,14 @@ void OpenSMOKE_Flame1D::give_Opposed_DW(const string string_kind)
 			for(int i=2;i<=Ni;i++)
 			{
 				single_contributions[i][k+1]  = - (rhoe[i]*vStar[i][data->index_SingleContributions[j]] - rhow[i]*vStar[i-1][data->index_SingleContributions[j]])*grid.udxc_over_2[i];
-				single_contributions[i][k+2] = - 2.*U[i]*diffW[i][data->index_SingleContributions[j]];
+				single_contributions[i][k + 2] = -(nGeometry-1.)*U[i] * diffW[i][data->index_SingleContributions[j]];
 				single_contributions[i][k+3] =   R[i][data->index_SingleContributions[j]];
 			}
 		}
 	}
 }
 
-void OpenSMOKE_Flame1D::give_Twin_DW(const string string_kind)
+void OpenSMOKE_Flame1D::give_Twin_DW(const std::string string_kind)
 {
 	give_Opposed_DW(string_kind);
 
@@ -7167,36 +7449,44 @@ void OpenSMOKE_Flame1D::give_Opposed_DT(double t)
 	// Equazioni
 	// --------------------------------------------------------------------------------------
 
-	dT[1] = T[1] - data->TC;
-
-	if (data->iPoolFire == POOL_FIRE_EQUILIBRIUM || data->iPoolFire == POOL_FIRE_LIQUIDPOOL)
+	if (data->iTemperatureProfile==1)
 	{
-		double Pvap = data->pool_fire_liquid_species->Pv(T[1]) * data->correctionFactorVaporPressure;
-		dT[1] = Pvap/data->P_Pascal - X[1][data->jFUEL];
-		data->TC = T[1];
+		dT[1] = T[1] - data->TC;
+		for(i=2;i<=Ni;i++)
+			dT[i] = 0.;
+		dT[Np] = T[Np] - data->TO; 
+	}
+	else
+	{
+		dT[1] = T[1] - data->TC;
+
+		if (data->iPoolFire == POOL_FIRE_EQUILIBRIUM || data->iPoolFire == POOL_FIRE_LIQUIDPOOL)
+		{
+			double Pvap = data->pool_fire_liquid_species->Pv(T[1]) * data->correctionFactorVaporPressure;
+			dT[1] = Pvap/data->P_Pascal - X[1][data->jFUEL];
+			data->TC = T[1];
+		}
+
+		for(i=2;i<=Ni;i++)
+		
+			dT[i] = -(+(nGeometry-1.)*U[i] * diffT[i] +
+					    - (  lambda[i]*(T[i+1]-T[i])*grid.udxe[i] - lambda[i-1]*(T[i]-T[i-1])*grid.udxw[i] ) 
+					      *grid.udxc_over_2[i] / Cp[i]
+						- QReaction[i] / Cp[i] 
+					    + rho[i]/Cp[i]*sumCpDiffusive[i]*diffTcentral[i] - Qrad[i]/Cp[i]
+					  ) * urho[i] ;
+		
+		dT[Np] = T[Np] - data->TO; 
 	}
 
-	for(i=2;i<=Ni;i++)
-		
-		dT[i] = - ( + 2.*U[i] * diffT[i] + 
-				    - (  lambda[i]*(T[i+1]-T[i])*grid.udxe[i] - lambda[i-1]*(T[i]-T[i-1])*grid.udxw[i] ) 
-				      *grid.udxc_over_2[i] / Cp[i]
-					- QReaction[i] / Cp[i] 
-				    + rho[i]/Cp[i]*sumCpDiffusive[i]*diffTcentral[i] - Qrad[i]/Cp[i]
-				  ) * urho[i] ;
-		
-	dT[Np] = T[Np] - data->TO; 
-
-	// TODO
-	if (data->iTemperatureProfile==1)
-		dT = 0.;
+	
 }
 
 void OpenSMOKE_Flame1D::give_Twin_DT(double t)
 {
 	give_Opposed_DT(t);
 
-	dT[Np] = - ( + 2.*U[Np] * diffT[Np]*0. +	// La derivata prima e' nulla 
+	dT[Np] = -(+(nGeometry-1.)*U[Np] * diffT[Np] * 0. +	// La derivata prima e' nulla 
 				    - (  lambda[Np]*(T[Np-1]-T[Np])*grid.udxw[Np] - lambda[Np-1]*(T[Np]-T[Np-1])*grid.udxw[Np] ) 
 				      *grid.udxc_over_2[Np/2] / Cp[Np]
 					- QReaction[Np] / Cp[Np] 
@@ -7215,20 +7505,20 @@ void OpenSMOKE_Flame1D::give_Twin_DT(double t)
 //																								   //
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void OpenSMOKE_Flame1D::recoverFromBackUp(const string fileName)
+void OpenSMOKE_Flame1D::recoverFromBackUp(const std::string fileName)
 {
 	char binary_string[40];
 	BzzVector x_grid;
 
-	string fileNameCase = fileName + ".inp";
-	string fileNameData = fileName + ".bin";
+	std::string fileNameCase = fileName + ".inp";
+	std::string fileNameData = fileName + ".bin";
 
 	ptFlame = this;
 
 	// Recover the kind of problem from backup data
 	BzzLoad fInput('*', fileNameData);
 		fInput.fileLoad.read((char*) binary_string, sizeof(binary_string));
-		string kindOfProblem = binary_string;
+		std::string kindOfProblem = binary_string;
 		fInput >> Np;	ChangeDimensions(Np, &x_grid);
 		fInput >> NC;
 		fInput >> x_grid;
@@ -7281,7 +7571,7 @@ void OpenSMOKE_Flame1D::recoverFromBackUp(const string fileName)
 	cout << "Variables correctly recovered..." << endl;	
 }
 
-void OpenSMOKE_Flame1D::recoverVariables(const string fileName)
+void OpenSMOKE_Flame1D::recoverVariables(const std::string fileName)
 {
 	char binary_string[40];
 	
@@ -7317,9 +7607,9 @@ void OpenSMOKE_Flame1D::recoverVariables(const string fileName)
 	fInput.End();
 }
 
-void OpenSMOKE_Flame1D::printBackUpOnlyInputData(const string fileName)
+void OpenSMOKE_Flame1D::printBackUpOnlyInputData(const std::string fileName)
 {
-	string fileNameCase = fileName + ".inp";
+	std::string fileNameCase = fileName + ".inp";
 
 	if (data->kind_of_flame == FLAME1D_PHYSICS_OPPOSED || 
 		data->kind_of_flame == FLAME1D_PHYSICS_TWIN)
@@ -7334,10 +7624,10 @@ void OpenSMOKE_Flame1D::printBackUpOnlyInputData(const string fileName)
 		data->printFileForPremixed(fileNameCase, H[1]);
 }
 
-void OpenSMOKE_Flame1D::printBackUpOnlyData(const string fileName)
+void OpenSMOKE_Flame1D::printBackUpOnlyData(const std::string fileName)
 {
 	char binary_string[40];
-	string kindOfProblem;
+	std::string kindOfProblem;
 
 	if (data->kind_of_flame == FLAME1D_PHYSICS_OPPOSED)
 	{
@@ -7358,7 +7648,7 @@ void OpenSMOKE_Flame1D::printBackUpOnlyData(const string fileName)
 		else if (data->kind_of_subphysics == FLAME1D_SUBPHYSICS_QMOM)	kindOfProblem = "TWIN_QMOM";
 	}
 
-	string fileNameData = fileName + ".bin";
+	std::string fileNameData = fileName + ".bin";
 
 	BzzSave fOutput('*', fileNameData);
 	strcpy(binary_string, kindOfProblem.c_str());
@@ -7673,7 +7963,7 @@ void OpenSMOKE_Flame1D::DAESystem_Premixed_NoEnergy(BzzVector &x, double t, BzzV
 //																								   //
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void OpenSMOKE_Flame1D::give_Premixed_DW(const string string_kind)
+void OpenSMOKE_Flame1D::give_Premixed_DW(const std::string string_kind)
 {
 	int i, j;
 
@@ -7792,7 +8082,7 @@ void OpenSMOKE_Flame1D::give_Premixed_DT()
 	dT[1] = T[1] - data->TC;
 
 	for(i=2;i<=Ni;i++)
-		
+	{
 		dT[i] = - ( + H[i] * diffT[i] + 
 				    - (A_x_lambdae[i]*(T[i+1]-T[i])*grid.udxe[i] - A_x_lambdaw[i]*(T[i]-T[i-1])*grid.udxw[i] ) 
 				      *grid.udxc_over_2[i] / Cp[i]
@@ -7800,6 +8090,8 @@ void OpenSMOKE_Flame1D::give_Premixed_DT()
 				    + G[i]*rho[i]/Cp[i]*sumCpDiffusive[i]*diffTcentral[i]
 				  ) / (rho[i]*G[i]);
 		
+		dT[i]  += Qrad[i]/Cp[i]/rho[i] ;
+	}
 
 	dT[Np] = T[Np] - T[Np-1];
 	}
@@ -8345,8 +8637,8 @@ void OpenSMOKE_Flame1D::DAESystemSolution(BzzDaeSparseObject *o, double tEnd)
 	o->SetMaximumConstraints(xMax);
 
 	// Default values: (A) 1e-10      (R) 100*MachEpsFloat()
-	o->SetTollRel(data->rel_dae_Tolerances);
-	o->SetTollAbs(data->abs_dae_Tolerances);
+	o->SetTolRel(data->rel_dae_Tolerances);
+	o->SetTolAbs(data->abs_dae_Tolerances);
 	cout << "Absolute tolerance: " << data->abs_dae_Tolerances << endl;
 	cout << "Relative tolerance: " << data->rel_dae_Tolerances << endl;
 
@@ -8395,7 +8687,7 @@ void OpenSMOKE_Flame1D::ODESystemSolution(BzzOdeSparseStiffObject &o, double tEn
 		fUnsteady.close();
 }
 
-void OpenSMOKE_Flame1D::assign_qmom_module_from_file(OpenSMOKE_ReactingGas &mix, const string fileName)
+void OpenSMOKE_Flame1D::assign_qmom_module_from_file(OpenSMOKE_ReactingGas &mix, const std::string fileName)
 {
 	qmom.setupGasMixture(mix);
 	qmom.readFromFile(fileName);
@@ -8557,7 +8849,7 @@ void OpenSMOKE_Flame1D::give_Opposed_QMOM()
 
 	for(i=2;i<=Ni;i++)
 		for(j=1;j<=2*qmom.N;j++)
-			dmoments[i][j] =	( - 2.*U[i]*diffMoments[i][j] ) * urho[i]  +
+			dmoments[i][j] = (-(nGeometry-1.)*U[i] * diffMoments[i][j]) * urho[i] +
 								moments_source[i][j] +
 								( DiffusionMoments[i][j]  *(moments[i+1][j]-moments[i][j])*grid.udxe[i] - 
 								  DiffusionMoments[i-1][j]*(moments[i][j]-moments[i-1][j])*grid.udxw[i] ) * grid.udxc_over_2[i];
@@ -8818,10 +9110,10 @@ void OpenSMOKE_Flame1D::give_Opposed_SOOT()
 
 	for(i=2;i<=Ni;i++)
 	{
-		dphiN[i] =   ( - 2.*U[i]*diff_phiN[i] + source_phiN[i] ) * urho[i]  +
+		dphiN[i] = (-(nGeometry-1.)*U[i] * diff_phiN[i] + source_phiN[i]) * urho[i] +
 					 ( DiffusionSoot[i]*(phiN[i+1]-phiN[i])*grid.udxe[i] - DiffusionSoot[i-1]*(phiN[i]-phiN[i-1])*grid.udxw[i] ) *grid.udxc_over_2[i];
 			
-		dphiM[i] =   ( - 2.*U[i]*diff_phiM[i] + source_phiM[i] ) * urho[i]  +
+		dphiM[i] = (-(nGeometry-1.)*U[i] * diff_phiM[i] + source_phiM[i]) * urho[i] +
 					 ( DiffusionSoot[i]*(phiM[i+1]-phiM[i])*grid.udxe[i] - DiffusionSoot[i-1]*(phiM[i]-phiM[i-1])*grid.udxw[i] ) *grid.udxc_over_2[i];
 	}
 
@@ -9003,7 +9295,7 @@ void OpenSMOKE_Flame1D::calculate_radiation()
 	}
 }
 
-void OpenSMOKE_Flame1D::final_sensitivity_analysis(string kindOfProblem,  BzzNonLinearSystemSparseObject &nls, BzzSave &fBinary)
+void OpenSMOKE_Flame1D::final_sensitivity_analysis(std::string kindOfProblem,  BzzNonLinearSystemSparseObject &nls, BzzSave &fBinary)
 {
 	OpenSMOKE_SensitivityAnalysis_Fast_Flame1D sensitivity;
 	int kind_of_flame;
@@ -9046,7 +9338,7 @@ void OpenSMOKE_Flame1D::final_sensitivity_analysis(string kindOfProblem,  BzzNon
 	sensitivity.SaveOnXMLFile(nameXMLFolder);
 }
 
-void OpenSMOKE_Flame1D::final_sensitivity_analysis_transport_properties(string kindOfProblem,  BzzNonLinearSystemSparseObject &nls, BzzVector &xSolution,  BzzVector &fSolution, BzzSave &fBinary)
+void OpenSMOKE_Flame1D::final_sensitivity_analysis_transport_properties(std::string kindOfProblem,  BzzNonLinearSystemSparseObject &nls, BzzVector &xSolution,  BzzVector &fSolution, BzzSave &fBinary)
 {
 	OpenSMOKE_LennardJonesSensitivityCoefficientsManager lennard_jones_manager;
 	lennard_jones_manager.Setup(mix->path_complete + "/TransportSensitivity.out", data->sensitivityLennardJonesMode);
@@ -9159,7 +9451,7 @@ void OpenSMOKE_Flame1D::final_sensitivity_analysis_transport_properties(string k
 				parameters[(kk-1)*NC+j] = numerator[j];
 		}
 
-		string dummy;
+		std::string dummy;
 		char name[Constants::NAME_SIZE];
 
 		dummy = "SENSITIVITY-DIFF";
@@ -9217,7 +9509,7 @@ void OpenSMOKE_Flame1D::final_sensitivity_analysis_transport_properties(string k
 
 void OpenSMOKE_Flame1D::FoldersAndFilesManager()
 {
-	string MSDOScommand;
+	std::string MSDOScommand;
 
 	if (data->iUserDefinedFolderName == false)
 	{
@@ -9282,7 +9574,7 @@ void OpenSMOKE_Flame1D::FoldersAndFilesManager()
 	nameFileBackupInputData = nameFolderBackupData + "/BackUp";
 }
 
-void OpenSMOKE_Flame1D::FoldersAndFilesManager(const string backupFolder)
+void OpenSMOKE_Flame1D::FoldersAndFilesManager(const std::string backupFolder)
 {
 	// 1. Output Folder name
 	nameOutputFolder = backupFolder;
@@ -9315,8 +9607,8 @@ void OpenSMOKE_Flame1D::Run()
 	const int Hot  = 1;
 	const int Cold = 0;
 
-	string nameFileSolution;
-	string nameFileSolutionComplete;
+	std::string nameFileSolution;
+	std::string nameFileSolutionComplete;
 
 	nameFileSolution = nameFolderSteadyData + "/Solution_";
 
@@ -9453,11 +9745,11 @@ void OpenSMOKE_Flame1D::Run()
 
 				#if LINUX_SO==1
 					nameFileSolutionComplete = nameFolderAdditionalData + "/opposed.osm";
-					string instruction = "cp " + mix->path_complete + "idealgas.bin" + " nameFolderAdditionalData/idealgas.bin";
+					std::string instruction = "cp " + mix->path_complete + "idealgas.bin" + " nameFolderAdditionalData/idealgas.bin";
 					system(instruction.c_str());
 				#else
 					nameFileSolutionComplete = nameFolderAdditionalData + "\\opposed.osm";
-					string instruction;
+					std::string instruction;
 					instruction = "copy " + mix->path_complete + "\\idealgas.bin " + nameFolderAdditionalData + "\\idealgas.bin /Y";
 					system(instruction.c_str());
 					instruction = "copy " + mix->path_complete + "\\reactions.bin " + nameFolderAdditionalData + "\\reactions.bin /Y";
@@ -9646,7 +9938,7 @@ void OpenSMOKE_Flame1D::Run()
 				nameFileSolutionComplete = nameFolderAdditionalData + "/premixed.osm";
 				#else
 					nameFileSolutionComplete = nameFolderAdditionalData + "\\premixed.osm";
-					string instruction;
+					std::string instruction;
 					instruction = "copy " + mix->path_complete + "\\idealgas.bin " + nameFolderAdditionalData + "\\idealgas.bin /Y";
 					system(instruction.c_str());
 					instruction = "copy " + mix->path_complete + "\\reactions.bin " + nameFolderAdditionalData + "\\reactions.bin /Y";
@@ -9781,7 +10073,7 @@ void OpenSMOKE_Flame1D::Run()
 				nameFileSolutionComplete = nameFolderAdditionalData + "/twin.osm";
 				#else
 					nameFileSolutionComplete = nameFolderAdditionalData + "\\twin.osm";
-					string instruction;
+					std::string instruction;
 					instruction = "copy " + mix->path_complete + "\\idealgas.bin " + nameFolderAdditionalData + "\\idealgas.bin /Y";
 					system(instruction.c_str());
 					instruction = "copy " + mix->path_complete + "\\reactions.bin " + nameFolderAdditionalData + "\\reactions.bin /Y";
@@ -9863,7 +10155,7 @@ void OpenSMOKE_Flame1D::PrintXMLFile(const std::string file_name)
 		fXML << QReaction[i] << " ";
 
 		if ( data->kind_of_flame == FLAME1D_PHYSICS_OPPOSED || data->kind_of_flame == FLAME1D_PHYSICS_TWIN )
-			fXML << 2*U[i]/rho[i] << " ";
+			fXML << (nGeometry-1.)*U[i] / rho[i] << " ";
 		else if ( data->kind_of_flame == FLAME1D_PHYSICS_PREMIXED )
 			fXML << U[i] << " ";
 
@@ -9988,7 +10280,7 @@ void OpenSMOKE_Flame1D::ElementalAnalysis()
 
 void OpenSMOKE_Flame1D::SaveOnBinaryFile(BzzSave &fOutput)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 
 	dummy = "FLAME1D";
@@ -10081,7 +10373,7 @@ void OpenSMOKE_Flame1D::SaveOnBinaryFile(BzzSave &fOutput)
 	}
 }
 
-void OpenSMOKE_Flame1D::SaveOnBinaryFile(const string filename, const bool iSensitivity, const flame1d_model NLS_KIND)
+void OpenSMOKE_Flame1D::SaveOnBinaryFile(const std::string filename, const bool iSensitivity, const flame1d_model NLS_KIND)
 {
 
 	cout << "Save on binary file..." << endl;
@@ -10115,7 +10407,7 @@ void OpenSMOKE_Flame1D::SaveOnBinaryFile(const string filename, const bool iSens
 			ropa.PrintIntegralRateOfProductionAnalyses(nameFolderAdditionalData + "/ROPA_Integral.out");
 		}
 
-		string dummy;
+		std::string dummy;
 		char name[Constants::NAME_SIZE];
 
 		dummy = "ROPA";
@@ -10265,8 +10557,8 @@ void OpenSMOKE_Flame1D::SolveODE_SingleReactors(const double tEnd)
 		//o.StepPrint(DAE_ODE_Print);
 		o.SetMinimumConstraints(xMin);
 		o.SetMaximumConstraints(xMax);
-		//o.SetTollRel(data->rel_dae_Tolerances);
-		//o.SetTollAbs(data->abs_dae_Tolerances);
+		//o.SetTolRel(data->rel_dae_Tolerances);
+		//o.SetTolAbs(data->abs_dae_Tolerances);
 	
 		double timeStart = BzzGetCpuTime();
 		xFirstGuess = o(tEnd, tEnd);

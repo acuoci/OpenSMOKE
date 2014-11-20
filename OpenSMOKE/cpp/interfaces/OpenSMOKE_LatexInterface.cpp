@@ -18,27 +18,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string>
 #include "interfaces/OpenSMOKE_LatexInterface.h"
 
-const string OpenSMOKE_LatexInterface::newline = "\n";
+const std::string OpenSMOKE_LatexInterface::newline = "\n";
 
 OpenSMOKE_LatexInterface::OpenSMOKE_LatexInterface()
 {
     fileName = "report";
-    string dummy = fileName + ".tex";
+    std::string dummy = fileName + ".tex";
     latex_file.open(dummy.c_str());
 }
 
-OpenSMOKE_LatexInterface::OpenSMOKE_LatexInterface(string _fileName)
+OpenSMOKE_LatexInterface::OpenSMOKE_LatexInterface(std::string _fileName)
 {
     fileName = _fileName;
-    string dummy = fileName + ".tex";
+    std::string dummy = fileName + ".tex";
     latex_file.open(dummy.c_str());
 }
 
-void OpenSMOKE_LatexInterface::include_figure(string fileName, string caption)
+void OpenSMOKE_LatexInterface::include_figure(std::string fileName, std::string caption)
 {
-    string message;
+    std::string message;
 
     message  = newline;
     message += "   \\begin{figure}"                         + newline;
@@ -54,7 +55,7 @@ void OpenSMOKE_LatexInterface::include_figure(string fileName, string caption)
 
 void OpenSMOKE_LatexInterface::setup()
 {
-    string head_file;
+    std::string head_file;
 
     head_file  = "\\documentclass[a4paper,12pt]{article}" + newline;
     head_file += "\\usepackage{graphicx}" + newline+newline;
@@ -63,9 +64,9 @@ void OpenSMOKE_LatexInterface::setup()
     latex_file << head_file;
 }
 
-void OpenSMOKE_LatexInterface::new_section(string section_name)
+void OpenSMOKE_LatexInterface::new_section(std::string section_name)
 {
-    string section;
+    std::string section;
 
     section  = newline;
     section += "   \\section{" + section_name + "}" + newline;
@@ -75,7 +76,7 @@ void OpenSMOKE_LatexInterface::new_section(string section_name)
     latex_file << section;
 }
 
-void OpenSMOKE_LatexInterface::add(string message)
+void OpenSMOKE_LatexInterface::add(std::string message)
 {
     latex_file << newline;
     latex_file << message;
@@ -99,19 +100,19 @@ void OpenSMOKE_LatexInterface::close()
 
 void OpenSMOKE_LatexInterface::create_pdf()
 {
-    string latex_creation   = "latex "  + fileName;
-    string pdf_creation     = "dvipdf " + fileName + ".dvi " + fileName + ".pdf";
+    std::string latex_creation   = "latex "  + fileName;
+    std::string pdf_creation     = "dvipdf " + fileName + ".dvi " + fileName + ".pdf";
 
     system(latex_creation.c_str());
     system(pdf_creation.c_str());
 }
 
 
-void OpenSMOKE_LatexInterface::include_table(string *titlesUp, string *titlesLeft, BzzMatrix &matrix)
+void OpenSMOKE_LatexInterface::include_table(std::string *titlesUp, std::string *titlesLeft, BzzMatrix &matrix)
 {
     int i, j;
 
-    string message;
+    std::string message;
     for(j=1;j<=matrix.Columns();j++)
         message += "c";
 

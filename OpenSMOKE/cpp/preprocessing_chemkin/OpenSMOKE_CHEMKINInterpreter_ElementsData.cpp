@@ -23,7 +23,7 @@
 #include "basic/OpenSMOKE_WarningFile.h"
 #include "preprocessing_chemkin/OpenSMOKE_CHEMKINInterpreter_ElementsData.h"
 
-void OpenSMOKE_CHEMKINInterpreter_ElementsData::ErrorMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_ElementsData::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_ElementsData"	<< endl;
@@ -34,7 +34,7 @@ void OpenSMOKE_CHEMKINInterpreter_ElementsData::ErrorMessage(const string messag
     exit(-1);
 }
 
-void OpenSMOKE_CHEMKINInterpreter_ElementsData::WarningMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_ElementsData::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_ElementsData"	<< endl;
@@ -483,7 +483,7 @@ OpenSMOKE_CHEMKINInterpreter_ElementsData::OpenSMOKE_CHEMKINInterpreter_Elements
 
 }
 
-bool OpenSMOKE_CHEMKINInterpreter_ElementsData::Parse_Element_Name(const string element_name)
+bool OpenSMOKE_CHEMKINInterpreter_ElementsData::Parse_Element_Name(const std::string element_name)
 {
 	for(int i=1;i<=elements_in_database;i++)
 		if ( caseInsCompare(element_name, elements_name[i]) )
@@ -499,7 +499,7 @@ bool OpenSMOKE_CHEMKINInterpreter_ElementsData::Parse_Element_Name(const string 
 	return false;
 }
 
-void OpenSMOKE_CHEMKINInterpreter_ElementsData::Parse_Isotope_Name(const string isotope_name, const double mw)
+void OpenSMOKE_CHEMKINInterpreter_ElementsData::Parse_Isotope_Name(const std::string isotope_name, const double mw)
 {
 	int i;
 

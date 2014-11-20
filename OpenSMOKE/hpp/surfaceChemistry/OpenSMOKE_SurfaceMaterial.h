@@ -34,13 +34,13 @@ public:
 
 	OpenSMOKE_SurfaceMaterial();
 
-	void Setup(OpenSMOKE_ReactingSurface *surface, const string name_);
+	void Setup(OpenSMOKE_ReactingSurface *surface, const std::string name_);
 	void ReadFromBinaryFile(BzzLoad &binaryFile);
 	void ReadKineticsFromBinaryFile(BzzLoad &binaryFile);
 	void ReactionRates( const double T, const BzzVector &cGas, BzzVector &cSurface, BzzVector &aBulk,
 						BzzVector &RGas, BzzVector &RSurface, BzzVector &RBulk, double &QReaction);
 
-	inline string name()	   { return name_object;  }
+	inline std::string name()	   { return name_object;  }
 	inline int NumberOfSites() { return numberSites_; }
 	inline int NumberOfBulks() { return numberBulks_; }
 
@@ -65,9 +65,9 @@ private:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif	// OPENSMOKE_SURFACEMATERIAL_H

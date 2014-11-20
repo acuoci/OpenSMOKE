@@ -291,7 +291,7 @@ void SparkProfilePartial(BzzVector &x, BzzVector &T, vector<double> &sparkRatio,
 		T[i] = Tpeak + (T[iD]-Tpeak)/(x[iD]-x[iC])*(x[i]-x[iC]);
 }
 
-void ReadFromBackupFile(OpenSMOKE_ReactingGas &mix, const string nameFile, BzzVector &x, BzzVector &T, BzzVector &m, BzzMatrix &omega)
+void ReadFromBackupFile(OpenSMOKE_ReactingGas &mix, const std::string nameFile, BzzVector &x, BzzVector &T, BzzVector &m, BzzMatrix &omega)
 {
 		int N = x.Size();
 		int NCGas = omega.Columns();
@@ -313,7 +313,7 @@ void ReadFromBackupFile(OpenSMOKE_ReactingGas &mix, const string nameFile, BzzVe
 			
 			for (int j=1;j<=NCGas;j++)
 			{
-				string dummy;
+				std::string dummy;
 				fBackup >> dummy;
 				namesBackup[j] = dummy;
 			}

@@ -21,7 +21,7 @@
 #include "OpenSMOKE.hpp"
 #include "basic/OpenSMOKE_LogFile.h"
 
-void OpenSMOKE_LogFile::ErrorMessage(const string message)
+void OpenSMOKE_LogFile::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LogFile"		<< endl;
@@ -32,7 +32,7 @@ void OpenSMOKE_LogFile::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_LogFile::WarningMessage(const string message)
+void OpenSMOKE_LogFile::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:   OpenSMOKE_LogFile"		<< endl;
@@ -47,14 +47,14 @@ OpenSMOKE_LogFile::OpenSMOKE_LogFile()
 	file_name = "[not assigned]";
 } 
 
-void OpenSMOKE_LogFile::Setup(const string _file_name)
+void OpenSMOKE_LogFile::Setup(const std::string _file_name)
 {
 	file_name = _file_name;
 	openOutputFileAndControl(fLog, file_name);
 	OpenSMOKE_logo(fLog, "OpenSMOKE Library");
 }
 
-void OpenSMOKE_LogFile::WriteLogMessage(const string log_message)
+void OpenSMOKE_LogFile::WriteLogMessage(const std::string log_message)
 {
 	fLog << log_message << endl;
 	fLog << endl;

@@ -22,7 +22,7 @@
 #include "idealreactors/OpenSMOKE_UD_Profile.h"
 #include "basic/OpenSMOKE_Conversions.h"
 
-void OpenSMOKE_UD_Profile::ErrorMessage(const string message)
+void OpenSMOKE_UD_Profile::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  User Defined Profile"		<< endl;
@@ -39,12 +39,12 @@ OpenSMOKE_UD_Profile::OpenSMOKE_UD_Profile()
 	iLinear			= false;
 }
 
-void OpenSMOKE_UD_Profile::SetName(const string name)
+void OpenSMOKE_UD_Profile::SetName(const std::string name)
 {
 	name_object	= name;							// Object Name
 }
 
-bool OpenSMOKE_UD_Profile::CheckForComment(const string read_word)
+bool OpenSMOKE_UD_Profile::CheckForComment(const std::string read_word)
 {
     if(read_word.at(0) == '/')
         if(read_word.at(1) == '/')
@@ -52,23 +52,23 @@ bool OpenSMOKE_UD_Profile::CheckForComment(const string read_word)
     return false;
 }
 
-bool OpenSMOKE_UD_Profile::CheckForKeyWord(const string read_word)
+bool OpenSMOKE_UD_Profile::CheckForKeyWord(const std::string read_word)
 {
     if(read_word.at(0) == '#')
 		return true;
     return false;
 }
 
-void OpenSMOKE_UD_Profile::AssignFromFile(const string fileName, const string name)
+void OpenSMOKE_UD_Profile::AssignFromFile(const std::string fileName, const std::string name)
 {
     const int SIZE = 300;
     char comment[SIZE];
 
-	string kind_x;
-    string kind_y;
-    string unit_x;
-    string unit_y;
-    string dummy;
+	std::string kind_x;
+    std::string kind_y;
+    std::string unit_x;
+    std::string unit_y;
+    std::string dummy;
 	bool    iGoBack;
 
     ifstream fInput;
@@ -162,7 +162,7 @@ void OpenSMOKE_UD_Profile::AssignFromFile(const string fileName, const string na
 	}
 }
 
-void OpenSMOKE_UD_Profile::Setup(const string units_x, const string units_y, const double x0, const double x1, const double y0, const double y1)
+void OpenSMOKE_UD_Profile::Setup(const std::string units_x, const std::string units_y, const double x0, const double x1, const double y0, const double y1)
 {
 	iLinear = true;
 	timeSupport = true;
@@ -178,13 +178,13 @@ void OpenSMOKE_UD_Profile::Setup(const string units_x, const string units_y, con
 
 
 /*
-void OpenSMOKE_UD_Profile::AssignFromFile(const string fileName, const string name)
+void OpenSMOKE_UD_Profile::AssignFromFile(const std::string fileName, const std::string name)
 {
-    string kind_x;
-    string kind_y;
-    string unit_x;
-    string unit_y;
-    string dummy;
+    std::string kind_x;
+    std::string kind_y;
+    std::string unit_x;
+    std::string unit_y;
+    std::string dummy;
     BzzVectorDouble x;
     BzzVectorDouble y;
 

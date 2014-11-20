@@ -23,17 +23,17 @@
 const int SparkOn  = 1;
 const int SparkOff = 0;
 
-void OpenSMOKE_Flame1D_ScheduleClass::readOperations(const string fileName)
+void OpenSMOKE_Flame1D_ScheduleClass::readOperations(const std::string fileName)
 {
 	const int MAXOPERATIONS=100;
 	int    i, k;
 	int    nCycle, onCycle, startCycle, endCycle;
-	string stringa;
-	string stringaOptional;
+	std::string stringa;
+	std::string stringaOptional;
 	char   charIndex;
 	double t;
-	species = new string[MAXOPERATIONS];
-	string option;
+	species = new std::string[MAXOPERATIONS];
+	std::string option;
 
 	ChangeDimensions(0, &iOperation);
 	ChangeDimensions(0, &iOptionA);
@@ -314,7 +314,7 @@ void OpenSMOKE_Flame1D_ScheduleClass::readOperations(const string fileName)
 }
 
 
-void OpenSMOKE_Flame1D_ScheduleClass::ErrorMessage(const string message)
+void OpenSMOKE_Flame1D_ScheduleClass::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flame1D_ScheduleClass"	<< endl;
@@ -325,7 +325,7 @@ void OpenSMOKE_Flame1D_ScheduleClass::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_Flame1D_ScheduleClass::WarningMessage(const string message)
+void OpenSMOKE_Flame1D_ScheduleClass::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flame1D_ScheduleClass"	<< endl;
@@ -340,7 +340,7 @@ OpenSMOKE_Flame1D_ScheduleClass::OpenSMOKE_Flame1D_ScheduleClass()
 	name_object = "[undefined name]";
 }
 
-void OpenSMOKE_Flame1D_ScheduleClass::SetName(const string name)
+void OpenSMOKE_Flame1D_ScheduleClass::SetName(const std::string name)
 {
 	name_object = name;
 }

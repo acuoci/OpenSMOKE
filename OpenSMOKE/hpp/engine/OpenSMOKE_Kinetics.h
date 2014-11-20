@@ -48,7 +48,7 @@ friend void CorrectionCoefficient_DeltaDirac( OpenSMOKE_ReactingGas *mix, const 
 public:
 
 	OpenSMOKE_Kinetics();
-	void SetName(const string name);
+	void SetName(const std::string name);
 	OpenSMOKE_ReactingGas *reactionRates;
 
 	void StoichiometricMatrix(BzzMatrix &gamma);
@@ -176,9 +176,9 @@ public:
 public:
 
 	// Lettura delle informazioni dello schema cinetico da file
-	void readFromFileBinary(const string fileKin);
+	void readFromFileBinary(const std::string fileKin);
 	void readStoichiometricFileBinary(BzzLoad &fInput);
-	BzzMatrix constructGamma(const string fileSt);
+	BzzMatrix constructGamma(const std::string fileSt);
 
 	// Calcolo dei contributi alle velocita di reazione
 	void ComputeDirectAndInverse(BzzVector& c , BzzVector &rDirC, BzzVector &rInvC);
@@ -207,7 +207,7 @@ public:
 
 	void GetDerivativesC(double T, double cTot, BzzMatrix *dRC, BzzVector &cRes, BzzVector &R);
 	
-	void GiveMeIndexOfSpeciesInEachReaction(const string fileName, BzzVectorIntArray &indices);
+	void GiveMeIndexOfSpeciesInEachReaction(const std::string fileName, BzzVectorIntArray &indices);
 
 	int IsAReversibleReaction(const int index);
 	int IsAFallOffReaction(const int index);
@@ -230,9 +230,9 @@ public:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
 private:
 	static const int NUM_MAX;

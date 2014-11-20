@@ -124,7 +124,7 @@ BzzVector FITASTAR(7, .1106910525E+01, -.7065517161E-02, -.1671975393E-01,  .118
 BzzVector FITBSTAR(7, .1199673577E+01, -.1140928763E+00, -.2147636665E-02,  .2512965407E-01, -.3030372973E-02, -.1445009039E-02, .2492954809E-03);
 BzzVector FITCSTAR(7, .8386993788E+00,  .4748325276E-01, .3250097527E-01, -.1625859588E-01, -.2260153363E-02,  .1844922811E-02, -.2115417788E-03);
  
-void OpenSMOKE_PreProcessorIdealGas::ErrorMessage(const string message)
+void OpenSMOKE_PreProcessorIdealGas::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_PreProcessorIdealGas"	<< endl;
@@ -135,7 +135,7 @@ void OpenSMOKE_PreProcessorIdealGas::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_PreProcessorIdealGas::WarningMessage(const string message)
+void OpenSMOKE_PreProcessorIdealGas::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:	  OpenSMOKE_PreProcessorIdealGas"	<< endl;
@@ -169,19 +169,19 @@ void OpenSMOKE_PreProcessorIdealGas::SetMaximumTemperature(const double tmax)
 		ErrorMessage("Please check your maximum temperature!");
 }
 
-void OpenSMOKE_PreProcessorIdealGas::SetName(const string name)
+void OpenSMOKE_PreProcessorIdealGas::SetName(const std::string name)
 {
 	name_object = name;
 }
 
-void OpenSMOKE_PreProcessorIdealGas::SetAuthorName(const string name)
+void OpenSMOKE_PreProcessorIdealGas::SetAuthorName(const std::string name)
 {
 	name_author = name;
 }
 
 void OpenSMOKE_PreProcessorIdealGas::WriteHeaderFile(BzzSave &binaryFile, BzzSave &asciiFile)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 
 	dummy = "V101116";
@@ -211,7 +211,7 @@ void OpenSMOKE_PreProcessorIdealGas::WriteHeaderFile(BzzSave &binaryFile, BzzSav
 	asciiFile  << TMAX;
 }
 
-void OpenSMOKE_PreProcessorIdealGas::Setup(const string fileNames, const string fileTransport, const string fileThermo, const string fileElements, BzzSave &binaryFile, BzzSave &asciiFile)
+void OpenSMOKE_PreProcessorIdealGas::Setup(const std::string fileNames, const std::string fileTransport, const std::string fileThermo, const std::string fileElements, BzzSave &binaryFile, BzzSave &asciiFile)
 {
 	WriteHeaderFile(binaryFile, asciiFile);
 	
@@ -235,7 +235,7 @@ void OpenSMOKE_PreProcessorIdealGas::Setup(const string fileNames, const string 
 	InitializeTransportProperties();
 }
 
-void OpenSMOKE_PreProcessorIdealGas::SetupTransportSensitivity(const string pathName, const string fileNames, const string fileTransport, const string fileThermo, const string fileElements, BzzSave &binaryFile, BzzSave &asciiFile,const double eps)
+void OpenSMOKE_PreProcessorIdealGas::SetupTransportSensitivity(const std::string pathName, const std::string fileNames, const std::string fileTransport, const std::string fileThermo, const std::string fileElements, BzzSave &binaryFile, BzzSave &asciiFile,const double eps)
 {
 	WriteHeaderFile(binaryFile, asciiFile);
 	
@@ -1165,7 +1165,7 @@ void OpenSMOKE_PreProcessorIdealGas::SpeciesConductivity(double T)
 // ************************************************************************************	//
 // ************************************************************************************ //
 
-void OpenSMOKE_PreProcessorIdealGas::readNames(const string fileName, BzzSave &binaryFile, BzzSave &asciiFile)
+void OpenSMOKE_PreProcessorIdealGas::readNames(const std::string fileName, BzzSave &binaryFile, BzzSave &asciiFile)
 {
 	cout << "Reading names ... ";
 
@@ -1192,7 +1192,7 @@ void OpenSMOKE_PreProcessorIdealGas::readNames(const string fileName, BzzSave &b
 
 
 	// Dimensionamento dell'array con i nomi
-	names = new string[NC + 1];
+	names = new std::string[NC + 1];
 
 	// Lettura dei nomi delle specie
 	ifstream inputFileControl;
@@ -1235,7 +1235,7 @@ void OpenSMOKE_PreProcessorIdealGas::WriteSpeciesNames(BzzSave &binaryFile, BzzS
 }
 
 
-void OpenSMOKE_PreProcessorIdealGas::readThermodynamics(const string fileName, BzzSave &binaryFile, BzzSave &asciiFile)
+void OpenSMOKE_PreProcessorIdealGas::readThermodynamics(const std::string fileName, BzzSave &binaryFile, BzzSave &asciiFile)
 {
 	cout << "Reading thermodynamics ... " << endl;
 
@@ -1358,7 +1358,7 @@ void OpenSMOKE_PreProcessorIdealGas::WriteThermodynamicData(BzzSave &binaryFile,
 	asciiFile << T3;
 }
 
-void OpenSMOKE_PreProcessorIdealGas::readTransportProperties(const string fileName)
+void OpenSMOKE_PreProcessorIdealGas::readTransportProperties(const std::string fileName)
 {
 	cout << "Reading transport properties ... " << endl;
 
@@ -2161,7 +2161,7 @@ int OpenSMOKE_PreProcessorIdealGas::recognize_species(char* name)
 		if (names[i] == name)
 			return i;
 	
-	string dummy = name;
+	std::string dummy = name;
 	ErrorMessage("This species is not included in the kinetic scheme: " + dummy);
 	return -1;
 }
@@ -2175,7 +2175,7 @@ int OpenSMOKE_PreProcessorIdealGas::recognize_species_without_exit(char* name)
 	return 0;
 }
 
-int OpenSMOKE_PreProcessorIdealGas::recognize_species(string name)
+int OpenSMOKE_PreProcessorIdealGas::recognize_species(std::string name)
 {
 	for(int i=1;i<=NC;i++)
 		if (!name.compare(names[i]))
@@ -2196,12 +2196,12 @@ int	OpenSMOKE_PreProcessorIdealGas::NumberOfElements()
 	return elements_matrix.Rows();
 }
 
-void OpenSMOKE_PreProcessorIdealGas::ReadElements(const string fileElements, BzzSave &binaryFile, BzzSave &asciiFile)
+void OpenSMOKE_PreProcessorIdealGas::ReadElements(const std::string fileElements, BzzSave &binaryFile, BzzSave &asciiFile)
 {
 	char comment[Constants::COMMENT_SIZE];
 	double dummy_double;
-	string dummy;
-	string name;
+	std::string dummy;
+	std::string name;
 	vector<string> elements_list;
 	vector<double> m_elements_list;
 	ifstream fInput;
@@ -2253,7 +2253,7 @@ void OpenSMOKE_PreProcessorIdealGas::ReadElements(const string fileElements, Bzz
 				bool iEnd = false;
 				while(iEnd == false)
 				{
-					string name_element;
+					std::string name_element;
 					double number_element;
 
 					fInput >> name_element;
@@ -2341,7 +2341,7 @@ void OpenSMOKE_PreProcessorIdealGas::SpeciesCv(void)
 }
 
 
-void OpenSMOKE_PreProcessorIdealGas::SetupFromCHEMKINInterpreter(OpenSMOKE_CHEMKINInterpreter *chemkin, const string file_name)
+void OpenSMOKE_PreProcessorIdealGas::SetupFromCHEMKINInterpreter(OpenSMOKE_CHEMKINInterpreter *chemkin, const std::string file_name)
 {
 	int k;
 
@@ -2354,7 +2354,7 @@ void OpenSMOKE_PreProcessorIdealGas::SetupFromCHEMKINInterpreter(OpenSMOKE_CHEMK
 	building_date = chemkin->building_date;
 
 	// Species names
-	names = new string[NC+1];
+	names = new std::string[NC+1];
 	for(k=1;k<=NC;k++)
 		names[k] = chemkin->kinetics.species_list[k];
 
@@ -2407,7 +2407,7 @@ void OpenSMOKE_PreProcessorIdealGas::SetupFromCHEMKINInterpreter(OpenSMOKE_CHEMK
 	BzzSave binaryFile;
 	BzzSave asciiFile;
 	binaryFile('*', file_name);
-	string file_name_ascii = file_name + ".ascii";
+	std::string file_name_ascii = file_name + ".ascii";
 	asciiFile(file_name_ascii);
 	WriteHeaderFile(binaryFile, asciiFile);
 	WriteSpeciesNames(binaryFile, asciiFile);

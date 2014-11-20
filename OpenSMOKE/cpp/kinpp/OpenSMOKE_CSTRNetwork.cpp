@@ -60,7 +60,7 @@ int OpenSMOKE_CSTRNetwork::countInScope = 0;
 
 #define DEBUG_LOADING 0
 
-void OpenSMOKE_CSTRNetwork::ErrorMessage(const string message)
+void OpenSMOKE_CSTRNetwork::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CSTRNetwork"	<< endl;
@@ -71,7 +71,7 @@ void OpenSMOKE_CSTRNetwork::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_CSTRNetwork::WarningMessage(const string message)
+void OpenSMOKE_CSTRNetwork::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CSTRNetwork"	<< endl;
@@ -187,14 +187,14 @@ void OpenSMOKE_CSTRNetwork::SetDeltaTFluctuationsMaxLocal(const double _Fluctuat
 	Fluctuations_CcMax		= _Fluctuations_CcMax;
 }
 
-void OpenSMOKE_CSTRNetwork::SetFluctuationsList(const string speciesFluctuations)
+void OpenSMOKE_CSTRNetwork::SetFluctuationsList(const std::string speciesFluctuations)
 {
 	ifstream fInput;
 	openInputFileAndControl(fInput, speciesFluctuations);
 
 	for(;;)
 	{
-		string dummy;
+		std::string dummy;
 		fInput >> dummy;
 		if (dummy == "#END")
 			break;
@@ -243,13 +243,13 @@ void OpenSMOKE_CSTRNetwork::AssignKineticScheme(OpenSMOKE_ReactingGas &_Reaction
 	numComponents	= Reactions->NumberOfSpecies();
 }
 
-void OpenSMOKE_CSTRNetwork::CheckInputfile(ifstream &file, string fileName)
+void OpenSMOKE_CSTRNetwork::CheckInputfile(ifstream &file, std::string fileName)
 {
 	if (file.fail())
 		ErrorMessage("It was impossible to correctly read some values in the file " + fileName);
 }
 
-void OpenSMOKE_CSTRNetwork::reading_the_network_file(string fileNetwork, int &countInput)
+void OpenSMOKE_CSTRNetwork::reading_the_network_file(std::string fileNetwork, int &countInput)
 {
 	int			i,j,k;
 	ifstream	fInput;
@@ -544,7 +544,7 @@ void OpenSMOKE_CSTRNetwork::reading_the_network_file(string fileNetwork, int &co
 
 }
 
-void OpenSMOKE_CSTRNetwork::read_tolerances(const string fileTolerances, int numCSTRReactors, double cicloCluster)
+void OpenSMOKE_CSTRNetwork::read_tolerances(const std::string fileTolerances, int numCSTRReactors, double cicloCluster)
 {
 	int i;
 
@@ -567,7 +567,7 @@ void OpenSMOKE_CSTRNetwork::read_tolerances(const string fileTolerances, int num
 		dt[i] = cicloCluster * dtBase(i);
 }
 
-void OpenSMOKE_CSTRNetwork::read_first_guess(string first)
+void OpenSMOKE_CSTRNetwork::read_first_guess(std::string first)
 {
 	BzzLoad load(first);
 	load >> numComponents >> iSpec >> massFractionsInReactors;
@@ -784,7 +784,7 @@ void OpenSMOKE_CSTRNetwork::calculate_initial_massfractions_in_clusters(int numC
 	cout << "Number of reactors: " << numCluster << endl;
 }
 
-void OpenSMOKE_CSTRNetwork::calculate_clustering(string fileNetwork, int cicloDiffusion, int numCluster,
+void OpenSMOKE_CSTRNetwork::calculate_clustering(std::string fileNetwork, int cicloDiffusion, int numCluster,
 											BzzVectorInt &cstrClusterSize,
 											BzzMatrix &omegaReduced_Cluster,
 											BzzMatrix &omegaReduced_CFD)
@@ -1528,7 +1528,7 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 	countTuttoTotal	 = 0;
 }
 
-void OpenSMOKE_CSTRNetwork::operator()(const string fileNetwork, const string first, const string fileTolerances,
+void OpenSMOKE_CSTRNetwork::operator()(const std::string fileNetwork, const std::string first, const std::string fileTolerances,
 								  const double cicloCluster, const int cicloDiffusion, const int iaia, 
 								  const int relaxation, const int _iAnalyticalJacobian, const SymbolicKinetics _analyticalJacobian, const int _iKindOfCorrection)
 {
@@ -1585,11 +1585,11 @@ void OpenSMOKE_CSTRNetwork::start_solving_network(const int from_cfd_results)
 	//	if (originalNumCSTRReactors == numCSTRReactors && from_cfd_results == 0)
 	//	{
 	//		cout << "Energy Analysis on the original network ... " << endl;
-	//		string fileNameEnthalpy				= folderCase + "Temp/Enthalpy/OriginalEnthalpy.map";
-	//		string fileNameDeltaEnthalpy		= folderCase + "Temp/Enthalpy/OriginalDeltaEnthalpy.map";
-	//		string fileNameDifferenceEnthalpy	= folderCase + "Temp/Enthalpy/OriginalDifferenceEnthalpy.map";
-	//		string fileNameInletEnthalpy		= folderCase + "Temp/Enthalpy/OriginalInletEnthalpy.map";
-	//		string fileNameErrorEnthalpy		= folderCase + "Temp/Enthalpy/OriginalErrorEnthalpy.map";
+	//		std::string fileNameEnthalpy				= folderCase + "Temp/Enthalpy/OriginalEnthalpy.map";
+	//		std::string fileNameDeltaEnthalpy		= folderCase + "Temp/Enthalpy/OriginalDeltaEnthalpy.map";
+	//		std::string fileNameDifferenceEnthalpy	= folderCase + "Temp/Enthalpy/OriginalDifferenceEnthalpy.map";
+	//		std::string fileNameInletEnthalpy		= folderCase + "Temp/Enthalpy/OriginalInletEnthalpy.map";
+	//		std::string fileNameErrorEnthalpy		= folderCase + "Temp/Enthalpy/OriginalErrorEnthalpy.map";
 	//		EnthalpyAnalysis(	fileNameEnthalpy, fileNameDeltaEnthalpy, fileNameDifferenceEnthalpy, 
 	//							fileNameInletEnthalpy, fileNameErrorEnthalpy);
 	//		cout << "DONE!" << endl;
@@ -1597,11 +1597,11 @@ void OpenSMOKE_CSTRNetwork::start_solving_network(const int from_cfd_results)
 	//	else
 		{
 			cout << "Energy Analysis on the reactor network ... " << endl;
-			string fileNameEnthalpy				= "Output/enthalpy/Enthalpy.map";
-			string fileNameInletEnthalpy		= "Output/enthalpy/InletEnthalpy.map";
-			string fileNameDeltaEnthalpy		= "Output/enthalpy/DeltaEnthalpy.map";
-			string fileNameDifferenceEnthalpy	= "Output/enthalpy/DifferenceEnthalpy.map";
-			string fileNameErrorEnthalpy		= "Output/enthalpy/ErrorEnthalpy.map";
+			std::string fileNameEnthalpy				= "Output/enthalpy/Enthalpy.map";
+			std::string fileNameInletEnthalpy		= "Output/enthalpy/InletEnthalpy.map";
+			std::string fileNameDeltaEnthalpy		= "Output/enthalpy/DeltaEnthalpy.map";
+			std::string fileNameDifferenceEnthalpy	= "Output/enthalpy/DifferenceEnthalpy.map";
+			std::string fileNameErrorEnthalpy		= "Output/enthalpy/ErrorEnthalpy.map";
 			EnthalpyAnalysis(	fileNameEnthalpy, fileNameDeltaEnthalpy, fileNameDifferenceEnthalpy, 
 								fileNameInletEnthalpy, fileNameErrorEnthalpy);
 			cout << "DONE!" << endl;
@@ -2147,7 +2147,7 @@ int OpenSMOKE_CSTRNetwork::GetFirst(void)
 			{
 				ode.SetInitialConditions(x0, 0., &cstrMono, &dRC);
 				ode.SetAnalyticalJacobian();									// TODO
-				ode.SetTollAbs(odeTolAbs);
+				ode.SetTolAbs(odeTolAbs);
 				ode.StopIntegrationBeforeRecalcuatingJacobian(odeMaxJacobian);	// TODO
 				ode.StopIntegrationWhenSumAbsY1IsLessThan(maxOdeSum);
 				BzzVector yMin(numComponents);
@@ -2249,7 +2249,7 @@ int OpenSMOKE_CSTRNetwork::GetFirst(void)
 			{
 				ode.SetInitialConditions(x0, 0., &cstrMono, &dRC);
 				ode.SetAnalyticalJacobian();						// TODO
-				ode.SetTollAbs(odeTolAbs); 
+				ode.SetTolAbs(odeTolAbs); 
 				ode.StopIntegrationBeforeRecalcuatingJacobian(odeMaxJacobian);	// TODO
 				ode.StopIntegrationWhenSumAbsY1IsLessThan(maxOdeSum);
 				BzzVector yMin(numComponents);
@@ -2578,7 +2578,7 @@ void OpenSMOKE_CSTRNetwork::GetSecond(void)
 		BzzMatrixSparseLockedByRows Q = Ld;
 	//	obj(this);
 
-        string fileSparseMatrix = "Temp/A.tmp";
+        std::string fileSparseMatrix = "Temp/A.tmp";
         char fileSM[200];
         strcpy(fileSM, fileSparseMatrix.c_str());
 		BzzOdeSparseStiffObject o(initialValues, tStart, &obj, blockDimensions, &Q, fileSM);
@@ -2586,7 +2586,7 @@ void OpenSMOKE_CSTRNetwork::GetSecond(void)
 		yMax = 1.;
 		o.SetMinimumConstraints(yMin);
 		o.SetMaximumConstraints(yMax);
-		o.SetTollAbs(1.e-15);
+		o.SetTolAbs(1.e-15);
 		o.StopIntegrationBeforeRecalcuatingJacobian(30);
 		o.StopIntegrationWhenSumAbsY1IsLessThan(stopODE);
 		massFractionsInReactorsSolution_Vector = o(tEnd);
@@ -2723,7 +2723,7 @@ int OpenSMOKE_CSTRNetwork::GetThird(void)
 	// dei blocchi della diagonale (che in questo caso e' presa dal file) e gli elementi che
 	// si trovano fuori
 	ExtraDiagonalTermsMatrix = Ld;
-	string fileJacobian = "Temp/MemoJacobian.tmp";
+	std::string fileJacobian = "Temp/MemoJacobian.tmp";
 	char fileJ[200];
 	strcpy(fileJ, fileJacobian.c_str());
 	GlobalMatrix(fileJ, &ExtraDiagonalTermsMatrix);
@@ -3040,11 +3040,11 @@ void OpenSMOKE_CSTRNetwork::OutputPrint(int cicle)
 
 	if (iEnergyAnalysis == true)
 	{
-		string fileNameEnthalpy				= "Output/enthalpy/Enthalpy.map";
-		string fileNameInletEnthalpy		= "Output/enthalpy/InletEnthalpy.map";
-		string fileNameDeltaEnthalpy		= "Output/enthalpy/DeltaEnthalpy.map";
-		string fileNameDifferenceEnthalpy	= "Output/enthalpy/DifferenceEnthalpy.map";
-		string fileNameErrorEnthalpy		= "Output/enthalpy/ErrorEnthalpy.map";
+		std::string fileNameEnthalpy				= "Output/enthalpy/Enthalpy.map";
+		std::string fileNameInletEnthalpy		= "Output/enthalpy/InletEnthalpy.map";
+		std::string fileNameDeltaEnthalpy		= "Output/enthalpy/DeltaEnthalpy.map";
+		std::string fileNameDifferenceEnthalpy	= "Output/enthalpy/DifferenceEnthalpy.map";
+		std::string fileNameErrorEnthalpy		= "Output/enthalpy/ErrorEnthalpy.map";
 
 		EnthalpyAnalysis(	fileNameEnthalpy, fileNameDeltaEnthalpy, fileNameDifferenceEnthalpy, 
 							fileNameInletEnthalpy, fileNameErrorEnthalpy);
@@ -3079,9 +3079,9 @@ void OpenSMOKE_CSTRNetwork::OutputPrint(int cicle)
 	OutputFinalFile("FinalSummary.out");
 }
 
-void OpenSMOKE_CSTRNetwork::EnthalpyAnalysis(const string fileNameEnthalpy, const string fileNameDeltaEnthalpy,
-										const string fileNameDifferenceEnthalpy, const string fileNameInletEnthalpy,
-										const string fileNameErrorEnthalpy
+void OpenSMOKE_CSTRNetwork::EnthalpyAnalysis(const std::string fileNameEnthalpy, const std::string fileNameDeltaEnthalpy,
+										const std::string fileNameDifferenceEnthalpy, const std::string fileNameInletEnthalpy,
+										const std::string fileNameErrorEnthalpy
 										)
 {
 	int i, k;
@@ -3288,7 +3288,7 @@ void OpenSMOKE_CSTRNetwork::Maps()
 	*/
 }
 
-void OpenSMOKE_CSTRNetwork::OutputFinalFile(string fileName)
+void OpenSMOKE_CSTRNetwork::OutputFinalFile(std::string fileName)
 {
 	int i,k;
 	double flowrate;
@@ -3888,10 +3888,10 @@ void OpenSMOKE_CSTRNetwork::MemoTemperatureFunctions(const int kind)
 	#endif
 }
 
-void OpenSMOKE_CSTRNetwork::WriteCorrectionMap(const int kReaction, BzzMatrix &matrix_correction_coefficient, const string fileName)
+void OpenSMOKE_CSTRNetwork::WriteCorrectionMap(const int kReaction, BzzMatrix &matrix_correction_coefficient, const std::string fileName)
 {
 	ofstream fOutputCorrection;
-	string name = "Temp/" + fileName;
+	std::string name = "Temp/" + fileName;
 	openOutputFileAndControl(fOutputCorrection, name);
 	fOutputCorrection.setf(ios::scientific);
 
@@ -4062,7 +4062,7 @@ void  OpenSMOKE_CSTRNetwork::GetDiagonalFactoredMatricesForLinearizedSistem
 	::BzzPrint("\nSeconds for CSTR: %e",BzzGetCpuTime() - start);
 }
 
-void  OpenSMOKE_CSTRNetwork::GetDiagonalMatricesForLinearizedSistem(string file,BzzVector &mfV)
+void  OpenSMOKE_CSTRNetwork::GetDiagonalMatricesForLinearizedSistem(std::string file,BzzVector &mfV)
 {
 	int kr;
 	BzzLoad load;
@@ -4119,7 +4119,7 @@ void OpenSMOKE_CSTRNetwork::SwapMassFractionsInReactors(BzzMatrix *massFractions
 	ReorderByRows(massFractionsInReactors,cstrSequence);
 }
 
-void OpenSMOKE_CSTRNetwork::Save(string file) // formatted
+void OpenSMOKE_CSTRNetwork::Save(std::string file) // formatted
 {
 	BzzSave save(file);
 	save << numCSTRReactors;
@@ -4128,7 +4128,7 @@ void OpenSMOKE_CSTRNetwork::Save(string file) // formatted
 	save.End();
 }
 
-void OpenSMOKE_CSTRNetwork::Save(char, string file)// binary
+void OpenSMOKE_CSTRNetwork::Save(char, std::string file)// binary
 {
 	BzzSave save('*',file);
 	save << numCSTRReactors;
@@ -4137,7 +4137,7 @@ void OpenSMOKE_CSTRNetwork::Save(char, string file)// binary
 	save.End();
 }
 
-void OpenSMOKE_CSTRNetwork::SaveTemperature(string file) // formatted
+void OpenSMOKE_CSTRNetwork::SaveTemperature(std::string file) // formatted
 {
 	BzzSave save(file);
 	save << temperature;
@@ -4145,7 +4145,7 @@ void OpenSMOKE_CSTRNetwork::SaveTemperature(string file) // formatted
 	save.End();
 }
 
-void OpenSMOKE_CSTRNetwork::SaveTemperature(char, string file)// binary
+void OpenSMOKE_CSTRNetwork::SaveTemperature(char, std::string file)// binary
 {
 	BzzSave save('*',file);
 	save << temperature;
@@ -4620,7 +4620,7 @@ void OpenSMOKE_CSTRNetwork::ConnectionMatrix()
 }
 
 void OpenSMOKE_CSTRNetwork::WarningLargeCorrectionCoefficient(const int k, const double T, const double g, const int iReaction, 
-							const string stringReaction, const double EsuR, const double n, double &CoeffCorr)
+							const std::string stringReaction, const double EsuR, const double n, double &CoeffCorr)
 {
 	double csi = (T-Tmin)/DeltaT[k];
 	double Tk = KineticTemperature(CoeffCorr, T, EsuR, n);
@@ -4657,7 +4657,7 @@ void OpenSMOKE_CSTRNetwork::WarningLargeCorrectionCoefficient(const int k, const
 }
 
 void OpenSMOKE_CSTRNetwork::WarningSmallCorrectionCoefficient(const int k, const double T, const double g, const int iReaction, 
-							const string stringReaction, const double EsuR, const double n, double &CoeffCorr)
+							const std::string stringReaction, const double EsuR, const double n, double &CoeffCorr)
 {
 	double csi = (T-Tmin)/DeltaT[k];
 	fWarning << "Negative correction coefficient..." << endl;
@@ -4723,7 +4723,7 @@ void OpenSMOKE_CSTRNetwork::GetFourth(const double tEnd)
 		BzzMatrixSparseLockedByRows Q = Ld;
 		//obj(this);
 
-        string fileSparseMatrix = "Temp/A.tmp";
+        std::string fileSparseMatrix = "Temp/A.tmp";
         char fileSM[200];
         strcpy(fileSM, fileSparseMatrix.c_str());
 		BzzOdeSparseStiffObject o(initialValues, tStart, &obj, blockDimensions, &Q, fileSM);
@@ -4733,8 +4733,8 @@ void OpenSMOKE_CSTRNetwork::GetFourth(const double tEnd)
 		o.SetMaximumConstraints(yMax);
 		
 		// Default values: (A) 1e-15      (R) 100*MachEps()
-		//o.SetTollRel(1.e2*MachEpsFloat());
-		o.SetTollAbs(1.e-15);
+		//o.SetTolRel(1.e2*MachEpsFloat());
+		o.SetTolAbs(1.e-15);
 
 		o.StopIntegrationBeforeRecalcuatingJacobian(30);
 		o.StopIntegrationWhenSumAbsY1IsLessThan(stopODE);

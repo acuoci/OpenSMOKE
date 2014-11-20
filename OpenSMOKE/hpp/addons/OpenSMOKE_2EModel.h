@@ -107,7 +107,7 @@ private:
 	double cSoot;
 	double NCarbons;
 
-	void MessageError(string message);
+	void MessageError(std::string message);
 
 public:
 
@@ -115,7 +115,7 @@ public:
 	void assign_mixture(OpenSMOKE_ReactingGas &_mix);
 	void update(double T_K, double P_atm, double rho, double DiffC, BzzVector &_x, double phiN, double phiM);
 
-	void setupFromFile(string fileName);
+	void setupFromFile(std::string fileName);
 	void formation_rates();
 	void initial_values(double rho);
 

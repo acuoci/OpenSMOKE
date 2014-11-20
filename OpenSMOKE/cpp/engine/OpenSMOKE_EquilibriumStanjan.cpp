@@ -30,7 +30,7 @@ OpenSMOKE_EquilibriumStanjan *ptEquilibrium;
 
 const double OpenSMOKE_EquilibriumStanjan::threshold_element	=	1.e-16;
 
-void OpenSMOKE_EquilibriumStanjan::ErrorMessage(const string message)
+void OpenSMOKE_EquilibriumStanjan::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_EquilibriumStanjan"	<< endl;
@@ -41,7 +41,7 @@ void OpenSMOKE_EquilibriumStanjan::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_EquilibriumStanjan::WarningMessageStrong(const string message)
+void OpenSMOKE_EquilibriumStanjan::WarningMessageStrong(const std::string message)
 {
     cout << endl;
     cout << "Class:	  OpenSMOKE_EquilibriumStanjan"	<< endl;
@@ -52,7 +52,7 @@ void OpenSMOKE_EquilibriumStanjan::WarningMessageStrong(const string message)
 	cout << endl;
 }
 
-void OpenSMOKE_EquilibriumStanjan::WarningMessageSoft(const string message)
+void OpenSMOKE_EquilibriumStanjan::WarningMessageSoft(const std::string message)
 {
     cout << endl;
     cout << "Class:	  OpenSMOKE_EquilibriumStanjan"	<< endl;
@@ -83,7 +83,7 @@ void OpenSMOKE_EquilibriumStanjan::Reset()
 	iAlreadySolved = false;
 }
 
-void OpenSMOKE_EquilibriumStanjan::SetName(string name)
+void OpenSMOKE_EquilibriumStanjan::SetName(std::string name)
 {
 	name_object = name;
 }
@@ -501,7 +501,7 @@ void OpenSMOKE_EquilibriumStanjan::Mode1(double &Ntot, BzzVector &lambda, BzzVec
 
 	if (iVerboseFile == true)
 	{
-		string status;
+		std::string status;
 		if (flag == CONVERGED)	status = "CONVERGED";
 		if (flag == GO_ON)		status = "GO_ON";
 		if (flag == FAILED)		status = "FAILED";

@@ -33,7 +33,7 @@ class OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D
 public:
 
 	OpenSMOKE_SensitivityAnalysis_Diffusion_Flame1D();
-	void SetName(const string name);
+	void SetName(const std::string name);
 	void Initialize(const int kind_of_flame, OpenSMOKE_ReactingGas *_mix, BzzVectorInt &_indices, const int _N);
 
 	void PrintOnFile(BzzVector &x, BzzVector &T, BzzVector &H, BzzMatrix &omega, 
@@ -45,10 +45,10 @@ public:
 	
 private:
 
-	string name_object;
-	string reacting_system;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	std::string reacting_system;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
 private:
 

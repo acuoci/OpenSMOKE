@@ -21,7 +21,7 @@
 #include "OpenSMOKE.hpp"
 #include "basic/OpenSMOKE_Grid1D.h"
 
-void OpenSMOKE_Grid1D::ErrorMessage(const string message)
+void OpenSMOKE_Grid1D::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Grid1D"		<< endl;
@@ -32,7 +32,7 @@ void OpenSMOKE_Grid1D::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_Grid1D::WarningMessage(const string message)
+void OpenSMOKE_Grid1D::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Grid1D"		<< endl;
@@ -48,7 +48,7 @@ OpenSMOKE_Grid1D::OpenSMOKE_Grid1D()
 	iSpherical = false;
 }
 
-void OpenSMOKE_Grid1D::SetName(const string name)
+void OpenSMOKE_Grid1D::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -265,10 +265,10 @@ void OpenSMOKE_Grid1D::Construct(const int NP, const double LL, const double xce
 }
 
 // 4. Construct grid from file
-void OpenSMOKE_Grid1D::Construct(const string fileName)
+void OpenSMOKE_Grid1D::Construct(const std::string fileName)
 {
 	BzzVector xVector;
-	string dummy, units;
+	std::string dummy, units;
 
 	ifstream inputFile;
 	openInputFileAndControl(inputFile, fileName);
@@ -482,7 +482,7 @@ void OpenSMOKE_Grid1D::Refine(const int j)
 	Build();
 }
 
-void OpenSMOKE_Grid1D::RecoverFromBackUp(const string fileName)
+void OpenSMOKE_Grid1D::RecoverFromBackUp(const std::string fileName)
 {
 	int dummy;
 

@@ -34,14 +34,14 @@ class OpenSMOKE_ReactingSurface
 {
 public:
 
-	void ReadFromBinaryFile(const string fileName);
+	void ReadFromBinaryFile(const std::string fileName);
 
 	inline int NumberMaterials()   { return numberMaterials_; }
 	inline int NumberSiteSpecies() { return numberSiteSpecies_; }
 	inline int NumberBulkSpecies() { return numberBulkSpecies_; }
 
-	inline string NameSiteSpecies(const int i)	{ return namesSiteSpecies_[i]; }
-	inline string NameBulkSpecies(const int i)	{ return namesBulkSpecies_[i]; }
+	inline std::string NameSiteSpecies(const int i)	{ return namesSiteSpecies_[i]; }
+	inline std::string NameBulkSpecies(const int i)	{ return namesBulkSpecies_[i]; }
 
 	inline OpenSMOKE_SurfaceMaterial*			material()		 { return material_; };
 	inline OpenSMOKE_SurfaceThermodynamics*		thermodynamics() { return thermodynamics_; };
@@ -70,9 +70,9 @@ private:
 
 	version_surface_file iVersion;
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif	// OPENSMOKE_REACTINGSURFACE_H

@@ -42,9 +42,9 @@ class OpenSMOKE_CSTRNetwork : public BzzBaseClass
 
 private:
 
-	string firstGuessFile;
-	string networkFile;
-	string name_object;
+	std::string firstGuessFile;
+	std::string networkFile;
+	std::string name_object;
 
 	// CONSTANTS
 	// ----------------------------------------------------------------------------
@@ -182,12 +182,12 @@ private:
 
 	// INITIALIZATION ALGORITHM
 	// ----------------------------------------------------------------------------
-	void read_first_guess(string first);
-	void reading_the_network_file(string fileNetwork, int &countInput);
+	void read_first_guess(std::string first);
+	void reading_the_network_file(std::string fileNetwork, int &countInput);
 	void build_cluster(double cicloCluster, int numCSTRReactors, int countInput, int &numCluster, BzzVectorInt &cstrClusterSize);
 	void calculate_initial_massfractions_in_clusters(int numCluster, BzzMatrix &omegaReduced, BzzMatrix &aux);
-	void calculate_clustering(string fileNetwork, int cicloDiffusion, int numCluster, BzzVectorInt &cstrClusterSize, BzzMatrix &auxMass, BzzMatrix &aux);
-	void read_tolerances(const string fileTolerances, int numCSTRReactors, double cicloCluster);
+	void calculate_clustering(std::string fileNetwork, int cicloDiffusion, int numCluster, BzzVectorInt &cstrClusterSize, BzzMatrix &auxMass, BzzMatrix &aux);
+	void read_tolerances(const std::string fileTolerances, int numCSTRReactors, double cicloCluster);
 	void complete_clustering(int countInput, int cicloDiffusion, int relaxation, int iaia, BzzMatrix &auxMass);
 
 	void MemoTemperatureFunctions(const int kind);
@@ -208,7 +208,7 @@ private:
 													BzzMatrix &matrix_correction_k1,
 													BzzMatrix &matrix_correction_uKeq, BzzMatrix &matrix_correction_k2);
 
-	void WriteCorrectionMap(const int kReaction, BzzMatrix &matrix_correction_coefficient, const string fileName);
+	void WriteCorrectionMap(const int kReaction, BzzMatrix &matrix_correction_coefficient, const std::string fileName);
 
 
 	// TOLERANCES FOR CLUSTERING ALGORITHM
@@ -260,7 +260,7 @@ private:
 	// OTHER FUNCTIONS
 	// ----------------------------------------------------------------------------
 	void GetDiagonalFactoredMatricesForLinearizedSistem(BzzMatrix &massFractionsInReactors);
-	void GetDiagonalMatricesForLinearizedSistem(string file, BzzVector &mfV);
+	void GetDiagonalMatricesForLinearizedSistem(std::string file, BzzVector &mfV);
 	void SwapMassFractionsInReactors(BzzMatrix *massFractionsInReactors);
 
 
@@ -276,16 +276,16 @@ private:
 	BzzVectorInt	*FromClusterToCluster_Index;
 	BzzVector *FromClusterToCluster_MassFlowRate;
 	BzzVector *FromClusterToCluster_DiffusionFlowRate;
-	void EnthalpyAnalysis(	const string fileNameEnthalpy,				const string fileNameDeltaEnthalpy,
-							const string fileNameDifferenceEnthalpy,	const string fileNameInletEnthalpy,
-							const string fileNameErrorEnthalpy);
+	void EnthalpyAnalysis(	const std::string fileNameEnthalpy,				const std::string fileNameDeltaEnthalpy,
+							const std::string fileNameDifferenceEnthalpy,	const std::string fileNameInletEnthalpy,
+							const std::string fileNameErrorEnthalpy);
 
 	void ConnectionMatrix();
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
-	void CheckInputfile(ifstream &file, string fileName);
+	void CheckInputfile(ifstream &file, std::string fileName);
 
 public:
 
@@ -297,7 +297,7 @@ public:
 
 	// OPERATORS
 	// ----------------------------------------------------------------------------
-	void operator()(const string fileNetwork,	const string first, const string fileTolerances,
+	void operator()(const std::string fileNetwork,	const std::string first, const std::string fileTolerances,
 					const double cicloCluster,		const int cicloDiffusion,	const int iaia,				const int relaxation, 
 					const int _iAnalyticalJacobian, const SymbolicKinetics _analyticalJacobian, const int _iKindOfCorrection);
 
@@ -305,10 +305,10 @@ public:
 
 	// SAVE NETWORK
 	// ----------------------------------------------------------------------------
-	void Save(string file);					// formatted
-	void Save(char, string file);		    // binary
-	void SaveTemperature(string file);		// formatted
-	void SaveTemperature(char, string file);	// binary
+	void Save(std::string file);					// formatted
+	void Save(char, std::string file);		    // binary
+	void SaveTemperature(std::string file);		// formatted
+	void SaveTemperature(char, std::string file);	// binary
 
 	// UTILITIES
 	// ----------------------------------------------------------------------------
@@ -336,7 +336,7 @@ public:
 	void	SetSolution(BzzMatrix &omega);
 	void	CleanTemperatureVariance(const int kind);
 
-	void SetFluctuationsList(const string speciesFluctuations);
+	void SetFluctuationsList(const std::string speciesFluctuations);
 	vector<string> list_of_fluctuating_species;
 	BzzVectorInt switchReactions;
 
@@ -350,7 +350,7 @@ public:
 	// ----------------------------------------------------------------------------
 	virtual void ObjectBzzPrint(void);
 	void OutputPrint(int ciclo);
-	void OutputFinalFile(string fileName);
+	void OutputFinalFile(std::string fileName);
 	void GiveMeOutput(ofstream &fOutput, const int index);
 	void GiveMeOutputLabel(ofstream &fOutput);
 
@@ -375,10 +375,10 @@ private:
 	BzzVector Tk_60000;
 
 	void WarningLargeCorrectionCoefficient( const int k, const double T, const double g, const int iReaction, 
-											const string stringReaction, const double EsuR, const double n, double &CoeffCorr);
+											const std::string stringReaction, const double EsuR, const double n, double &CoeffCorr);
 
 	void WarningSmallCorrectionCoefficient( const int k, const double T, const double g, const int iReaction, 
-											const string stringReaction, const double EsuR, const double n, double &CoeffCorr);
+											const std::string stringReaction, const double EsuR, const double n, double &CoeffCorr);
 
 public:
 

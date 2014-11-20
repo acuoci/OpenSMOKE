@@ -34,7 +34,7 @@ const double	OpenSMOKE_Kinetics::S2						= S1 * S1;
 const double	OpenSMOKE_Kinetics::S3						= S2 * S1;	
 const double	OpenSMOKE_Kinetics::SSQ						= sqrt(S1);	
 
-void OpenSMOKE_Kinetics::ErrorMessage(const string message)
+void OpenSMOKE_Kinetics::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Kinetics"		<< endl;
@@ -45,7 +45,7 @@ void OpenSMOKE_Kinetics::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_Kinetics::WarningMessage(const string message)
+void OpenSMOKE_Kinetics::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:	  OpenSMOKE_Kinetics"		<< endl;
@@ -59,14 +59,14 @@ OpenSMOKE_Kinetics::OpenSMOKE_Kinetics()
 	name_object	= "[Name not assigned]";
 }
 
-void OpenSMOKE_Kinetics::SetName(const string name)
+void OpenSMOKE_Kinetics::SetName(const std::string name)
 {
 	name_object = name;
 }
 
 
 // Costruzione della matrice GAMMA (NC x NR)
-BzzMatrix OpenSMOKE_Kinetics::constructGamma(const string fileSt)
+BzzMatrix OpenSMOKE_Kinetics::constructGamma(const std::string fileSt)
 {
 	int i, j;
 	double val;
@@ -914,7 +914,7 @@ void OpenSMOKE_Kinetics::GetDerivativesC(double T, double cTot, BzzMatrix *dRC, 
 
 }
 
-void OpenSMOKE_Kinetics::readFromFileBinary(const string fileKin)
+void OpenSMOKE_Kinetics::readFromFileBinary(const std::string fileKin)
 {
 	int j;
 
@@ -1400,7 +1400,7 @@ void OpenSMOKE_Kinetics::readStoichiometricFileBinary(BzzLoad &inputFile)
 	inputFile >> sumNuij;
 }
 
-void OpenSMOKE_Kinetics::GiveMeIndexOfSpeciesInEachReaction(const string fileName, BzzVectorIntArray &indices)
+void OpenSMOKE_Kinetics::GiveMeIndexOfSpeciesInEachReaction(const std::string fileName, BzzVectorIntArray &indices)
 {
 	int i,j,k;
 

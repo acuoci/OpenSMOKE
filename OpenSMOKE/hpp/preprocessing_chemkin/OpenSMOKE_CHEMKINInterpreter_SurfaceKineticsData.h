@@ -46,7 +46,7 @@ public:
 	OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData *reaction;
 	OpenSMOKE_CHEMKINInterpreter_SurfaceReactionData *reaction_reverserate;
 	void Setup(ofstream *_fLog, OpenSMOKE_WarningFile *fWarning);
-	void RecognizeSpecies(const string name_species, int &index, char &phase);
+	void RecognizeSpecies(const std::string name_species, int &index, char &phase);
 	void FinalChecks();
 	void Statistics();
 	void SummaryOnFile(ofstream &fOutput);
@@ -66,9 +66,9 @@ private:
 
 private:
 	
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
-	string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
+	std::string name_object;
 };
 
 #endif // !defined(OpenSMOKE_CHEMKINInterpreter_SurfaceKineticsData_H)

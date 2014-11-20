@@ -27,7 +27,7 @@
 #include "addons/OpenSMOKE_PostProcessor_Flame1D.h"
 #include "addons/OpenSMOKE_PostProcessor_SensitivityAnalysis_Flame1D.h"
 
-void OpenSMOKE_PostProcessor_SensitivityAnalysis_Flame1D::ErrorMessage(const string message)
+void OpenSMOKE_PostProcessor_SensitivityAnalysis_Flame1D::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_PostProcessor_SensitivityAnalysis_Flame1D"	<< endl;
@@ -38,7 +38,7 @@ void OpenSMOKE_PostProcessor_SensitivityAnalysis_Flame1D::ErrorMessage(const str
     exit(-1);
 }
 
-void OpenSMOKE_PostProcessor_SensitivityAnalysis_Flame1D::WarningMessage(const string message)
+void OpenSMOKE_PostProcessor_SensitivityAnalysis_Flame1D::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_PostProcessor_SensitivityAnalysis_Flame1D"	<< endl;
@@ -60,12 +60,12 @@ void OpenSMOKE_PostProcessor_SensitivityAnalysis_Flame1D::ReadFromBinaryFile(Bzz
 	char name_reaction[Constants::REACTION_NAME_SIZE];
 
 	fLoad.fileLoad.read((char*) dummy, sizeof(dummy));
-	string version = dummy;
+	std::string version = dummy;
 	if (version != "V20100417")
 		ErrorMessage("This version post processing file is not supported: " + version);
 	cout << "Version: " << version << endl;
 
-	string tag = NextInBinaryFile(fLoad);
+	std::string tag = NextInBinaryFile(fLoad);
 		 if (tag == "OPPOSED")		kind = OPPOSED;
 	else if (tag == "FLAMESPEED")	kind = FLAMESPEED;
 	else if (tag == "PREMIXED")		kind = PREMIXED;
@@ -99,7 +99,7 @@ void OpenSMOKE_PostProcessor_SensitivityAnalysis_Flame1D::ReadFromBinaryFile(Bzz
 	if (index == 0)
 	{
 		CheckInBinaryFile(fLoad, "FALLOFF");
-		reactions = new string[NP + 1];
+		reactions = new std::string[NP + 1];
 		for(j=1;j<=NR;j++)		// Conventional (0)
 			reactions[j] = post_processor->reactions[j];
 		for(j=NR+1;j<=NP;j++)	// Fall-Off (inf)
@@ -111,8 +111,8 @@ void OpenSMOKE_PostProcessor_SensitivityAnalysis_Flame1D::ReadFromBinaryFile(Bzz
 	// Diffusivity
 	else if (index == 1)
 	{
-		nExtracted = min(20,NP);
-		reactions = new string[NP + 1];
+		nExtracted = Min(20,NP);
+		reactions = new std::string[NP + 1];
 		int NPtransport = NP/NC;
 		for(int kk=1;kk<=NPtransport;kk++)
 		{

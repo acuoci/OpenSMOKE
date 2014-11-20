@@ -63,7 +63,7 @@ public:
 	double powerSiteDensity;
 	double powerOccupancySites;
 
-	string reaction_string;
+	std::string reaction_string;
 
 	bool iConvenctionalReaction;
 
@@ -88,9 +88,9 @@ public:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif	// OPENSMOKE_SURFACEREACTION_H

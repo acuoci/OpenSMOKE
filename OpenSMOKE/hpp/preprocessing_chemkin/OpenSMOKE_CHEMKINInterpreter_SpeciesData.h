@@ -32,7 +32,7 @@ public:
 
 	OpenSMOKE_CHEMKINInterpreter_SpeciesData();
 
-	bool Parse_Species_Name(const string species_name);
+	bool Parse_Species_Name(const std::string species_name);
 	void Setup(ofstream *_fLog, OpenSMOKE_WarningFile *_fWarning);
 	void Summary();
 
@@ -42,9 +42,9 @@ public:
 
 private:
 	
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
-	string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
+	std::string name_object;
 };
 
 #endif // !defined(OPENSMOKE_CHEMKININTERPRETER_SPECIESDATA_H)

@@ -25,7 +25,7 @@
 #include "preprocessing_chemkin/OpenSMOKE_CHEMKINInterpreter_ElementsData.h"
 #include <iomanip>
 
-void OpenSMOKE_CHEMKINInterpreter_ThermoData::ErrorMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_ThermoData::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_ThermoData"	<< endl;
@@ -36,7 +36,7 @@ void OpenSMOKE_CHEMKINInterpreter_ThermoData::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_CHEMKINInterpreter_ThermoData::WarningMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_ThermoData::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_ThermoData"	<< endl;
@@ -56,7 +56,7 @@ OpenSMOKE_CHEMKINInterpreter_ThermoData::~OpenSMOKE_CHEMKINInterpreter_ThermoDat
 
 }
 
-void OpenSMOKE_CHEMKINInterpreter_ThermoData::ReadThermoData(const string file_name, ofstream *_fLog)
+void OpenSMOKE_CHEMKINInterpreter_ThermoData::ReadThermoData(const std::string file_name, ofstream *_fLog)
 {
 	const int SIZE = 400;
 	char comment[SIZE];
@@ -228,7 +228,7 @@ void OpenSMOKE_CHEMKINInterpreter_ThermoData::GiveMeMolecularWeights(BzzVectorIn
 	}
 }
 
-void OpenSMOKE_CHEMKINInterpreter_ThermoData::PrintThermoFile(const string file_name, BzzVectorInt &indices)
+void OpenSMOKE_CHEMKINInterpreter_ThermoData::PrintThermoFile(const std::string file_name, BzzVectorInt &indices)
 {
 	ofstream fOutput;
 	openOutputFileAndControl(fOutput, file_name);
@@ -778,7 +778,7 @@ void OpenSMOKE_CHEMKINInterpreter_ThermoData::ProcessElementData(BzzVectorInt &s
 	}
 }
 
-double OpenSMOKE_CHEMKINInterpreter_ThermoData::ReducedMolecularWeight(const string name1, const string name2)
+double OpenSMOKE_CHEMKINInterpreter_ThermoData::ReducedMolecularWeight(const std::string name1, const std::string name2)
 {
 	vector<string> names_list;
 	BzzVectorInt indices;

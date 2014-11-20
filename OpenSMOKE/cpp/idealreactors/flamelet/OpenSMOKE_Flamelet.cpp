@@ -34,7 +34,7 @@ void ODE_Print(BzzVector &x, double t)
 	ptFlamelet->MyODE_Print(x, t);
 }
 
-void OpenSMOKE_Flamelet::ErrorMessage(const string message)
+void OpenSMOKE_Flamelet::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flamelet"	<< endl;
@@ -45,7 +45,7 @@ void OpenSMOKE_Flamelet::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_Flamelet::WarningMessage(const string message)
+void OpenSMOKE_Flamelet::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flamelet"	<< endl;
@@ -60,7 +60,7 @@ OpenSMOKE_Flamelet::OpenSMOKE_Flamelet()
 	name_object = "[Name not assigned]";
 }
 
-void OpenSMOKE_Flamelet::SetName(const string name)
+void OpenSMOKE_Flamelet::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -860,8 +860,8 @@ void OpenSMOKE_Flamelet::Solve(const double tEnd)
 		o.SetMinimumConstraints(xMin);
 		o.SetMaximumConstraints(xMax);
 		
-		o.SetTollRel(data->relTolerances*MachEps());
-		o.SetTollAbs(data->absTolerances);
+		o.SetTolRel(data->relTolerances*MachEps());
+		o.SetTolAbs(data->absTolerances);
 
 		o.StepPrint(ODE_Print);
 		Video_label();
@@ -888,8 +888,8 @@ void OpenSMOKE_Flamelet::Solve(const double tEnd)
 		o.SetMinimumConstraints(xMin);
 		o.SetMaximumConstraints(xMax);
 
-		o.SetTollRel(data->relTolerances*MachEps());
-		o.SetTollAbs(data->absTolerances);
+		o.SetTolRel(data->relTolerances*MachEps());
+		o.SetTolAbs(data->absTolerances);
 
 		o.StepPrint(ODE_Print);
 		Video_label();
@@ -917,8 +917,8 @@ void OpenSMOKE_Flamelet::Solve(const double tEnd)
 		o.SetMinimumConstraints(xMin);
 		o.SetMaximumConstraints(xMax);
 		
-		o.SetTollRel(data->relTolerances*MachEps());
-		o.SetTollAbs(data->absTolerances);
+		o.SetTolRel(data->relTolerances*MachEps());
+		o.SetTolAbs(data->absTolerances);
 
 
 		o.StepPrint(ODE_Print);
@@ -943,8 +943,8 @@ void OpenSMOKE_Flamelet::Solve(const double tEnd)
 		o.SetMinimumConstraints(xMin);
 		o.SetMaximumConstraints(xMax);
 
-		o.SetTollRel(data->relTolerances*MachEps());
-		o.SetTollAbs(data->absTolerances);
+		o.SetTolRel(data->relTolerances*MachEps());
+		o.SetTolAbs(data->absTolerances);
 
 		o.StepPrint(ODE_Print);
 	
@@ -1038,7 +1038,7 @@ void OpenSMOKE_Flamelet::GnuPlotODE_label(const int N)
 {
 	int j;
 
-	string fileName;
+	std::string fileName;
 	char numberOfPoints[4];
 
 	my_itoa(N, numberOfPoints, 10);
@@ -1060,11 +1060,11 @@ void OpenSMOKE_Flamelet::GnuPlotODE_label(const int N)
 	fGnuPlotODE << endl << endl;
 }
 
-void OpenSMOKE_Flamelet::GnuPlot_label(const string name, const int N)
+void OpenSMOKE_Flamelet::GnuPlot_label(const std::string name, const int N)
 {
 	int j;
 
-	string fileName;
+	std::string fileName;
 
 	if (N>0)
 	{
@@ -1628,7 +1628,7 @@ void OpenSMOKE_Flamelet::AddPoints(BzzVectorInt &listPoints)
 			omega_elemental_profile[i][j] = data->omega_elemental_C[j] + (data->omega_elemental_O[j]-data->omega_elemental_C[j])*grid.x[i];
 }
 
-void OpenSMOKE_Flamelet::NewPoints(const string KIND, const char index)
+void OpenSMOKE_Flamelet::NewPoints(const std::string KIND, const char index)
 {
 	BzzVector phi;
 	BzzVectorInt pointList;
@@ -1655,13 +1655,13 @@ void OpenSMOKE_Flamelet::NewPoints(const string KIND, const char index)
 	cout << " Total number of points: " << Np				<< endl;
 }
 
-void OpenSMOKE_Flamelet::RecoverFromBackUp(const string fileName)
+void OpenSMOKE_Flamelet::RecoverFromBackUp(const std::string fileName)
 {
 	int i, j;
 
-	string stringa;
-	string firstSpecies;
-	string *nameSpecies;
+	std::string stringa;
+	std::string firstSpecies;
+	std::string *nameSpecies;
 	int numberOfSpecies;
 	int MaxNumberOfSpecies = 500;
 	int nFound;
@@ -1675,7 +1675,7 @@ void OpenSMOKE_Flamelet::RecoverFromBackUp(const string fileName)
 	LinearInterpolation dummylinear;
 
 
-	nameSpecies = new string[MaxNumberOfSpecies+1]; 
+	nameSpecies = new std::string[MaxNumberOfSpecies+1]; 
 	
 	ifstream fInput;
 	openInputFileAndControl(fInput, fileName);
@@ -1956,7 +1956,7 @@ void OpenSMOKE_Flamelet::ReRun()
 
 void OpenSMOKE_Flamelet::FoldersAndFilesManager()
 {
-	string MSDOScommand;
+	std::string MSDOScommand;
 
 	// 1. Output Folder name
 	nameOutputFolder = "Flamelet_";	
@@ -2005,7 +2005,7 @@ void OpenSMOKE_Flamelet::FoldersAndFilesManager()
 	nameFileBackupInputData = nameFolderBackupData + "/BackUp.inp";
 }
 
-void OpenSMOKE_Flamelet::FoldersAndFilesManager(const string backupFolder)
+void OpenSMOKE_Flamelet::FoldersAndFilesManager(const std::string backupFolder)
 {
 	// 1. Output Folder name
 	nameOutputFolder = backupFolder;

@@ -28,9 +28,9 @@ class OpenSMOKE_SurfaceSite
 public:
 
 	OpenSMOKE_SurfaceSite();
-	void Setup(OpenSMOKE_SurfaceMaterial* material, const string name_object, const double density);
+	void Setup(OpenSMOKE_SurfaceMaterial* material, const std::string name_object, const double density);
 
-	inline string name()	{ return name_object; }
+	inline std::string name()	{ return name_object; }
 	inline double density() { return density_; }		// [kmol/m2]
 
 private:
@@ -40,9 +40,9 @@ private:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif	// OPENSMOKE_SURFACESITE_H

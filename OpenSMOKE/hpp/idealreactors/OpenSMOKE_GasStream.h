@@ -30,7 +30,7 @@ class OpenSMOKE_GasStream
 private:
 
 	// Name
-	string name_object;
+	std::string name_object;
 
 	// Control variables
 	bool assignedKineticScheme;
@@ -58,8 +58,8 @@ private:
 								const vector<string> oxidizer_names, BzzVector &moles_oxidizer);
 
 	// Error and warning messages
-	void ErrorMessage(string message);
-	void WarningMessage(string message);
+	void ErrorMessage(std::string message);
+	void WarningMessage(std::string message);
 
 	static const double EPSILON;
 	static const double _1_PLUS_EPSILON;
@@ -104,12 +104,12 @@ public:
 
 	// Assignements (compulsory)
 	void AssignKineticScheme(OpenSMOKE_ReactingGas &_mix);
-	void AssignTemperature(const double _value, const string _units);
-	void AssignDensity(const double _value, const string _units);
-	void AssignPressure(const double _value, const string _units);
-	void AssignMassFlowRate(const double _value, const string _units);
-	void AssignMoleFlowRate(const double _value, const string _units);
-	void AssignVolumetricFlowRate(const double _value, const string _units);
+	void AssignTemperature(const double _value, const std::string _units);
+	void AssignDensity(const double _value, const std::string _units);
+	void AssignPressure(const double _value, const std::string _units);
+	void AssignMassFlowRate(const double _value, const std::string _units);
+	void AssignMoleFlowRate(const double _value, const std::string _units);
+	void AssignVolumetricFlowRate(const double _value, const std::string _units);
 	void AssignMoleFractions(BzzVector &_values);
 	void AssignMassFractions(BzzVector &_values);
 	void AssignMoleFractions(const vector<string> _names, const vector<double> _values);
@@ -135,18 +135,18 @@ public:
 	void lock();
 
 	// Assignements (non-compulsory)
-	void SetVelocity(const double _value, const string _units);
-	void SetName(const string name);
+	void SetVelocity(const double _value, const std::string _units);
+	void SetName(const std::string name);
 
 	// Define from file
-	void DefineFromFile(const string inputFile);
+	void DefineFromFile(const std::string inputFile);
 	
 	// Change stream parameters
-	void ChangeTemperature(const double _value, const string _units);
-	void ChangePressure(const double _value, const string _units);
-	void ChangeMassFlowRate(const double _value, const string _units);
-	void ChangeMoleFlowRate(const double _value, const string _units);
-	void ChangeVolumetricFlowRate(const double _value, const string _units);
+	void ChangeTemperature(const double _value, const std::string _units);
+	void ChangePressure(const double _value, const std::string _units);
+	void ChangeMassFlowRate(const double _value, const std::string _units);
+	void ChangeMoleFlowRate(const double _value, const std::string _units);
+	void ChangeVolumetricFlowRate(const double _value, const std::string _units);
 	void ChangeMassFractions(BzzVector &_values);
 	void ChangeMoleFractions(BzzVector &_values);	
 

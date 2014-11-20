@@ -40,8 +40,8 @@ public:
 
 	virtual ~OpenSMOKE_CHEMKINInterpreter_ReactionData();
 
-	string reaction_string_clean;
-	string reaction_string_complete;
+	std::string reaction_string_clean;
+	std::string reaction_string_complete;
 
 	double A;
 	double Beta;
@@ -132,7 +132,7 @@ public:
 	void PrintOnFile(ofstream &fOutput);
 	void PrintOnBinaryFile(BzzSave &outputFile, OpenSMOKE_CHEMKINInterpreter_ThermoData &thermo, OpenSMOKE_CHEMKINInterpreter_TransportData &transport);
 	void SummaryOnFile(ofstream &fOutput);
-	void WriteWarningMessageOnFile(const string message);
+	void WriteWarningMessageOnFile(const std::string message);
 
 
 
@@ -187,13 +187,13 @@ public:
 	bool IsThirdBodyReaction();
 	bool IsLandauTellerReaction();
 
-	string thirdbodysingle;
+	std::string thirdbodysingle;
 
 private:
 	
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
-	string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
+	std::string name_object;
 };
 
 #endif // !defined(OPENSMOKE_CHEMKININTERPRETER_REACTIONDATA_H)

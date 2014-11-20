@@ -23,7 +23,7 @@
 #include "idealreactors/flame1d/OpenSMOKE_Flame1D.h"
 #include "idealreactors/flame1d/OpenSMOKE_Flame1D_FlameSpeedManager.h" 
 
-void OpenSMOKE_Flame1D_FlameSpeedManager::ErrorMessage(const string message)
+void OpenSMOKE_Flame1D_FlameSpeedManager::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flame1D_FlameSpeedManager"	<< endl;
@@ -34,7 +34,7 @@ void OpenSMOKE_Flame1D_FlameSpeedManager::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_Flame1D_FlameSpeedManager::WarningMessage(const string message)
+void OpenSMOKE_Flame1D_FlameSpeedManager::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flame1D_FlameSpeedManager"	<< endl;
@@ -54,7 +54,7 @@ OpenSMOKE_Flame1D_FlameSpeedManager::OpenSMOKE_Flame1D_FlameSpeedManager()
 	iMasses = false;
 }
 
-void OpenSMOKE_Flame1D_FlameSpeedManager::SetName(const string name)
+void OpenSMOKE_Flame1D_FlameSpeedManager::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -64,7 +64,7 @@ void OpenSMOKE_Flame1D_FlameSpeedManager::SetupFromFile(OpenSMOKE_Flame1D *_flam
 	flame = _flame;
 	data  = _data;
 
-	string dummy;
+	std::string dummy;
 
 
 	ifstream fInput;
@@ -260,7 +260,7 @@ void OpenSMOKE_Flame1D_FlameSpeedManager::Run()
 
 		stringstream number;
 		number << tag_number;
-		string nameFileSolutionComplete = flame->nameFolderSteadyData + "/Solution_"; + "Phi_" + number.str() + ".out";
+		std::string nameFileSolutionComplete = flame->nameFolderSteadyData + "/Solution_"; + "Phi_" + number.str() + ".out";
 		flame->printOnFile(nameFileSolutionComplete);
 
 		fFlameSpeed << tag_number					<< "\t" 
@@ -305,7 +305,7 @@ void OpenSMOKE_Flame1D_FlameSpeedManager::PrintComposition(ofstream &fOut, const
 {
 	int j;
 
-	string tag_string;
+	std::string tag_string;
 	if (iEquivalenceRatios == true)	tag_string = " Equivalence ratio: ";
 	else							tag_string = " Flame Index: ";
 
@@ -333,9 +333,9 @@ void OpenSMOKE_Flame1D_FlameSpeedManager::PrintComposition(ofstream &fOut, const
 void OpenSMOKE_Flame1D_FlameSpeedManager::Print(const double tag_number)
 {
 	stringstream phi;
-	string fileName_BackUp;
-	string fileName_BackUpInputData;
-	string fileNameOutput;
+	std::string fileName_BackUp;
+	std::string fileName_BackUpInputData;
+	std::string fileNameOutput;
 			
 	if (iEquivalenceRatios == true)
 	{

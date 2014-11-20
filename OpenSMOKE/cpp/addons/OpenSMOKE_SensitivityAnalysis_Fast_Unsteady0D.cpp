@@ -26,7 +26,7 @@
 #include "engine/OpenSMOKE_ReactingGas.h"
 #include "addons/OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D.h"
 
-void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::ErrorMessage(const string message)
+void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D"	<< endl;
@@ -37,7 +37,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::ErrorMessage(const string me
     exit(-1);
 }
 
-void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::WarningMessage(const string message)
+void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D"	<< endl;
@@ -47,7 +47,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::WarningMessage(const string 
     getchar();
 }
 
-void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::SetName(const string name)
+void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -62,7 +62,7 @@ OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::OpenSMOKE_SensitivityAnalysis_Fas
 	additional_variables		= 0;			// index of additional variables
 }
 
-void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::Initialize(const kind_of_sensitivity_analysis kind_, const kind_of_integration integration_, OpenSMOKE_ReactingGas *_mix, BzzVectorInt &_indices, const string path_name)
+void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::Initialize(const kind_of_sensitivity_analysis kind_, const kind_of_integration integration_, OpenSMOKE_ReactingGas *_mix, BzzVectorInt &_indices, const std::string path_name)
 {
 	int i,k;
 
@@ -157,7 +157,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::Initialize(const kind_of_sen
 
 	// Summary
 	VideoSummary();
-	string message = "mkdir " + path_name;
+	std::string message = "mkdir " + path_name;
     system(message.c_str());
 	PrepareOutputFile(path_name + "\\Sensitivity.log");
 	fBinary('*', path_name + "\\Sensitivity.bin");
@@ -306,7 +306,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::VideoSummary()
 }
 
 	
-void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::PrepareOutputFile(const string file_name)
+void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::PrepareOutputFile(const std::string file_name)
 {
 	openOutputFileAndControl(fOutput, file_name);
 	fOutput.setf(ios::scientific);
@@ -320,7 +320,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::PrepareOutputFile(const stri
 		{
 			stringstream number_k;		number_k << k;
 			stringstream number_count;	number_count << count++;
-			string label = "S_T_"+ number_k.str() + "(" + number_count.str() + ")";
+			std::string label = "S_T_"+ number_k.str() + "(" + number_count.str() + ")";
 			fOutput << setw(16) << left << label;
 		}
 
@@ -329,7 +329,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::PrepareOutputFile(const stri
 		{
 			stringstream number_k;		number_k << k;
 			stringstream number_count;	number_count << count++;
-			string label = "S_P_"+ number_k.str() + "(" + number_count.str() + ")";
+			std::string label = "S_P_"+ number_k.str() + "(" + number_count.str() + ")";
 			fOutput << setw(16) << left << label;
 		}
 	
@@ -338,7 +338,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::PrepareOutputFile(const stri
 		{
 			stringstream number_k;		number_k << k;
 			stringstream number_count;	number_count << count++;
-			string label = "S_Q_"+ number_k.str() + "(" + number_count.str() + ")";
+			std::string label = "S_Q_"+ number_k.str() + "(" + number_count.str() + ")";
 			fOutput << setw(16) << left << label;
 		}
 
@@ -347,7 +347,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::PrepareOutputFile(const stri
 		{
 			stringstream number_k;		number_k << k;
 			stringstream number_count;	number_count << count++;
-			string label = "S_" + mix->names[_indices_print_species[j]] + "_" + number_k.str() + "(" + number_count.str() + ")";
+			std::string label = "S_" + mix->names[_indices_print_species[j]] + "_" + number_k.str() + "(" + number_count.str() + ")";
 			fOutput << setw(16) << left << label;
 		}
 
@@ -434,7 +434,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::Close()
 
 void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::CloseBinaryFile(BzzSave &fOutput)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 
 	dummy = "END";
@@ -446,7 +446,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::CloseBinaryFile(BzzSave &fOu
 
 void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::SaveOnBinaryFile(BzzSave &fOutput)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 
 	Populate_S_S();
@@ -457,9 +457,9 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::SaveOnBinaryFile(BzzSave &fO
 	fOutput << _S_S;
 }
 
-void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::PrepareBinaryFile(BzzSave &fOutput, const int N, BzzMatrix &S, const string tag)
+void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::PrepareBinaryFile(BzzSave &fOutput, const int N, BzzMatrix &S, const std::string tag)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 	char name_reaction[Constants::REACTION_NAME_SIZE];
 
@@ -556,7 +556,7 @@ void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::Populate_S_S()
 			_S_S[indexPressure-NC+NC_RED][j] = _S[indexPressure][j];
 }
 
-void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::MoveFromFiles(const string nameFileLoadProvisional, const int N, BzzSave &fOutput, const string tag)
+void OpenSMOKE_SensitivityAnalysis_Fast_Unsteady0D::MoveFromFiles(const std::string nameFileLoadProvisional, const int N, BzzSave &fOutput, const std::string tag)
 {	 
 	Close();
 

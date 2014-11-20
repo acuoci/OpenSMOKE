@@ -219,7 +219,7 @@ void OpenSMOKE_QMOM_Module::MessageError(char *message)
 	exit(-1);
 }
 
-void OpenSMOKE_QMOM_Module::readFromFile(const string fileName)
+void OpenSMOKE_QMOM_Module::readFromFile(const std::string fileName)
 {
 	const int SIZE = 200;
 	char comment[SIZE];

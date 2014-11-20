@@ -22,7 +22,7 @@
 #include "droplet/OpenSMOKE_DropletMicrogravity_DataManager.h"
 #include "droplet/OpenSMOKE_DropletMicrogravity.h"
 
-void OpenSMOKE_DropletMicrogravity_DataManager::ErrorMessage(const string message)
+void OpenSMOKE_DropletMicrogravity_DataManager::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_DropletMicrogravity_DataManager"	<< endl;
@@ -33,7 +33,7 @@ void OpenSMOKE_DropletMicrogravity_DataManager::ErrorMessage(const string messag
     exit(-1);
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::WarningMessage(const string message)
+void OpenSMOKE_DropletMicrogravity_DataManager::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_DropletMicrogravity_DataManager"	<< endl;
@@ -116,7 +116,7 @@ OpenSMOKE_DropletMicrogravity_DataManager::OpenSMOKE_DropletMicrogravity_DataMan
 	enhancingFactor = 0;
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::SetName(const string name)
+void OpenSMOKE_DropletMicrogravity_DataManager::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -136,7 +136,7 @@ void OpenSMOKE_DropletMicrogravity_DataManager::Assign(OpenSMOKE_LiquidPropertie
 	liquid_database = _liquid_database;
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::ReadFromFile(const string fileName)
+void OpenSMOKE_DropletMicrogravity_DataManager::ReadFromFile(const std::string fileName)
 {
 	DefineFromFile(fileName);
 
@@ -269,11 +269,11 @@ OpenSMOKE_Dictionary_DropletMicrogravity::OpenSMOKE_Dictionary_DropletMicrogravi
     Lock();
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::DefineFromFile(const string inputFile)
+void OpenSMOKE_DropletMicrogravity_DataManager::DefineFromFile(const std::string inputFile)
 {
     int     int_value;
 	double  double_value;
-    string  string_value;
+    std::string  string_value;
 	char    char_value;
 	vector<string> string_vector;
 	vector<double> double_vector;
@@ -412,26 +412,26 @@ void OpenSMOKE_DropletMicrogravity_DataManager::Lock()
 {
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::SetOutputFolderName(const string _name)
+void OpenSMOKE_DropletMicrogravity_DataManager::SetOutputFolderName(const std::string _name)
 {
 	nameOutputFolder = _name;
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::AssignMode(const string _name)
+void OpenSMOKE_DropletMicrogravity_DataManager::AssignMode(const std::string _name)
 {
 	if (_name == "Steady")			iMode = EIGENVALUE;	
 	else if (_name == "Unsteady")	iMode = UNSTEADY_BATCH;
 	else ErrorMessage ("Wrong mode!");
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::AssignVelocity(const string _name)
+void OpenSMOKE_DropletMicrogravity_DataManager::AssignVelocity(const std::string _name)
 {
 	if (_name == "on")			iVelocity = true;	
 	else if (_name == "off")	iVelocity = false;
 	else ErrorMessage ("Wrong velocity!");
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::AssignLiquidPhase(const string _name)
+void OpenSMOKE_DropletMicrogravity_DataManager::AssignLiquidPhase(const std::string _name)
 {
 	if (_name == "stirred")				iLiquidPhase = LIQUID_DROPLET_PERFECTLY_STIRRED;	
 	else if (_name == "pde-only-T")		iLiquidPhase = LIQUID_DROPLET_PDE_ONLYT;	
@@ -460,24 +460,24 @@ void OpenSMOKE_DropletMicrogravity_DataManager::AssignFuel(const vector<string> 
 	}
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::AssignPressure(const string units, const double value)
+void OpenSMOKE_DropletMicrogravity_DataManager::AssignPressure(const std::string units, const double value)
 {
     P_Pascal = OpenSMOKE_Conversions::conversion_pressure(value, units);
 	P_atm	 = P_Pascal / OpenSMOKE_Conversions::Pa_from_atm;
 	P_bar	 = P_Pascal / OpenSMOKE_Conversions::Pa_from_bar;
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::AssignFlameTemperature(const string units, const double value)
+void OpenSMOKE_DropletMicrogravity_DataManager::AssignFlameTemperature(const std::string units, const double value)
 {
     Tpeak = OpenSMOKE_Conversions::conversion_temperature(value, units);
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::AssignDropletTemperature(const string units, const double value)
+void OpenSMOKE_DropletMicrogravity_DataManager::AssignDropletTemperature(const std::string units, const double value)
 {
     TDroplet0 = OpenSMOKE_Conversions::conversion_temperature(value, units);
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::AssignEnvironmentTemperature(const string units, const double value)
+void OpenSMOKE_DropletMicrogravity_DataManager::AssignEnvironmentTemperature(const std::string units, const double value)
 {
     TEnvironment = OpenSMOKE_Conversions::conversion_temperature(value, units);
 }
@@ -645,7 +645,7 @@ void OpenSMOKE_DropletMicrogravity_DataManager::AssignInterfaceTemperature(const
 	}
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::SetBackup(const string _name)
+void OpenSMOKE_DropletMicrogravity_DataManager::SetBackup(const std::string _name)
 {
 	iBackupFromBinaryFile = true;
 	nameBackupFile = _name;
@@ -685,7 +685,7 @@ void OpenSMOKE_DropletMicrogravity_DataManager::SetReactionRatesOnFile(const vec
 	iAssignedReactionRates = true;
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager::AssignDropletDiameter(const string units, const double value)
+void OpenSMOKE_DropletMicrogravity_DataManager::AssignDropletDiameter(const std::string units, const double value)
 {
     diameterDroplet0 = OpenSMOKE_Conversions::conversion_length(value, units);
 }
@@ -705,7 +705,7 @@ void OpenSMOKE_DropletMicrogravity_DataManager:: SetEnhancingFactor(const double
 	enhancingFactor = double_value;
 }
 
-void OpenSMOKE_DropletMicrogravity_DataManager:: SetIntegrationTime(const string units, const double value)
+void OpenSMOKE_DropletMicrogravity_DataManager:: SetIntegrationTime(const std::string units, const double value)
 {
 	tEnd = OpenSMOKE_Conversions::conversion_time(value, units);
 }

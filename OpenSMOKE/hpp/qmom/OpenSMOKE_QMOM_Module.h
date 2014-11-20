@@ -31,7 +31,7 @@ public:
 
 	// These functions must be called once
 	void setupGasMixture(OpenSMOKE_ReactingGas &mix);
-	void readFromFile(const string fileName);
+	void readFromFile(const std::string fileName);
 	void initialize(int N, int iFractalDimension,
 					int iNucleation, int iGrowth, int iOxidation,
 					int iAggregation, double L0, int iNucleationDistribution,

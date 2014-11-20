@@ -77,35 +77,35 @@ namespace OpenSMOKE_Conversions
     
     const double W_from_kW 		= 1.e3;
 
-    double  conversion_length(const double value, const string unit);
-    double  conversion_u_length(const double value, const string units);
-    double  conversion_area(const double value, const string unit);
-    double  conversion_volume(const double value, const string unit);
-    double  conversion_specificVolume(const double value, const string unit);
-    double  conversion_pressure(const double value, const string unit);
-    double  conversion_time(const double value, const string unit);
-    double  conversion_energy(const double value, const string unit);
-    double  conversion_entropy(const double value, const string unit);
-    double  conversion_specificEnergy(const double value, const string unit);
-    double  conversion_specificEntropy(const double value, const string unit);
-	double  conversion_mass(const double value, const string unit);
-	double  conversion_temperature(const double value, const string unit);
-    double  conversion_frequency(const double value, const string unit);
-    double  conversion_velocity(const double value, const string unit);
-    double  conversion_massFlowRate(const double value, const string unit);
-    double  conversion_moleFlowRate(const double value, const string unit);
-    double  conversion_volumetricFlowRate(const double value, const string unit);
-    double  conversion_heat_flux(const double value, const string unit);
-    double  conversion_heat_exchange_coefficient(const double value, const string unit);
-	double  conversion_dynamic_viscosity(const double value, const string units);
-	double  conversion_density(const double value, const string units);
-	double  conversion_angle(const double value, const string units);
-	double  conversion_angular_velocity(const double value, const string units);
-	double  conversion_area_velocity(const double value, const string units);
-	double  conversion_valve_flow_coefficient(const double value, const string units);
-    double  conversion_specificEnergyMolar(const double value, const string units);
+    double  conversion_length(const double value, const std::string unit);
+    double  conversion_u_length(const double value, const std::string units);
+    double  conversion_area(const double value, const std::string unit);
+    double  conversion_volume(const double value, const std::string unit);
+    double  conversion_specificVolume(const double value, const std::string unit);
+    double  conversion_pressure(const double value, const std::string unit);
+    double  conversion_time(const double value, const std::string unit);
+    double  conversion_energy(const double value, const std::string unit);
+    double  conversion_entropy(const double value, const std::string unit);
+    double  conversion_specificEnergy(const double value, const std::string unit);
+    double  conversion_specificEntropy(const double value, const std::string unit);
+	double  conversion_mass(const double value, const std::string unit);
+	double  conversion_temperature(const double value, const std::string unit);
+    double  conversion_frequency(const double value, const std::string unit);
+    double  conversion_velocity(const double value, const std::string unit);
+    double  conversion_massFlowRate(const double value, const std::string unit);
+    double  conversion_moleFlowRate(const double value, const std::string unit);
+    double  conversion_volumetricFlowRate(const double value, const std::string unit);
+    double  conversion_heat_flux(const double value, const std::string unit);
+    double  conversion_heat_exchange_coefficient(const double value, const std::string unit);
+	double  conversion_dynamic_viscosity(const double value, const std::string units);
+	double  conversion_density(const double value, const std::string units);
+	double  conversion_angle(const double value, const std::string units);
+	double  conversion_angular_velocity(const double value, const std::string units);
+	double  conversion_area_velocity(const double value, const std::string units);
+	double  conversion_valve_flow_coefficient(const double value, const std::string units);
+    double  conversion_specificEnergyMolar(const double value, const std::string units);
 
-	void    ErrorMessage(const string message);
+	void    ErrorMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_CONVERSIONS

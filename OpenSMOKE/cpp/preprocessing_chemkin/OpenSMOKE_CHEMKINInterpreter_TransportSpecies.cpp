@@ -22,7 +22,7 @@
 #include "preprocessing_chemkin/OpenSMOKE_CHEMKINInterpreter_TransportSpecies.h"
 #include <sstream>
 
-void OpenSMOKE_CHEMKINInterpreter_TransportSpecies::ErrorMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_TransportSpecies::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_TransportSpecies"	<< endl;
@@ -34,7 +34,7 @@ void OpenSMOKE_CHEMKINInterpreter_TransportSpecies::ErrorMessage(const string me
     exit(-1);
 }
 
-void OpenSMOKE_CHEMKINInterpreter_TransportSpecies::WarningMessage(const string message)
+void OpenSMOKE_CHEMKINInterpreter_TransportSpecies::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_CHEMKINInterpreter_TransportSpecies"	<< endl;
@@ -52,12 +52,12 @@ OpenSMOKE_CHEMKINInterpreter_TransportSpecies::~OpenSMOKE_CHEMKINInterpreter_Tra
 {
 }
 
-void OpenSMOKE_CHEMKINInterpreter_TransportSpecies::ReadMainData(const string line, const int iLine)
+void OpenSMOKE_CHEMKINInterpreter_TransportSpecies::ReadMainData(const std::string line, const int iLine)
 {
 	vector<string> instructions;
 	instructions.push_back("instructions");
 		
-	string dummy;
+	std::string dummy;
 	stringstream parsed_string(line);
 
 	for(;;)
@@ -90,7 +90,7 @@ void OpenSMOKE_CHEMKINInterpreter_TransportSpecies::Analyze()
 	element_numbers.push_back(0.);
 	for(int i=1;i<=instructions.size()-1;i++)
 	{
-		string name;
+		std::string name;
 		double number;
 		int flag = SeparateNumberFromStringForElements(instructions[i], name, number);
 		if(flag == 1)	element_numbers.push_back(number);

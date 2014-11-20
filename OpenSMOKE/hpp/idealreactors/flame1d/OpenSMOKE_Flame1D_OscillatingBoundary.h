@@ -83,7 +83,7 @@ public:
 
 	void setup(double _USteadyFuel, double _USteadyAir,   double _rhoSteadyFuel, double _rhoSteadyAir, 
 			   double _MWSteadyFuel, double _MWSteadyAir, double _TSteadyFuel, double _TSteadyAir,
-			   double _L, double _P, OpenSMOKE_ReactingGas  *_mix, const string fileName);
+			   double _L, double _P, OpenSMOKE_ReactingGas  *_mix, const std::string fileName);
 
 	void update_boundary_conditions(double _time, double &UC, double &UO, double &TAir,
 									double _rhoC, double _rhoO, double _Tmax,
@@ -102,9 +102,9 @@ private:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif

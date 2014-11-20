@@ -48,15 +48,15 @@ public:
 	OpenSMOKE_LiquidSpecies *liquid_species;
 
 	OpenSMOKE_DropletMicrogravity_DataManager();
-	void SetName(const string name);
+	void SetName(const std::string name);
 
 	void Assign(OpenSMOKE_DropletMicrogravity *_droplet);
 	void Assign(OpenSMOKE_ReactingGas *_mix);
 	void Assign(OpenSMOKE_LiquidProperties_Database *_liquid_database);
-	void ReadFromFile(const string fileName);
-	void SetOutputFolderName(const string _name);
+	void ReadFromFile(const std::string fileName);
+	void SetOutputFolderName(const std::string _name);
 
-	void DefineFromFile(const string inputFile);
+	void DefineFromFile(const std::string inputFile);
 	void Lock();
 
 	// Pressure
@@ -80,7 +80,7 @@ public:
 	BzzVector XDroplet;
 	BzzVector OmegaEnvironment;
 	vector <string> nameOutput;
-	string twoEquation_file_name;
+	std::string twoEquation_file_name;
 
 	// Flame
 	OpenSMOKE_DropletMicrogravity	*droplet;
@@ -156,44 +156,44 @@ public:
 	bool iSpark;
 	vector<double> SparkRatio;
 	bool iBackupFromBinaryFile;
-	string nameBackupFile;
+	std::string nameBackupFile;
 	DropletBoundaryConditions boundaryConditions;
 	DropletInterfaceTemperature dropletInterfaceTemperature;
 	double interfaceTemperature;
 	vector<string> radiationOptions;
-	string nameOutputFolder;
+	std::string nameOutputFolder;
 
 	int NDroplet;
 	double dropletStretchingFactor;
-	string dropletGridMode;
+	std::string dropletGridMode;
 	DropletLiquidPhaseModel iLiquidPhase;
 
 private:
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
-	string name_object;
+	std::string name_object;
 
-	void AssignDropletDiameter(const string units, const double value);
+	void AssignDropletDiameter(const std::string units, const double value);
 	void AssignEnvironmentExtension(const double double_value);
 	void AssignStretchingFactor(const double double_value);
 	void SetEnhancingFactor(const double double_value);
 
-	void AssignMode(const string _name);
-	void AssignVelocity(const string _name);
+	void AssignMode(const std::string _name);
+	void AssignVelocity(const std::string _name);
 	void AssignFuel(const vector<string> _names);
-	void AssignPressure(const string units, const double value);
-	void AssignFlameTemperature(const string units, const double value);
-	void AssignDropletTemperature(const string units, const double value);
-	void AssignEnvironmentTemperature(const string units, const double value);
+	void AssignPressure(const std::string units, const double value);
+	void AssignFlameTemperature(const std::string units, const double value);
+	void AssignDropletTemperature(const std::string units, const double value);
+	void AssignEnvironmentTemperature(const std::string units, const double value);
 	void AssignDropletMassFractions(const vector<string> _names, const vector<double> _values);
 	void AssignDropletMoleFractions(const vector<string> _names, const vector<double> _values);
 	void AssignEnvironmentMassFractions(const vector<string> _names, const vector<double> _values);
 	void AssignEnvironmentMoleFractions(const vector<string> _names, const vector<double> _values);
 	void AssignGridPoints(const int int_value);
 	void AssignInterfaceTemperature(const vector<string> _names);
-	void AssignLiquidPhase(const string _name);
+	void AssignLiquidPhase(const std::string _name);
 
 	void SetVideoSteps(const int int_value);
 	void SetFileSteps(const int int_value);
@@ -215,9 +215,9 @@ private:
 	void SetReactionRatesOnFile(const vector<string> _names);
 	void UnsetSoretEffect();
 	void UnsetReactions();
-	void SetIntegrationTime(const string units, const double value);
+	void SetIntegrationTime(const std::string units, const double value);
 	void SetSpark(const vector<string> _names);
-	void SetBackup(const string _name);
+	void SetBackup(const std::string _name);
 	void SetDropletGrid(const vector<string> string_vector);
 
 

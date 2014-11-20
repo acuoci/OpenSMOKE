@@ -29,7 +29,7 @@ void DAE_Print_Droplet(BzzVector &x, double t)
 	ptDroplet->DAE_myPrint(x, t);
 }
 
-void OpenSMOKE_Droplet::ErrorMessage(const string message)
+void OpenSMOKE_Droplet::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Droplet"	<< endl;
@@ -40,7 +40,7 @@ void OpenSMOKE_Droplet::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_Droplet::WarningMessage(const string message)
+void OpenSMOKE_Droplet::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_DropletMicrogravity"	<< endl;
@@ -117,7 +117,7 @@ OpenSMOKE_Droplet::OpenSMOKE_Droplet()
 	grid.SetSpherical();
 }
 
-void OpenSMOKE_Droplet::SetName(const string name)
+void OpenSMOKE_Droplet::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -537,8 +537,8 @@ void OpenSMOKE_Droplet::DAESystemSolution(BzzDaeSparseObject *o)
 	o->SetMaximumConstraints(xMax);
 
 	// Default values: (A) 1e-10      (R) 100*MachEps()
-	o->SetTollRel(data->relTolerances);
-	o->SetTollAbs(data->absTolerances);
+	o->SetTolRel(data->relTolerances);
+	o->SetTolAbs(data->absTolerances);
 
 	cout << "Absolute tolerance: " << data->absTolerances << endl;
 	cout << "Relative tolerance: " << data->relTolerances << endl;

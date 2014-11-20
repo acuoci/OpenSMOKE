@@ -21,7 +21,7 @@
 #include "basic/OpenSMOKE_Utilities.h"
 #include "idealreactors/flamelet/OpenSMOKE_Flamelet_ScheduleClass.h"
 
-void OpenSMOKE_Flamelet_ScheduleClass::ErrorMessage(const string message)
+void OpenSMOKE_Flamelet_ScheduleClass::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  ScheduleClass"			<< endl;
@@ -32,7 +32,7 @@ void OpenSMOKE_Flamelet_ScheduleClass::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_Flamelet_ScheduleClass::WarningMessage(const string message)
+void OpenSMOKE_Flamelet_ScheduleClass::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  ScheduleClass"			<< endl;
@@ -47,16 +47,16 @@ OpenSMOKE_Flamelet_ScheduleClass::OpenSMOKE_Flamelet_ScheduleClass()
 	name_object = "Undefined name";
 }
 
-void OpenSMOKE_Flamelet_ScheduleClass::SetName(const string name)
+void OpenSMOKE_Flamelet_ScheduleClass::SetName(const std::string name)
 {
 	name_object = name;
 }
 
-void OpenSMOKE_Flamelet_ScheduleClass::ReadOperations(const string fileName)
+void OpenSMOKE_Flamelet_ScheduleClass::ReadOperations(const std::string fileName)
 {
 	int i, k, nCycle, onCycle, startCycle, endCycle;
-	string stringa;
-	string stringaOptional;
+	std::string stringa;
+	std::string stringaOptional;
 	double t;
 	char charIndex;
 

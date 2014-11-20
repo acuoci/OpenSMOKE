@@ -26,7 +26,7 @@
 #include "liquid/OpenSMOKE_LiquidSpecies.h"
 #include "liquid/OpenSMOKE_LiquidProperties_Database.h"
 
-void OpenSMOKE_Flame1D_DataManager::ErrorMessage(const string message)
+void OpenSMOKE_Flame1D_DataManager::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flame1D_DataManager"	<< endl;
@@ -37,7 +37,7 @@ void OpenSMOKE_Flame1D_DataManager::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_Flame1D_DataManager::WarningMessage(const string message)
+void OpenSMOKE_Flame1D_DataManager::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flame1D_DataManager"	<< endl;
@@ -178,9 +178,12 @@ OpenSMOKE_Flame1D_DataManager::OpenSMOKE_Flame1D_DataManager()
 	bin_density_A = 0.;
 	bin_index_final = 0;
 	bin_density_B = 0.;
+
+	iCorrectDiffusionFormulation = true;
+	iPhysicalSootDiffusionCoefficients = 0;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetName(const string name)
+void OpenSMOKE_Flame1D_DataManager::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -212,9 +215,10 @@ void OpenSMOKE_Flame1D_DataManager::SetDefaultValues()
 	iUnityLewisNumbers					= false;
 	iVerboseMixtureProperties			= false;
 	iFakeTemperatureThermalConductivity = false;
+	iPhysicalSootDiffusionCoefficients  = 0;
 }
 
-void OpenSMOKE_Flame1D_DataManager::Setup(const string kind)
+void OpenSMOKE_Flame1D_DataManager::Setup(const std::string kind)
 {
 	if (kind == "PREMIXED")
 	{
@@ -278,7 +282,7 @@ void OpenSMOKE_Flame1D_DataManager::Setup(const string kind)
 	}
 }
 
-void OpenSMOKE_Flame1D_DataManager::readFromFileForOpposed(const string fileName)
+void OpenSMOKE_Flame1D_DataManager::readFromFileForOpposed(const std::string fileName)
 {
 	DefineFromFileOpposed(fileName);
 
@@ -300,7 +304,7 @@ void OpenSMOKE_Flame1D_DataManager::readFromFileForOpposed(const string fileName
 	}
 }
 
-void OpenSMOKE_Flame1D_DataManager::PasteInputFile(const string fileName)
+void OpenSMOKE_Flame1D_DataManager::PasteInputFile(const std::string fileName)
 {
 	ofstream fOutput;
 	openOutputFileAndControl(fOutput, fileName);
@@ -320,17 +324,17 @@ void OpenSMOKE_Flame1D_DataManager::PasteInputFile(const string fileName)
 	fOutput.close();
 }
 
-void OpenSMOKE_Flame1D_DataManager::printFileForOpposed(const string fileName, double vFuel, double vAir)
+void OpenSMOKE_Flame1D_DataManager::printFileForOpposed(const std::string fileName, double vFuel, double vAir)
 {
 	PasteInputFile(fileName);
 }
 
-void OpenSMOKE_Flame1D_DataManager::printFileForPremixed(const string fileName, double MassFlowRate_Updated)
+void OpenSMOKE_Flame1D_DataManager::printFileForPremixed(const std::string fileName, double MassFlowRate_Updated)
 {
 	PasteInputFile(fileName);
 }
 
-void OpenSMOKE_Flame1D_DataManager::readFromFileForPremixed(const string fileName)
+void OpenSMOKE_Flame1D_DataManager::readFromFileForPremixed(const std::string fileName)
 {
 	DefineFromFilePremixed(fileName);
 
@@ -394,6 +398,10 @@ OpenSMOKE_Dictionary_Flame1D::OpenSMOKE_Dictionary_Flame1D()
 	Add("#ThermophoreticEffect",	'O', 'N', "Thermophoretic effect");
 	Add("#VerboseMixtureProperties",'O', 'N', "Verbose mixture properties");
 
+	Add("#PhysicalSootDiffusionCoefficients", 'O', 'I', "Physical soot diffusion coefficients (BIN where to cut)");
+
+	Add("#UncorrectDiffusionFormulation", 'O', 'N', "Uncorrect diffusion formulation: omega*V = -D*grad(omega)");
+
 	Add("#LewisNumbers",			'O', 'N', "Lewis numbers on file");
 	Add("#UnityLewisNumbers",		'O', 'N', "Lewis numbers are assumed equal to 1 for every species");
 	Add("#UserDefinedLewisNumbers",	'O', 'L', "User defined Lewis numbers");
@@ -428,7 +436,7 @@ OpenSMOKE_Dictionary_Flame1D::OpenSMOKE_Dictionary_Flame1D()
 	Add("#AdaptiveGridCoefficients",	'O', 'V', "Adaptive Grid Coefficients: Alfa, Beta, Gamma");
 
 	Add("#ChangeFrequencyFactor",		'O', 'V', "Change frequency factor (reaction, variation)");
-	Add("#ChangeActivationEnergy",		'O', 'V', "Change activation energy (int reaction, double new value, string units)");
+	Add("#ChangeActivationEnergy",		'O', 'V', "Change activation energy (int reaction, double new value, std::string units)");
 	Add("#ChangeDiffusivity",			'O', 'V', "Change diffusion coefficient (species, variation)");
 	Add("#LennardJonesMode",			'O', 'S', "Lennard-Jones Mode: ALL, ONLY_DIFFUSIVITIES, ONLY_CONDUCTIVITY, ONLY_VISCOSITY");
 	Add("#ChangeFormationEnthalpy",		'O', 'V', "Change formation enthalpy (species, variation, units)");
@@ -547,7 +555,7 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionaryForOpposedFlames(OpenSMOKE_Di
 {
     char    char_value;
 	double  double_value;
-    string  string_value;
+    std::string  string_value;
 	vector<string> string_vector;
 	vector<double> double_vector;
 
@@ -615,7 +623,7 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionaryForPremixedFlames(OpenSMOKE_D
 {
     int     int_value;
 	double  double_value;
-    string  string_value;
+    std::string  string_value;
 	vector<string> string_vector;
 	vector<double> double_vector;
 
@@ -678,7 +686,7 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionary(OpenSMOKE_Dictionary_Flame1D
     int     int_value;
     char    char_value;
 	double  double_value;
-    string  string_value;
+    std::string  string_value;
 	vector<string> string_vector;
 	vector<double> double_vector;
 
@@ -766,8 +774,14 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionary(OpenSMOKE_Dictionary_Flame1D
 	if (dictionary.Return("#SoretEffect"))	
 		SetSoretEffect();
 
+	if (dictionary.Return("#PhysicalSootDiffusionCoefficients", int_value))
+		SetPhysicalSootDiffusionCoefficients(int_value);
+
 	if (dictionary.Return("#ThermophoreticEffect"))	
 		SetThermophoreticEffect();
+
+	if (dictionary.Return("#UncorrectDiffusionFormulation"))
+		SetUncorrectDiffusionFormulation();
 
 	if (dictionary.Return("#VerboseMixtureProperties"))	
 		SetVerboseMixtureProperties();
@@ -860,7 +874,7 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionary(OpenSMOKE_Dictionary_Flame1D
 		SetChangeFakeTemperatureThermalConductivity(double_value, string_value);
 }
 
-void OpenSMOKE_Flame1D_DataManager::DefineFromFileOpposed(const string inputFile)
+void OpenSMOKE_Flame1D_DataManager::DefineFromFileOpposed(const std::string inputFile)
 {
     OpenSMOKE_Dictionary_Flame1D dictionary;
 
@@ -873,7 +887,7 @@ void OpenSMOKE_Flame1D_DataManager::DefineFromFileOpposed(const string inputFile
 	CopyInputFile(inputFile);
 }
 
-void OpenSMOKE_Flame1D_DataManager::DefineFromFilePremixed(const string inputFile)
+void OpenSMOKE_Flame1D_DataManager::DefineFromFilePremixed(const std::string inputFile)
 {
     OpenSMOKE_Dictionary_Flame1D dictionary;
 
@@ -886,7 +900,7 @@ void OpenSMOKE_Flame1D_DataManager::DefineFromFilePremixed(const string inputFil
 	CopyInputFile(inputFile);
 }
 
-void OpenSMOKE_Flame1D_DataManager::CopyInputFile(const string inputFile)
+void OpenSMOKE_Flame1D_DataManager::CopyInputFile(const std::string inputFile)
 {
 	const int SIZE = 400;
 	char comment[SIZE];
@@ -1027,49 +1041,49 @@ void OpenSMOKE_Flame1D_DataManager::LockForPremixedFlames()
 		if (XC[i]!=0. || XO[i]!=0.)	iX.Append(i);
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetOutputFolder(const string _outputFolderName)
+void OpenSMOKE_Flame1D_DataManager::SetOutputFolder(const std::string _outputFolderName)
 {
 	iUserDefinedFolderName = true;
 	userDefinedFolderName = _outputFolderName;
 }
-void OpenSMOKE_Flame1D_DataManager::AssignPressure(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::AssignPressure(const std::string units, const double value)
 {
     P_Pascal = OpenSMOKE_Conversions::conversion_pressure(value, units);
 	P_atm	 = P_Pascal / OpenSMOKE_Conversions::Pa_from_atm;
 	P_bar	 = P_Pascal / OpenSMOKE_Conversions::Pa_from_bar;
 }
 
-void OpenSMOKE_Flame1D_DataManager::AssignDistance(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::AssignDistance(const std::string units, const double value)
 {
     L = OpenSMOKE_Conversions::conversion_length(value, units);
 }
 
-void OpenSMOKE_Flame1D_DataManager::AssignFuelVelocity(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::AssignFuelVelocity(const std::string units, const double value)
 {
     VC = OpenSMOKE_Conversions::conversion_velocity(value, units);
 }
 
-void OpenSMOKE_Flame1D_DataManager::AssignOxidizerVelocity(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::AssignOxidizerVelocity(const std::string units, const double value)
 {
     VO = OpenSMOKE_Conversions::conversion_velocity(value, units);
 }
 
-void OpenSMOKE_Flame1D_DataManager::AssignFuelTemperature(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::AssignFuelTemperature(const std::string units, const double value)
 {
     TC = OpenSMOKE_Conversions::conversion_temperature(value, units);
 }
 
-void OpenSMOKE_Flame1D_DataManager::AssignOxidizerTemperature(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::AssignOxidizerTemperature(const std::string units, const double value)
 {
     TO = OpenSMOKE_Conversions::conversion_temperature(value, units);
 }
 
-void OpenSMOKE_Flame1D_DataManager::AssignTemperaturePeak(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::AssignTemperaturePeak(const std::string units, const double value)
 {
     Tpeak = OpenSMOKE_Conversions::conversion_temperature(value, units);
 }
 
-void OpenSMOKE_Flame1D_DataManager::AssignGeometry(const string string_value)
+void OpenSMOKE_Flame1D_DataManager::AssignGeometry(const std::string string_value)
 {
 	if (string_value != "AXIS" && string_value != "PLANAR")
 		ErrorMessage("#Geometry options: AXIS || PLANAR");
@@ -1077,19 +1091,19 @@ void OpenSMOKE_Flame1D_DataManager::AssignGeometry(const string string_value)
 	geometry = string_value;
 }
 
-void OpenSMOKE_Flame1D_DataManager::AssignFuel(const string string_value)
+void OpenSMOKE_Flame1D_DataManager::AssignFuel(const std::string string_value)
 {
 	nameFuel = string_value;
 	jFUEL = mix->recognize_species(nameFuel);
 }
 
-void OpenSMOKE_Flame1D_DataManager::AssignOxidizer(const string string_value)
+void OpenSMOKE_Flame1D_DataManager::AssignOxidizer(const std::string string_value)
 {
 	nameOxidizer = string_value;
 	jO2 = mix->recognize_species(nameOxidizer);
 }
 
-void OpenSMOKE_Flame1D_DataManager::AssignInert(const string string_value)
+void OpenSMOKE_Flame1D_DataManager::AssignInert(const std::string string_value)
 {
 	nameInert = string_value;
 	jINERT = mix->recognize_species(nameInert);
@@ -1266,39 +1280,39 @@ void OpenSMOKE_Flame1D_DataManager::SetPeaks(const vector<string> _names, const 
 	iAssignedPeaks = true;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetFixedTemperatureProfile(const string string_value)
+void OpenSMOKE_Flame1D_DataManager::SetFixedTemperatureProfile(const std::string string_value)
 {
 	iTemperatureProfile = 1;
 	ud_temperature_profile_file_name = string_value;
 	iAssignedFixedTemperatureProfile = true;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetFixedTemperatureProfileProvisional(const string string_value)
+void OpenSMOKE_Flame1D_DataManager::SetFixedTemperatureProfileProvisional(const std::string string_value)
 {
 	ud_temperature_profile_file_name = string_value;
 	iAssignedFixedTemperatureProfileProvisional = true;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetInitialTemperatureProfile(const string string_value)
+void OpenSMOKE_Flame1D_DataManager::SetInitialTemperatureProfile(const std::string string_value)
 {
 	iTemperatureProfile = 2;
 	ud_temperature_profile_file_name = string_value;
 	iAssignedInitialTemperatureProfile = true;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetFlameThickness(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::SetFlameThickness(const std::string units, const double value)
 {
     wmix = OpenSMOKE_Conversions::conversion_length(value, units);
 	iAssignedFlameThickness = true;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetFlamePosition(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::SetFlamePosition(const std::string units, const double value)
 {
     xcen = OpenSMOKE_Conversions::conversion_length(value, units);
 	iAssignedFlamePosition = true;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetGrid(const string string_value)
+void OpenSMOKE_Flame1D_DataManager::SetGrid(const std::string string_value)
 {
 	if (string_value != "CENTERED" && string_value != "EQUISPACED" &&
 		string_value != "STRETCHED" && string_value != "STRETCHED_POOL_FIRE" && string_value != "USER" &&
@@ -1356,24 +1370,24 @@ void OpenSMOKE_Flame1D_DataManager::SetMaximumIntegrationOrder(const int int_val
 	max_integration_order = int_value;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetInitialTimeStep(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::SetInitialTimeStep(const std::string units, const double value)
 {
 	initial_time_step = OpenSMOKE_Conversions::conversion_time(value, units);
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetFuelRadialGradient(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::SetFuelRadialGradient(const std::string units, const double value)
 {
 	radialGradientC = OpenSMOKE_Conversions::conversion_frequency(value, units);
 	iAssignedFuelRadialGradient = true;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetOxidizerRadialGradient(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::SetOxidizerRadialGradient(const std::string units, const double value)
 {
 	radialGradientO = OpenSMOKE_Conversions::conversion_frequency(value, units);
 	iAssignedOxidizerRadialGradient = true;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetEnvironmentTemperature(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::SetEnvironmentTemperature(const std::string units, const double value)
 {
 	environmentTemperature = OpenSMOKE_Conversions::conversion_temperature(value, units);
 	iAssignedEnvironmentTemperature = true;
@@ -1391,7 +1405,12 @@ void OpenSMOKE_Flame1D_DataManager::SetDepositionWall()
 	iThermophoreticEffect = true;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetSootRadiation(const string value)
+void OpenSMOKE_Flame1D_DataManager::SetUncorrectDiffusionFormulation()
+{
+	iCorrectDiffusionFormulation = false;
+}
+
+void OpenSMOKE_Flame1D_DataManager::SetSootRadiation(const std::string value)
 {
 	iAssignedSootRadiation = true;
 	if (value == "none")			iRadiativeSootModel = RADIATIVE_SOOT_MODEL_NONE;
@@ -1540,22 +1559,22 @@ void OpenSMOKE_Flame1D_DataManager::SetBINDensities(const vector<string> _names)
 
 
 
-void OpenSMOKE_Flame1D_DataManager::AssignMassFlowRate(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::AssignMassFlowRate(const std::string units, const double value)
 {
 	MassFlowRate = OpenSMOKE_Conversions::conversion_massFlowRate(value, units);
 }
 
-void OpenSMOKE_Flame1D_DataManager::AssignInletVelocity(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::AssignInletVelocity(const std::string units, const double value)
 {
 	AssignFuelVelocity(units, value);
 }
 	
-void OpenSMOKE_Flame1D_DataManager::AssignInletTemperature(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::AssignInletTemperature(const std::string units, const double value)
 {
 	AssignFuelTemperature(units, value);
 }
 	
-void OpenSMOKE_Flame1D_DataManager::AssignCrossSection(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::AssignCrossSection(const std::string units, const double value)
 {
 	CrossSectionalArea = OpenSMOKE_Conversions::conversion_area(value, units);
 }
@@ -1570,7 +1589,7 @@ void OpenSMOKE_Flame1D_DataManager::AssignInletMoleFractions(const vector<string
 	AssignFuelMoleFractions(names, values);
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetOutletTemperature(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::SetOutletTemperature(const std::string units, const double value)
 {
 	AssignOxidizerTemperature(units, value);
 	iAssignedOutletTemperature = true;
@@ -1594,7 +1613,7 @@ void OpenSMOKE_Flame1D_DataManager::SetFlameSpeedIndex(const int int_value)
 	iAssignedFlameSpeedIndex = true;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetFlameSpeedTemperature(const string units, const double value)
+void OpenSMOKE_Flame1D_DataManager::SetFlameSpeedTemperature(const std::string units, const double value)
 {
 	fixedTemperature = OpenSMOKE_Conversions::conversion_temperature(value, units);
 	iAssignedFlameSpeedTemperature = true;
@@ -1606,7 +1625,7 @@ void OpenSMOKE_Flame1D_DataManager::SetStretchingFactor(const double double_valu
 	iAssignedStretchingFactor = true;
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetCrossSectionProfile(const string string_value)
+void OpenSMOKE_Flame1D_DataManager::SetCrossSectionProfile(const std::string string_value)
 {
 	iAreaProfile = 1;
 	ud_cross_section_profile_file_name = string_value;
@@ -1622,6 +1641,11 @@ void OpenSMOKE_Flame1D_DataManager::SetCrossSectionMIT()
 void OpenSMOKE_Flame1D_DataManager::SetSoretEffect()
 {
 	iSoretEffect = true;
+}
+
+void OpenSMOKE_Flame1D_DataManager::SetPhysicalSootDiffusionCoefficients(const int value)
+{
+	iPhysicalSootDiffusionCoefficients = value;
 }
 
 void OpenSMOKE_Flame1D_DataManager::SetThermophoreticEffect()
@@ -1821,7 +1845,7 @@ void OpenSMOKE_Flame1D_DataManager::SetChangeDiffusivity(const vector<string> _n
 	}
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetChangeFakeTemperatureThermalConductivity(const double value, const string units)
+void OpenSMOKE_Flame1D_DataManager::SetChangeFakeTemperatureThermalConductivity(const double value, const std::string units)
 {
 	iFakeTemperatureThermalConductivity = true;
 	fakeTemperatureThermalConductivityIncrement = OpenSMOKE_Conversions::conversion_temperature(value, units);
@@ -1841,7 +1865,7 @@ void OpenSMOKE_Flame1D_DataManager::SetChangeFormationEnthalpy(const vector<stri
 	}
 }
 
-void OpenSMOKE_Flame1D_DataManager::SetLennardJonesMode(const string option)
+void OpenSMOKE_Flame1D_DataManager::SetLennardJonesMode(const std::string option)
 {
 	if (option == "ALL")
 		sensitivityLennardJonesMode = OPENSMOKE_FITTING_ALL;
@@ -1856,7 +1880,7 @@ void OpenSMOKE_Flame1D_DataManager::SetLennardJonesMode(const string option)
 }
 
 
-void OpenSMOKE_Flame1D_DataManager::SetAdaptiveGrid(const string name)
+void OpenSMOKE_Flame1D_DataManager::SetAdaptiveGrid(const std::string name)
 {
 	if		(name=="GRADIENT")		kind_of_adaptive_grid = ADAPTIVE_GRADIENT;
 	else if (name=="CHEMKIN")		kind_of_adaptive_grid = ADAPTIVE_CHEMKIN;

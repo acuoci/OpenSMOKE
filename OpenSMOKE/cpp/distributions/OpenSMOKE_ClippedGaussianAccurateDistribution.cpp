@@ -25,7 +25,7 @@ const double OpenSMOKE_ClippedGaussianAccurateDistribution::sqrt_2pi = sqrt(2.*a
 const double OpenSMOKE_ClippedGaussianAccurateDistribution::sqrt_pi  = sqrt(acos(-1.));
 const double OpenSMOKE_ClippedGaussianAccurateDistribution::sqrt_2   = sqrt(2.);
 
-void OpenSMOKE_ClippedGaussianAccurateDistribution::ErrorMessage(const string message)
+void OpenSMOKE_ClippedGaussianAccurateDistribution::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_ClippedGaussianAccurateDistribution"			<< endl;
@@ -35,7 +35,7 @@ void OpenSMOKE_ClippedGaussianAccurateDistribution::ErrorMessage(const string me
     exit(-1);
 }
 
-void OpenSMOKE_ClippedGaussianAccurateDistribution::WarningMessage(const string message)
+void OpenSMOKE_ClippedGaussianAccurateDistribution::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:    OpenSMOKE_ClippedGaussianAccurateDistribution"		<< endl;

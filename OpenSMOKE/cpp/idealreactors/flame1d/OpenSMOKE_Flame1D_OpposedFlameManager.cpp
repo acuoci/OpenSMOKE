@@ -23,7 +23,7 @@
 #include "idealreactors/flame1d/OpenSMOKE_Flame1D.h"
 #include "idealreactors/flame1d/OpenSMOKE_Flame1D_OpposedFlameManager.h" 
 
-void OpenSMOKE_Flame1D_OpposedFlameManager::ErrorMessage(const string message)
+void OpenSMOKE_Flame1D_OpposedFlameManager::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flame1D_OpposedFlameManager"	<< endl;
@@ -34,7 +34,7 @@ void OpenSMOKE_Flame1D_OpposedFlameManager::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_Flame1D_OpposedFlameManager::WarningMessage(const string message)
+void OpenSMOKE_Flame1D_OpposedFlameManager::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flame1D_OpposedFlameManager"	<< endl;
@@ -55,7 +55,7 @@ OpenSMOKE_Flame1D_OpposedFlameManager::OpenSMOKE_Flame1D_OpposedFlameManager()
 	N = 0;
 }
 
-void OpenSMOKE_Flame1D_OpposedFlameManager::SetName(const string name)
+void OpenSMOKE_Flame1D_OpposedFlameManager::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -65,7 +65,7 @@ void OpenSMOKE_Flame1D_OpposedFlameManager::SetupFromFile(OpenSMOKE_Flame1D *_fl
 	flame = _flame;
 	data  = _data;
 
-    string  string_value;
+    std::string  string_value;
 	vector<string> string_vector;
 	vector<double> double_vector;
 
@@ -170,9 +170,9 @@ void OpenSMOKE_Flame1D_OpposedFlameManager::Solution(const int count)
 
 	stringstream number;
 	number << count;
-	string nameFileSolutionComplete = flame->nameFolderSteadyData + "/Solution_Number_" + number.str() + ".out";
-	string nameFileBackUpCompleteInput	= flame->nameFolderBackupData + "/BackUp_Number_" + number.str() + ".inp";
-	string nameFileBackUpCompleteData	= flame->nameFolderBackupData + "/BackUp_Number_" + number.str() + ".bin";
+	std::string nameFileSolutionComplete = flame->nameFolderSteadyData + "/Solution_Number_" + number.str() + ".out";
+	std::string nameFileBackUpCompleteInput	= flame->nameFolderBackupData + "/BackUp_Number_" + number.str() + ".inp";
+	std::string nameFileBackUpCompleteData	= flame->nameFolderBackupData + "/BackUp_Number_" + number.str() + ".bin";
 	flame->printOnFile(nameFileSolutionComplete);
 	flame->printBackUpOnlyInputData(nameFileBackUpCompleteInput);
 	flame->printBackUpOnlyData(nameFileBackUpCompleteData);
@@ -383,7 +383,7 @@ void OpenSMOKE_Flame1D_OpposedFlameManager::Lock()
 void OpenSMOKE_Flame1D_OpposedFlameManager::SetFuelVelocity(const vector<string> string_vector)
 {
 	int n = string_vector.size();
-	string units = string_vector[n-1];
+	std::string units = string_vector[n-1];
 
 	if (N>0 && (n-1)!=N)	
 		ErrorMessage("Wrong number of requested flames...");
@@ -401,7 +401,7 @@ void OpenSMOKE_Flame1D_OpposedFlameManager::SetFuelVelocity(const vector<string>
 void OpenSMOKE_Flame1D_OpposedFlameManager::SetFuelTemperature(const vector<string> string_vector)
 {
 	int n = string_vector.size();
-	string units = string_vector[n-1];
+	std::string units = string_vector[n-1];
 
 	if (N>0 && (n-1)!=N)	
 		ErrorMessage("Wrong number of requested flames...");
@@ -419,7 +419,7 @@ void OpenSMOKE_Flame1D_OpposedFlameManager::SetFuelTemperature(const vector<stri
 void OpenSMOKE_Flame1D_OpposedFlameManager::SetOxidizerVelocity(const vector<string> string_vector)
 {
 	int n = string_vector.size();
-	string units = string_vector[n-1];
+	std::string units = string_vector[n-1];
 
 	if (N>0 && (n-1)!=N)	
 		ErrorMessage("Wrong number of requested flames...");
@@ -437,7 +437,7 @@ void OpenSMOKE_Flame1D_OpposedFlameManager::SetOxidizerVelocity(const vector<str
 void OpenSMOKE_Flame1D_OpposedFlameManager::SetOxidizerTemperature(const vector<string> string_vector)
 {
 	int n = string_vector.size();
-	string units = string_vector[n-1];
+	std::string units = string_vector[n-1];
 
 	if (N>0 && (n-1)!=N)	
 		ErrorMessage("Wrong number of requested flames...");
@@ -455,7 +455,7 @@ void OpenSMOKE_Flame1D_OpposedFlameManager::SetOxidizerTemperature(const vector<
 void OpenSMOKE_Flame1D_OpposedFlameManager::SetPressure(const vector<string> string_vector)
 {
 	int n = string_vector.size();
-	string units = string_vector[n-1];
+	std::string units = string_vector[n-1];
 
 	if (N>0 && (n-1)!=N)	
 		ErrorMessage("Wrong number of requested flames...");

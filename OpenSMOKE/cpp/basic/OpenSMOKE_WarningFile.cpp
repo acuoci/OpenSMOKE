@@ -21,7 +21,7 @@
 #include "OpenSMOKE.hpp"
 #include "basic/OpenSMOKE_WarningFile.h"
 
-void OpenSMOKE_WarningFile::ErrorMessage(const string message)
+void OpenSMOKE_WarningFile::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_WarningFile"		<< endl;
@@ -32,7 +32,7 @@ void OpenSMOKE_WarningFile::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_WarningFile::WarningMessage(const string message)
+void OpenSMOKE_WarningFile::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:   OpenSMOKE_WarningFile"		<< endl;
@@ -47,14 +47,14 @@ OpenSMOKE_WarningFile::OpenSMOKE_WarningFile()
 	file_name = "[not assigned]";
 }
 
-void OpenSMOKE_WarningFile::Setup(const string _file_name)
+void OpenSMOKE_WarningFile::Setup(const std::string _file_name)
 {
 	iWarning  = 0;
 	file_name = _file_name;
 	openOutputFileAndControl(fWarning, file_name);
 }
 
-void OpenSMOKE_WarningFile::WriteWarningMessage(const string warning_message)
+void OpenSMOKE_WarningFile::WriteWarningMessage(const std::string warning_message)
 { 
 	iWarning++;
 

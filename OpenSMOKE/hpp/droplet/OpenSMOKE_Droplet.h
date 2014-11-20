@@ -34,7 +34,7 @@ class OpenSMOKE_Droplet
 public:
 
 	OpenSMOKE_Droplet();
-	void SetName(const string name);
+	void SetName(const std::string name);
 	void Assign(OpenSMOKE_ReactingGas *_mix);
 	void Assign(OpenSMOKE_DropletMicrogravity_DataManager *_data);
 
@@ -144,9 +144,9 @@ private:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_DROPLET_H

@@ -15,51 +15,51 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\flamelet.cpp">
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\flamelet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\flamelet_group.cpp">
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\flamelet_group.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\Main.cpp">
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\OpenSMOKE_LookUp_Table_Executables.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\OpenSMOKE_LookUp_Table_Executables.cpp">
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\OpenSMOKE_LookUp_Table_Flame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\OpenSMOKE_LookUp_Table_Flame.cpp">
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\OpenSMOKE_LookUp_Table_Manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\OpenSMOKE_LookUp_Table_Manager.cpp">
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\sources_in_flamelet_library.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\sources_in_flamelet_library.cpp">
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\Utilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\Utilities.cpp">
+    <ClCompile Include="..\..\..\src\OpenSMOKE_LookUpTables\src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\Utilities.h">
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\flamelet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\sources_in_flamelet_library.h">
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\flamelet_group.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\OpenSMOKE_LookUp_Table_Manager.h">
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\OpenSMOKE_LookUp_Table_Executables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\OpenSMOKE_LookUp_Table_Flame.h">
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\OpenSMOKE_LookUp_Table_Flame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\OpenSMOKE_LookUp_Table_Executables.h">
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\OpenSMOKE_LookUp_Table_Manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\flamelet_group.h">
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\sources_in_flamelet_library.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\sources\flamelet.h">
+    <ClInclude Include="..\..\..\src\OpenSMOKE_LookUpTables\src\Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

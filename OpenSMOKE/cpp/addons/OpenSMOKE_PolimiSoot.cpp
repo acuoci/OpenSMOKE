@@ -23,7 +23,7 @@
 #include "basic/OpenSMOKE_Utilities.h"
 #include "basic/OpenSMOKE_Constants.h"
 
-void OpenSMOKE_PolimiSoot::Setup(OpenSMOKE_IdealGas &gas, const string minimum_bin)
+void OpenSMOKE_PolimiSoot::Setup(OpenSMOKE_IdealGas &gas, const std::string minimum_bin)
 {
 	const unsigned int bin_index_zero  = 10;
 	const unsigned int bin_index_final = 20;
@@ -33,7 +33,7 @@ void OpenSMOKE_PolimiSoot::Setup(OpenSMOKE_IdealGas &gas, const string minimum_b
 }
 
 
-void OpenSMOKE_PolimiSoot::Setup(OpenSMOKE_IdealGas &gas, const string minimum_bin, 
+void OpenSMOKE_PolimiSoot::Setup(OpenSMOKE_IdealGas &gas, const std::string minimum_bin, 
 									const unsigned int bin_index_zero, const double bin_density_A, 
 									const unsigned int bin_index_final, const double bin_density_B)
 {
@@ -405,7 +405,7 @@ void OpenSMOKE_PolimiSoot::WriteSummaryFiles()
 			int j = bin_indices_small_[i];
 			fOutput << setw(5)  << left << j; 
 			fOutput << setw(5)  << left << i; 
-			fOutput << setw(10) << left << bin_names_[j];	
+			fOutput << setw(10) << left << bin_names_[j].c_str();	
 			fOutput << setw(16) << fixed << left << setprecision(2) << bin_mw_[j];			// [kg/kmol]
 			fOutput << setw(12) << fixed << left << setprecision(5) << bin_d_[j]*1e9;		// [nm]
 			fOutput << setw(16) << scientific << left << bin_m_[j]*1e9;						// [mug] 
@@ -428,7 +428,7 @@ void OpenSMOKE_PolimiSoot::WriteSummaryFiles()
 				int j = bin_indices_large_[i];
 				fOutput << setw(5)  << left << j; 
 				fOutput << setw(5)  << left << i; 
-				fOutput << setw(10) << left << bin_names_[j];	
+				fOutput << setw(10) << left << bin_names_[j].c_str();	
 				fOutput << setw(16) << fixed << left << setprecision(2) << bin_mw_[j];			// [kg/kmol]
 				fOutput << setw(12) << fixed << left << setprecision(5) << bin_d_[j]*1e9;		// [nm]
 				fOutput << setw(16) << scientific << left << bin_m_[j]*1e9;						// [mug] 
@@ -474,7 +474,7 @@ void OpenSMOKE_PolimiSoot::WriteSummaryFiles()
 				int j = bin_baskets_indices_[k][i];
 				fOutput << setw(5)  << left << j; 
 				fOutput << setw(5)  << left << i; 
-				fOutput << setw(10) << left << bin_names_[j];	
+				fOutput << setw(10) << left << bin_names_[j].c_str();	
 				fOutput << setw(16) << fixed << left << setprecision(2) << bin_mw_[j];			// [kg/kmol]
 				fOutput << setw(12) << fixed << left << setprecision(5) << bin_d_[j]*1e9;		// [nm]
 				fOutput << setw(16) << scientific << left << bin_m_[j]*1e9;						// [mug] 

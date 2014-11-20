@@ -219,7 +219,7 @@ void OpenSMOKE_SensitivityAnalysis::PrintOnFile_SensitivityCoefficients(ofstream
 	{
 		int k = indices_print_species[i];
 		for (int jj=1;jj<=NR;jj++)
-			fOutput << mix->names[k] << "_R" << jj << "(" << count++ << ")\t";
+			fOutput << mix->names[k].c_str() << "_R" << jj << "(" << count++ << ")\t";
 	}
 
 	if (iTemperature == true)

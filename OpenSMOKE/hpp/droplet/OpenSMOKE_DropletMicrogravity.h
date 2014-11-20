@@ -35,7 +35,7 @@ class OpenSMOKE_DropletMicrogravity
 public:
 
 	OpenSMOKE_DropletMicrogravity();
-	void SetName(const string name);
+	void SetName(const std::string name);
 	void Assign(OpenSMOKE_ReactingGas *_mix);
 	void Assign(OpenSMOKE_DropletMicrogravity_DataManager *_data);
 	void Assign(OpenSMOKE_GlobalKinetics *_global);
@@ -143,7 +143,7 @@ private:
 	double SootPropensity(const int j);
 	double SootPropensity();
 	double SpeciesIntegralMass(const int j, const int indexSpecies);
-	double MassIntegral(const string names);
+	double MassIntegral(const std::string names);
 
 	double InterfaceLiquidDensity();
 	double InterfaceLiquidVaporizationHeat(const double t);
@@ -202,9 +202,9 @@ private:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_DROPLETMICROGAVITY_H

@@ -21,7 +21,7 @@
 #include "idealreactors/flame1d/OpenSMOKE_Flame1D_OscillatingBoundary.h"
 
 
-void OpenSMOKE_Flame1D_OscillatingBoundary::ErrorMessage(const string message)
+void OpenSMOKE_Flame1D_OscillatingBoundary::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flame1D_OscillatingBoundary"	<< endl;
@@ -32,7 +32,7 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_Flame1D_OscillatingBoundary::WarningMessage(const string message)
+void OpenSMOKE_Flame1D_OscillatingBoundary::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_Flame1D_OscillatingBoundary"	<< endl;
@@ -46,12 +46,12 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::setup(double _USteadyFuel, double _U
 								double _rhoSteadyFuel, double _rhoSteadyAir, 
 								double _MWSteadyFuel, double _MWSteadyAir,
 								double _TSteadyFuel, double _TSteadyAir,
-								double _L, double _P, OpenSMOKE_ReactingGas *_mix, const string fileName)
+								double _L, double _P, OpenSMOKE_ReactingGas *_mix, const std::string fileName)
 {
 	const int SIZE = 120;
 	char commento[SIZE];
 	double semiAmplitude;
-	string dummy;
+	std::string dummy;
 
 	mix = mix;
 

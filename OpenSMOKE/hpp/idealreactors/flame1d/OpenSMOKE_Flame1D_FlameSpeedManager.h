@@ -30,7 +30,7 @@ class OpenSMOKE_Flame1D_FlameSpeedManager
 public:
 
 	OpenSMOKE_Flame1D_FlameSpeedManager();
-	void SetName(const string name);
+	void SetName(const std::string name);
 	void SetupFromFile(OpenSMOKE_Flame1D *_flame, OpenSMOKE_Flame1D_DataManager *_data);
 	void Run();
 	
@@ -69,9 +69,9 @@ private:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
 	void PrintComposition(ofstream &fOut, const double equivalence);
 };

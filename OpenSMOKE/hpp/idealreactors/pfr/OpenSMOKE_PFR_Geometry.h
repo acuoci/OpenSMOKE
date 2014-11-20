@@ -32,8 +32,8 @@ public:
 
     OpenSMOKE_PFR_Geometry();
 
-    void Setup(const string fileName);
-    void SetName(const string name);
+    void Setup(const std::string fileName);
+    void SetName(const std::string name);
 	void Update(const double x, double &D, double &Area);
 
 private:
@@ -41,7 +41,7 @@ private:
     static const double  pi_over_4;
     static const double _4_over_pi;
 
-	string  name_object;
+	std::string  name_object;
     int     iKind;
     double  D0;
     double  Area0;
@@ -56,7 +56,7 @@ private:
     LinearInterpolation interpolation_dArea;
     LinearInterpolation interpolation_dDiameter;
 
-    void ErrorMessage(const string message);
+    void ErrorMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_PFR_GEOMETRY_H

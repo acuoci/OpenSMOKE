@@ -25,12 +25,12 @@ int	OpenSMOKE_PreProcessorReactingGas::NumberOfReactions()
 	return NR;
 }
 
-void OpenSMOKE_PreProcessorReactingGas::PreProcessing(const string pathName, const string fileNameTransport, const string fileNameElements, const string option)
+void OpenSMOKE_PreProcessorReactingGas::PreProcessing(const std::string pathName, const std::string fileNameTransport, const std::string fileNameElements, const std::string option)
 {
-	string fileNameStoichiometry	= pathName + "/stoichiometry.bzz";
-	string fileNameThermodynamics	= pathName + "/termo.bzz";
-	string fileNameReactions		= pathName + "/reactions.bzz";
-	string fileNameNames			= pathName + "/names.bzz";
+	std::string fileNameStoichiometry	= pathName + "/stoichiometry.bzz";
+	std::string fileNameThermodynamics	= pathName + "/termo.bzz";
+	std::string fileNameReactions		= pathName + "/reactions.bzz";
+	std::string fileNameNames			= pathName + "/names.bzz";
 	
 	kinetics.reactionRates = this;
 
@@ -59,12 +59,12 @@ void OpenSMOKE_PreProcessorReactingGas::PreProcessing(const string pathName, con
 	kinetics.SparsityStructures(fileNameStoichiometry);
 }
 
-void OpenSMOKE_PreProcessorReactingGas::PreProcessingTransportSensitivity(const string pathName, const string fileNameTransport, const string fileNameElements, const double eps)
+void OpenSMOKE_PreProcessorReactingGas::PreProcessingTransportSensitivity(const std::string pathName, const std::string fileNameTransport, const std::string fileNameElements, const double eps)
 {
-	string fileNameStoichiometry	= pathName + "/ascii/stoichiometry.bzz";
-	string fileNameThermodynamics	= pathName + "/ascii/termo.bzz";
-	string fileNameReactions		= pathName + "/ascii/reactions.bzz";
-	string fileNameNames			= pathName + "/ascii/names.bzz";
+	std::string fileNameStoichiometry	= pathName + "/ascii/stoichiometry.bzz";
+	std::string fileNameThermodynamics	= pathName + "/ascii/termo.bzz";
+	std::string fileNameReactions		= pathName + "/ascii/reactions.bzz";
+	std::string fileNameNames			= pathName + "/ascii/names.bzz";
 	
 	kinetics.reactionRates = this;
 
@@ -85,7 +85,7 @@ void OpenSMOKE_PreProcessorReactingGas::PreProcessingTransportSensitivity(const 
 	SetupTransportSensitivity(pathName, fileNameNames, fileNameTransport, fileNameThermodynamics, fileNameElements, binaryFile, asciiFile, eps);
 }
 
-void OpenSMOKE_LennardJonesSensitivityCoefficientsManager::ErrorMessage(const string message)
+void OpenSMOKE_LennardJonesSensitivityCoefficientsManager::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LennardJonesSensitivityCoefficientsManager"		<< endl;
@@ -96,7 +96,7 @@ void OpenSMOKE_LennardJonesSensitivityCoefficientsManager::ErrorMessage(const st
     exit(-1);
 }
 
-void OpenSMOKE_LennardJonesSensitivityCoefficientsManager::WarningMessage(const string message)
+void OpenSMOKE_LennardJonesSensitivityCoefficientsManager::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LennardJonesSensitivityCoefficientsManager"		<< endl;
@@ -112,15 +112,15 @@ OpenSMOKE_LennardJonesSensitivityCoefficientsManager::OpenSMOKE_LennardJonesSens
 	fittingMode = OPENSMOKE_FITTING_ALL; 
 }
 
-void OpenSMOKE_LennardJonesSensitivityCoefficientsManager::SetName(const string name)
+void OpenSMOKE_LennardJonesSensitivityCoefficientsManager::SetName(const std::string name)
 {
 	name_object = name;
 }
 
 
-void OpenSMOKE_LennardJonesSensitivityCoefficientsManager::Setup(const string file_name, fittingCoefficientSensitivityMode _fittingMode)
+void OpenSMOKE_LennardJonesSensitivityCoefficientsManager::Setup(const std::string file_name, fittingCoefficientSensitivityMode _fittingMode)
 {
-	string dummy;
+	std::string dummy;
 
 	fittingMode = _fittingMode;
 

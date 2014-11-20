@@ -24,7 +24,7 @@
 #include "addons/OpenSMOKE_PostProcessor.h"
 #include "addons/OpenSMOKE_PostProcessor_Flame1D.h"
 
-void OpenSMOKE_PostProcessor_Flame1D::ErrorMessage(const string message)
+void OpenSMOKE_PostProcessor_Flame1D::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_PostProcessor_Flame1D"	<< endl;
@@ -35,7 +35,7 @@ void OpenSMOKE_PostProcessor_Flame1D::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_PostProcessor_Flame1D::WarningMessage(const string message)
+void OpenSMOKE_PostProcessor_Flame1D::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_PostProcessor_Flame1D"	<< endl;
@@ -56,12 +56,12 @@ void OpenSMOKE_PostProcessor_Flame1D::ReadFromBinaryFile(BzzLoad &fLoad)
 {
 	char dummy[Constants::NAME_SIZE];
 	fLoad.fileLoad.read((char*) dummy, sizeof(dummy));
-	string version = dummy;
+	std::string version = dummy;
 	if (version != "V20100417")
 		ErrorMessage("This version post processing file is not supported: " + version);
 	cout << "Version: " << version << endl;
 
-	string tag = NextInBinaryFile(fLoad);
+	std::string tag = NextInBinaryFile(fLoad);
 	if (tag == "OPPOSED")			kind = OPPOSED;
 	else if (tag == "FLAMESPEED")	kind = FLAMESPEED;
 	else if (tag == "PREMIXED")		kind = PREMIXED;
@@ -194,7 +194,7 @@ void OpenSMOKE_PostProcessor_Flame1D::ExportAvailableYAxis(vector<string> &y_ava
 	y_available = list_of_y_available;
 }	
 
-void OpenSMOKE_PostProcessor_Flame1D::ImportSelectedAxis(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, string &name_x, string &name_y, vector<string> &names_lines)
+void OpenSMOKE_PostProcessor_Flame1D::ImportSelectedAxis(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, std::string &name_x, std::string &name_y, vector<string> &names_lines)
 {
 	ChangeDimensions(y_axis.size(), x.Size(), &xAxis);
 	ChangeDimensions(y_axis.size(), x.Size(), &yAxis);

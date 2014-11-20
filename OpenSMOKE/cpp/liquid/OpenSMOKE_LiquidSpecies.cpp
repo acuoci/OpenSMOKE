@@ -27,7 +27,7 @@
 #include "liquid/OpenSMOKE_LiquidCriticalConstants_Dictionary.h"
 #include "liquid/OpenSMOKE_LiquidThermalConductivity_Dictionary.h"
 
-void OpenSMOKE_LiquidSpecies::ErrorMessage(const string message)
+void OpenSMOKE_LiquidSpecies::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidSpecies"	<< endl;
@@ -38,7 +38,7 @@ void OpenSMOKE_LiquidSpecies::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_LiquidSpecies::WarningMessage(const string message)
+void OpenSMOKE_LiquidSpecies::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidSpecies"	<< endl;
@@ -53,7 +53,7 @@ OpenSMOKE_LiquidSpecies::OpenSMOKE_LiquidSpecies()
 	name_object = "[not assigned]";
 }
 
-void OpenSMOKE_LiquidSpecies::SetName(const string _name)
+void OpenSMOKE_LiquidSpecies::SetName(const std::string _name)
 {
 	name = _name;
 }

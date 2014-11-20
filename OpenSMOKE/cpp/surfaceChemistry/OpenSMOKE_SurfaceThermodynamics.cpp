@@ -18,10 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string>
 #include "surfaceChemistry/OpenSMOKE_ReactingSurface.h"
 #include "surfaceChemistry/OpenSMOKE_SurfaceThermodynamics.h"
 
-void OpenSMOKE_SurfaceThermodynamics::ErrorMessage(const string message)
+void OpenSMOKE_SurfaceThermodynamics::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_SurfaceThermodynamics"	<< endl;
@@ -32,7 +33,7 @@ void OpenSMOKE_SurfaceThermodynamics::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_SurfaceThermodynamics::WarningMessage(const string message)
+void OpenSMOKE_SurfaceThermodynamics::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:	  OpenSMOKE_SurfaceThermodynamics"	<< endl;

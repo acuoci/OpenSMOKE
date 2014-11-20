@@ -79,7 +79,7 @@ public:
 
 
 	// Names and molecular weigths	
-	string				*names;
+	std::string				*names;
 	BzzVector		M;		// Peso molecolare [g/mol]
 	BzzVector		uM;		// Peso molecolare [g/mol]
 	BzzVector		Cp;		// Species Specific Heat (Constant pressure)
@@ -100,6 +100,8 @@ public:
 	void SetPolimiSoot(	const unsigned int bin_index_zero, const double bin_density_A, 
 						const unsigned int bin_index_final, const double bin_density_B);
 	void SetPolimiSoot(	);
+
+	void CorrectSpeciesDiffusivityForSoot();
 
 	// Utilities
 	double	GetMWFromMassFractions(BzzVector &y);
@@ -139,8 +141,8 @@ public:
 	
 	int recognize_species(char* name);
 	int recognize_species_without_exit(char* name);
-    int recognize_species(const string name);
-	int recognize_species_without_exit(const string name);
+    int recognize_species(const std::string name);
+	int recognize_species_without_exit(const std::string name);
 
 	int NumberOfSpecies();
 	int	NumberOfElements();
@@ -149,18 +151,18 @@ public:
 
 	void SetMinimumTemperature(const double tmin);
 	void SetMaximumTemperature(const double tmax);
-	void SetName(const string name);
-	void SetAuthorName(const string name);
+	void SetName(const std::string name);
+	void SetAuthorName(const std::string name);
 
-	string name_object;
-	string name_author;
-	string building_date;
+	std::string name_object;
+	std::string name_author;
+	std::string building_date;
 
 	double TMIN;
 	double TMAX;
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
 
 	// Managers
@@ -187,8 +189,8 @@ public:
 	BzzVector	m_elements;
 	BzzVector	um_elements;
 
-	int  recognize_element(const string name);
-	int  recognize_element_without_error(const string name);
+	int  recognize_element(const std::string name);
+	int  recognize_element_without_error(const std::string name);
 	void GetElementalMoleFractionsFromSpeciesMoleFractions(BzzVector &x_elemental, BzzVector &x);
 	void GetElementalMassFractionsFromSpeciesMassFractions(BzzVector &omega_elemental, BzzVector &omega);
 	void GetElementalMoleFractionsFromSpeciesMoleFractions(BzzMatrix &x_elemental, BzzMatrix &x);
@@ -293,7 +295,7 @@ public:
 	double GetPressureFromMassEntropyAndMoleFractions(const double T, const double Smass, BzzVector &xmole);
 
 	// Get Composition
-	BzzVector GetMoleFractionsFromEquivalenceRatio(const double equivalence_ratio, const string fuel_name);
+	BzzVector GetMoleFractionsFromEquivalenceRatio(const double equivalence_ratio, const std::string fuel_name);
 	BzzVector GetMoleFractionsFromEquivalenceRatio(const double equivalence_ratio,	const vector<string> fuel_names,		BzzVector &moles_fuel,
 																					const vector<string> oxidizer_names,	BzzVector &moles_oxidizer);
 

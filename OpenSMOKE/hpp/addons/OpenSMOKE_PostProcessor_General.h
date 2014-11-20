@@ -30,15 +30,15 @@ class OpenSMOKE_PostProcessor_General
 public:
 
 	OpenSMOKE_PostProcessor_General(OpenSMOKE_PostProcessor *post_processor_);
-	void SetName(const string name);
+	void SetName(const std::string name);
 	
 	virtual void ReadFromBinaryFile(BzzLoad &fLoad);
 	virtual void ExportAvailableXAxis(vector<string> &x_available);
 	virtual void ExportAvailableYAxis(vector<string> &y_available);
-	virtual void ImportSelectedAxis(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, string &name_x, string &name_y, vector<string> &names_lines);
+	virtual void ImportSelectedAxis(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, std::string &name_x, std::string &name_y, vector<string> &names_lines);
 	virtual void Prepare();
 
-	string ExportMainXAxis();
+	std::string ExportMainXAxis();
 
 protected:
 
@@ -72,9 +72,9 @@ public:
 
 protected:
 
-	string name_object;
-	virtual void ErrorMessage(const string message);
-	virtual void WarningMessage(const string message);
+	std::string name_object;
+	virtual void ErrorMessage(const std::string message);
+	virtual void WarningMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_POSTPROCESSOR_GENERAL

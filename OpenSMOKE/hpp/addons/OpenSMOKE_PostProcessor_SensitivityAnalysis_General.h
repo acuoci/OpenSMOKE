@@ -33,18 +33,18 @@ public:
 
 	OpenSMOKE_PostProcessor_SensitivityAnalysis_General() {};
 	OpenSMOKE_PostProcessor_SensitivityAnalysis_General(OpenSMOKE_PostProcessor *post_processor_);
-	void SetName(const string name);
-	string sensitivity_list();
+	void SetName(const std::string name);
+	std::string sensitivity_list();
 	
 	virtual void ReadFromBinaryFile(BzzLoad &fLoad, const int index) {};
 
 	// Get Bars
 	void GetAdditionalSensitivityBars(const bool iTotal, const bool iLocal, const double coordinate, vector<double> &t, vector<int> &it, vector<string> &names_t, const int index_selection);
-	void GetMassFractionSensitivityBars(const bool iTotal, const bool iLocal, const double coordinate, const string name, vector<double> &t, vector<int> &it, vector<string> &names_t);
+	void GetMassFractionSensitivityBars(const bool iTotal, const bool iLocal, const double coordinate, const std::string name, vector<double> &t, vector<int> &it, vector<string> &names_t);
 
 	// Get Profiles
 	void GetAdditionalSensitivityProfiles(const bool iTotal, const bool iLocal, const double coordinate, BzzMatrix &SMatrix, BzzVectorInt &indices, vector<string> &names_t, const int index_selection);
-	void GetMassFractionSensitivityProfiles(const bool iTotal, const bool iLocal, const double coordinate, const string name, BzzMatrix &SMatrix, BzzVectorInt &indices, vector<string> &names_t);
+	void GetMassFractionSensitivityProfiles(const bool iTotal, const bool iLocal, const double coordinate, const std::string name, BzzMatrix &SMatrix, BzzVectorInt &indices, vector<string> &names_t);
 
 	// Export functions
 	void ExportAdditionalNames(vector<string> &_additional_names);
@@ -52,7 +52,7 @@ public:
 	void ExportAvailableYAxisSensitivityCoefficients(vector<string> &y_available);
 
 	// Import functions
-	void ImportSelectedAxisSensitivityCoefficients(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, string &name_x, string &name_y, vector<string> &names_lines);
+	void ImportSelectedAxisSensitivityCoefficients(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, std::string &name_x, std::string &name_y, vector<string> &names_lines);
 
 	BzzVector GetProfileNormalized(const int index_local, const int index_parameter);
 	BzzVector GetProfile(const int index_local, const int index_parameter);
@@ -71,7 +71,7 @@ protected:
 	int NV;					// Number of variables
 	int S_NC;				// Number of species (reduced)
 	int S_NV;				// Number of variables (reduced)
-	string *reactions;		// Reaction strings
+	std::string *reactions;		// Reaction strings
 
 	BzzVector parameters;			// Parameters
 	BzzMatrix S;					// Sensitivity coefficients
@@ -91,7 +91,7 @@ protected:
 
 	int	nExtracted;
 
-	string sensitivity_list_;
+	std::string sensitivity_list_;
 
 protected:
 
@@ -108,9 +108,9 @@ protected:
 
 protected:
 
-	string name_object;
-	virtual void ErrorMessage(const string message);
-	virtual void WarningMessage(const string message);
+	std::string name_object;
+	virtual void ErrorMessage(const std::string message);
+	virtual void WarningMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_POSTPROCESSOR_SENSITIVITYANALYSIS_GENERAL

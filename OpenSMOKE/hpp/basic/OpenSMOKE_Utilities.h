@@ -36,7 +36,7 @@ public:
 
 	OpenSMOKE_NuManager();
 	void Clean();
-	void Set(const int index, const string name);
+	void Set(const int index, const std::string name);
 	void Set(const double coefficient, const int reaction);
 	void PrintOnFile(ofstream &fOutput);
 
@@ -50,7 +50,7 @@ public:
 private:
 
 	int		index_species;
-	string	name_species;
+	std::string	name_species;
 };
 
 class OpenSMOKE_Nu
@@ -66,7 +66,7 @@ public:
 	BzzVectorInt sparse_columns;		// Sparsity Pattern
 	BzzVectorInt sparse_index;			// Sparsity Pattern
 
-	void PrintOnFile(const string fileName);		// 
+	void PrintOnFile(const std::string fileName);		// 
 	void SaveToBinaryFile(BzzSave &fSave);		// 
 	void SparsityPattern(BzzMatrixSparse &M);
 
@@ -110,8 +110,8 @@ public:
 private:
 
 	double GiveMePhi(const int n, const double x);
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
 private:
 
@@ -145,8 +145,8 @@ public:
 
 private:
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 
 private:
 
@@ -196,7 +196,7 @@ class LinearInterpolation
 public:
     
     LinearInterpolation();
-		void 		SetName(string name);
+		void 		SetName(std::string name);
 		double 	operator ()(double t);
 		void 		operator ()(BzzVector &x, BzzVector &y);
 
@@ -206,13 +206,13 @@ private:
 		double xMin, xMax;
 		int n;
 	
-		string name_object;
+		std::string name_object;
         
-  	void ErrorMessage(const string message);
+  	void ErrorMessage(const std::string message);
 };
 
-string GiveMeTimeAndDate();
-int seek_index(string name, vector<string> list_names);
+std::string GiveMeTimeAndDate();
+int seek_index(std::string name, vector<string> list_names);
 
 void GiveMeIndicesAndNames(OpenSMOKE_IdealGas &mix, const vector<string> _names, BzzVectorInt &index, vector<string> &names);
 
@@ -269,10 +269,10 @@ void openOutputFileAndControl(ofstream &inputFile, const char *fileName);
 void openInputFileAndControl_BinaryMode(ifstream &outputFile, const char *fileName);
 void openOutputFileAndControl_BinaryMode(ofstream &outputFile, const char *fileName);
 
-void openInputFileAndControl(ifstream &inputFile, string fileName);
-void openOutputFileAndControl(ofstream &inputFile, string fileName);
-void openInputFileAndControl_BinaryMode(ifstream &outputFile, string fileName);
-void openOutputFileAndControl_BinaryMode(ofstream &outputFile, string fileName);
+void openInputFileAndControl(ifstream &inputFile, std::string fileName);
+void openOutputFileAndControl(ofstream &inputFile, std::string fileName);
+void openInputFileAndControl_BinaryMode(ifstream &outputFile, std::string fileName);
+void openOutputFileAndControl_BinaryMode(ofstream &outputFile, std::string fileName);
 
 // **************************************************************************************************** //
 //					Grid Zone Class                                                                     //
@@ -346,8 +346,8 @@ public:
 //					OpenSMOKE logo                                                  //
 // **************************************************************************************************** //
 
-void OpenSMOKE_logo(string application_name, string version, string date);
-void OpenSMOKE_logo(ofstream &fOutput, string application_name);
+void OpenSMOKE_logo(std::string application_name, std::string version, std::string date);
+void OpenSMOKE_logo(ofstream &fOutput, std::string application_name);
 
 
 // **************************************************************************************************** //
@@ -361,8 +361,8 @@ class ParserClass
     public:
 
     void setup(int _argc, char* _argv[], CSimpleOpt::SOption *_g_rgOptions);
-    int parse(string label, string &argument);
-    int parse(string label);
+    int parse(std::string label, std::string &argument);
+    int parse(std::string label);
 
     void virtual ShowUsage();
 
@@ -385,7 +385,7 @@ private :
 
     int rows, cols;
     T * element;
-    void ErrorMessage(string message);
+    void ErrorMessage(std::string message);
 
 public :
 
@@ -484,7 +484,7 @@ void OpenSMOKE_Matrix<T>::Show () const
 }
 
 template <class T>
-void OpenSMOKE_Matrix<T>::ErrorMessage(string message)
+void OpenSMOKE_Matrix<T>::ErrorMessage(std::string message)
 {
     cout << "FATAL ERROR: OpenSMOKE Matrix Class" << endl;
     cout << message << endl;
@@ -493,27 +493,27 @@ void OpenSMOKE_Matrix<T>::ErrorMessage(string message)
     exit(-1);
 }
 
-string GiveMeFileNameFromFullPath(const string pathname);
-string GiveMeFolderPathFromFullPath(const string pathname);
+std::string GiveMeFileNameFromFullPath(const std::string pathname);
+std::string GiveMeFolderPathFromFullPath(const std::string pathname);
 
 bool caseInsCharCompareN(char a, char b); 
-bool caseInsCompare(const string& s1, const string& s2); 
-bool CheckForCommentLine(string &line);
-bool CheckForCommentLineFromStart(string &line);
-bool CheckForBlankLine(const string line);
-bool CheckForEndLine(string &line);
-void StringSubstitution(string &original, const string old_string, const string new_string);
+bool caseInsCompare(const std::string& s1, const std::string& s2); 
+bool CheckForCommentLine(std::string &line);
+bool CheckForCommentLineFromStart(std::string &line);
+bool CheckForBlankLine(const std::string line);
+bool CheckForEndLine(std::string &line);
+void StringSubstitution(std::string &original, const std::string old_string, const std::string new_string);
 
-bool StringSubstitutionAll(string &s, const string p, const string new_string);
-bool StringFindSubString(string &s, const string p);
-void SeparateNumberFromString(const string expression, string &name, double &number);
-void SeparateInstructions(const string line, vector<string> &instructions);
-int SeparateNumberFromStringForElements(const string expression, string &name, double &number);
+bool StringSubstitutionAll(std::string &s, const std::string p, const std::string new_string);
+bool StringFindSubString(std::string &s, const std::string p);
+void SeparateNumberFromString(const std::string expression, std::string &name, double &number);
+void SeparateInstructions(const std::string line, vector<string> &instructions);
+int SeparateNumberFromStringForElements(const std::string expression, std::string &name, double &number);
 
-int StringFind(const string s, const string subs);
-void CleanFromBlanks(string &name);
-void CleanFromBlanksForThermo(string &name);
-void TokenizeString(const string line, vector<string> &list);
+int StringFind(const std::string s, const std::string subs);
+void CleanFromBlanks(std::string &name);
+void CleanFromBlanksForThermo(std::string &name);
+void TokenizeString(const std::string line, vector<string> &list);
 void TokenizeString(char *line, vector<string> &list);
 
 void WriteUnits_cm_mol_s(ofstream &fOutput, const double lambda);
@@ -521,17 +521,17 @@ void WriteUnits_m_kmol_s(ofstream &fOutput, const double lambda);
 
 double KineticTemperature(const double Cc, const double Tmean, const double Tatt, const double n);
 
-string GetLabelIndex(const int count);
-string GetNumber(const int count);
+std::string GetLabelIndex(const int count);
+std::string GetNumber(const int count);
 
-void PrintTagOnGnuplotLabel(const int length, ofstream &fOut, const string tag, int &counter);
+void PrintTagOnGnuplotLabel(const int length, ofstream &fOut, const std::string tag, int &counter);
 void PrintHeaderOnBinaryFile(BzzSave &fSave);
 void PrintEndOnBinaryFile(BzzSave &fSave);
-void CheckInBinaryFile(BzzLoad &fLoad, const string flag);
-string NextInBinaryFile(BzzLoad &fLoad);
-void PrepareLiquidPropertiesDictionary(const string tag, const string file_name, vector<string> &lines, BzzVectorInt &indexLines);
-string StringToUpper(string strToConvert);
-string StringToLower(string strToConvert);
+void CheckInBinaryFile(BzzLoad &fLoad, const std::string flag);
+std::string NextInBinaryFile(BzzLoad &fLoad);
+void PrepareLiquidPropertiesDictionary(const std::string tag, const std::string file_name, vector<string> &lines, BzzVectorInt &indexLines);
+std::string StringToUpper(std::string strToConvert);
+std::string StringToLower(std::string strToConvert);
 
 #endif	// OPENSMOKE_UTILITIES
 

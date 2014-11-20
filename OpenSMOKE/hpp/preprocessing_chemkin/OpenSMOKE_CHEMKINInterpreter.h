@@ -35,7 +35,7 @@ class OpenSMOKE_PreProcessorSurfaceMaterial
 {
 public:
 	
-	string name;
+	std::string name;
 
 	int nSurfaceSites;
 	int nSurfaceBulks;
@@ -78,8 +78,8 @@ public:
 	vector<string> surface_lines;
 
 	void Run();
-	void PrintIdealGasBinaryFile(const string file_name);
-	void PrintSurfaceBinaryFile(const string file_name);
+	void PrintIdealGasBinaryFile(const std::string file_name);
+	void PrintSurfaceBinaryFile(const std::string file_name);
 
 	OpenSMOKE_CHEMKINInterpreter_ElementsData	elements;
 	OpenSMOKE_CHEMKINInterpreter_SpeciesData	species;
@@ -91,24 +91,24 @@ public:
 	void SetMinimumTemperature(const double tmin);
 	void SetMaximumTemperature(const double tmax);
 	void SetFittingPoints(const int fittingpoints);
-	void SetName(const string name);
-	void SetAuthorName(const string name);
-	void SetKineticFileName(const string name);
-	void SetSurfaceKineticFileName(const string name);
-	void SetThermodynamicFileName(const string name);
-	void SetTransportFileName(const string name);
-	void SetReducedListFileName(const string name);
-	void SetOutputFolderName(const string name);
+	void SetName(const std::string name);
+	void SetAuthorName(const std::string name);
+	void SetKineticFileName(const std::string name);
+	void SetSurfaceKineticFileName(const std::string name);
+	void SetThermodynamicFileName(const std::string name);
+	void SetTransportFileName(const std::string name);
+	void SetReducedListFileName(const std::string name);
+	void SetOutputFolderName(const std::string name);
 	void SetBuzziMode();
 	void SetVerboseMode();
 	void SetNoVerboseMode();
 	void SetSootMode();
 
-	string nameKineticsFile();
-	string nameSurfaceKineticsFile();
-	string nameThermoFile();
-	string nameTransportFile();
-	string nameOutputFolder();
+	std::string nameKineticsFile();
+	std::string nameSurfaceKineticsFile();
+	std::string nameThermoFile();
+	std::string nameTransportFile();
+	std::string nameOutputFolder();
 
 private:
 
@@ -116,7 +116,7 @@ private:
 	void ParsingElements(const int iLine, vector<string> instructions);
 	void ParsingReactions(const int iReaction, const int iLine, vector<string> instructions);
 	void ParsingReactionsAdditional(const int i, const int iLine, vector<string> instructions);
-	void AddSpaces(string &line, const char symbol);
+	void AddSpaces(std::string &line, const char symbol);
 
 	// Surface specific parsing functions
 	int nSurfaceMaterials;
@@ -140,11 +140,11 @@ private:
 	BzzVectorInt indices_site_thermo_database;
 	BzzVectorInt indices_bulk_thermo_database;
 
-	void WriteReducedScheme(string fileName);
+	void WriteReducedScheme(std::string fileName);
 
 	//
 
-	void PrintSummaryFile(const string file_name);
+	void PrintSummaryFile(const std::string file_name);
 	void PrintBuzziFiles();
 	void WriteAdditionalFiles();
 
@@ -190,20 +190,20 @@ private:
 	bool iBuzziMode;
 	bool iVerboseMode;
 
-	string name_author;
-	string building_date;
-	string name_object;
+	std::string name_author;
+	std::string building_date;
+	std::string name_object;
 
-	string name_kinetics_file;
-	string name_surface_kinetics_file;
-	string name_thermo_file;
-	string name_transport_file;
-	string name_output_folder;
-	string name_ascii_folder;
-	string name_reduced_list_file;
+	std::string name_kinetics_file;
+	std::string name_surface_kinetics_file;
+	std::string name_thermo_file;
+	std::string name_transport_file;
+	std::string name_output_folder;
+	std::string name_ascii_folder;
+	std::string name_reduced_list_file;
 
-	void ErrorMessage(const int iLine, const string message);
-	void WarningMessage(const int iLine, const string message);
+	void ErrorMessage(const int iLine, const std::string message);
+	void WarningMessage(const int iLine, const std::string message);
 };
 
 

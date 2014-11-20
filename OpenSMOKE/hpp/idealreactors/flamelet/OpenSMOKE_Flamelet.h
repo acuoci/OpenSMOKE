@@ -36,7 +36,7 @@ class OpenSMOKE_Flamelet
 public:
 
 	OpenSMOKE_Flamelet();
-	void SetName(const string name);
+	void SetName(const std::string name);
 
 	void Assign(OpenSMOKE_Flamelet_DataManager *_data);
 	void Assign(OpenSMOKE_Flamelet_ScheduleClass *_operations);
@@ -55,28 +55,28 @@ public:
 	OpenSMOKE_ReactingGas				*mix;
 
 	void FoldersAndFilesManager();
-	void FoldersAndFilesManager(const string backupFolder);
-	void RecoverFromBackUp(const string fileName);
+	void FoldersAndFilesManager(const std::string backupFolder);
+	void RecoverFromBackUp(const std::string fileName);
 
-	string nameOutputFolder; 
-	string nameFolderBackupData;
-	string nameFileBackupInputData;
-	string nameFolderUnsteadyData;
-	string nameFolderSteadyData;
-	string nameFolderAdditionalData;
-	string nameFolderProfilesData;
-	string nameFileOutput;
+	std::string nameOutputFolder; 
+	std::string nameFolderBackupData;
+	std::string nameFileBackupInputData;
+	std::string nameFolderUnsteadyData;
+	std::string nameFolderSteadyData;
+	std::string nameFolderAdditionalData;
+	std::string nameFolderProfilesData;
+	std::string nameFileOutput;
 
 
 private:	// Internal variables
 
 	int		NC;
 	int		NR;
-	string	name_object;
+	std::string	name_object;
 
 	void Setup();
 	void Solve(const double tEnd);
-	void NewPoints(string kind, const char index);
+	void NewPoints(std::string kind, const char index);
 	void DoubleTheGrid();
 	void RefineGridPeak(const double fraction);
 	void RefineLeanSide(const double fraction);
@@ -149,8 +149,8 @@ private:	// Internal functions
 	void Prepare();
 	void InitialTemperatureProfile();
 	void InitialMassFractionProfiles();
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);	
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);	
 
 
 private:	// Properties
@@ -208,7 +208,7 @@ private:	// Print on file
 
 	void Video_label();
 	void Video_label_soot();
-	void GnuPlot_label(const string name, const int N);
+	void GnuPlot_label(const std::string name, const int N);
 	void GnuPlotODE_label(const int N);
 	void PrintGnuPlotODE(const double t);
 	void PrintGnuPlot();

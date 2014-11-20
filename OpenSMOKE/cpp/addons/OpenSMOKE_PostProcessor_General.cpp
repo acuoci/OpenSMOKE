@@ -24,15 +24,15 @@
 #include "addons/OpenSMOKE_PostProcessor.h"
 #include "addons/OpenSMOKE_PostProcessor_General.h"
 
-void OpenSMOKE_PostProcessor_General::ErrorMessage(const string message)
+void OpenSMOKE_PostProcessor_General::ErrorMessage(const std::string message)
 {
 }
 
-void OpenSMOKE_PostProcessor_General::WarningMessage(const string message)
+void OpenSMOKE_PostProcessor_General::WarningMessage(const std::string message)
 {
 }
 
-void OpenSMOKE_PostProcessor_General::SetName(const string name)
+void OpenSMOKE_PostProcessor_General::SetName(const std::string name)
 {
 	name_object = name;
 }
@@ -61,11 +61,11 @@ void OpenSMOKE_PostProcessor_General::ExportAvailableYAxis(vector<string> &y_axi
 {
 }	
 
-void OpenSMOKE_PostProcessor_General::ImportSelectedAxis(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, string &name_x, string &name_y, vector<string> &names_lines)
+void OpenSMOKE_PostProcessor_General::ImportSelectedAxis(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, std::string &name_x, std::string &name_y, vector<string> &names_lines)
 {
 }
 
-string OpenSMOKE_PostProcessor_General::ExportMainXAxis()
+std::string OpenSMOKE_PostProcessor_General::ExportMainXAxis()
 {
 	return list_of_x_labels.at(0);
 }

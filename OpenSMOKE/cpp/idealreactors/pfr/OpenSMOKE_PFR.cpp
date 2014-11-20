@@ -45,7 +45,7 @@ OpenSMOKE_PFR::OpenSMOKE_PFR()
 	iODE_Solver					= ODE_SOLVER_BZZ;
 }
 
-void OpenSMOKE_PFR::AssignEnd(const string units, const double value)
+void OpenSMOKE_PFR::AssignEnd(const std::string units, const double value)
 {
 	if (iTimeIndipendent == true)
 		TauTotal = OpenSMOKE_Conversions::conversion_time(value, units);
@@ -55,7 +55,7 @@ void OpenSMOKE_PFR::AssignEnd(const string units, const double value)
     assignedEnd = true;
 }
 
-void OpenSMOKE_PFR::AssignDiameter(const string units, const double value)
+void OpenSMOKE_PFR::AssignDiameter(const std::string units, const double value)
 {
     D       = OpenSMOKE_Conversions::conversion_length(value, units);
     Area    = Constants::pi * D*D / 4.;
@@ -65,7 +65,7 @@ void OpenSMOKE_PFR::AssignDiameter(const string units, const double value)
     assignedGeometry = true;
 }
 
-void OpenSMOKE_PFR::AssignArea(const string units, const double value)
+void OpenSMOKE_PFR::AssignArea(const std::string units, const double value)
 {
     Area    = OpenSMOKE_Conversions::conversion_area(value, units);
     D       = sqrt(4./Constants::pi*Area);
@@ -75,7 +75,7 @@ void OpenSMOKE_PFR::AssignArea(const string units, const double value)
     assignedGeometry = true; 
 }
 
-void OpenSMOKE_PFR::SetUserDefinedDiameter(const string fileName)
+void OpenSMOKE_PFR::SetUserDefinedDiameter(const std::string fileName)
 {
     //geometry.Setup(fileName, "LENGTH");
     geometry.Setup(fileName);
@@ -86,7 +86,7 @@ void OpenSMOKE_PFR::SetUserDefinedDiameter(const string fileName)
 	assignedGeometry = true;
 }
 
-void OpenSMOKE_PFR::SetUserDefinedArea(const string fileName)
+void OpenSMOKE_PFR::SetUserDefinedArea(const std::string fileName)
 {
     //geometry.Setup(fileName, "AREA");
     geometry.Setup(fileName);
@@ -107,14 +107,14 @@ void OpenSMOKE_PFR::UnsetMomentumEquation()
     iMomentum = false;
 }
 
-void OpenSMOKE_PFR::SetUserDefinedSpecificExchangeArea(const string fileName)
+void OpenSMOKE_PFR::SetUserDefinedSpecificExchangeArea(const std::string fileName)
 {
     iUserDefinedExchangeArea = USERDEFINED;
     ud_Ae_profile.AssignFromFile(fileName, "SPECIFIC_AREA");
 	ud_Ae_profile.SetName(name_object + " - Exchange Area Profile");
 }
 
-void OpenSMOKE_PFR::SetConstantSpecificExchangeArea(const double value, const string units)
+void OpenSMOKE_PFR::SetConstantSpecificExchangeArea(const double value, const std::string units)
 {
 	iUserDefinedExchangeArea = CONSTANT;
 	Ae = OpenSMOKE_Conversions::conversion_u_length(value, units);
@@ -131,7 +131,7 @@ void OpenSMOKE_PFR::SetLogExperiment(const int int_value)
 	nExperiments = int_value;
 }
 
-void OpenSMOKE_PFR::SetODESolver(const string solver)
+void OpenSMOKE_PFR::SetODESolver(const std::string solver)
 {
 	if (solver == "BZZ")			iODE_Solver = ODE_SOLVER_BZZ;
 	else if (solver == "RADAU")		iODE_Solver = ODE_SOLVER_RADAU;
@@ -139,12 +139,12 @@ void OpenSMOKE_PFR::SetODESolver(const string solver)
 	else ErrorMessage("ODE Solvers: BZZ || RADAU || DLSODE");
 }
 
-void OpenSMOKE_PFR::SetInitialTime(const string units, const double value)
+void OpenSMOKE_PFR::SetInitialTime(const std::string units, const double value)
 {
     initialTime       = OpenSMOKE_Conversions::conversion_time(value, units);
 }
 
-void OpenSMOKE_PFR::SetInitialLenght(const string units, const double value)
+void OpenSMOKE_PFR::SetInitialLenght(const std::string units, const double value)
 {
     initialLenght       = OpenSMOKE_Conversions::conversion_length(value, units);
 }
@@ -175,7 +175,7 @@ void OpenSMOKE_PFR::Lock()
 
 	if (mix->polimiSoot->IsSoot() == true)
 	{
-		const string fileName = outputFolderName + "/SootDistribution.out";
+		const std::string fileName = outputFolderName + "/SootDistribution.out";
 		openOutputFileAndControl(fSootDistribution, fileName);
 		fSootDistribution.setf(ios::scientific);
 		GnuPlotSootDistributionInterface(fSootDistribution);
@@ -301,7 +301,7 @@ void OpenSMOKE_PFR::VideoSummary()
 void OpenSMOKE_PFR::SummaryOnFile()
 {
 	int i;
-	string file_name = outputFolderName + "/Summary.out";
+	std::string file_name = outputFolderName + "/Summary.out";
 	ofstream fSummary;
 	openOutputFileAndControl(fSummary, file_name);
     fSummary.setf(ios::scientific);
@@ -796,7 +796,7 @@ void OpenSMOKE_PFR::ODEPrint(BzzVector &y, double eta)
 
 					stringstream tag;
 					tag << index_local_ElementFluxAnalysis[1];
-					string name_file = outputFolderName + "/FluxAnalysis_" + tag.str();
+					std::string name_file = outputFolderName + "/FluxAnalysis_" + tag.str();
 					ElementFluxAnalysis.Run(name_file, rForward, rBackward);
 					index_local_ElementFluxAnalysis.DeleteElement(1);
 				}
@@ -1079,10 +1079,10 @@ void OpenSMOKE_PFR::ReSolve()
 	Solve();
 }
 
-void OpenSMOKE_PFR::DefineFromFile(const string inputFile)
+void OpenSMOKE_PFR::DefineFromFile(const std::string inputFile)
 {
     double  double_value;
-    string  string_value;
+    std::string  string_value;
     int     int_value;
 	vector<string> string_vector;
 
@@ -1528,8 +1528,8 @@ void OpenSMOKE_PFR::Solve()
     o.SetMaximumConstraints(xMax);
 //	o.SetMaxStep(MAX_TIME_STEPS);
 
-    if (iRelativeTolerance == true)	o.SetTollRel(relativeTolerance);
-    if (iAbsoluteTolerance == true)	o.SetTollAbs(absoluteTolerance);
+    if (iRelativeTolerance == true)	o.SetTolRel(relativeTolerance);
+    if (iAbsoluteTolerance == true)	o.SetTolAbs(absoluteTolerance);
 
 //	o.SetHMax(2.e-6);
 
@@ -2338,7 +2338,7 @@ void MyOdeSystem_PFR::assignPFR(OpenSMOKE_PFR *pfr, bool _iEnergy, bool _iMoment
 
 void OpenSMOKE_PFR::SaveOnBinaryFile(BzzSave &fOutput)
 {
-	string dummy;
+	std::string dummy;
 	char name[Constants::NAME_SIZE];
 
 	int nSteps = countGlobalIterations;			
@@ -2412,7 +2412,7 @@ void OpenSMOKE_PFR::SaveOnBinaryFile(BzzSave &fOutput)
 	}
 }
 
-void OpenSMOKE_PFR::SaveOnBinaryFile(const string filename)
+void OpenSMOKE_PFR::SaveOnBinaryFile(const std::string filename)
 {
 	cout << "Save on binary file..." << endl;
 	BzzSave fOutput;
@@ -2430,7 +2430,7 @@ void OpenSMOKE_PFR::SaveOnBinaryFile(const string filename)
 	{
 		cout << "  -- writing rate of production analysis..." << endl;
 
-		string dummy;
+		std::string dummy;
 		char name[Constants::NAME_SIZE];
 
 		BzzVector RRvector(mix->NumberOfReactions());

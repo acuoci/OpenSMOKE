@@ -31,8 +31,8 @@ friend class OpenSMOKE_Flamelet;
 public:
 
 	OpenSMOKE_Flamelet_ScheduleClass();
-	void ReadOperations(const string fileName);
-	void SetName(const string name);
+	void ReadOperations(const std::string fileName);
+	void SetName(const std::string name);
 
 protected:
 
@@ -43,9 +43,9 @@ protected:
 
 private:
 
-	string name_object;
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	std::string name_object;
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif // !defined(OPENSMOKE_FLAMELET_SCHEDULECLASS)

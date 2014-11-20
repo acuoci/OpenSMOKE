@@ -33,7 +33,7 @@ public:
 	void ReadFromBinaryFile(BzzLoad &fLoad);
 	void ExportAvailableXAxis(vector<string> &x_axis);
 	void ExportAvailableYAxis(vector<string> &y_axis);
-	void ImportSelectedAxis(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, string &name_x, string &name_y, vector<string> &names_lines);
+	void ImportSelectedAxis(int x_axis, vector<int> y_axis, BzzMatrix &xAxis, BzzMatrix &yAxis, std::string &name_x, std::string &name_y, vector<string> &names_lines);
 	void Prepare();
 
 public:
@@ -48,8 +48,8 @@ private:
 
 private:
 
-	void ErrorMessage(const string message);
-	void WarningMessage(const string message);
+	void ErrorMessage(const std::string message);
+	void WarningMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_POSTPROCESSOR_FLAME1D

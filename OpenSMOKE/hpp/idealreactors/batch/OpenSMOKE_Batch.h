@@ -59,9 +59,9 @@ public:	// Virtual functions (compulsory)
 	void VideoFinalResult();
 	void VideoGeneralInfo();
 	void VideoSummary();
-	void DefineFromFile(const string inputFile);
+	void DefineFromFile(const std::string inputFile);
 	void Solve();
-	void AssignEnd(const string units, const double value);
+	void AssignEnd(const std::string units, const double value);
 	void EnergyAnalysis(OpenSMOKE_GasStream &outletStream);
 	void ODEPrint(BzzVector &y, double eta);
 	void SummaryOnFile();
@@ -77,18 +77,18 @@ private: // Virtual functions (compulsory)
 	void UpdateExchangeArea(const double tau, const double csi);
 	void UpdateTwoEquationModel(BzzVector &y, BzzVector &dy);
 
-	void SaveOnBinaryFile(const string filename);
+	void SaveOnBinaryFile(const std::string filename);
 	void SaveOnBinaryFile(BzzSave &fOutput);
 	void UpdateReactionRates(const double TT, const double PP, BzzVector &xx, BzzVector &rr);
 
 public: // Specific functions 
 	
 	void AssignConstantPressure();
-	void AssignVolume(const string units, const double value);
+	void AssignVolume(const std::string units, const double value);
 
-	void SetConstantExchangeArea(const double value, const string units);
-	void SetUserDefinedExchangeArea(const string fileName);
-	void SetVolumeLaw(const double value, const string units);
+	void SetConstantExchangeArea(const double value, const std::string units);
+	void SetUserDefinedExchangeArea(const std::string fileName);
+	void SetVolumeLaw(const double value, const std::string units);
 	void UnsetUserDefinedExchangeArea();
 
 

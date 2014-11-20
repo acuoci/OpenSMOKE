@@ -18,10 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string>
 #include "surfaceChemistry/OpenSMOKE_SurfaceMaterial.h"
 #include "surfaceChemistry/OpenSMOKE_SurfaceSite.h"
 
-void OpenSMOKE_SurfaceSite::ErrorMessage(const string message)
+void OpenSMOKE_SurfaceSite::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_SurfaceSite"	<< endl;
@@ -32,7 +33,7 @@ void OpenSMOKE_SurfaceSite::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_SurfaceSite::WarningMessage(const string message)
+void OpenSMOKE_SurfaceSite::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:	  OpenSMOKE_SurfaceSite"	<< endl;
@@ -46,7 +47,7 @@ OpenSMOKE_SurfaceSite::OpenSMOKE_SurfaceSite()
 	name_object = "[not assigned]";
 }
 
-void OpenSMOKE_SurfaceSite::Setup(OpenSMOKE_SurfaceMaterial* material, const string name_object_, const double density)
+void OpenSMOKE_SurfaceSite::Setup(OpenSMOKE_SurfaceMaterial* material, const std::string name_object_, const double density)
 {
 	ptMaterial  = material;
 	name_object = name_object_;

@@ -25,7 +25,7 @@
 
 const int		OpenSMOKE_PreProcessorKinetics::NUM_MAX	= 40000;
 
-void OpenSMOKE_PreProcessorKinetics::ErrorMessage(const string message)
+void OpenSMOKE_PreProcessorKinetics::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_PreProcessorKinetics"	<< endl;
@@ -36,7 +36,7 @@ void OpenSMOKE_PreProcessorKinetics::ErrorMessage(const string message)
     exit(-1);
 }
 
-void OpenSMOKE_PreProcessorKinetics::WarningMessage(const string message)
+void OpenSMOKE_PreProcessorKinetics::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:	  OpenSMOKE_PreProcessorKinetics"	<< endl;
@@ -45,7 +45,7 @@ void OpenSMOKE_PreProcessorKinetics::WarningMessage(const string message)
 	cout << endl;
 }
 
-void OpenSMOKE_PreProcessorKinetics::readFromFile(const string fileSt, const string fileKin)
+void OpenSMOKE_PreProcessorKinetics::readFromFile(const std::string fileSt, const std::string fileKin)
 {
 	int i,j,k;
 	
@@ -278,7 +278,7 @@ void OpenSMOKE_PreProcessorKinetics::readFromFile(const string fileSt, const str
 		{
 			stringstream number;
 			number << j;
-			string message = "Reaction #" + number.str() +"\n";
+			std::string message = "Reaction #" + number.str() +"\n";
 			cout << k01[j] << "\t" << beta1[j] << "\t" << E1[j];
 			message += reactionRates->strReaction[j];
 			message += "\nReaction with negative pre-exponential factor!";
@@ -765,7 +765,7 @@ void OpenSMOKE_PreProcessorKinetics::CheckingStoichiometry()
 	}
 }
 
-void OpenSMOKE_PreProcessorKinetics::readStoichiometricFile(const string fileSt)
+void OpenSMOKE_PreProcessorKinetics::readStoichiometricFile(const std::string fileSt)
 {
 	int i,j;
 	double val;
@@ -825,7 +825,7 @@ void OpenSMOKE_PreProcessorKinetics::readStoichiometricFile(const string fileSt)
 	inputFile.close();
 }
 
-void OpenSMOKE_PreProcessorKinetics::SparsityStructures(const string fileSt)
+void OpenSMOKE_PreProcessorKinetics::SparsityStructures(const std::string fileSt)
 {
 	int i,j;
 	double val;
@@ -917,7 +917,7 @@ void OpenSMOKE_PreProcessorKinetics::SparsityStructures(const string fileSt)
 	cout << "Sparsity structures correctly written!" << endl;
 }
 
-void OpenSMOKE_PreProcessorKinetics::readStoichiometricFile_2(const string fileSt)
+void OpenSMOKE_PreProcessorKinetics::readStoichiometricFile_2(const std::string fileSt)
 {
 	int i,j;
 	double val;

@@ -38,15 +38,15 @@ public:
 	void AssignKineticScheme(OpenSMOKE_ReactingGas &_mix);
 	void AssignEnergy(const bool iEnergy);
 	void AssignInletFlows(OpenSMOKE_GasStream &stream);
-	virtual void AssignEnd(const string units, const double value) = 0;
+	virtual void AssignEnd(const std::string units, const double value) = 0;
 	virtual void Lock() = 0;
 
     // 2. Option settings
-	void SetName(const string name);
-    void SetOptions(string option);
+	void SetName(const std::string name);
+    void SetOptions(std::string option);
     void SetVideoOptions(const int _nVideoSteps);
     void SetFileOptions(const int _nFileSteps);
-    void SetOutputFolder(const string _outputFolderName);
+    void SetOutputFolder(const std::string _outputFolderName);
     void SetGlobalKinetics();
 	void SetTwoEquationModel();
 	void SetVerbose();
@@ -54,17 +54,17 @@ public:
 	void SetHistory();
     void SetRelativeTolerance(const double relative);
     void SetAbsoluteTolerance(const double absolute);
-    void SetUserDefinedTemperature(const string fileName);
+    void SetUserDefinedTemperature(const std::string fileName);
 	void SetUserDefinedTemperature(OpenSMOKE_UD_Profile &udp);
-	void SetViscosity(const double value, const string units);
+	void SetViscosity(const double value, const std::string units);
 	void SetKeySpecies(const vector<string> key_species);
 	
-	void SetUserDefinedHeatFlux(const string fileName);
-	void SetUserDefinedHeatExchangeCoefficient(const string fileName);
-	void SetUserDefinedAmbientTemperature(const string fileName);
-	void SetConstantHeatFlux(const double value, const string units);
-	void SetConstantHeatExchangeCoefficient(const double value, const string units);
-	void SetConstantAmbientTemperature(const double value, const string units);
+	void SetUserDefinedHeatFlux(const std::string fileName);
+	void SetUserDefinedHeatExchangeCoefficient(const std::string fileName);
+	void SetUserDefinedAmbientTemperature(const std::string fileName);
+	void SetConstantHeatFlux(const double value, const std::string units);
+	void SetConstantHeatExchangeCoefficient(const double value, const std::string units);
+	void SetConstantAmbientTemperature(const double value, const std::string units);
 	
 	void SetReactionRatesOnFile(const vector<string> _names);
 	void SetFormationRatesOnFile(const vector<string> _names);
@@ -100,7 +100,7 @@ public:
 	virtual void SummaryOnFile() = 0;
 
 	// Constructor
-    virtual void DefineFromFile(const string inputFile) = 0;
+    virtual void DefineFromFile(const std::string inputFile) = 0;
 
 	// Solve Reactor
 	virtual void Solve() = 0;
@@ -116,8 +116,8 @@ public:
 protected:
 
 	// Error and warning messages
-	void	ErrorMessage(const string message);
-	void	WarningMessage(const string message);
+	void	ErrorMessage(const std::string message);
+	void	WarningMessage(const std::string message);
 
 	// Message functions
 	virtual void VideoGeneralInfo() = 0;
@@ -142,9 +142,9 @@ protected:
 protected:
 
 	// Error and warning messages
-	string name_object;
-	string class_name;
-	string out_name;
+	std::string name_object;
+	std::string class_name;
+	std::string out_name;
 
 	// Control Variables
 	bool assignedKineticScheme;
@@ -187,20 +187,20 @@ protected:
 	int     indexTwoEquations;
 
 	// Print Options
-	string outputFolderName;
-	string outputName;
-	string outputSootName;
-	string outputPAHName;
-	string output2EName;
-	string outputOSMName;
-	string outputEnergyName;
-	string outputReactionRatesName;
-	string outputFormationRatesName;
-	string outputSolidName;
-	string outputConversionsName;
-	string outputExperimentName;
-	string outputSensitivityName;
-	string outputSelectivityName;
+	std::string outputFolderName;
+	std::string outputName;
+	std::string outputSootName;
+	std::string outputPAHName;
+	std::string output2EName;
+	std::string outputOSMName;
+	std::string outputEnergyName;
+	std::string outputReactionRatesName;
+	std::string outputFormationRatesName;
+	std::string outputSolidName;
+	std::string outputConversionsName;
+	std::string outputExperimentName;
+	std::string outputSensitivityName;
+	std::string outputSelectivityName;
 
 
     // Internal counters

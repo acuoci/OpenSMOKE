@@ -24,7 +24,7 @@
 #include "basic/OpenSMOKE_Constants.h"
 
 /*
-void OpenSMOKE_SootManager::recognizeSpecies(int numComponents, string *names, BzzVector &M)
+void OpenSMOKE_SootManager::recognizeSpecies(int numComponents, std::string *names, BzzVector &M)
 {
 	int i;
 	double pi = acos(-1.);
@@ -788,7 +788,7 @@ void OpenSMOKE_SootManager::print_distribution_data_on_file_large(double csi, of
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-void OpenSMOKE_PAHManager::recognizeSpecies(int numComponents, string *names, BzzVector &M)
+void OpenSMOKE_PAHManager::recognizeSpecies(int numComponents, std::string *names, BzzVector &M)
 {
 	int i;
 

@@ -32,8 +32,8 @@ public:
 
     OpenSMOKE_CSTR_Geometry();
 
-    void Setup(const string fileName);
-    void SetName(const string name);
+    void Setup(const std::string fileName);
+    void SetName(const std::string name);
 	void Update(const double x, double &D, double &Volume, double &Area);
 	void Update(const double x, double &Tau);
 
@@ -42,7 +42,7 @@ private:
     static const double  pi_over_6;
     static const double _6_over_pi;
 
-	string  name_object;
+	std::string  name_object;
     int     iKind;
     
 	double  D0;
@@ -63,7 +63,7 @@ private:
     LinearInterpolation interpolation_dDiameter;
     LinearInterpolation interpolation_dTau;
 
-    void ErrorMessage(const string message);
+    void ErrorMessage(const std::string message);
 };
 
 #endif // OPENSMOKE_CSTR_GEOMETRY_H
