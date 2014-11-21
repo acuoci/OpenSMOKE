@@ -14,11 +14,12 @@
 
 COMPILER_NAME  	      = gnu
 
-BZZ_PATH 	       =  ${HOME}/NumericalLibraries/BzzMath6
-OPENSMOKE_PATH         =  ../../../../../../OpenSMOKE/OpenSMOKE
+MYHOME		       =  $(HOME)
+BZZ_PATH 	       =  $(MYHOME)/NumericalLibraries/BzzMath/BzzMath6-dev
+OPENSMOKE_PATH         =  $(MYHOME)/NumericalLibraries/OpenSMOKE/OpenSMOKE
+NUMERICALRECIPES_PATH  =  $(MYHOME)/NumericalLibraries/NumericalRecipes
 
 #Paths 
-NUMERICALRECIPES_PATH  =  ${HOME}/NumericalLibraries/NumericalRecipes
 LIS_PATH               =  ${HOME}/NumericalLibraries/lis-1.2.62/lis-omp-complete
 MUMPS_PATH             =  ${HOME}/NumericalLibraries/MUMPS/MUMPS_4.9.2_SEQ_MKL_PORD
 METIS_PATH             =  ${HOME}/NumericalLibraries/metis-5.0.2
