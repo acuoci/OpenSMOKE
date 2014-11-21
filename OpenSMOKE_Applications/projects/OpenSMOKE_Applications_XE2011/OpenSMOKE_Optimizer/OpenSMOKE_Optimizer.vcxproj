@@ -76,11 +76,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;..\..\..\..\OpenSMOKE\hpp;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;..\..\..\..\OpenSMOKE\hpp;C:\NumericalLibraries\NumericalRecipes\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;..\..\..\..\OpenSMOKE\hpp;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;..\..\..\..\OpenSMOKE\hpp;C:\NumericalLibraries\NumericalRecipes\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -93,6 +93,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>../../../exe/win32debug/$(TargetName)_xe2013$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -106,6 +107,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>../../../exe/win64debug/$(TargetName)_xe2013$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -125,9 +127,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <OutputFile>../../../exe/$(TargetName)_xe2011_32bit_release$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>C:\NumericalLibraries\BzzMath\BzzMath6x\lib;..\..\..\..\OpenSMOKE\lib\xe2013;C:\NumericalLibraries\NumericalRecipes\lib;C:\Program Files %28x86%29\Intel\Composer XE 2013\mkl\lib\ia32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libBzzMath6_XE2013_serial_32bit_release.lib;libOpenSMOKE_Flamelet_32bit_release.lib;libOpenSMOKE_AddOns_32bit_release.lib;libOpenSMOKE_Basic_32bit_release.lib;libOpenSMOKE_IdealReactors_32bit_release.lib;libOpenSMOKE_PFR_32bit_release.lib;libOpenSMOKE_QMOM_32bit_release.lib;libOpenSMOKE_Engine_32bit_release.lib;libOpenSMOKE_SurfaceChemistry_32bit_release.lib;libOpenSMOKE_Flame1D_32bit_release.lib;libOpenSMOKE_Interfaces_32bit_release.lib;libOpenSMOKE_LiquidProperties_32bit_release.lib;libOpenSMOKE_PreProcessor_32bit_release.lib;libOpenSMOKE_CHEMKINPreProcessor_32bit_release.lib;lib_NR_XE2013_32bit_release.lib;libOpenSMOKE_Distributions_32bit_release.lib;libOpenSMOKE_PSR_32bit_release.lib;mkl_core.lib;mkl_intel_c.lib;mkl_sequential.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>../../../exe/win32/$(TargetName)_xe2013$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\lib\windows;..\..\..\..\OpenSMOKE\lib\xe2013;C:\Temp\Backup\NumericalLibraries\NumericalRecipes\lib;C:\Program Files %28x86%29\Intel\Composer XE 2013 SP1\mkl\lib\ia32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libBzzMath60dev_msvs2013_Win32_Release.lib;libOpenSMOKE_AddOns_32bit_release.lib;libOpenSMOKE_Basic_32bit_release.lib;libOpenSMOKE_IdealReactors_32bit_release.lib;libOpenSMOKE_PFR_32bit_release.lib;libOpenSMOKE_Flamelet_32bit_release.lib;libOpenSMOKE_PSR_32bit_release.lib;libOpenSMOKE_QMOM_32bit_release.lib;libOpenSMOKE_Engine_32bit_release.lib;libOpenSMOKE_SurfaceChemistry_32bit_release.lib;libOpenSMOKE_Flame1D_32bit_release.lib;libOpenSMOKE_Interfaces_32bit_release.lib;libOpenSMOKE_LiquidProperties_32bit_release.lib;libOpenSMOKE_PreProcessor_32bit_release.lib;libOpenSMOKE_CHEMKINPreProcessor_32bit_release.lib;lib_NR_XE2013_32bit_release.lib;mkl_core.lib;mkl_intel_c.lib;mkl_sequential.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,8 +150,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>../../../exe/$(TargetName)_xe2011_64bit_release$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>C:\NumericalLibraries\BzzMath\BzzMath6x\lib;..\..\..\..\OpenSMOKE\lib\xe2013;C:\NumericalLibraries\NumericalRecipes\lib;C:\Program Files %28x86%29\Intel\Composer XE 2013\mkl\lib\intel64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libBzzMath6_XE2013_serial_64bit_release.lib;libOpenSMOKE_Flamelet_64bit_release.lib;libOpenSMOKE_AddOns_64bit_release.lib;libOpenSMOKE_Basic_64bit_release.lib;libOpenSMOKE_IdealReactors_64bit_release.lib;libOpenSMOKE_PFR_64bit_release.lib;libOpenSMOKE_QMOM_64bit_release.lib;libOpenSMOKE_Engine_64bit_release.lib;libOpenSMOKE_SurfaceChemistry_64bit_release.lib;libOpenSMOKE_Flame1D_64bit_release.lib;libOpenSMOKE_Interfaces_64bit_release.lib;libOpenSMOKE_LiquidProperties_64bit_release.lib;libOpenSMOKE_PreProcessor_64bit_release.lib;libOpenSMOKE_CHEMKINPreProcessor_64bit_release.lib;lib_NR_XE2013_64bit_release.lib;libOpenSMOKE_SymbolicKinetics_64bit_release.lib;libOpenSMOKE_Distributions_64bit_release.lib;libOpenSMOKE_PSR_64bit_release.lib;mkl_core.lib;mkl_intel_lp64.lib;mkl_sequential.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\lib\windows;..\..\..\..\OpenSMOKE\lib\xe2013;C:\Temp\Backup\NumericalLibraries\NumericalRecipes\lib;C:\Program Files %28x86%29\Intel\Composer XE 2013 SP1\mkl\lib\intel64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libBzzMath60dev_msvs2013_x64_Release.lib;libOpenSMOKE_AddOns_64bit_release.lib;libOpenSMOKE_Basic_64bit_release.lib;libOpenSMOKE_IdealReactors_64bit_release.lib;libOpenSMOKE_PFR_64bit_release.lib;libOpenSMOKE_Flamelet_64bit_release.lib;libOpenSMOKE_PSR_32bit_release.lib;libOpenSMOKE_QMOM_64bit_release.lib;libOpenSMOKE_Engine_64bit_release.lib;libOpenSMOKE_SurfaceChemistry_64bit_release.lib;libOpenSMOKE_Flame1D_64bit_release.lib;libOpenSMOKE_Interfaces_64bit_release.lib;libOpenSMOKE_LiquidProperties_64bit_release.lib;libOpenSMOKE_PreProcessor_64bit_release.lib;libOpenSMOKE_CHEMKINPreProcessor_64bit_release.lib;lib_NR_XE2013_64bit_release.lib;mkl_core.lib;mkl_intel_lp64.lib;mkl_sequential.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

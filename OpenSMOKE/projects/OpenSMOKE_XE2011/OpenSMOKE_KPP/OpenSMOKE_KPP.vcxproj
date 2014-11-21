@@ -75,7 +75,7 @@
     <IncludePath>C:\NumericalLibraries\OpenSMOKE\hpp;C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;C:\Program Files %28x86%29\Intel\ComposerXE-2011\mkl\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\..\hpp;C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\..\hpp;C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;C:\Program Files %28x86%29\Intel\Composer XE 2013 SP1\mkl\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>..\..\..\hpp;C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;C:\Program Files %28x86%29\Intel\Composer XE 2013 SP1\mkl\include;$(IncludePath)</IncludePath>

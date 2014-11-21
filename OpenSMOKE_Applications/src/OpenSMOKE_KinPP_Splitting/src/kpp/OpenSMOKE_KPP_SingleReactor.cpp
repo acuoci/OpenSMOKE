@@ -432,7 +432,7 @@ void OpenSMOKE_KPP_SingleReactor::SolveCSTR_CorrectorDiscrete(const double tau, 
 		o.SetAnalyticalJacobian();									
 		o.SetMinimumConstraints(xMin_);
 		o.SetMaximumConstraints(xMax_);
-		o.SetTollAbs(data_->SingleReactor_OdeAbsoluteTolerance());
+		o.SetTolAbs(data_->SingleReactor_OdeAbsoluteTolerance());
 		
 		// Max number of Jacobians calls
 		if (data_->SingleReactor_OdeMaxJacobian() > 0)
@@ -925,7 +925,7 @@ double OpenSMOKE_KPP_SingleReactor::ODESystemIntegration(const double tau, BzzVe
 	o.SetAnalyticalJacobian();									
 	o.SetMinimumConstraints(xMin_);
 	o.SetMaximumConstraints(xMax_);
-	o.SetTollAbs(data_->SingleReactor_OdeAbsoluteTolerance());
+	o.SetTolAbs(data_->SingleReactor_OdeAbsoluteTolerance());
 		
 	// Max number of Jacobians calls
 	if (data_->SingleReactor_OdeMaxJacobian() > 0)

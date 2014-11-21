@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "OpenSMOKE_KPP_SingleReactorStatistics.h"
+#include <algorithm>
 #include <iostream>
 #include <iomanip>
 #include <omp.h>

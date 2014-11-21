@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm> 
 #include "OpenSMOKE_KPP_ODE_Manager.h"
 
 const double	OpenSMOKE_KPP_ODE_Manager::default_absoluteTolerance_			= 1.e-10;
@@ -250,7 +251,7 @@ void OpenSMOKE_KPP_ODE_Manager::TimeStepPolicy()
 	if (iterationsWithoutCorrections_ >= numberIterationsWithoutCorrections_)
 	{
 		requestedDeltaTime_ *= increasingFactorDeltaTime_;
-		requestedDeltaTime_  = min(requestedDeltaTime_, maximumDeltaTime_);
+		requestedDeltaTime_  = std::min(requestedDeltaTime_, maximumDeltaTime_);
 		iterationsWithoutCorrections_ = 0;
 		iterationsWithCorrections_    = 0;
 		

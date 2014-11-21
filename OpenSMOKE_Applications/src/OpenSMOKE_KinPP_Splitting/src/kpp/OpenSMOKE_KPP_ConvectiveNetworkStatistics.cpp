@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include "OpenSMOKE_KPP_ConvectiveNetworkStatistics.h"
 #include <iostream>
 #include <iomanip>
@@ -123,7 +124,7 @@ double OpenSMOKE_KPP_ConvectiveNetworkStatistics::ReductionOfTimeStep(BzzVector&
 				{
 					iTimeCorrectedMin_++;
 
-					a = min(a,vOld[i]/(vOld[i]-vNew[i]));
+					a = std::min(a,vOld[i]/(vOld[i]-vNew[i]));
 					if (a<0. || a>1.)
 						ErrorMessage("Safety reduction factor outside the boundaries...");
 				}
@@ -137,7 +138,7 @@ double OpenSMOKE_KPP_ConvectiveNetworkStatistics::ReductionOfTimeStep(BzzVector&
 			if (uncorrectedOmegaMin_ > 1.)
 			{
 				iTimeCorrectedMin_++;
-				a = min(a, vOld[kMin]/(vOld[kMin]-vNew[kMin]));
+				a = std::min(a, vOld[kMin]/(vOld[kMin]-vNew[kMin]));
 			}
 		}
 	}
@@ -149,7 +150,7 @@ double OpenSMOKE_KPP_ConvectiveNetworkStatistics::ReductionOfTimeStep(BzzVector&
 		if (uncorrectedOmegaMax_ > 1.)
 		{
 			iTimeCorrectedMax_++;
-			a = min(a, (1.-vOld[kMax])/(vNew[kMax]-vOld[kMax]));
+			a = std::min(a, (1.-vOld[kMax])/(vNew[kMax]-vOld[kMax]));
 		}
 	}
 
