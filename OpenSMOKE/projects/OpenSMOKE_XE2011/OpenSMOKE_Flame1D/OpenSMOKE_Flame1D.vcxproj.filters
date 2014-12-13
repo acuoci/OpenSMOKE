@@ -18,12 +18,6 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\cpp\idealreactors\flame1d\OpenSMOKE_Flame1D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\idealreactors\flame1d\OpenSMOKE_Flame1D_DataManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\cpp\idealreactors\flame1d\OpenSMOKE_Flame1D_FlameSpeedManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -37,6 +31,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\cpp\idealreactors\flame1d\OpenSMOKE_Flame1D_ScheduleClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\idealreactors\flame1d\OpenSMOKE_Flame1D_DataManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\idealreactors\flame1d\OpenSMOKE_Flame1D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

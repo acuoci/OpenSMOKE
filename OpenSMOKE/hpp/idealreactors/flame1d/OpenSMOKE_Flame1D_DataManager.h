@@ -70,6 +70,7 @@ public:
 	bool iCorrectionDiffusivity;
 	bool iCorrectionFormationEnthalpy;
 	bool iVerboseMixtureProperties;
+	bool iVerboseFluxes;
 	bool iUserDefinedLewisNumbers;
 	bool iDepositionWall;
 
@@ -335,6 +336,7 @@ private:
 
 	void SetRobustTemperature();
 	void SetVerboseMixtureProperties();
+	void SetVerboseFluxes();
 
 	void SetMaximumIntegrationOrder(const int int_value);
 	void SetInitialTimeStep(const std::string units, const double value);

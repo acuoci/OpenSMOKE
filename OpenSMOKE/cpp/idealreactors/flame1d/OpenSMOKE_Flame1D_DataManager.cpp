@@ -214,6 +214,7 @@ void OpenSMOKE_Flame1D_DataManager::SetDefaultValues()
 	iCorrectionReactionRates			= false;
 	iUnityLewisNumbers					= false;
 	iVerboseMixtureProperties			= false;
+	iVerboseFluxes						= false;
 	iFakeTemperatureThermalConductivity = false;
 	iPhysicalSootDiffusionCoefficients  = 0;
 }
@@ -446,6 +447,8 @@ OpenSMOKE_Dictionary_Flame1D::OpenSMOKE_Dictionary_Flame1D()
 	Add("#DepositionWall",			'O', 'N', "Deposition wall");
 
 	Add("#BINDensities",			'O', 'V', "BIN densities in kg/m3 (index0 rho0 indexF rhoF) [default 10 1500 20 1700]");
+
+	Add("#VerboseFluxes",			'O', 'N', "Verbose fluxes (Fick + Soret)");
 }
 
 void OpenSMOKE_Dictionary_Flame1D::PrepareForOpposedFlames()
@@ -785,6 +788,9 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionary(OpenSMOKE_Dictionary_Flame1D
 
 	if (dictionary.Return("#VerboseMixtureProperties"))	
 		SetVerboseMixtureProperties();
+
+	if (dictionary.Return("#VerboseFluxes"))
+		SetVerboseFluxes();
 
 	if (dictionary.Return("#LewisNumbers"))	
 		SetLewisNumbers();
@@ -1693,6 +1699,11 @@ void OpenSMOKE_Flame1D_DataManager::SetUserDefinedLewisNumbers(const vector<stri
 void OpenSMOKE_Flame1D_DataManager::SetVerboseMixtureProperties()
 {
 	iVerboseMixtureProperties = true;
+}
+
+void OpenSMOKE_Flame1D_DataManager::SetVerboseFluxes()
+{
+	iVerboseFluxes = true;
 }
 
 void OpenSMOKE_Flame1D_DataManager::SetCorrectionReactionRates(const double value)

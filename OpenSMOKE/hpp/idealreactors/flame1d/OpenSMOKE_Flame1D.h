@@ -418,7 +418,8 @@ private:
 	void GnuPlotSootDistributionInterface(ofstream &fSoot);
 
 	void GnuPlotLewisInterface(ofstream &fLewis);
-	void GnuPlotSoretInterface(ofstream &fSoot);
+	void GnuPlotSoretInterface(ofstream &fSoret);
+	void GnuPlotVerboseFluxesInterface(ofstream &fVerboseFluxes);
 	void GnuPlotFormationRatesInterface(ofstream &fFormationRates);
 	void GnuPlotReactionRatesInterface(ofstream &fReactionRates);
 	void GnuPlotSingleContributionsInterface(ofstream &fSingleContributions);
@@ -489,6 +490,9 @@ private:
 	void SaveOnBinaryFile(const std::string filename, const bool iSensitivity, const flame1d_model NLS_KIND);
 
 	void SolveODE_SingleReactors(const double tEnd);
+
+	BzzMatrix jFick;
+	BzzMatrix jSoret;
 };
 
 class OpenSMOKE_Flame1D_Solution

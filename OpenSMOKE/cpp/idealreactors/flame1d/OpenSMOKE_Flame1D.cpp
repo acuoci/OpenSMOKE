@@ -207,6 +207,11 @@ void OpenSMOKE_Flame1D::allocate_only_Np()
 			ChangeDimensions(NC, NC, &TetakjMap[j]);
 	}
 
+	if (data->iVerboseFluxes == true)
+	{
+		ChangeDimensions(Np, NC, &jFick);
+		ChangeDimensions(Np, NC, &jSoret);
+	}
 
 	// Variabili ausiliarie dipendenti solo da NP
 	// --------------------------------------------
@@ -3009,6 +3014,18 @@ void OpenSMOKE_Flame1D::compute_vStarPremixed()
 			vStar_e[i][j]   += vc_e[i] * 0.50*(W[i][j]+W[i+1][j]);
 			vStar_w[i+1][j]  = vStar_e[i][j];
 		}
+
+		if (data->iVerboseFluxes == true)
+		{
+			for (i = 1; i <= Ni; i++)
+				for (j = 1; j <= NC; j++)
+				{
+					jFick[i][j] = rho[i] * coeff_e[i][j] * (X[i + 1][j] - X[i][j])*grid.udxe[i];					// kg/m2/s
+
+					if (data->iSoretEffect == true)
+						jSoret[i][j] = rho[i] * coeff_e[i][j] * Teta[i][j] * (T[i + 1] - T[i]) / T[i] * grid.udxe[i];	// kg/m2/s
+				}
+		}
 }
 
 
@@ -3991,6 +4008,33 @@ void OpenSMOKE_Flame1D::printOnFile(const std::string fileNameOutput)
 		fSoret.close();
 	}
 
+	if (data->iVerboseFluxes == true)
+	{
+		std::string fileName;
+
+		ofstream fVerboseFluxes;
+		fileName = nameFolderAdditionalData + "/Fluxes.out";
+		openOutputFileAndControl(fVerboseFluxes, fileName);
+		fVerboseFluxes.setf(ios::scientific);
+
+		GnuPlotVerboseFluxesInterface(fVerboseFluxes);
+
+		for (i = 1; i <= Np; i++)
+		{
+			fVerboseFluxes << setw(20) << left << 1.e2*grid.x[i];	// 1
+			fVerboseFluxes << setw(20) << left << T[i];				// 2
+
+			for (j = 1; j <= NC; j++)
+			{
+				fVerboseFluxes << setw(20) << left << jFick[i][j];
+				fVerboseFluxes << setw(20) << left << jSoret[i][j];
+			}
+
+			fVerboseFluxes << endl;
+		}
+		fVerboseFluxes.close();
+	}
+
 	if (data->iAssignedFormationRates == true)
 	{
 		std::string fileName;
@@ -4264,6 +4308,21 @@ void OpenSMOKE_Flame1D::GnuPlotSoretInterface(ofstream &fSoret)
 		if (mix->M[j] <= 5.)	
 			PrintTagOnGnuplotLabel(20, fSoret, mix->names[j],fOutputCount);
 	fSoret << endl << endl;
+}
+
+void OpenSMOKE_Flame1D::GnuPlotVerboseFluxesInterface(ofstream &fVerboseFluxes)
+{
+	int fOutputCount = 1;
+
+	PrintTagOnGnuplotLabel(20, fVerboseFluxes, "x[cm]", fOutputCount);
+	PrintTagOnGnuplotLabel(20, fVerboseFluxes, "T[K]", fOutputCount);
+
+	for (int j = 1; j <= NC; j++)
+	{
+		PrintTagOnGnuplotLabel(20, fVerboseFluxes, "jF_" + mix->names[j], fOutputCount);
+		PrintTagOnGnuplotLabel(20, fVerboseFluxes, "jS_" + mix->names[j], fOutputCount);
+	}
+	fVerboseFluxes << endl << endl;
 }
 
 void OpenSMOKE_Flame1D::GnuPlotSingleContributionsInterface(ofstream &fSingleContributions)

@@ -72,14 +72,14 @@
     <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_SingleReactor_KineticsManager.cpp">
       <Filter>Source Files\kpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_SingleReactorStatistics.cpp">
-      <Filter>Source Files\kpp</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\OpenSMOKE_KPP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\OpenSMOKE_KPP_Definitions.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OpenSMOKE_KinPP_Splitting\src\kpp\OpenSMOKE_KPP_SingleReactorStatistics.cpp">
+      <Filter>Source Files\kpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
