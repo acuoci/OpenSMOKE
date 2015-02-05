@@ -29,13 +29,14 @@ void OpenSMOKE_PolimiSoot::Setup(OpenSMOKE_IdealGas &gas, const std::string mini
 	const unsigned int bin_index_final = 20;
 	const double bin_density_A   = 1500.;
 	const double bin_density_B   = 1700.;
-	Setup(gas, minimum_bin, bin_index_zero, bin_density_A, bin_index_final, bin_density_B);	
+	const double Df = 1.8;
+	Setup(gas, minimum_bin, bin_index_zero, bin_density_A, bin_index_final, bin_density_B, Df);	
 }
 
 
 void OpenSMOKE_PolimiSoot::Setup(OpenSMOKE_IdealGas &gas, const std::string minimum_bin, 
 									const unsigned int bin_index_zero, const double bin_density_A, 
-									const unsigned int bin_index_final, const double bin_density_B)
+									const unsigned int bin_index_final, const double bin_density_B, const double Df)
 {
 	iBin_ = false;
 	iSoot_ = false;
@@ -68,6 +69,7 @@ void OpenSMOKE_PolimiSoot::Setup(OpenSMOKE_IdealGas &gas, const std::string mini
 	bin_density_A_ = bin_density_A;
 	bin_index_final_ = bin_index_final;
 	bin_density_B_ = bin_density_B;
+	Df_ = Df;
 
 	for(int j=1;j<=gas.NumberOfSpecies();j++)
 		if (gas.names[j].compare(0, 3, "BIN") == 0)
@@ -89,6 +91,7 @@ void OpenSMOKE_PolimiSoot::Setup(OpenSMOKE_IdealGas &gas, const std::string mini
 		int iC = gas.recognize_element("c");
 		int iH = gas.recognize_element("h");
 		int iO = gas.recognize_element("o");
+		unsigned int BIN12_index = 0;
 
 		for(int j=1;j<=gas.NumberOfSpecies();j++)
 			if (gas.names[j].compare(0, 3, "BIN") == 0)
@@ -106,13 +109,16 @@ void OpenSMOKE_PolimiSoot::Setup(OpenSMOKE_IdealGas &gas, const std::string mini
 					}
 				}
 
+				if (gas.names[j].compare(0, 5, "BIN12") == 0 && BIN12_index == 0)
+					BIN12_index = bin_indices_.Size()+1;
+
 				bin_indices_.Append(j);																								// Index of bin in the gas phase kinetic scheme [-]
 				bin_names_.push_back(gas.names[j]);																					// Index of bin in the gas phase kinetic scheme [-]
 				bin_mw_.Append(gas.M[j]);																							// Molecular weight [kg/kmol]
 				bin_m_.Append(gas.M[j]/Constants::Nav_kmol);																		// Mass of particle [kg]
-				bin_d_.Append( pow(6./Constants::pi*gas.M[j]/(bin_density_[bin_density_.Size()]/1000.)
+				bin_ds_.Append( pow(6./Constants::pi*gas.M[j]/(bin_density_[bin_density_.Size()]/1000.)
 										/(Constants::Nav_mol), 1./3.)*1.e-2 );														// Diameter of particle [m]
-				bin_V_.Append( Constants::pi/6.*BzzPow3(bin_d_[bin_d_.Size()]) );													// Volume of particle [m3]
+				bin_V_.Append( Constants::pi/6.*BzzPow3(bin_ds_[bin_ds_.Size()]) );													// Volume of particle [m3]
 				bin_c_.Append(gas.elements(iC,j));															// C
 				bin_h_.Append(gas.elements(iH,j));															// H
 				bin_o_.Append(gas.elements(iO,j));															// O
@@ -123,6 +129,24 @@ void OpenSMOKE_PolimiSoot::Setup(OpenSMOKE_IdealGas &gas, const std::string mini
 				
 				if ( gas.M[j] >=  min_mw_soot)	bin_indices_large_.Append(bin_indices_.Size());
 				else                            bin_indices_small_.Append(bin_indices_.Size());
+
+				// Collisional diameter and diameter
+				{
+					const int nc = gas.elements(iC, j);
+					const double index = log(nc / 24.) / log(2.) + 1.;
+					if (bin_m_[bin_m_.Size()]>bin_m_[BIN12_index] && gas.names[j].compare(0, 5, "BIN12") != 0)
+					{
+						bin_np_.Append(bin_m_[bin_m_.Size()] / bin_m_[BIN12_index]);
+						bin_dc_.Append(std::sqrt(5. / 3.)*bin_ds_[BIN12_index] * std::pow(bin_np_[bin_np_.Size()] / std::pow(1. + 2. / Df_, Df_ / 2.), 1. / Df_));
+						bin_d_.Append(bin_dc_[bin_dc_.Size()]);
+					}
+					else
+					{
+						bin_np_.Append(0.);
+						bin_dc_.Append(0.);
+						bin_d_.Append(bin_ds_[bin_ds_.Size()]);
+					}
+				}
 			}
 
 		// Memory allocation
@@ -390,9 +414,12 @@ void OpenSMOKE_PolimiSoot::WriteSummaryFiles()
 		fOutput << setw(10) << left << "Name";	
 		fOutput << setw(16) << fixed << left << setprecision(2) << "MW[kg/kmol]";	// [kg/kmol]
 		fOutput << setw(12) << fixed << left << setprecision(5) << "d[nm]";			// [nm]
+		fOutput << setw(12) << fixed << left << setprecision(5) << "dsph[nm]";		// [nm]
+		fOutput << setw(12) << fixed << left << setprecision(5) << "dcol[nm]";		// [nm]
 		fOutput << setw(16) << scientific << left << "m[mug]";						// [mug] 
 		fOutput << setw(16) << scientific << left << "V[cm3]";						// [cm3]
-		fOutput << setw(10) << fixed << left << setprecision(0) << "C"; 
+		fOutput << setw(16) << scientific << left << "np[-]";						// [-]
+		fOutput << setw(10) << fixed << left << setprecision(0) << "C";
 		fOutput << setw(10) << fixed << left << setprecision(0) << "H"; 
 		fOutput << setw(10) << fixed << left << setprecision(0) << "O";
 		fOutput << setw(10) << fixed << left << setprecision(4) << "H/C"; 
@@ -407,10 +434,13 @@ void OpenSMOKE_PolimiSoot::WriteSummaryFiles()
 			fOutput << setw(5)  << left << i; 
 			fOutput << setw(10) << left << bin_names_[j].c_str();	
 			fOutput << setw(16) << fixed << left << setprecision(2) << bin_mw_[j];			// [kg/kmol]
-			fOutput << setw(12) << fixed << left << setprecision(5) << bin_d_[j]*1e9;		// [nm]
-			fOutput << setw(16) << scientific << left << bin_m_[j]*1e9;						// [mug] 
-			fOutput << setw(16) << scientific << left << bin_V_[j]*1e6;						// [cm3]
-			fOutput << setw(10) << fixed << left << setprecision(0) << bin_c_[j]; 
+			fOutput << setw(12) << fixed << left << setprecision(5) << bin_d_[j] * 1e9;		// [nm]
+			fOutput << setw(12) << fixed << left << setprecision(5) << bin_ds_[j] * 1e9;	// [nm]
+			fOutput << setw(12) << fixed << left << setprecision(5) << bin_dc_[j] * 1e9;	// [nm]
+			fOutput << setw(16) << scientific << left << bin_m_[j] * 1e9;					// [mug] 
+			fOutput << setw(16) << scientific << left << bin_V_[j] * 1e6;					// [cm3]
+			fOutput << setw(12) << fixed << left << setprecision(2) << bin_np_[j];			// [-]
+			fOutput << setw(10) << fixed << left << setprecision(0) << bin_c_[j];
 			fOutput << setw(10) << fixed << left << setprecision(0) << bin_h_[j]; 
 			fOutput << setw(10) << fixed << left << setprecision(0) << bin_o_[j];
 			fOutput << setw(10) << fixed << left << setprecision(4) << bin_h_over_c_[j]; 
@@ -430,9 +460,12 @@ void OpenSMOKE_PolimiSoot::WriteSummaryFiles()
 				fOutput << setw(5)  << left << i; 
 				fOutput << setw(10) << left << bin_names_[j].c_str();	
 				fOutput << setw(16) << fixed << left << setprecision(2) << bin_mw_[j];			// [kg/kmol]
-				fOutput << setw(12) << fixed << left << setprecision(5) << bin_d_[j]*1e9;		// [nm]
+				fOutput << setw(12) << fixed << left << setprecision(5) << bin_d_[j] * 1e9;		// [nm]
+				fOutput << setw(12) << fixed << left << setprecision(5) << bin_ds_[j] * 1e9;	// [nm]
+				fOutput << setw(12) << fixed << left << setprecision(5) << bin_dc_[j] * 1e9;	// [nm]
 				fOutput << setw(16) << scientific << left << bin_m_[j]*1e9;						// [mug] 
 				fOutput << setw(16) << scientific << left << bin_V_[j]*1e6;						// [cm3]
+				fOutput << setw(12) << fixed << left << setprecision(2) << bin_np_[j];			// [-]
 				fOutput << setw(10) << fixed << left << setprecision(0) << bin_c_[j]; 
 				fOutput << setw(10) << fixed << left << setprecision(0) << bin_h_[j]; 
 				fOutput << setw(10) << fixed << left << setprecision(0) << bin_o_[j];
@@ -457,8 +490,11 @@ void OpenSMOKE_PolimiSoot::WriteSummaryFiles()
 		fOutput << setw(10) << left << "Name";	
 		fOutput << setw(16) << fixed << left << setprecision(2) << "MW[kg/kmol]";	// [kg/kmol]
 		fOutput << setw(12) << fixed << left << setprecision(5) << "d[nm]";			// [nm]
+		fOutput << setw(12) << fixed << left << setprecision(5) << "dsph[nm]";		// [nm]
+		fOutput << setw(12) << fixed << left << setprecision(5) << "dcol[nm]";		// [nm]
 		fOutput << setw(16) << scientific << left << "m[mug]";						// [mug] 
 		fOutput << setw(16) << scientific << left << "V[cm3]";						// [cm3]
+		fOutput << setw(16) << scientific << left << "np[-]";						// [-]
 		fOutput << setw(10) << fixed << left << setprecision(0) << "C"; 
 		fOutput << setw(10) << fixed << left << setprecision(0) << "H"; 
 		fOutput << setw(10) << fixed << left << setprecision(0) << "O";
@@ -477,8 +513,11 @@ void OpenSMOKE_PolimiSoot::WriteSummaryFiles()
 				fOutput << setw(10) << left << bin_names_[j].c_str();	
 				fOutput << setw(16) << fixed << left << setprecision(2) << bin_mw_[j];			// [kg/kmol]
 				fOutput << setw(12) << fixed << left << setprecision(5) << bin_d_[j]*1e9;		// [nm]
+				fOutput << setw(12) << fixed << left << setprecision(5) << bin_ds_[j]*1e9;		// [nm]
+				fOutput << setw(12) << fixed << left << setprecision(5) << bin_dc_[j] * 1e9;	// [nm]
 				fOutput << setw(16) << scientific << left << bin_m_[j]*1e9;						// [mug] 
 				fOutput << setw(16) << scientific << left << bin_V_[j]*1e6;						// [cm3]
+				fOutput << setw(12) << fixed << left << setprecision(2) << bin_np_[j];			// [-]
 				fOutput << setw(10) << fixed << left << setprecision(0) << bin_c_[j]; 
 				fOutput << setw(10) << fixed << left << setprecision(0) << bin_h_[j]; 
 				fOutput << setw(10) << fixed << left << setprecision(0) << bin_o_[j];

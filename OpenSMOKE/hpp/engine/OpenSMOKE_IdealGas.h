@@ -98,7 +98,8 @@ public:
 	void Setup(BzzLoad &binaryFile);
 	void Fitting(BzzLoad &binaryFile);
 	void SetPolimiSoot(	const unsigned int bin_index_zero, const double bin_density_A, 
-						const unsigned int bin_index_final, const double bin_density_B);
+						const unsigned int bin_index_final, const double bin_density_B,
+						const double Df);
 	void SetPolimiSoot(	);
 
 	void CorrectSpeciesDiffusivityForSoot();

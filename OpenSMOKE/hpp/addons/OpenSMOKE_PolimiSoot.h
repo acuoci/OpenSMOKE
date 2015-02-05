@@ -30,7 +30,8 @@ public:
 
 	void Setup(OpenSMOKE_IdealGas &gas, const std::string minimum_bin,
 							const unsigned int bin_index_zero, const double bin_density_A, 
-							const unsigned int bin_index_final, const double bin_density_B);
+							const unsigned int bin_index_final, const double bin_density_B,
+							const double Df);
 
 	void Setup(OpenSMOKE_IdealGas &gas, const std::string minimum_bin);
 
@@ -123,6 +124,10 @@ private:
 	BzzVector		bin_o_over_h_;
 	vector<string>	bin_names_;
 
+	BzzVector		bin_dc_;
+	BzzVector		bin_ds_;
+	BzzVector		bin_np_;
+
 	BzzVector		xGas_;
 	BzzVector		bin_omega_;
 	BzzVector		bin_x_;
@@ -181,6 +186,7 @@ private:
 	double dstd_N_;
 	double d32_N_small_;
 	double d32_N_large_;
+	double Df_;
 
 	void WriteSummaryFiles();
 

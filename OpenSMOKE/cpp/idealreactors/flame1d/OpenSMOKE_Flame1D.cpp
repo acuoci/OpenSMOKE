@@ -3114,7 +3114,7 @@ void OpenSMOKE_Flame1D::setupGasMixture()
 //	mix->pah_manager.recognizeSpecies(NC, mix->names, mix->M);
 
 	if (data->bin_index_zero > 0)
-		mix->SetPolimiSoot(data->bin_index_zero, data->bin_density_A, data->bin_index_final, data->bin_density_B);
+		mix->SetPolimiSoot(data->bin_index_zero, data->bin_density_A, data->bin_index_final, data->bin_density_B, data->Df);
 	else
 		mix->SetPolimiSoot();
 }
@@ -3916,8 +3916,9 @@ void OpenSMOKE_Flame1D::printOnFile(const std::string fileNameOutput)
 					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_x()[k];
 					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_omega()[k];
 					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_rho()[k];
-					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_N()[k];
-					
+					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_N()[k] * 1.e6; // [#/cm3]
+					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_N()[k] / mix->polimiSoot->baskets_dlog10d()[k] * 1.e6; // [#/cm3]
+
 					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_fv()[k]/(mix->polimiSoot->fv_large()+mix->polimiSoot->fv_small());
 					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_x()[k]/(mix->polimiSoot->x_large()+mix->polimiSoot->x_small());
 					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_omega()[k]/(mix->polimiSoot->omega_large()+mix->polimiSoot->omega_small());
@@ -4269,13 +4270,14 @@ void OpenSMOKE_Flame1D::GnuPlotSootDistributionInterface(ofstream &fSoot)
 			<< setw(20) << left << "x(13)"
 			<< setw(20) << left << "y(14)"
 			<< setw(20) << left << "rho[kg/m3](15)"
-			<< setw(20) << left << "N[#/m3](16)";
+			<< setw(20) << left << "N[#/cm3](16)"
+			<< setw(20) << left << "N/dlog10[#/cm3](17)";
 
-    fSoot	<< setw(20) << left << "fvN(17)"
-			<< setw(20) << left << "xN(18)"
-			<< setw(20) << left << "yN(19)"
-			<< setw(20) << left << "rhoN[](20)"
-			<< setw(20) << left << "NN[](21)";
+    fSoot	<< setw(20) << left << "fvN(18)"
+			<< setw(20) << left << "xN(19)"
+			<< setw(20) << left << "yN(20)"
+			<< setw(20) << left << "rhoN[](21)"
+			<< setw(20) << left << "NN[](22)";
 
 	fSoot << endl << endl;
 }
@@ -7448,7 +7450,7 @@ void OpenSMOKE_Flame1D::give_Opposed_DW(const std::string string_kind)
 		for(int j=1;j<=mix->polimiSoot->bin_indices().Size();j++)
 		{
 			const int jj = mix->polimiSoot->bin_indices()[j];
-			dW[Np][jj] = (nGeometry-1.)*U[Np] * W[Np][jj] + rho[Np] * vStar[Np][jj] - rho[Np] * vThermophoretic[Np][jj];
+			dW[Np][jj] = (nGeometry-1.)*U[Np] * W[Np][jj] + rho[Np] * vStar[Np][jj] - rho[Np] * vThermophoretic[Np][jj] ;
 		}
 	}
 	
@@ -7567,6 +7569,7 @@ void OpenSMOKE_Flame1D::give_Twin_DT(double t)
 void OpenSMOKE_Flame1D::recoverFromBackUp(const std::string fileName)
 {
 	char binary_string[40];
+	int NCprevious;
 	BzzVector x_grid;
 
 	std::string fileNameCase = fileName + ".inp";
@@ -7579,10 +7582,39 @@ void OpenSMOKE_Flame1D::recoverFromBackUp(const std::string fileName)
 		fInput.fileLoad.read((char*) binary_string, sizeof(binary_string));
 		std::string kindOfProblem = binary_string;
 		fInput >> Np;	ChangeDimensions(Np, &x_grid);
-		fInput >> NC;
+		
+		fInput >> NCprevious;
+		std::vector<std::string> list_previous(NCprevious);
+		for (int i = 1; i <= NCprevious; i++)
+		{
+			fInput.fileLoad.read((char*)binary_string, sizeof(binary_string));
+			list_previous[i - 1] = binary_string;
+		}
+		NC = mix->NumberOfSpecies();
+
+		BzzVectorInt index_previous(NC); 
+		index_previous = 0;
+		unsigned int count = 0;
+		for (int i = 1; i <= NC; i++)
+		{
+			bool iFound = false;
+			for (int j = 1; j <= NCprevious; j++)
+			if (mix->names[i] == list_previous[j - 1])
+			{
+				index_previous[i] = j;
+				count++;
+				break;
+			}
+		}
+
+		std::cout << "Number of species in the previous kinetic mechanism: " << NCprevious << std::endl;
+		std::cout << "Number of species in the current kinetic mechanism:  " << NC << std::endl;
+		std::cout << "Number of species which are available:               " << count << std::endl;
+
+
 		fInput >> x_grid;
 		data->Setup(kindOfProblem);
-	fInput.End();
+		fInput.End();
 
 	setupGasMixture();
 
@@ -7633,21 +7665,72 @@ void OpenSMOKE_Flame1D::recoverFromBackUp(const std::string fileName)
 void OpenSMOKE_Flame1D::recoverVariables(const std::string fileName)
 {
 	char binary_string[40];
+	int NCprevious;
 	
 	BzzLoad fInput('*', fileName);
 
 	fInput.fileLoad.read((char*) binary_string, sizeof(binary_string));
 	
 	fInput >> Np;
-	fInput >> NC;
+	fInput >> NCprevious;
+	std::vector<std::string> list_previous(NCprevious);
+	for (int i = 1; i <= NCprevious; i++)
+	{
+		fInput.fileLoad.read((char*)binary_string, sizeof(binary_string));
+		list_previous[i - 1] = binary_string;
+	}
+	NC = mix->NumberOfSpecies();
+
+	BzzVectorInt index_previous(NC);
+	index_previous = 0;
+	unsigned int count = 0;
+	for (int i = 1; i <= NC; i++)
+	{
+		bool iFound = false;
+		for (int j = 1; j <= NCprevious; j++)
+		if (mix->names[i] == list_previous[j - 1])
+		{
+			index_previous[i] = j;
+			count++;
+			break;
+		}
+	}
+
 	fInput >> grid.x;
 
 	fInput >> U;
 	fInput >> G;
 	fInput >> H;
 	fInput >> T;
-	fInput >> W;
+	BzzMatrix Wprevious;
+	fInput >> Wprevious;
+	
+	ChangeDimensions(Np, NC, &W);
+	for (int i = 1; i <= NC; i++)
+	{
+		if (index_previous[i] != 0)
+		{
+			for (int j = 1; j <= grid.Np; j++)
+				W[j][i] = Wprevious[j][index_previous[i]];
+		}
+	}
+
+	const double epsilon = 1e-6;
+	for (int j = 1; j <= grid.Np; j++)
+	{
+		double sum = 0.;
+		for (int i = 1; i <= NC; i++)
+			sum += W[j][i];
 		
+		if (sum > 1.+epsilon || sum <= 0)
+		{
+			std::cout << "Point: " << j << " Sum: " << sum << std::endl;
+			ErrorMessage("The sum of mass fractions in point is ");
+		}
+		W[j][data->jINERT] += (1. - sum);
+	}
+
+
 	if (data->iQMOM == true)
 		fInput >> moments;
 			
@@ -7710,10 +7793,22 @@ void OpenSMOKE_Flame1D::printBackUpOnlyData(const std::string fileName)
 	std::string fileNameData = fileName + ".bin";
 
 	BzzSave fOutput('*', fileNameData);
+
+	// Type of problem
 	strcpy(binary_string, kindOfProblem.c_str());
 	fOutput.fileSave.write((char*) binary_string, sizeof(binary_string));
+
+	// Number of points
 	fOutput << Np;
+
+	// Number and list of species
 	fOutput << NC;
+	for (int i = 1; i <= NC; i++)
+	{
+		strcpy(binary_string, mix->names[i].c_str());
+		fOutput.fileSave.write((char*)binary_string, sizeof(binary_string));
+	}
+	
 	fOutput << grid.x;
 	fOutput << U;
 	fOutput << G;

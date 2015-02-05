@@ -204,7 +204,7 @@ int main(int argc, char* argv[])
 
 	// Finalize
 	cout << "Total time for solution: " << tEnd - tStart << " s" << endl;
-	OpenSMOKE_logo("OpenSMOKE_Flame1D", "0.3", "January 2014");
+	OpenSMOKE_logo("OpenSMOKE_Flame1D", "0.4", "February 2015");
 
 	return 1;
 }

@@ -217,6 +217,7 @@ void OpenSMOKE_Flame1D_DataManager::SetDefaultValues()
 	iVerboseFluxes						= false;
 	iFakeTemperatureThermalConductivity = false;
 	iPhysicalSootDiffusionCoefficients  = 0;
+	Df = 1.80;
 }
 
 void OpenSMOKE_Flame1D_DataManager::Setup(const std::string kind)

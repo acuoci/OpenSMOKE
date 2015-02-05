@@ -297,10 +297,11 @@ void OpenSMOKE_IdealGas::Setup(BzzLoad &binaryFile)
 }
 
 void OpenSMOKE_IdealGas::SetPolimiSoot(	const unsigned int bin_index_zero, const double bin_density_A, 
-										const unsigned int bin_index_final, const double bin_density_B)
+										const unsigned int bin_index_final, const double bin_density_B,
+										const double Df)
 {
 	polimiSoot = new OpenSMOKE_PolimiSoot;
-	polimiSoot->Setup(*this, "BIN5", bin_index_zero, bin_density_A, bin_index_final, bin_density_B);
+	polimiSoot->Setup(*this, "BIN5", bin_index_zero, bin_density_A, bin_index_final, bin_density_B,Df);
 }
 
 void OpenSMOKE_IdealGas::SetPolimiSoot(	)

@@ -245,6 +245,8 @@ public:
 	bool iCorrectDiffusionFormulation;
 	int iPhysicalSootDiffusionCoefficients;
 
+	double Df;
+
 private:
 
 	ifstream fInput;
