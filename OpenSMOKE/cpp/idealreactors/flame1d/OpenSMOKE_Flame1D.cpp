@@ -7715,7 +7715,7 @@ void OpenSMOKE_Flame1D::recoverVariables(const std::string fileName)
 		}
 	}
 
-	const double epsilon = 1e-6;
+	const double epsilon = 1.e-4;
 	for (int j = 1; j <= grid.Np; j++)
 	{
 		double sum = 0.;
@@ -7724,8 +7724,8 @@ void OpenSMOKE_Flame1D::recoverVariables(const std::string fileName)
 		
 		if (sum > 1.+epsilon || sum <= 0)
 		{
-			std::cout << "Point: " << j << " Sum: " << sum << std::endl;
-			ErrorMessage("The sum of mass fractions in point is ");
+			std::cout << "Point: " << j << " Sum: " << sum << " Error: " << sum-1. << std::endl;
+			ErrorMessage("Wrong sum of mass fractions");
 		}
 		W[j][data->jINERT] += (1. - sum);
 	}

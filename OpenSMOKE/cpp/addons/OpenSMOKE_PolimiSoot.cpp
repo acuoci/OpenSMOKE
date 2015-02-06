@@ -132,9 +132,13 @@ void OpenSMOKE_PolimiSoot::Setup(OpenSMOKE_IdealGas &gas, const std::string mini
 
 				// Collisional diameter and diameter
 				{
+					int iCollisional = false;
 					const int nc = gas.elements(iC, j);
-					const double index = log(nc / 24.) / log(2.) + 1.;
-					if (bin_m_[bin_m_.Size()]>bin_m_[BIN12_index] && gas.names[j].compare(0, 5, "BIN12") != 0)
+					const double index = log(nc / 24.) / log(2.) + 1;
+					if (index > 12)
+						iCollisional = true;
+					
+					if (iCollisional == true)
 					{
 						bin_np_.Append(bin_m_[bin_m_.Size()] / bin_m_[BIN12_index]);
 						bin_dc_.Append(sqrt(5. / 3.)*bin_ds_[BIN12_index] * pow(bin_np_[bin_np_.Size()] / pow(1. + 2. / Df_, Df_ / 2.), 1. / Df_));
@@ -418,7 +422,7 @@ void OpenSMOKE_PolimiSoot::WriteSummaryFiles()
 		fOutput << setw(12) << fixed << left << setprecision(5) << "dcol[nm]";		// [nm]
 		fOutput << setw(16) << scientific << left << "m[mug]";						// [mug] 
 		fOutput << setw(16) << scientific << left << "V[cm3]";						// [cm3]
-		fOutput << setw(16) << scientific << left << "np[-]";						// [-]
+		fOutput << setw(12) << scientific << left << "np[-]";						// [-]
 		fOutput << setw(10) << fixed << left << setprecision(0) << "C";
 		fOutput << setw(10) << fixed << left << setprecision(0) << "H"; 
 		fOutput << setw(10) << fixed << left << setprecision(0) << "O";
@@ -494,7 +498,7 @@ void OpenSMOKE_PolimiSoot::WriteSummaryFiles()
 		fOutput << setw(12) << fixed << left << setprecision(5) << "dcol[nm]";		// [nm]
 		fOutput << setw(16) << scientific << left << "m[mug]";						// [mug] 
 		fOutput << setw(16) << scientific << left << "V[cm3]";						// [cm3]
-		fOutput << setw(16) << scientific << left << "np[-]";						// [-]
+		fOutput << setw(12) << scientific << left << "np[-]";						// [-]
 		fOutput << setw(10) << fixed << left << setprecision(0) << "C"; 
 		fOutput << setw(10) << fixed << left << setprecision(0) << "H"; 
 		fOutput << setw(10) << fixed << left << setprecision(0) << "O";
