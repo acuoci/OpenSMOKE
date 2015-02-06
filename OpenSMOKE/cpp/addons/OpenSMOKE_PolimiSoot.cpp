@@ -137,7 +137,7 @@ void OpenSMOKE_PolimiSoot::Setup(OpenSMOKE_IdealGas &gas, const std::string mini
 					if (bin_m_[bin_m_.Size()]>bin_m_[BIN12_index] && gas.names[j].compare(0, 5, "BIN12") != 0)
 					{
 						bin_np_.Append(bin_m_[bin_m_.Size()] / bin_m_[BIN12_index]);
-						bin_dc_.Append(std::sqrt(5. / 3.)*bin_ds_[BIN12_index] * std::pow(bin_np_[bin_np_.Size()] / std::pow(1. + 2. / Df_, Df_ / 2.), 1. / Df_));
+						bin_dc_.Append(sqrt(5. / 3.)*bin_ds_[BIN12_index] * pow(bin_np_[bin_np_.Size()] / pow(1. + 2. / Df_, Df_ / 2.), 1. / Df_));
 						bin_d_.Append(bin_dc_[bin_dc_.Size()]);
 					}
 					else

@@ -18,7 +18,7 @@ MYHOME		       =  $(HOME)
 BZZ_PATH 	       =  $(MYHOME)/NumericalLibraries/BzzMath/BzzMath6-dev
 OPENSMOKE_PATH         =  $(MYHOME)/NumericalLibraries/OpenSMOKE/OpenSMOKE
 NUMERICALRECIPES_PATH  =  $(MYHOME)/NumericalLibraries/NumericalRecipes
-MKL_PATH               =  /opt/intel/composer_xe_2015/mkl
+MKL_PATH               =  $(MYHOME)/intel/composerxe/mkl
 
 #Paths 
 LIS_PATH               =  ${HOME}/NumericalLibraries/lis-1.2.62/lis-omp-complete
