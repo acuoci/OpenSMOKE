@@ -148,8 +148,8 @@ void OpenSMOKE_Flame1D_OpposedFlameManager::Update()
 	double rhoFuel = FuelDensity();
 	double rhoOxidizer = OxidizerDensity();
 
-	flame->UC =  rhoFuel*data->VC / (flame->nGeometry-1.);
-	flame->UO = -rhoOxidizer*data->VO / (flame->nGeometry-1.);
+//	flame->UC =  rhoFuel*data->VC / (flame->nGeometry-1.);
+//	flame->UO = -rhoOxidizer*data->VO / (flame->nGeometry-1.);
 
 	flame->GC = -rhoFuel*data->radialGradientC;
 	flame->GO = -rhoOxidizer*data->radialGradientO;

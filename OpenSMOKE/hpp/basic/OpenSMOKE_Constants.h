@@ -60,7 +60,7 @@ namespace Constants
 	const int	 NAME_SIZE			= 40;				// size of names
 	const int	 REACTION_NAME_SIZE	= 400;				// size of reaction names
 
-	const double MaxMWThermalDiffusionRatios = 5.;		// kg/kmol
+	const double MaxMWThermalDiffusionRatios = 20.;		// kg/kmol
 }
 
 enum ProfileKind				 { NONE, CONSTANT, USERDEFINED };

@@ -2793,13 +2793,13 @@ void OpenSMOKE_Flame1D::compute_vStarOpposed()
 					for (i = 1; i <= Ni; i++)
 					for (j = 1; j <= NC; j++)
 					{
-						vFick[i][j] = -Dm[i][j] * ((W_c[i + 1][j] - W_c[i][j])*grid.udxe[i] + Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]);
+						vFick[i][j] = -Dm[i][j] * ((W_c[i + 1][j] - W_c[i][j])*grid.udxe[i] + mix->M[j] / MW_c[i] * Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]);
 						vc[i] -= vFick[i][j];
 					}
 
 					for (j = 1; j <= NC; j++)
 					{
-						vFick[Np][j] = -Dm[Np][j] * ((W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np] + Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]);
+						vFick[Np][j] = -Dm[Np][j] * ((W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np] + mix->M[j] / MW_c[Np] * Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]);
 						vc[Np] -= vFick[Np][j];
 					}
 				}
@@ -2816,7 +2816,7 @@ void OpenSMOKE_Flame1D::compute_vStarOpposed()
 
 						for (j = 1; j <= NC; j++)
 						{
-							vFick[i][j] = -Dm[i][j] * ((W_c[i + 1][j] - W_c[i][j])*grid.udxe[i] + Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]);
+							vFick[i][j] = -Dm[i][j] * ((W_c[i + 1][j] - W_c[i][j])*grid.udxe[i] + mix->M[j] / MW_c[i] * Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]);
 							vc[i] -= vFick[i][j];
 						}
 					}
@@ -2827,7 +2827,7 @@ void OpenSMOKE_Flame1D::compute_vStarOpposed()
 
 					for (j = 1; j <= NC; j++)
 					{
-						vFick[Np][j] = -Dm[Np][j] * ((W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np] + Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]);
+						vFick[Np][j] = -Dm[Np][j] * ((W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np] + mix->M[j] / MW_c[Np] * Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]);
 						vc[Np] -= vFick[Np][j];
 					}
 				}
@@ -2905,13 +2905,13 @@ void OpenSMOKE_Flame1D::compute_vStarOpposed()
 					for (i = 1; i <= Ni; i++)
 					for (j = 1; j <= NC; j++)
 					{
-						vStar[i][j] = -Dm[i][j] * ((W_c[i + 1][j] - W_c[i][j])*grid.udxe[i] + Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]);
+						vStar[i][j] = -Dm[i][j] * ((W_c[i + 1][j] - W_c[i][j])*grid.udxe[i] + mix->M[j] / MW_c[i] * Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]);
 						vc[i] -= vStar[i][j];
 					}
 
 					for (j = 1; j <= NC; j++)
 					{
-						vStar[Np][j] = -Dm[Np][j] * ((W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np] + Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]);
+						vStar[Np][j] = -Dm[Np][j] * ((W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np] + mix->M[j] / MW_c[Np] * Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]);
 						vc[Np] -= vStar[Np][j];
 					}
 				}
@@ -2928,7 +2928,7 @@ void OpenSMOKE_Flame1D::compute_vStarOpposed()
 
 						for (j = 1; j <= NC; j++)
 						{
-							vStar[i][j] = -Dm[i][j] * ((W_c[i + 1][j] - W_c[i][j])*grid.udxe[i] + Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]) + vThermophoretic[i][j];
+							vStar[i][j] = -Dm[i][j] * ((W_c[i + 1][j] - W_c[i][j])*grid.udxe[i] + mix->M[j] / MW_c[i] * Teta[i][j] / T[i] * (T[i + 1] - T[i])*grid.udxe[i]) + vThermophoretic[i][j];
 							vc[i] -= vStar[i][j];
 						}
 					}
@@ -2939,7 +2939,7 @@ void OpenSMOKE_Flame1D::compute_vStarOpposed()
 
 					for (j = 1; j <= NC; j++)
 					{
-						vStar[Np][j] = -Dm[Np][j] * ((W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np] + Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]) + vThermophoretic[Np][j];
+						vStar[Np][j] = -Dm[Np][j] * ((W_c[Np][j] - W_c[Np - 1][j])*grid.udxw[Np] + mix->M[j] / MW_c[Np] * Teta[Np][j] / T[Np] * (T[Np] - T[Np - 1])*grid.udxw[Np]) + vThermophoretic[Np][j];
 						vc[Np] -= vStar[Np][j];
 					}
 				}
@@ -3128,10 +3128,13 @@ void OpenSMOKE_Flame1D::setupBoundaryConditions()
 
 		massFractionsAndPM(data->XC, WC, PMtot[1], mix->M);
 		massFractionsAndPM(data->XO, WO, PMtot[Np], mix->M);
-
+	
 		setTemperatureAndMassFractionProfiles(FLAME1D_IGNITION_START);
 		BzzVectorInt dummy;
 		properties(0, -1, dummy, 0, 0);
+
+		const double rhoC = data->P_Pascal*PMtot[1] / Constants::R_J_kmol / data->TC;
+		const double rhoO = data->P_Pascal*PMtot[Np] / Constants::R_J_kmol / data->TO;
 
 		if (data->geometry == "AXIS")		nGeometry = 3.; 
 		else if (data->geometry == "PLANAR") nGeometry = 2.; 
@@ -3891,8 +3894,36 @@ void OpenSMOKE_Flame1D::printOnFile(const std::string fileNameOutput)
 			fSoot << setw(20) << left << mix->polimiSoot->rho_small();
 			fSoot << setw(20) << left << mix->polimiSoot->N_small();
 
-            fSoot << endl;
+			fSoot << endl;
+			/*
+			{
+				double sum = 0.;
+				for (unsigned int i = 0; i < NC; i++)
+				{
+					wVector[i + 1] = double(i + 1);
+					sum += double(i + 1);
+				}
+				for (unsigned int i = 0; i < NC; i++)
+					wVector[i + 1] /= sum;
 
+				// Molecular weight
+				mix->GetMWAndMoleFractionsFromMassFractions(MWgas, xVector, wVector);
+
+				// Soot analysis
+				mix->polimiSoot->Analysis(*mix, 101325., 1000., wVector);
+
+
+				std::cout << 101325.*MWgas / 8314. / 1000. << endl;
+				std::cout << mix->polimiSoot->fv_large() << endl;
+				std::cout << mix->polimiSoot->fv_small() << endl;
+				std::cout << mix->polimiSoot->x_large() << endl;
+				std::cout << mix->polimiSoot->x_small() << endl;
+				std::cout << mix->polimiSoot->rho_large() << endl;
+				std::cout << mix->polimiSoot->rho_small() << endl;
+
+				getchar();
+			}
+			*/
 			// Distribution
 			{
 				for (int k=1;k<=mix->polimiSoot->baskets_d().Size();k++)
@@ -3916,8 +3947,8 @@ void OpenSMOKE_Flame1D::printOnFile(const std::string fileNameOutput)
 					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_x()[k];
 					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_omega()[k];
 					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_rho()[k];
-					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_N()[k] * 1.e6; // [#/cm3]
-					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_N()[k] / mix->polimiSoot->baskets_dlog10d()[k] * 1.e6; // [#/cm3]
+					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_N()[k] / 1.e6; // [#/cm3]
+					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_N()[k] / mix->polimiSoot->baskets_dlog10d()[k] / 1.e6; // [#/cm3]
 
 					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_fv()[k]/(mix->polimiSoot->fv_large()+mix->polimiSoot->fv_small());
 					fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_x()[k]/(mix->polimiSoot->x_large()+mix->polimiSoot->x_small());
@@ -4271,7 +4302,7 @@ void OpenSMOKE_Flame1D::GnuPlotSootDistributionInterface(ofstream &fSoot)
 			<< setw(20) << left << "y(14)"
 			<< setw(20) << left << "rho[kg/m3](15)"
 			<< setw(20) << left << "N[#/cm3](16)"
-			<< setw(20) << left << "N/dlog10[#/cm3](17)";
+			<< setw(20) << left << "dN/dlog10[#/cm3](17)";
 
     fSoot	<< setw(20) << left << "fvN(18)"
 			<< setw(20) << left << "xN(19)"
@@ -7333,7 +7364,7 @@ void OpenSMOKE_Flame1D::give_Opposed_DU_DG_DH()
 
 	grid.FirstDerivative(data->iDerG, U, M, diffM);
 
-	// Equations
+	// Equations (Cuoci)
 	// --------------------------------------------------------------------------------------------
 	dU[1] = U[1] - UC;
 	dG[1] = G[1] - GC;
@@ -7428,7 +7459,7 @@ void OpenSMOKE_Flame1D::give_Opposed_DW(const std::string string_kind)
 	// Equazioni
 	// --------------------------------------------------------------------------------------
 	for(j=1;j<=NC;j++)
-		dW[1][j] = rho[1] * ((nGeometry-1.)*U[1] * urho[1] * W[1][j] + vStar[1][j]) - BCW_C[j];
+		dW[1][j] = rho[1] * ((nGeometry - 1.)*U[1] * urho[1] * W[1][j] + vStar[1][j]) - BCW_C[j];
 	
 	for(i=2;i<=Ni;i++)
 		for(j=1;j<=NC;j++)
@@ -7448,9 +7479,9 @@ void OpenSMOKE_Flame1D::give_Opposed_DW(const std::string string_kind)
 
 		// Soot species
 		for(int j=1;j<=mix->polimiSoot->bin_indices().Size();j++)
-		{
+		{		
 			const int jj = mix->polimiSoot->bin_indices()[j];
-			dW[Np][jj] = (nGeometry-1.)*U[Np] * W[Np][jj] + rho[Np] * vStar[Np][jj] - rho[Np] * vThermophoretic[Np][jj] ;
+			dW[Np][jj] = (nGeometry - 1.)*U[Np] * W[Np][jj] + rho[Np] * vStar[Np][jj] - rho[Np] * vThermophoretic[Np][jj];
 		}
 	}
 	

@@ -1409,7 +1409,7 @@ void OpenSMOKE_Flame1D_DataManager::SetGasRadiation()
 void OpenSMOKE_Flame1D_DataManager::SetDepositionWall()
 {
 	iDepositionWall = true;
-	iThermophoreticEffect = true;
+	//iThermophoreticEffect = true;
 }
 
 void OpenSMOKE_Flame1D_DataManager::SetUncorrectDiffusionFormulation()
