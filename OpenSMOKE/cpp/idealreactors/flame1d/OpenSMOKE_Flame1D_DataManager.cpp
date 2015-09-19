@@ -181,6 +181,9 @@ OpenSMOKE_Flame1D_DataManager::OpenSMOKE_Flame1D_DataManager()
 
 	iCorrectDiffusionFormulation = true;
 	iPhysicalSootDiffusionCoefficients = 0;
+
+	sampling_coefficient = 0.;
+	iAssignedSamplingCoefficient = false;
 }
 
 void OpenSMOKE_Flame1D_DataManager::SetName(const std::string name)
@@ -450,6 +453,8 @@ OpenSMOKE_Dictionary_Flame1D::OpenSMOKE_Dictionary_Flame1D()
 	Add("#BINDensities",			'O', 'V', "BIN densities in kg/m3 (index0 rho0 indexF rhoF) [default 10 1500 20 1700]");
 
 	Add("#VerboseFluxes",			'O', 'N', "Verbose fluxes (Fick + Soret)");
+
+	Add("#TODO_Sampling",			'O', 'M', "Sampling coefficient (in Pa/m)");
 }
 
 void OpenSMOKE_Dictionary_Flame1D::PrepareForOpposedFlames()
@@ -879,6 +884,9 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionary(OpenSMOKE_Dictionary_Flame1D
 
 	if (dictionary.Return("#FakeTemperatureIncrementThermalConductivity", double_value, string_value))
 		SetChangeFakeTemperatureThermalConductivity(double_value, string_value);
+
+	if (dictionary.Return("#TODO_Sampling", double_value, string_value))
+		SetSampling(string_value, double_value);
 }
 
 void OpenSMOKE_Flame1D_DataManager::DefineFromFileOpposed(const std::string inputFile)
@@ -1398,6 +1406,15 @@ void OpenSMOKE_Flame1D_DataManager::SetEnvironmentTemperature(const std::string 
 {
 	environmentTemperature = OpenSMOKE_Conversions::conversion_temperature(value, units);
 	iAssignedEnvironmentTemperature = true;
+}
+
+void OpenSMOKE_Flame1D_DataManager::SetSampling(const std::string units, const double value)
+{
+	if (units != "Pa/m")
+		ErrorMessage("Wrong units for #Sampling option");
+
+	sampling_coefficient = value;
+	iAssignedSamplingCoefficient = true;
 }
 
 void OpenSMOKE_Flame1D_DataManager::SetGasRadiation()

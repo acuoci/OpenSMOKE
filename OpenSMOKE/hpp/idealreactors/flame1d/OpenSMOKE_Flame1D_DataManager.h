@@ -247,6 +247,9 @@ public:
 
 	double Df;
 
+	double sampling_coefficient;
+	bool iAssignedSamplingCoefficient;
+
 private:
 
 	ifstream fInput;
@@ -344,6 +347,7 @@ private:
 	void SetInitialTimeStep(const std::string units, const double value);
 
 	void SetDepositionWall();
+	void SetSampling(const std::string units, const double value);
 
 	// Specific for premixed flames
 	void AssignMassFlowRate(const std::string units, const double value);

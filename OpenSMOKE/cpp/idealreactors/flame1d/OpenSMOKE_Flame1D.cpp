@@ -7415,6 +7415,15 @@ void OpenSMOKE_Flame1D::give_Opposed_DU_DG_DH()
 	dU[Np] = -0.50*(G[Np-1]+G[Np]) + (-U[Np-1]+U[Np])*grid.udxw[Np];
 	dG[Np] = G[Np] - GO;
 	dH[Np] = U[Np] - UO;
+
+	// Sampling (TODO)
+	if (data->iAssignedSamplingCoefficient == true)
+	{
+		double v_np = (nGeometry - 1.)*U[Np] / rho[Np];
+		double v_ni = (nGeometry - 1.)*U[Np-1] / rho[Np-1];
+		double dv_over_dx = (v_np - v_ni)*grid.udxw[Np];
+		dH[Np] = rho[Np]*v_np*dv_over_dx - data->sampling_coefficient;
+	}
 }	
 
 void OpenSMOKE_Flame1D::give_Twin_DU_DG_DH()
