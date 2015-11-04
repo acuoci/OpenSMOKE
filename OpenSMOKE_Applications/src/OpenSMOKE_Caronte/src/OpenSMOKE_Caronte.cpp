@@ -53,7 +53,9 @@ CSimpleOpt::SOption parser_options[] =
     { OPT_ARG,  _T("--backup"),          SO_REQ_SEP }, // "-backup   ARG"
     { OPT_ARG,  _T("--unsteady"),        SO_REQ_SEP }, // "-unsteady ARG"
     { OPT_ARG,  _T("--flame-speed-analysis"),   SO_REQ_SEP }, // "-unsteady ARG"
-    { OPT_ARG,  _T("--opposed-flame-analysis"), SO_REQ_SEP }, // "-unsteady ARG"
+	{ OPT_ARG, _T("--opposed-flame-analysis-regular"), SO_REQ_SEP }, // "-unsteady ARG"
+	{ OPT_ARG, _T("--opposed-flame-analysis-extinction"), SO_REQ_SEP }, // "-unsteady ARG"
+	{ OPT_ARG, _T("--opposed-flame-analysis-ignition"), SO_REQ_SEP }, // "-unsteady ARG"
 
     { OPT_HELP, _T("-?"),     SO_NONE    }, // "-?"
     { OPT_HELP, _T("-help"),  SO_NONE    }, // "-help"
@@ -189,10 +191,23 @@ int main(int argc, char* argv[])
 
 
 	// 6. Flame speed analysis
-    if (parser.parse("--opposed-flame-analysis", argument))
+    if (parser.parse("--opposed-flame-analysis-regular", argument))
 	{
-		data.iOpposedFlameAnalysis = true;			
+		data.iOpposedFlameAnalysis = true;	
+		data.OpposedAnalysisType = "Regular";
 		data.opposedFlameAnalysisFileName = argument;	
+	}
+	else if (parser.parse("--opposed-flame-analysis-ignition", argument))
+	{
+		data.iOpposedFlameAnalysis = true;
+		data.OpposedAnalysisType = "Ignition";
+		data.opposedFlameAnalysisFileName = argument;
+	}
+	else if (parser.parse("--opposed-flame-analysis-extinction", argument))
+	{
+		data.iOpposedFlameAnalysis = true;
+		data.OpposedAnalysisType = "Extinction";
+		data.opposedFlameAnalysisFileName = argument;
 	}
 	else data.iOpposedFlameAnalysis = false;	
 
@@ -204,7 +219,7 @@ int main(int argc, char* argv[])
 
 	// Finalize
 	cout << "Total time for solution: " << tEnd - tStart << " s" << endl;
-	OpenSMOKE_logo("OpenSMOKE_Flame1D", "0.4", "February 2015");
+	OpenSMOKE_logo("OpenSMOKE_Flame1D", "0.5", "November 2015");
 
 	return 1;
 }
@@ -229,6 +244,8 @@ void ParserClass::ShowUsage()
 	cout << "   --output FOLDER						output folder"				<< endl;
     cout << "   --schedule FILENAME					input file for operations"	<< endl;
     cout << "   --flame-speed-analysis FILENAME		input file for flame speed analysis"					<< endl;
-    cout << "   --opposed-flame-analysis FILENAME	input file for opposed flame analysis"					<< endl;
+	cout << "   --opposed-flame-analysis-regular FILENAME	 input file for opposed flame analysis" << endl;
+	cout << "   --opposed-flame-analysis-extinction FILENAME input file for opposed flame analysis" << endl;
+	cout << "   --opposed-flame-analysis-ignition FILENAME	 input file for opposed flame analysis" << endl;
 	cout << endl;
 }

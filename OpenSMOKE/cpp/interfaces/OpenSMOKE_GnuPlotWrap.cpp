@@ -73,6 +73,7 @@
 #endif
 
 #include "BzzMath.hpp"
+using namespace std;
 #include "interfaces/OpenSMOKE_GnuPlotWrap.h"
 
 

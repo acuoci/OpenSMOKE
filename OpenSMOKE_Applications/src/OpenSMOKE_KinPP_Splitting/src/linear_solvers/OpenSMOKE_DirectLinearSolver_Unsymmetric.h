@@ -22,6 +22,7 @@
 #define OpenSMOKE_DirectLinearSolver_Unsymmetric_H
 
 #include "BzzMath.hpp"
+using namespace std;
 
 enum OpenSMOKE_DirectLinearSolver_Unsymmetric_Kind   { OPENSMOKE_DIRECTSOLVER_SQUAREMATRIX, OPENSMOKE_DIRECTSOLVER_SQUAREMATRIX_ROW_BY_ROW };
 enum OpenSMOKE_DirectLinearSolver_Unsymmetric_Status { OPENSMOKE_DIRECTSOLVER_STATUS_OPEN, OPENSMOKE_DIRECTSOLVER_STATUS_TOFACTORIZE, OPENSMOKE_DIRECTSOLVER_STATUS_FACTORIZED };

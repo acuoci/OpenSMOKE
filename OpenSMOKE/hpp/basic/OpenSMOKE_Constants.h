@@ -54,7 +54,7 @@ namespace Constants
 	const double csi_min			= 1.e-3;
 	const double csi_max			= 0.995;
 
-	const double TMinExtinction		= 1000.;			// [K]
+	const double TMinExtinction		= 400.;			// [K]
 
 	const int	 COMMENT_SIZE		= 300;				// size of comments
 	const int	 NAME_SIZE			= 40;				// size of names

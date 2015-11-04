@@ -22,6 +22,7 @@
 #define OPENSMOKE_LOOKUP_TABLE_FLAME
 
 #include "BzzMath.hpp"
+using namespace std;
 
 class OpenSMOKE_LookUp_Table_Flame
 {

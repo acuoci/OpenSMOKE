@@ -26,6 +26,7 @@
 #include "basic/OpenSMOKE_Constants.h"
 //#include "addons/OpenSMOKE_SootManager.h"
 #include "engine/OpenSMOKE_EquilibriumStanjan.h"
+using namespace std;
 
 class OpenSMOKE_PolimiSoot;
 

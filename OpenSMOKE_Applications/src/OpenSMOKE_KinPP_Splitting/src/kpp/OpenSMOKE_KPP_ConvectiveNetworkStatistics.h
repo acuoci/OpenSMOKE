@@ -22,6 +22,7 @@
 #define OpenSMOKE_KPP_ConvectiveNetworkStatistics_H
 
 #include "BzzMath.hpp"
+using namespace std;
 
 class OpenSMOKE_KPP_ConvectiveNetworkStatistics
 {

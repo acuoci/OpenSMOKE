@@ -23,6 +23,7 @@
 
 #include <vector>
 #include "BzzMath.hpp"
+using namespace std;
 
 class OpenSMOKE_IdealGas;
 class OpenSMOKE_ReactingGas;

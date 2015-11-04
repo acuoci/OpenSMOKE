@@ -22,6 +22,7 @@
 #define OPENSMOKE_EQUILIBRIUMSTANJAN
 
 #include "BzzMath.hpp"
+using namespace std;
 
 class OpenSMOKE_IdealGas;
 class OpenSMOKE_EquilibriumStanjan;

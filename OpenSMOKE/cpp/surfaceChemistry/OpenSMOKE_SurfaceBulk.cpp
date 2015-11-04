@@ -21,6 +21,7 @@
 #include <string>
 #include "surfaceChemistry/OpenSMOKE_SurfaceMaterial.h"
 #include "surfaceChemistry/OpenSMOKE_SurfaceBulk.h"
+using namespace std;
 
 
 void OpenSMOKE_SurfaceBulk::ErrorMessage(const std::string message)

@@ -21,6 +21,7 @@
 #include <string>
 #include "basic/OpenSMOKE_Constants.h"
 #include "distributions/OpenSMOKE_GammaFunction.h"
+using namespace std;
 
 const double OpenSMOKE_GammaFunction::c1 = -0.577191652;
 const double OpenSMOKE_GammaFunction::c2 =  0.988205891;

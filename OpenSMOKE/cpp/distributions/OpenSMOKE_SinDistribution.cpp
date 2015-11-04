@@ -21,6 +21,7 @@
 #include <string>
 #include "basic/OpenSMOKE_Constants.h"
 #include "distributions/OpenSMOKE_SinDistribution.h"
+using namespace std;
 
 const double OpenSMOKE_SinDistribution::c2=0.25;
 const double OpenSMOKE_SinDistribution::c4=0.015625;

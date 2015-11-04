@@ -23,6 +23,7 @@
 
 #include "BzzMath.hpp"
 #include <vector>
+using namespace std;
 
 class OpenSMOKE_SurfaceKinetics;
 class OpenSMOKE_SurfaceMaterial;

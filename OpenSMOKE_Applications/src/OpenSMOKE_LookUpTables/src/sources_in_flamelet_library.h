@@ -25,6 +25,7 @@
 #include <iostream>
 #include <fstream>
 #include "BzzMath.hpp"
+using namespace std;
 
 class sources_in_flamelet_library
 {

@@ -27,6 +27,8 @@
 #include "symbolickinetics/gri12/OpenSMOKE_SymbolicKinetics_GRI12.h"
 #include "kinpp/OpenSMOKE_DirectLinearSolver_Unsymmetric.h"
 #include "kinpp/OpenSMOKE_PARDISO_Unsymmetric.h"
+#include <ctime>
+using namespace std;
 
 /*
 #include "symbolickinetics/OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_0810.h"

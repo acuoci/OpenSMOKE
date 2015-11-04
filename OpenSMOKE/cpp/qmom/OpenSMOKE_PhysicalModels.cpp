@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "qmom/OpenSMOKE_PhysicalModels.h"
+using namespace std;
 
 void OpenSMOKE_PhysicalModels::setup(int N)
 {

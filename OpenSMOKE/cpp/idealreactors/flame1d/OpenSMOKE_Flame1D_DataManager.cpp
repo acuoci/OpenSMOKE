@@ -221,6 +221,11 @@ void OpenSMOKE_Flame1D_DataManager::SetDefaultValues()
 	iFakeTemperatureThermalConductivity = false;
 	iPhysicalSootDiffusionCoefficients  = 0;
 	Df = 1.80;
+
+	OpposedAnalysisType = "Regular";
+	TExtinction = 900.;
+	TIgnition   = 1600.;
+	DeltaTAccuracy = 2.5;
 }
 
 void OpenSMOKE_Flame1D_DataManager::Setup(const std::string kind)
@@ -489,6 +494,10 @@ void OpenSMOKE_Dictionary_Flame1D::PrepareForOpposedFlames()
 	Add("#PoolFireCorrectionSpecificHeat",	      'O', 'D', "Correction factor for pool specific heat: Cp = alfa*Cp");
 	Add("#PoolFireCorrectionThermalConductivity", 'O', 'D', "Correction factor for pool thermal conductivity: k = alfa*k");
 
+	Add("#TExtinction", 'O', 'M', "Maximum temperature before extinction (default 900K)");
+	Add("#TIgnition", 'O', 'M', "Minimum temperature before ignition (default 1600K)");
+	Add("#DeltaTAccuracy", 'O', 'M', "Interval amplitude for ignition/extinction analyses");
+
 	Compulsory("#FuelMassFractions",     "#FuelMoleFractions",		"#PoolFire");
 	Compulsory("#OxidizerMassFractions", "#OxidizerMoleFractions");
 
@@ -626,6 +635,15 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionaryForOpposedFlames(OpenSMOKE_Di
 
 	if (dictionary.Return("#StretchingFactor", double_value))
         SetStretchingFactor(double_value);
+
+	if (dictionary.Return("#TExtinction", double_value, string_value))
+		SetTExtinction(string_value, double_value);
+
+	if (dictionary.Return("#TIgnition", double_value, string_value))
+		SetTIgnition(string_value, double_value);
+
+	if (dictionary.Return("#DeltaTAccuracy", double_value, string_value))
+		SetDeltaTAccuracy(string_value, double_value);
 }
 
 void OpenSMOKE_Flame1D_DataManager::CheckDictionaryForPremixedFlames(OpenSMOKE_Dictionary_Flame1D &dictionary)
@@ -2029,4 +2047,19 @@ void OpenSMOKE_Flame1D_DataManager::SetPoolFireCorrectionFactorThermalConductivi
 void OpenSMOKE_Flame1D_DataManager::SetPoolFireCorrectionFactorSpecificHeat(const double value)
 {
 	correctionFactorSpecificHeat = value;
+}
+
+void OpenSMOKE_Flame1D_DataManager::SetTExtinction(const std::string units, const double value)
+{
+	TExtinction = OpenSMOKE_Conversions::conversion_temperature(value, units);
+}
+
+void OpenSMOKE_Flame1D_DataManager::SetTIgnition(const std::string units, const double value)
+{
+	TIgnition = OpenSMOKE_Conversions::conversion_temperature(value, units);
+}
+
+void OpenSMOKE_Flame1D_DataManager::SetDeltaTAccuracy(const std::string units, const double value)
+{
+	DeltaTAccuracy = value;
 }

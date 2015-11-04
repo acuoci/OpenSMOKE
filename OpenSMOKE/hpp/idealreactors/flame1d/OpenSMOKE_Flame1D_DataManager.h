@@ -250,6 +250,11 @@ public:
 	double sampling_coefficient;
 	bool iAssignedSamplingCoefficient;
 
+	std::string OpposedAnalysisType;
+	double TExtinction;
+	double TIgnition;
+	double DeltaTAccuracy;
+
 private:
 
 	ifstream fInput;
@@ -348,6 +353,11 @@ private:
 
 	void SetDepositionWall();
 	void SetSampling(const std::string units, const double value);
+
+	void SetOpposedAnalysisType(const std::string);
+	void SetTExtinction(const std::string units, const double value);
+	void SetTIgnition(const std::string units, const double value);
+	void SetDeltaTAccuracy(const std::string units, const double value);
 
 	// Specific for premixed flames
 	void AssignMassFlowRate(const std::string units, const double value);

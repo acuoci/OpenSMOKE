@@ -21,6 +21,7 @@
 #include <string>
 #include <iomanip>
 #include "kinpp/OpenSMOKE_DirectLinearSolver_Unsymmetric.h"
+using namespace std;
 
 void OpenSMOKE_DirectLinearSolver_Unsymmetric::ErrorMessage(const std::string message_)
 {

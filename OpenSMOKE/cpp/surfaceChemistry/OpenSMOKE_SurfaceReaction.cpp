@@ -22,6 +22,7 @@
 #include <algorithm>
 #include "basic/OpenSMOKE_Constants.h"
 #include "surfaceChemistry/OpenSMOKE_SurfaceReaction.h"
+using namespace std;
 
 void OpenSMOKE_SurfaceReaction::ErrorMessage(const std::string message)
 {

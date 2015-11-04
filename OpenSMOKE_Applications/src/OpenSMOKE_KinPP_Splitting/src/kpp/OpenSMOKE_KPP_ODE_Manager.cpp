@@ -20,6 +20,7 @@
 
 #include <algorithm> 
 #include "OpenSMOKE_KPP_ODE_Manager.h"
+using namespace std;
 
 const double	OpenSMOKE_KPP_ODE_Manager::default_absoluteTolerance_			= 1.e-10;
 const double	OpenSMOKE_KPP_ODE_Manager::default_relativeTolerance_			= 1.e-6;

@@ -24,6 +24,7 @@
 
 #include "BzzMath.hpp"
 #include <iomanip>
+using namespace std;
 
 enum KPP_Correction { KPP_CORRECTION_NONE, KPP_CORRECTION_DIRAC, KPP_CORRECTION_BETA, KPP_CORRECTION_SIN, KPP_CORRECTION_GAUSS };
 

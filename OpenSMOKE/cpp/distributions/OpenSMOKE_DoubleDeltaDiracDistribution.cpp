@@ -21,6 +21,7 @@
 #include <string>
 #include "basic/OpenSMOKE_Constants.h"
 #include "distributions/OpenSMOKE_DoubleDeltaDiracDistribution.h"
+using namespace std;
 
 void OpenSMOKE_DoubleDeltaDiracDistribution::ErrorMessage(const std::string message)
 {

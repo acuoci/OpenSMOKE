@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "qmom/OpenSMOKE_Distributions.h"
+using namespace std;
 
 void OpenSMOKE_Distributions::printOnVideo()
 {

@@ -10398,7 +10398,7 @@ void OpenSMOKE_Flame1D::PasteFromExternalSolution(OpenSMOKE_Flame1D_Solution &so
 		
 	if (data->iQMOM == true)
 		moments = solution.moments;
-			
+
 	if (data->i2E == true)
 	{
 		phiN = solution.phiN;

@@ -180,9 +180,9 @@ void OpenSMOKE_Flame1D_OpposedFlameManager::Solution(const int count)
 
 void OpenSMOKE_Flame1D_OpposedFlameManager::Run()
 {
-	double MinimumTemperatureDifference = 2.5;			// [K]
-	double MinimumVelocityDifference	= 0.01;			// [m/s]
-	double MinimumPressureDifference	= 0.05/101325;	// [Pa] = 0.05 atm
+	double MinimumTemperatureDifference = data->DeltaTAccuracy;			// [K]
+	double MinimumVelocityDifference	= 0.01;							// [m/s]
+	double MinimumPressureDifference	= 0.05/101325;					// [Pa] = 0.05 atm
 
 	int iCount = 0;
 	if (iAssignedFuelTemperature == true)		iCount++;
@@ -191,136 +191,195 @@ void OpenSMOKE_Flame1D_OpposedFlameManager::Run()
 	if (iAssignedOxidizerVelocity == true)		iCount++;
 	if (iAssignedPressure == true)				iCount++;
 
-//	if (iCount >  1)	ErrorMessage("Only one parameter per time can be changed...");
 	if (iCount == 0)	ErrorMessage("At least one parameter per time must be changed...");
 
-	OpenSMOKE_Flame1D_Solution flame_hot_solution;
+	OpenSMOKE_Flame1D_Solution flame_previous_useful_solution;
 
 	for (int count=1;count<=N;count++)
 	{		
-		if (iAssignedFuelTemperature == true)		data->TC = TFuel[count];
-		if (iAssignedOxidizerTemperature == true)	data->TO = TOxidizer[count];
-		if (iAssignedFuelVelocity == true)			data->VC = vFuel[count];
-		if (iAssignedOxidizerVelocity == true)		data->VO = vOxidizer[count];
-		if (iAssignedPressure == true)				
+		if (data->OpposedAnalysisType == "Regular")
 		{
-			data->P_Pascal = Pressures[count];
-			data->P_bar = Pressures[count]/1.e5;
-			data->P_atm = Pressures[count]/101325.;
-		}
-
-		Update();
-		Solution(count);
-
-		if (flame->T.Max() >= Constants::TMinExtinction)
-			flame_hot_solution.PasteFromExternalSolution(*flame, *data);
-		else
-		{
-			int count_last_hot = count-1;
-			
-			double TC_Hot, TO_Hot, VC_Hot, VO_Hot, P_Hot;
-			double TC_Cold, TO_Cold, VC_Cold, VO_Cold, P_Cold;
-			
-			if (iAssignedFuelTemperature == true)		TC_Hot = TFuel[count_last_hot];
-			if (iAssignedOxidizerTemperature == true)	TO_Hot = TOxidizer[count_last_hot];
-			if (iAssignedFuelVelocity == true)			VC_Hot = vFuel[count_last_hot];
-			if (iAssignedOxidizerVelocity == true)		VO_Hot = vOxidizer[count_last_hot];
-			if (iAssignedPressure == true)				P_Hot = Pressures[count_last_hot];
-			
-			if (iAssignedFuelTemperature == true)		TC_Cold = TFuel[count_last_hot+1];
-			if (iAssignedOxidizerTemperature == true)	TO_Cold = TOxidizer[count_last_hot+1];
-			if (iAssignedFuelVelocity == true)			VC_Cold = vFuel[count_last_hot+1];
-			if (iAssignedOxidizerVelocity == true)		VO_Cold = vOxidizer[count_last_hot+1];
-			if (iAssignedPressure == true)				P_Cold = Pressures[count_last_hot+1];
-			
-			flame->PasteFromExternalSolution(flame_hot_solution);
-
-			for(;;)
-			{
-				count++;
-				if (iAssignedFuelTemperature == true)		data->TC = 0.50*(TC_Hot+TC_Cold);
-				if (iAssignedOxidizerTemperature == true)	data->TO = 0.50*(TO_Hot+TO_Cold);
-				if (iAssignedFuelVelocity == true)			data->VC = 0.50*(VC_Hot+VC_Cold);
-				if (iAssignedOxidizerVelocity == true)		data->VO = 0.50*(VO_Hot+VO_Cold);
-				if (iAssignedPressure == true)				
-				{
-					data->P_Pascal = 0.50*(P_Hot+P_Cold);
-					data->P_bar = data->P_Pascal/1.e5;
-					data->P_atm = data->P_Pascal/101325.;
-				}
-
-				Update();
-				Solution(count);
-
-				if (flame->T.Max() >= Constants::TMinExtinction)
-				{
-					flame_hot_solution.PasteFromExternalSolution(*flame, *data);
-					TC_Hot = data->TC;
-					TO_Hot = data->TO;
-					VC_Hot = data->VC;
-					VO_Hot = data->VO;
-				}
-				else
-				{
-					flame->PasteFromExternalSolution(flame_hot_solution);
-					TC_Cold = data->TC;
-					TO_Cold = data->TO;
-					VC_Cold = data->VC;
-					VO_Cold = data->VO;
-				}
-
-				if (iAssignedFuelTemperature == true)		
-					if (fabs(TC_Cold-TC_Hot) <= MinimumTemperatureDifference)	break;
-				if (iAssignedOxidizerTemperature == true)	
-					if (fabs(TO_Cold-TO_Hot) <= MinimumTemperatureDifference)	break;
-				if (iAssignedFuelVelocity == true)
-					if (fabs(VC_Cold-VC_Hot) <= MinimumVelocityDifference)		break;
-				if (iAssignedOxidizerVelocity == true)
-					if (fabs(VO_Cold-VO_Hot) <= MinimumVelocityDifference)		break;
-				if (iAssignedPressure == true)	
-					if (fabs(P_Cold-P_Hot) <= MinimumPressureDifference)		break;
-			}
-
-			cout << "--------------------------------------------" << endl;
-			cout << "               Final Results                " << endl;
-			cout << "--------------------------------------------" << endl;
-
-			if (iAssignedFuelTemperature == true)
-			{
-				cout << " Minimum TC: " << TC_Cold << " K" << endl;
-				cout << " Maximum TC: " << TC_Hot  << " K" << endl;
-				cout << " Mean TC:    " << (TC_Cold+TC_Hot)/2.  << " K" << endl;
-			}
-
-			if (iAssignedOxidizerTemperature == true)
-			{
-				cout << " Minimum TO: " << TO_Cold << " K" << endl;
-				cout << " Maximum TO: " << TO_Hot  << " K" << endl;
-				cout << " Mean TO:    " << (TO_Cold+TO_Hot)/2.  << " K" << endl;
-			}
-
-			if (iAssignedFuelVelocity == true)
-			{
-				cout << " Minimum VC: " << VC_Cold*100. << " cm/s" << endl;
-				cout << " Maximum VC: " << VC_Hot*100.  << " cm/s" << endl;
-				cout << " Mean VC:    " << (VC_Cold+VC_Hot)/2.*100.  << " cm/s" << endl;
-			}
-
-			if (iAssignedOxidizerVelocity == true)
-			{
-				cout << " Minimum VO: " << VO_Cold*100. << " cm/s" << endl;
-				cout << " Maximum VO: " << VO_Hot*100.  << " cm/s" << endl;
-				cout << " Mean VO:    " << (VO_Cold+VO_Hot)/2.*100.  << " cm/s" << endl;
-			}
-
+			if (iAssignedFuelTemperature == true)		data->TC = TFuel[count];
+			if (iAssignedOxidizerTemperature == true)	data->TO = TOxidizer[count];
+			if (iAssignedFuelVelocity == true)			data->VC = vFuel[count];
+			if (iAssignedOxidizerVelocity == true)		data->VO = vOxidizer[count];
 			if (iAssignedPressure == true)
 			{
-				cout << " Minimum P: " << P_Cold << " Pa" << endl;
-				cout << " Maximum P: " << P_Hot  << " Pa" << endl;
-				cout << " Mean P:    " << (P_Cold+P_Hot)/2.*100.  << " Pa" << endl;
+				data->P_Pascal = Pressures[count];
+				data->P_bar = Pressures[count] / 1.e5;
+				data->P_atm = Pressures[count] / 101325.;
 			}
 
-			count = N+1;
+			Update();
+			Solution(count);
+		}
+		else
+		{
+			if (iAssignedFuelTemperature == true)		data->TC = TFuel[count];
+			if (iAssignedOxidizerTemperature == true)	data->TO = TOxidizer[count];
+			if (iAssignedFuelVelocity == true)			data->VC = vFuel[count];
+			if (iAssignedOxidizerVelocity == true)		data->VO = vOxidizer[count];
+			if (iAssignedPressure == true)
+			{
+				data->P_Pascal = Pressures[count];
+				data->P_bar = Pressures[count] / 1.e5;
+				data->P_atm = Pressures[count] / 101325.;
+			}
+
+			Update();
+			Solution(count);
+
+			if (data->OpposedAnalysisType == "Extinction" && flame->T.Max() >= data->TExtinction)
+				flame_previous_useful_solution.PasteFromExternalSolution(*flame, *data);
+			else if (data->OpposedAnalysisType == "Ignition" && flame->T.Max() <= data->TIgnition)
+				flame_previous_useful_solution.PasteFromExternalSolution(*flame, *data);
+			else
+			{
+				int count_last_hot = count - 1;
+
+				double TC_Hot, TO_Hot, VC_Hot, VO_Hot, P_Hot;
+				double TC_Cold, TO_Cold, VC_Cold, VO_Cold, P_Cold;
+
+				if (data->OpposedAnalysisType == "Extinction")
+				{
+					if (iAssignedFuelTemperature == true)		TC_Hot = TFuel[count_last_hot];
+					if (iAssignedOxidizerTemperature == true)	TO_Hot = TOxidizer[count_last_hot];
+					if (iAssignedFuelVelocity == true)			VC_Hot = vFuel[count_last_hot];
+					if (iAssignedOxidizerVelocity == true)		VO_Hot = vOxidizer[count_last_hot];
+					if (iAssignedPressure == true)				P_Hot = Pressures[count_last_hot];
+
+					if (iAssignedFuelTemperature == true)		TC_Cold = TFuel[count_last_hot + 1];
+					if (iAssignedOxidizerTemperature == true)	TO_Cold = TOxidizer[count_last_hot + 1];
+					if (iAssignedFuelVelocity == true)			VC_Cold = vFuel[count_last_hot + 1];
+					if (iAssignedOxidizerVelocity == true)		VO_Cold = vOxidizer[count_last_hot + 1];
+					if (iAssignedPressure == true)				P_Cold = Pressures[count_last_hot + 1];
+				}
+
+				if (data->OpposedAnalysisType == "Ignition")
+				{
+					if (iAssignedFuelTemperature == true)		TC_Hot = TFuel[count_last_hot + 1];
+					if (iAssignedOxidizerTemperature == true)	TO_Hot = TOxidizer[count_last_hot + 1];
+					if (iAssignedFuelVelocity == true)			VC_Hot = vFuel[count_last_hot + 1];
+					if (iAssignedOxidizerVelocity == true)		VO_Hot = vOxidizer[count_last_hot + 1];
+					if (iAssignedPressure == true)				P_Hot = Pressures[count_last_hot + 1];
+
+					if (iAssignedFuelTemperature == true)		TC_Cold = TFuel[count_last_hot];
+					if (iAssignedOxidizerTemperature == true)	TO_Cold = TOxidizer[count_last_hot];
+					if (iAssignedFuelVelocity == true)			VC_Cold = vFuel[count_last_hot];
+					if (iAssignedOxidizerVelocity == true)		VO_Cold = vOxidizer[count_last_hot];
+					if (iAssignedPressure == true)				P_Cold = Pressures[count_last_hot];
+				}
+
+
+				flame->PasteFromExternalSolution(flame_previous_useful_solution);
+				for (;;)
+				{
+					count++;
+					if (iAssignedFuelTemperature == true)		data->TC = 0.50*(TC_Hot + TC_Cold);
+					if (iAssignedOxidizerTemperature == true)	data->TO = 0.50*(TO_Hot + TO_Cold);
+					if (iAssignedFuelVelocity == true)			data->VC = 0.50*(VC_Hot + VC_Cold);
+					if (iAssignedOxidizerVelocity == true)		data->VO = 0.50*(VO_Hot + VO_Cold);
+					if (iAssignedPressure == true)
+					{
+						data->P_Pascal = 0.50*(P_Hot + P_Cold);
+						data->P_bar = data->P_Pascal / 1.e5;
+						data->P_atm = data->P_Pascal / 101325.;
+					}
+					Update();
+					Solution(count);
+
+					if (data->OpposedAnalysisType == "Extinction")
+					{
+						if (flame->T.Max() >= data->TExtinction)
+						{
+							flame_previous_useful_solution.PasteFromExternalSolution(*flame, *data);
+							TC_Hot = data->TC;
+							TO_Hot = data->TO;
+							VC_Hot = data->VC;
+							VO_Hot = data->VO;
+						}
+						else
+						{
+							flame->PasteFromExternalSolution(flame_previous_useful_solution);
+							TC_Cold = data->TC;
+							TO_Cold = data->TO;
+							VC_Cold = data->VC;
+							VO_Cold = data->VO;
+						}
+					}
+					if (data->OpposedAnalysisType == "Ignition")
+					{
+						if (flame->T.Max() <= data->TIgnition)
+						{
+							flame_previous_useful_solution.PasteFromExternalSolution(*flame, *data);
+							TC_Cold = data->TC;
+							TO_Cold = data->TO;
+							VC_Cold = data->VC;
+							VO_Cold = data->VO;
+						}
+						else
+						{
+							flame_previous_useful_solution.PasteFromExternalSolution(*flame, *data);
+							TC_Hot = data->TC;
+							TO_Hot = data->TO;
+							VC_Hot = data->VC;
+							VO_Hot = data->VO;
+						}
+					}
+
+					if (iAssignedFuelTemperature == true)
+					if (fabs(TC_Cold - TC_Hot) <= MinimumTemperatureDifference)	break;
+					if (iAssignedOxidizerTemperature == true)
+					if (fabs(TO_Cold - TO_Hot) <= MinimumTemperatureDifference)	break;
+					if (iAssignedFuelVelocity == true)
+					if (fabs(VC_Cold - VC_Hot) <= MinimumVelocityDifference)		break;
+					if (iAssignedOxidizerVelocity == true)
+					if (fabs(VO_Cold - VO_Hot) <= MinimumVelocityDifference)		break;
+					if (iAssignedPressure == true)
+					if (fabs(P_Cold - P_Hot) <= MinimumPressureDifference)		break;
+				}
+
+				cout << "--------------------------------------------" << endl;
+				cout << "               Final Results                " << endl;
+				cout << "--------------------------------------------" << endl;
+
+				if (iAssignedFuelTemperature == true)
+				{
+					cout << " Minimum TC: " << TC_Cold << " K" << endl;
+					cout << " Maximum TC: " << TC_Hot << " K" << endl;
+					cout << " Mean TC:    " << (TC_Cold + TC_Hot) / 2. << " K" << endl;
+				}
+
+				if (iAssignedOxidizerTemperature == true)
+				{
+					cout << " Minimum TO: " << TO_Cold << " K" << endl;
+					cout << " Maximum TO: " << TO_Hot << " K" << endl;
+					cout << " Mean TO:    " << (TO_Cold + TO_Hot) / 2. << " K" << endl;
+				}
+
+				if (iAssignedFuelVelocity == true)
+				{
+					cout << " Minimum VC: " << VC_Cold*100. << " cm/s" << endl;
+					cout << " Maximum VC: " << VC_Hot*100. << " cm/s" << endl;
+					cout << " Mean VC:    " << (VC_Cold + VC_Hot) / 2.*100. << " cm/s" << endl;
+				}
+
+				if (iAssignedOxidizerVelocity == true)
+				{
+					cout << " Minimum VO: " << VO_Cold*100. << " cm/s" << endl;
+					cout << " Maximum VO: " << VO_Hot*100. << " cm/s" << endl;
+					cout << " Mean VO:    " << (VO_Cold + VO_Hot) / 2.*100. << " cm/s" << endl;
+				}
+
+				if (iAssignedPressure == true)
+				{
+					cout << " Minimum P: " << P_Cold << " Pa" << endl;
+					cout << " Maximum P: " << P_Hot << " Pa" << endl;
+					cout << " Mean P:    " << (P_Cold + P_Hot) / 2.*100. << " Pa" << endl;
+				}
+
+				count = N + 1;
+			}
 		}
 	}
 

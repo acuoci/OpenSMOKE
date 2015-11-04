@@ -20,7 +20,7 @@
 
 #include "interfaces/OpenSMOKE_GnuPlotWrap.h"
 #include <sstream>
-
+using namespace std;
 #include "interfaces/OpenSMOKE_GnuPlotInterface.h"
 
 

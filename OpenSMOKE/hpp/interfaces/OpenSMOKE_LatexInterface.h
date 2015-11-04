@@ -22,6 +22,7 @@
 #define OPENSMOKE_LATEXINTERFACE
 
 #include "BzzMath.hpp"
+using namespace std;
 
 class OpenSMOKE_LatexInterface
 {

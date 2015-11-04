@@ -22,6 +22,7 @@
 #define OPENSMOKE_SOOTMANAGER
 
 #include "BzzMath.hpp"
+using namespace std;
 
 class OpenSMOKE_ReactingGas;
 

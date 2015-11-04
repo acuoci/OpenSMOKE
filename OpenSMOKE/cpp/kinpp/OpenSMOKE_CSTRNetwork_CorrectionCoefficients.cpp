@@ -21,6 +21,7 @@
 
 #include "basic/OpenSMOKE_Constants.h"
 #include "kinpp/OpenSMOKE_CSTRNetwork_CorrectionCoefficients.h"
+using namespace std;
 
 const double	OpenSMOKE_CSTRNetwork_CorrectionCoefficients::epsilon		= 1.e-6;
 const int		OpenSMOKE_CSTRNetwork_CorrectionCoefficients::NSTEPSPDF	= 101;

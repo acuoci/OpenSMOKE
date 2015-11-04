@@ -24,6 +24,8 @@
 #include "BzzMath.hpp"
 #include "basic/OpenSMOKE_Constants.h"
 #include <vector>
+using namespace std;
+
 
 class OpenSMOKE_ReactingGas;
 class OpenSMOKE_NuManager;
