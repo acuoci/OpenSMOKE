@@ -7372,16 +7372,21 @@ void OpenSMOKE_Flame1D::give_Opposed_DU_DG_DH()
 
 	if (data->iPoolFire == POOL_FIRE_TASSIGNED || data->iPoolFire == POOL_FIRE_EQUILIBRIUM)
 	{
-		double DHvap = data->pool_fire_liquid_species->Hv(T[1]) * data->correctionFactorVaporizationHeat;
-		dU[1] = (nGeometry-1.)*U[1] * DHvap - lambda[1] * (T[2] - T[1])*grid.udxe[1];
+		const double DHvap = data->pool_fire_liquid_species->Hv(T[1]) * data->correctionFactorVaporizationHeat;
+		const double Qincident = Constants::sigma*data->pool_fire_view_factor*(std::pow(data->TO, 4.) - std::pow(T[1], 4.));
+		const double Qconduction = lambda[1] * (T[2] - T[1])*grid.udxe[1];
+		dU[1] = (nGeometry - 1.)*U[1] * DHvap - ( Qconduction +  Qincident);
 		data->VC = (nGeometry-1.)*U[1] / rho[1];
 	}
 
 	if (data->iPoolFire == POOL_FIRE_LIQUIDPOOL)
 	{
-		double lambdaLiquid = data->pool_fire_liquid_species->lambda(0.50*(T[1]+data->pool_fire_feed_temperature));
-		double DHvap = data->pool_fire_liquid_species->Hv(T[1]) * data->correctionFactorVaporizationHeat;
-		dU[1] = (nGeometry-1.)*U[1] * DHvap - lambda[1] * (T[2] - T[1])*grid.udxe[1] + lambdaLiquid*(T[1] - data->pool_fire_feed_temperature) / data->pool_fire_depth;
+		const double lambdaLiquid = data->pool_fire_liquid_species->lambda(0.50*(T[1]+data->pool_fire_feed_temperature));
+		const double DHvap = data->pool_fire_liquid_species->Hv(T[1]) * data->correctionFactorVaporizationHeat;
+		const double Qincident = Constants::sigma*data->pool_fire_view_factor*(std::pow(data->TO, 4.) - std::pow(T[1], 4.));
+		const double QtoBottom = lambdaLiquid*(T[1] - data->pool_fire_feed_temperature) / data->pool_fire_depth;
+		const double Qconduction = lambda[1] * (T[2] - T[1])*grid.udxe[1];
+		dU[1] = (nGeometry-1.)*U[1] * DHvap - ( Qconduction - QtoBottom + Qincident );
 		data->VC = (nGeometry-1.)*U[1] / rho[1];
 	}
 	

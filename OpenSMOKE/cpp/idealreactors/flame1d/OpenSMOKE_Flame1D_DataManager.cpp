@@ -168,6 +168,7 @@ OpenSMOKE_Flame1D_DataManager::OpenSMOKE_Flame1D_DataManager()
 	correctionFactorVaporPressure = 1.0;
 	correctionFactorSpecificHeat = 1.0;
 	correctionFactorThermalConductivity = 1.0;
+	pool_fire_view_factor = 0.;
 
 	// Soot
 	iRadiativeSootModel = RADIATIVE_SOOT_MODEL_NONE;
@@ -493,6 +494,7 @@ void OpenSMOKE_Dictionary_Flame1D::PrepareForOpposedFlames()
 	Add("#PoolFireCorrectionVaporPressure",	      'O', 'D', "Correction factor for pool vapor pressure: Pv = alfa*Pv");
 	Add("#PoolFireCorrectionSpecificHeat",	      'O', 'D', "Correction factor for pool specific heat: Cp = alfa*Cp");
 	Add("#PoolFireCorrectionThermalConductivity", 'O', 'D', "Correction factor for pool thermal conductivity: k = alfa*k");
+	Add("#PoolFireViewFactor", 'O', 'D', "View factor: pool to steel (default 0.)");
 
 	Add("#TExtinction", 'O', 'M', "Maximum temperature before extinction (default 900K)");
 	Add("#TIgnition", 'O', 'M', "Minimum temperature before ignition (default 1600K)");
@@ -619,6 +621,8 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionaryForOpposedFlames(OpenSMOKE_Di
 		SetPoolFireCorrectionFactorThermalConductivity(double_value);
 	if (dictionary.Return("#PoolFireCorrectionSpecificHeat", double_value))
 		SetPoolFireCorrectionFactorSpecificHeat(double_value);
+	if (dictionary.Return("#PoolFireViewFactor", double_value))
+		SetPoolFireViewFactor(double_value);
 	
 
 	if (dictionary.Return("#FuelRadialGradient", double_value, string_value))
@@ -2047,6 +2051,11 @@ void OpenSMOKE_Flame1D_DataManager::SetPoolFireCorrectionFactorThermalConductivi
 void OpenSMOKE_Flame1D_DataManager::SetPoolFireCorrectionFactorSpecificHeat(const double value)
 {
 	correctionFactorSpecificHeat = value;
+}
+
+void OpenSMOKE_Flame1D_DataManager::SetPoolFireViewFactor(const double value)
+{
+	pool_fire_view_factor = value;
 }
 
 void OpenSMOKE_Flame1D_DataManager::SetTExtinction(const std::string units, const double value)

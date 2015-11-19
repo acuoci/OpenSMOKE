@@ -451,11 +451,13 @@ public:
 	void SetPoolFireCorrectionFactorVaporPressure(const double value);
 	void SetPoolFireCorrectionFactorThermalConductivity(const double value);
 	void SetPoolFireCorrectionFactorSpecificHeat(const double value);
+	void SetPoolFireViewFactor(const double value);
 
 	kind_of_pool_fire iPoolFire;
 	double pool_fire_temperature;
 	double pool_fire_feed_temperature;
 	double pool_fire_depth;
+	double pool_fire_view_factor;
 
 	radiative_soot_model iRadiativeSootModel;
 	bool iThermophoreticEffect;
