@@ -15,15 +15,16 @@
 COMPILER_NAME  	      = gnu
 
 MYHOME		       =  $(HOME)
-BZZ_PATH 	       =  $(MYHOME)/NumericalLibraries/BzzMath/BzzMath6-dev
-OPENSMOKE_PATH         =  $(MYHOME)/NumericalLibraries/OpenSMOKE/OpenSMOKE
-NUMERICALRECIPES_PATH  =  $(MYHOME)/NumericalLibraries/NumericalRecipes
-MKL_PATH               =  $(MYHOME)/intel/composerxe/mkl
+BZZ_PATH 	       =  /software/chimica2/libraries/bzzmath/bzzmath-6.0
+OPENSMOKE_PATH         =  $(HOME)/Development/ExternalLibraries/OpenSMOKE/OpenSMOKE
+NUMERICALRECIPES_PATH  =  /software/chimica2/libraries/nr/nr-gcc-4.8.2
+MKL_PATH               =  $(HOME)/intel/mkl
+SYSTEM_LIB_PATH        =  /usr/lib/x86_64-redhat-linux5E/lib64/
 
 #Paths 
-LIS_PATH               =  ${HOME}/NumericalLibraries/lis-1.2.62/lis-omp-complete
+LIS_PATH               =  /software/chimica2/libraries/lis/lis-1.5.57-gcc-4.8.2/serial
 MUMPS_PATH             =  ${HOME}/NumericalLibraries/MUMPS/MUMPS_4.9.2_SEQ_MKL_PORD
-METIS_PATH             =  ${HOME}/NumericalLibraries/metis-5.0.2
+METIS_PATH             =  /software/chimica2/libraries/metis/metis-5.1.0-gcc-4.8.2
 BLAS_PATH              =  #{HOME}/NumericalLibraries/GotoBLAS2
 
 #Options
@@ -35,12 +36,13 @@ OPTIONS_GNU     =  -O3 -m64 -Wall -fexpensive-optimizations -funroll-loops -DUSE
 # ------------------------------------------------------------------------------------------------
 
 #BzzMath Libraries
-BZZ_LIBS_INTEL  = -lBzzMath6_INTEL_MKL
-BZZ_LIBS_GNU    = -lBzzMath6_GNU_MKL
+BZZ_LIBS_INTEL  = -lBzzMath6_INTEL
+BZZ_LIBS_GNU    = -lBzzMath6_GNU
 
 #NR libraries
-NR_LIBS_INTEL   =  -lNumericalRecipes_INTEL   
-NR_LIBS_GNU     =  -lNumericalRecipes_GNU
+NR_LIBS_INTEL   =  -lnr_INTEL   
+NR_LIBS_GNU     =  -lnr_GNU
+
 
 #MUMPS libraries
 MUMPS_LIBS      = -ldmumps -lmumps_common -lpord $(MUMPS_PATH)/libseq/libmpiseq.a 
@@ -79,7 +81,7 @@ endif
 BZZ_INCLUDE          = -I$(BZZ_PATH)/hpp
 MKL_INCLUDE          = -I$(MKL_PATH)/include
 MKL_ROOT	     =   ${MKL_PATH}
-NR_INCLUDE           = -I$(NUMERICALRECIPES_PATH)/hpp
+NR_INCLUDE           = -I$(NUMERICALRECIPES_PATH)/include
 OPENSMOKE_INCLUDE    = -I$(OPENSMOKE_PATH)/hpp
 MUMPS_INCLUDE        = -I$(MUMPS_PATH)/include
 LIS_INCLUDE          = -I$(LIS_PATH)/include
@@ -89,7 +91,7 @@ METIS_INCLUDE        = -I$(METIS_PATH)/include
 # LIBRARY PATHS
 # ------------------------------------------------------------------------------------------------
 BZZ_PATH_LIB           = $(BZZ_PATH)/lib/release
-NR_PATH_LIB            = $(NUMERICALRECIPES_PATH)/lib/release
+NR_PATH_LIB            = $(NUMERICALRECIPES_PATH)/lib
 OPENSMOKE_PATH_LIB     = $(OPENSMOKE_PATH)/lib/linux/$(OBJ_PATH)
 MKL_PATH_LIB           = $(MKL_PATH)/lib/intel64
 MUMPS_PATH_LIB         = $(MUMPS_PATH)/lib
@@ -99,18 +101,10 @@ BLAS_PATH_LIB          = $(BLAS_PATH)
 
 
 ifeq ($(COMPILER_NAME),intel)
-MKL_LIBS        = -Wl,--start-group $(MKL_ROOT)/lib/intel64/libmkl_intel_lp64.a $(MKL_ROOT)/lib/intel64/libmkl_core.a $(MKL_ROOT)/lib/intel64/libmkl_sequential.a -Wl,--end-group -lpthread -lm -Wl,--no-as-needed -ldl
+MKL_LIBS        = -Wl,--start-group $(MKL_ROOT)/lib/intel64/libmkl_intel_lp64.a $(MKL_ROOT)/lib/intel64/libmkl_core.a $(MKL_ROOT)/lib/intel64/libmkl_sequential.a -Wl,--end-group  -Wl,--no-as-needed -L$(SYSTEM_LIB_PATH)
 endif
 
 ifeq ($(COMPILER_NAME),gnu)
-MKL_LIBS        = -Wl,--start-group $(MKL_ROOT)/lib/intel64/libmkl_intel_lp64.a $(MKL_ROOT)/lib/intel64/libmkl_core.a $(MKL_ROOT)/lib/intel64/libmkl_sequential.a -Wl,--end-group -lpthread -lm -Wl,--no-as-needed -ldl
+MKL_LIBS        = -Wl,--start-group $(MKL_ROOT)/lib/intel64/libmkl_intel_lp64.a $(MKL_ROOT)/lib/intel64/libmkl_core.a $(MKL_ROOT)/lib/intel64/libmkl_sequential.a -Wl,--end-group -Wl,--no-as-needed -L$(SYSTEM_LIB_PATH)
 endif
  
-
-
- 
-
-
-
-
-

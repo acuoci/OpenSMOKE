@@ -23,6 +23,7 @@ LIS_PATH               =  ${HOME}/NumericalLibraries/lis-1.2.62/lis-omp-complete
 MUMPS_PATH             =  ${HOME}/NumericalLibraries/MUMPS/MUMPS_4.9.2_SEQ_MKL_PORD
 METIS_PATH             =  ${HOME}/NumericalLibraries/metis-5.0.2
 BLAS_PATH              =  #{HOME}/NumericalLibraries/GotoBLAS2
+SYSTEM_LIB_PATH        =  /usr/lib/x86_64-redhat-linux5E/lib64/
 
 #Options
 OPTIONS_INTEL   =  -O3 -DUSE_INTEL_MKL=1 -openmp -I/usr/include/x86_64-linux-gnu/c++/4.8
@@ -97,11 +98,11 @@ BLAS_PATH_LIB          = $(BLAS_PATH)
 
 
 ifeq ($(COMPILER_NAME),intel)
-MKL_LIBS        =  -Wl,--start-group $(MKL_ROOT)/lib/intel64/libmkl_intel_lp64.a $(MKL_ROOT)/lib/intel64/libmkl_core.a $(MKL_ROOT)/lib/intel64/libmkl_intel_thread.a -Wl,--end-group -lpthread -lm
+MKL_LIBS        =  -Wl,--start-group $(MKL_ROOT)/lib/intel64/libmkl_intel_lp64.a $(MKL_ROOT)/lib/intel64/libmkl_core.a $(MKL_ROOT)/lib/intel64/libmkl_intel_thread.a -Wl,--end-group  -L$(SYSTEM_LIB_PATH)
 endif
 
 ifeq ($(COMPILER_NAME),gnu)
-MKL_LIBS        =  -Wl,--start-group $(MKL_ROOT)/lib/intel64/libmkl_intel_lp64.a $(MKL_ROOT)/lib/intel64/libmkl_core.a $(MKL_ROOT)/lib/intel64/libmkl_gnu_thread.a -Wl,--end-group -ldl -lpthread -lm
+MKL_LIBS        =  -Wl,--start-group $(MKL_ROOT)/lib/intel64/libmkl_intel_lp64.a $(MKL_ROOT)/lib/intel64/libmkl_core.a $(MKL_ROOT)/lib/intel64/libmkl_gnu_thread.a -Wl,--end-group -ldl  -L$(SYSTEM_LIB_PATH)
 endif
  
 

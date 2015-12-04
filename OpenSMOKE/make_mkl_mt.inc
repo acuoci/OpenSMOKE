@@ -11,10 +11,10 @@
 ############################################################################
 
 #Paths 
-MYHOME		       =  $(HOME)
-BZZ_PATH 	       =  $(MYHOME)/NumericalLibraries/BzzMath6
-OPENSMOKE_PATH         =  $(MYHOME)/NumericalLibraries/OpenSMOKE/OpenSMOKE
-NUMERICALRECIPES_PATH  =  $(MYHOME)/NumericalLibraries/NumericalRecipes
+BZZ_PATH 	       =  /software/chimica2/libraries/bzzmath/bzzmath-6.0
+OPENSMOKE_PATH         =  $(HOME)/Development/ExternalLibraries/OpenSMOKE/OpenSMOKE
+NUMERICALRECIPES_PATH  =  /software/chimica2/libraries/nr/nr-gcc-4.8.2
+MKL_PATH               =  $(HOME)/intel/mkl
 
 #Options
 OPTIONS_INTEL    =  -O3 -Wall -m64 -DUSE_INTEL_MKL=1 -openmp -I/usr/include/x86_64-linux-gnu/c++/4.8
@@ -25,12 +25,12 @@ OPTIONS_GNU      =  -O3 -Wall -m64 -DUSE_INTEL_MKL=1 -fopenmp
 # ------------------------------------------------------------------------------------------------
 
 #BzzMath Libraries
-BZZ_LIBS_INTEL  = -lBzzMath6_INTEL_MKL_MT
-BZZ_LIBS_GNU    = -lBzzMath6_GNU_MKL_MT
+BZZ_LIBS_INTEL  = -lBzzMath6_INTEL
+BZZ_LIBS_GNU    = -lBzzMath6_GNU
 
 #NR libraries
-NR_LIBS_INTEL   =  -lNumericalRecipes_INTEL   
-NR_LIBS_GNU     =  -lNumericalRecipes_GNU
+NR_LIBS_INTEL   =  -lnr_INTEL   
+NR_LIBS_GNU     =  -lnr_GNU
 
 
 # ------------------------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ endif
 # ------------------------------------------------------------------------------------------------
 BZZ_INCLUDE          = -I$(BZZ_PATH)/hpp
 MKL_INCLUDE          = -I$(MKL_PATH)/include
-NR_INCLUDE           = -I$(NUMERICALRECIPES_PATH)/hpp
+NR_INCLUDE           = -I$(NUMERICALRECIPES_PATH)/include
 OPENSMOKE_INCLUDE    = -I$(OPENSMOKE_PATH)/hpp
 
 # ------------------------------------------------------------------------------------------------
