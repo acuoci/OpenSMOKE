@@ -1790,20 +1790,28 @@ void OpenSMOKE_PreProcessorIdealGas::thermalDiffusionRatiosFitting(int nPoints, 
 	}
 
 	// 2. Fitting sulle diffusivita' binarie
-	for (k=1;k<=iThermalDiffusionRatios.Size();k++)
-		for (j=1;j<=NC;j++)
+	for (k = 1; k <= iThermalDiffusionRatios.Size(); k++)
+	{
+		for (j = 1; j <= NC; j++)
 		{
 			if (iThermalDiffusionRatios[k] != j)
 			{
-				y=matrixTetaBinary.GetRow(j+NC*(k-1));
+				
+				y = matrixTetaBinary.GetRow(j + NC*(k - 1));
 
-				linReg(F,y);
-				b=linReg.GetParameters();
+				if (y.Norm2() < 1.e-10)
+					b = 0.;
+				else
+				{
+					linReg(F, y);
+					b = linReg.GetParameters();
+				}	
 			}
-			else b=0.;
+			else b = 0.;
 
-			fittingTetaBinary.SetRow(j+(k-1)*NC, b);
+			fittingTetaBinary.SetRow(j + (k - 1)*NC, b);
 		}
+	}
 
 	// 3. Min and Max values
 	double *s=matrixTetaBinary.GetHandle();
