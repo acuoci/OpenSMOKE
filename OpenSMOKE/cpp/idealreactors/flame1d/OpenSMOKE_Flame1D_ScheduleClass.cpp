@@ -228,6 +228,15 @@ void OpenSMOKE_Flame1D_ScheduleClass::readOperations(const std::string fileName)
 			iOptionB.Append(xB);
 		}
 
+		else if (stringa == "USERDEFINEDPOINT")
+		{
+			double xPoint;
+			fInput >> xPoint;
+			iOperation.Append(555);
+			iOptionA.Append(xPoint);
+			iOptionB.Append(0.);
+		}
+
 		else if (stringa == "REFINE_STAGNATION_PLANE")
 		{
 			double xA;

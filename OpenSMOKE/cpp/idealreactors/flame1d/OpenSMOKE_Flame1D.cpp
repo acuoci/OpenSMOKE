@@ -6043,6 +6043,49 @@ void OpenSMOKE_Flame1D::refineFlameBase(const double xA, const double xB)
 	AddPoints(listAddPoints);
 }
 
+void OpenSMOKE_Flame1D::refineFlameByAddingSpecificPoint(const double xA)
+{
+	std::cout << "Add user defined point: " << xA << " cm" << std::endl;
+
+	const double xPoint = xA / 100.;
+
+	// Refine the grid
+	int index = grid.AddPoint(xPoint);
+	if (index > 0)
+	{
+		const double ratio = (grid.x[index + 1] - grid.x[index]) / (grid.x[index + 2] - grid.x[index]);
+
+		// For Flame Speed Problems	
+		if (index < data->iFixedTemperature)	data->iFixedTemperature += 1;
+
+		// Update number of points
+		Np = grid.Np;
+		Ni = grid.Ni;
+
+		// Linear Interpolation
+		BzzVectorInt listPoints(1, index);
+		grid.AddPointsField(U, listPoints, 1. - ratio);
+		grid.AddPointsField(G, listPoints, 1. - ratio);
+		grid.AddPointsField(H, listPoints, 1. - ratio);
+		grid.AddPointsField(T, listPoints, 1. - ratio);
+		grid.AddPointsField(W, listPoints, 1. - ratio);
+
+		if (data->kind_of_subphysics == FLAME1D_SUBPHYSICS_QMOM)
+			grid.AddPointsField(moments, listPoints, 1. - ratio);
+
+		if (data->kind_of_subphysics == FLAME1D_SUBPHYSICS_SOOT)
+		{
+			grid.AddPointsField(phiN, listPoints, 1. - ratio);
+			grid.AddPointsField(phiM, listPoints, 1. - ratio);
+		}
+
+		// Updating Properties
+		allocate_only_Np();
+		BzzVectorInt dummy;
+		properties(1, -1, dummy, 0, 0);
+		updatingProfiles();
+	}
+}
 
 void OpenSMOKE_Flame1D::updatingProfiles()
 {
@@ -9922,6 +9965,11 @@ void OpenSMOKE_Flame1D::Run()
 				refineFlameBase(operations->iOptionA[indexOperation], operations->iOptionB[indexOperation]);
 			}
 
+			if (operations->iOperation[indexOperation] == 555)
+			{
+				refineFlameByAddingSpecificPoint(operations->iOptionA[indexOperation]);
+			}
+
 			if (operations->iOperation[indexOperation]==55)
 			{
 				adaptGrid(operations->iOptionA[indexOperation]);
@@ -10103,6 +10151,10 @@ void OpenSMOKE_Flame1D::Run()
 			{
 				refineFlameBase(operations->iOptionA[indexOperation], operations->iOptionB[indexOperation]);
 			}
+			if (operations->iOperation[indexOperation] == 555)
+			{
+				refineFlameByAddingSpecificPoint(operations->iOptionA[indexOperation]);
+			}
 			if (operations->iOperation[indexOperation]==55)
 			{
 				adaptGrid(operations->iOptionA[indexOperation]);
@@ -10246,6 +10298,10 @@ void OpenSMOKE_Flame1D::Run()
 			if (operations->iOperation[indexOperation]==54)
 			{
 				refineFlameBase(operations->iOptionA[indexOperation], operations->iOptionB[indexOperation]);
+			}
+			if (operations->iOperation[indexOperation] == 555)
+			{
+				refineFlameByAddingSpecificPoint(operations->iOptionA[indexOperation]);
 			}
 
 			if (operations->iOperation[indexOperation]==55)

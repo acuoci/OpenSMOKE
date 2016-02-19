@@ -229,6 +229,7 @@ public:
 	void refineGridPeak(double fraction);
 	void refineFlameBase();
 	void refineFlameBase(const double xA, const double xB);
+	void refineFlameByAddingSpecificPoint(const double xA);
 	bool newPoints(const std::string string_kind, char index);
 	void adaptGrid(const int iOption);
 	void refineBase();

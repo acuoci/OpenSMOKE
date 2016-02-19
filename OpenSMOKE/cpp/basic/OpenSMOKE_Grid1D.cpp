@@ -482,6 +482,56 @@ void OpenSMOKE_Grid1D::Refine(const int j)
 	Build();
 }
 
+int OpenSMOKE_Grid1D::AddPoint(const double xPoint)
+{
+	if (xPoint <= xA || xPoint >= xB)
+		ErrorMessage("Grid refinement: Wrong user defined point");
+
+	for (int i = 1; i <= Np; i++)
+	if (std::fabs(xPoint - x[i]) / std::fabs(xB - xA) < 1e-10)
+	{
+		std::cout << "The point was not added because there is already an existing point in the grid in the same position" << std::endl;
+		return 0;
+	}
+
+	int index = 0;
+	double ratio = 0.;
+	for (int i = 1; i < Np; i++)
+		if (xPoint > x[i] && xPoint < x[i+1])
+		{
+			index = i;
+			ratio = (xPoint-x[i])/(x[i+1]-x[i]);
+			break;
+		}
+
+	if (index > 0)
+	{
+		BzzVector dxwOld = dxw;
+		int NpOld = Np;
+
+		Np = NpOld + 1;
+		Ni = Np - 1;
+
+		Allocate();
+
+		dxw[1] = 0.;
+		for (int i = 2; i <= index; i++)
+			dxw[i] = dxwOld[i];
+
+		dxw[index + 1] = dxwOld[index + 1] * ratio;
+		dxw[index + 2] = dxwOld[index + 1] * (1.-ratio);
+
+		for (int i = index + 3; i <= Np; i++)
+			dxw[i] = dxwOld[i - 1];
+
+		Build();
+
+		return index;
+	}
+	else
+		return 0;
+}
+
 void OpenSMOKE_Grid1D::RecoverFromBackUp(const std::string fileName)
 {
 	int dummy;
@@ -828,6 +878,11 @@ void OpenSMOKE_Grid1D::DoubleField(BzzMatrix &phi)
 
 void OpenSMOKE_Grid1D::AddPointsField(BzzVector &phi, BzzVectorInt &listPoints)
 {
+	AddPointsField(phi, listPoints, 0.50);
+}
+
+void OpenSMOKE_Grid1D::AddPointsField(BzzVector &phi, BzzVectorInt &listPoints, const double ratio)
+{
 	int i, k;
 	int NpOld;
 
@@ -836,22 +891,27 @@ void OpenSMOKE_Grid1D::AddPointsField(BzzVector &phi, BzzVectorInt &listPoints)
 	ChangeDimensions(Np, &phi);
 
 	int count = 0;
-	for (i=1;i<=NpOld;i++)
+	for (i = 1; i <= NpOld; i++)
 	{
-		phi[i+count] = phiOld[i];
+		phi[i + count] = phiOld[i];
 		if (count < listPoints.Size())
-			if(listPoints[count+1] == i)	count++;
+		if (listPoints[count + 1] == i)	count++;
 	}
 
 	BzzVectorInt indices(listPoints.Size());
-	for (k=1;k<=listPoints.Size();k++)
-		indices[k]= listPoints[k]+k;
-	
-	for (k=1;k<=listPoints.Size();k++)
-		phi[indices[k]] = 0.50*(phi[indices[k]-1]+phi[indices[k]+1]);
+	for (k = 1; k <= listPoints.Size(); k++)
+		indices[k] = listPoints[k] + k;
+
+	for (k = 1; k <= listPoints.Size(); k++)
+		phi[indices[k]] = ratio*phi[indices[k] - 1] + (1.-ratio)*phi[indices[k] + 1];
 }
 
 void OpenSMOKE_Grid1D::AddPointsField(BzzMatrix &phi, BzzVectorInt &listPoints)
+{
+	AddPointsField(phi, listPoints, 0.50);
+}
+
+void OpenSMOKE_Grid1D::AddPointsField(BzzMatrix &phi, BzzVectorInt &listPoints, const double ratio)
 {
 	int i, j, k;
 	int NpOld;
@@ -875,5 +935,5 @@ void OpenSMOKE_Grid1D::AddPointsField(BzzMatrix &phi, BzzVectorInt &listPoints)
 		indices[k]= listPoints[k]+k;
 	
 	for (k=1;k<=listPoints.Size();k++)
-		for(j=1;j<=NCols;j++)	phi[indices[k]][j] = 0.50*(phi[indices[k]-1][j]+phi[indices[k]+1][j]);
+		for(j=1;j<=NCols;j++)	phi[indices[k]][j] = 0.50*phi[indices[k]-1][j]+(1.-ratio)*phi[indices[k]+1][j];
 }

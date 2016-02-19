@@ -61,6 +61,7 @@ public:
 	
 	void RefineDouble();
 	void Refine(const int j);
+	int AddPoint(const double xPoint);
 	
 	BzzVectorInt QueryNewPointsDifference(const int nDiff, const double delta, BzzVector &phi);
 	BzzVectorInt QueryNewPointsGradient(const int nGrad, const double delta, BzzVector &phi);
@@ -77,7 +78,9 @@ public:
 	void DoubleField(BzzVector &phi);
 	void DoubleField(BzzMatrix &phi);
 	void AddPointsField(BzzVector &phi, BzzVectorInt &listPoints);
+	void AddPointsField(BzzVector &phi, BzzVectorInt &listPoints, const double ratio);
 	void AddPointsField(BzzMatrix &phi, BzzVectorInt &listPoints);
+	void AddPointsField(BzzMatrix &phi, BzzVectorInt &listPoints, const double ratio);
 	void AdaptField(BzzVector &phi, BzzVector &xNew);
 	void AdaptField(BzzMatrix &phi, BzzVector &xNew);
 
