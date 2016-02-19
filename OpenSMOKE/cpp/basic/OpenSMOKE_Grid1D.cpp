@@ -488,7 +488,7 @@ int OpenSMOKE_Grid1D::AddPoint(const double xPoint)
 		ErrorMessage("Grid refinement: Wrong user defined point");
 
 	for (int i = 1; i <= Np; i++)
-	if (std::fabs(xPoint - x[i]) / std::fabs(xB - xA) < 1e-10)
+	if (fabs(xPoint - x[i]) / fabs(xB - xA) < 1e-10)
 	{
 		std::cout << "The point was not added because there is already an existing point in the grid in the same position" << std::endl;
 		return 0;
