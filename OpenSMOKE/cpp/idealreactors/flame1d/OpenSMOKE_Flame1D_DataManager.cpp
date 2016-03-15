@@ -185,6 +185,8 @@ OpenSMOKE_Flame1D_DataManager::OpenSMOKE_Flame1D_DataManager()
 
 	sampling_coefficient = 0.;
 	iAssignedSamplingCoefficient = false;
+
+	iFixedEnthalpyLeftSide = false;
 }
 
 void OpenSMOKE_Flame1D_DataManager::SetName(const std::string name)
@@ -461,6 +463,8 @@ OpenSMOKE_Dictionary_Flame1D::OpenSMOKE_Dictionary_Flame1D()
 	Add("#VerboseFluxes",			'O', 'N', "Verbose fluxes (Fick + Soret)");
 
 	Add("#TODO_Sampling",			'O', 'M', "Sampling coefficient (in Pa/m)");
+
+	Add("#FixedEnthalpyLeftSide",	'O', 'N', "Instead of fixing the temperature on the left side, the enthalpy is fixed");
 }
 
 void OpenSMOKE_Dictionary_Flame1D::PrepareForOpposedFlames()
@@ -798,6 +802,9 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionary(OpenSMOKE_Dictionary_Flame1D
 
 	if (dictionary.Return("#DepositionWall"))	
 		SetDepositionWall();
+
+	if (dictionary.Return("#FixedEnthalpyLeftSide"))
+		SetFixedEnthalpyLeftSide();
 
 	if (dictionary.Return("#SootRadiation", string_value))	
 		SetSootRadiation(string_value);
@@ -1450,6 +1457,12 @@ void OpenSMOKE_Flame1D_DataManager::SetDepositionWall()
 	iDepositionWall = true;
 	//iThermophoreticEffect = true;
 }
+
+void OpenSMOKE_Flame1D_DataManager::SetFixedEnthalpyLeftSide()
+{
+	iFixedEnthalpyLeftSide = true;
+}
+
 
 void OpenSMOKE_Flame1D_DataManager::SetUncorrectDiffusionFormulation()
 {

@@ -7616,6 +7616,17 @@ void OpenSMOKE_Flame1D::give_Opposed_DT(double t)
 			data->TC = T[1];
 		}
 
+		if (data->iFixedEnthalpyLeftSide == true)
+		{
+			W.GetRow(1, &wVector);
+			const double H0 = mix->GetMixEnthalpy_Mass(data->TC, WC);		// [J/kg]
+			const double H  = mix->GetMixEnthalpy_Mass(T[1], wVector);		// [J/kg]
+			const double v0 = (nGeometry - 1.)*U[1] * urho[1];				// [m/s]
+			const double deltax = grid.x[2] - grid.x[1];					// [m]
+			const double mass_flux = rho[1] * v0;							// [kg/m2/s]
+			dT[1] = mass_flux*(H - H0) - lambda[1]*(T[2] - T[1])/deltax;	// 
+		}
+
 		for(i=2;i<=Ni;i++)
 		
 			dT[i] = -(+(nGeometry-1.)*U[i] * diffT[i] +
@@ -8293,49 +8304,49 @@ void OpenSMOKE_Flame1D::give_Premixed_DT()
 	else
 	{
 
-	// 1. Computation: A x lambda
-	// ------------------------------------------------------------
-	A_x_lambdaw[1] = G[1]*lambda[1];
-	for(i=1;i<=Np-1;i++)
-	{
-		A_x_lambdae[i] = 0.50 * (G[i]*lambda[i] + G[i+1]*lambda[i+1]);
-		A_x_lambdaw[i+1] = A_x_lambdae[i];
-	}
-	A_x_lambdae[Np] = G[Np]*lambda[Np];
+		// 1. Computation: A x lambda
+		// ------------------------------------------------------------
+		A_x_lambdaw[1] = G[1]*lambda[1];
+		for(i=1;i<=Np-1;i++)
+		{
+			A_x_lambdae[i] = 0.50 * (G[i]*lambda[i] + G[i+1]*lambda[i+1]);
+			A_x_lambdaw[i+1] = A_x_lambdae[i];
+		}
+		A_x_lambdae[Np] = G[Np]*lambda[Np];
 
 
-	// 2. Computation: mass diffusional fluxes
-	// ------------------------------------------------------------
-	sumCpDiffusive = 0.;
-	for(i=2;i<=Ni;i++)
-		for(j=1;j<=NC;j++)
-//			sumCpDiffusive[i] += Cpk[i][j]*vStar[i][j];
-			sumCpDiffusive[i] += 0.50*Cpk[i][j]*(vStar[i-1][j]+vStar[i][j]);
+		// 2. Computation: mass diffusional fluxes
+		// ------------------------------------------------------------
+		sumCpDiffusive = 0.;
+		for(i=2;i<=Ni;i++)
+			for(j=1;j<=NC;j++)
+	//			sumCpDiffusive[i] += Cpk[i][j]*vStar[i][j];
+				sumCpDiffusive[i] += 0.50*Cpk[i][j]*(vStar[i-1][j]+vStar[i][j]);
 	
 
-	// 3. Computation: convective terms
-	// ------------------------------------------------------------
-	grid.FirstDerivative(data->iDerT, U, T, diffT);
-	grid.FirstDerivative('C', T, diffTcentral);
+		// 3. Computation: convective terms
+		// ------------------------------------------------------------
+		grid.FirstDerivative(data->iDerT, U, T, diffT);
+		grid.FirstDerivative('C', T, diffTcentral);
 
 
-	// 4. Equations
-	// ------------------------------------------------------------
-	dT[1] = T[1] - data->TC;
+		// 4. Equations
+		// ------------------------------------------------------------
+		dT[1] = T[1] - data->TC;
 
-	for(i=2;i<=Ni;i++)
-	{
-		dT[i] = - ( + H[i] * diffT[i] + 
-				    - (A_x_lambdae[i]*(T[i+1]-T[i])*grid.udxe[i] - A_x_lambdaw[i]*(T[i]-T[i-1])*grid.udxw[i] ) 
-				      *grid.udxc_over_2[i] / Cp[i]
-					- G[i]*QReaction[i] / Cp[i] 
-				    + G[i]*rho[i]/Cp[i]*sumCpDiffusive[i]*diffTcentral[i]
-				  ) / (rho[i]*G[i]);
+		for(i=2;i<=Ni;i++)
+		{
+			dT[i] = - ( + H[i] * diffT[i] + 
+						- (A_x_lambdae[i]*(T[i+1]-T[i])*grid.udxe[i] - A_x_lambdaw[i]*(T[i]-T[i-1])*grid.udxw[i] ) 
+						  *grid.udxc_over_2[i] / Cp[i]
+						- G[i]*QReaction[i] / Cp[i] 
+						+ G[i]*rho[i]/Cp[i]*sumCpDiffusive[i]*diffTcentral[i]
+					  ) / (rho[i]*G[i]);
 		
-		dT[i]  += Qrad[i]/Cp[i]/rho[i] ;
-	}
+			dT[i]  += Qrad[i]/Cp[i]/rho[i] ;
+		}
 
-	dT[Np] = T[Np] - T[Np-1];
+		dT[Np] = T[Np] - T[Np-1];
 	}
 }
 

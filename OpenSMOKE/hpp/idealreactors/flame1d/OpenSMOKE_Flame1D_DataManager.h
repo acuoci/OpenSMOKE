@@ -255,6 +255,8 @@ public:
 	double TIgnition;
 	double DeltaTAccuracy;
 
+	bool iFixedEnthalpyLeftSide;
+
 private:
 
 	ifstream fInput;
@@ -377,6 +379,8 @@ private:
 	void SetCrossSectionMIT();
 
 	void SetUncorrectDiffusionFormulation();
+
+	void SetFixedEnthalpyLeftSide();
 
 	void AssignEquivalenceRatioForPremixedFlames(const double value);
 	void AssignFuelMassFractionsForPremixedFlames(const vector<string> names, const vector<double> values);
