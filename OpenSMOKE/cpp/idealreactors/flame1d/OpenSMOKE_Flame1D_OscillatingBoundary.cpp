@@ -52,6 +52,8 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::setup(double _USteadyFuel, double _U
 	char commento[SIZE];
 	double semiAmplitude;
 	std::string dummy;
+	next_target = 0;
+	onPrint = 0;
 
 	mix = mix;
 
@@ -62,18 +64,53 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::setup(double _USteadyFuel, double _U
 	fInput.getline(commento, SIZE);
 	fInput.getline(commento, SIZE);
 	fInput >> dummy;				fInput.getline(commento, SIZE);
-	fInput >> frequency;			fInput.getline(commento, SIZE);	
-	fInput >> semiAmplitude;		fInput.getline(commento, SIZE);
+	fInput >> frequency;				fInput.getline(commento, SIZE);	
+	fInput >> semiAmplitude;			fInput.getline(commento, SIZE);
 	fInput >> InPhase;				fInput.getline(commento, SIZE);
-	fInput >> slope;				fInput.getline(commento, SIZE);			
+	fInput >> slope;				fInput.getline(commento, SIZE);	
+	fInput >> relaxationTimeFuel;			fInput.getline(commento, SIZE);	
+
+	// Read possible targets
+	fInput >> vTargetFuel;				fInput.getline(commento, SIZE);	
+	fInput >> TTargetFuel;				fInput.getline(commento, SIZE);
+	fInput >> phiTargetFuel;			fInput.getline(commento, SIZE);
+
+	// Read target velocities
+	int  n_target_velocities;	
+	fInput >> n_target_velocities;
+	list_target_fuel_velocities.resize(n_target_velocities+1);
+	for(unsigned int j=0;j<n_target_velocities;j++)
+		fInput >> list_target_fuel_velocities[j];
+	fInput.getline(commento, SIZE);	
+
+	// Read target temperatures
+	int  n_target_temperatures;	
+	fInput >> n_target_temperatures;
+	list_target_fuel_temperatures.resize(n_target_temperatures+1);
+	for(unsigned int j=0;j<n_target_temperatures;j++)
+		fInput >> list_target_fuel_temperatures[j];
+	fInput.getline(commento, SIZE);	
+
+	// Read target equivalence ratios
+	int  n_target_equivalence_ratios;	
+	fInput >> n_target_equivalence_ratios;
+	list_target_fuel_equivalence_ratios.resize(n_target_equivalence_ratios+1);
+	for(unsigned int j=0;j<n_target_equivalence_ratios;j++)
+		fInput >> list_target_fuel_equivalence_ratios[j];
+	fInput.getline(commento, SIZE);	
+
+		
 	fInput.close();
 
-	     if (dummy == "SIN")					unsteady_boundary_kind = OSCILLATING_BOUNDARY_SIN;
+	     if (dummy == "SIN")				unsteady_boundary_kind = OSCILLATING_BOUNDARY_SIN;
 	else if (dummy == "SIN_EXP")				unsteady_boundary_kind = OSCILLATING_BOUNDARY_SIN_EXP;
 	else if (dummy == "AIR_VELOCITY")			unsteady_boundary_kind = OSCILLATING_BOUNDARY_AIR_VELOCITY;
-	else if (dummy == "SIN_TEMPERATURE")		unsteady_boundary_kind = OSCILLATING_BOUNDARY_AIR_TEMPERATURE;
-	else if (dummy == "FUEL_AIR_VELOCITIES")	unsteady_boundary_kind = OSCILLATING_BOUNDARY_FUEL_AIR_VELOCITIES;
-	else if (dummy == "FUEL_COMPOSITION")		unsteady_boundary_kind = OSCILLATING_BOUNDARY_FUEL_COMPOSITION;
+	else if (dummy == "SIN_TEMPERATURE")			unsteady_boundary_kind = OSCILLATING_BOUNDARY_AIR_TEMPERATURE;
+	else if (dummy == "FUEL_AIR_VELOCITIES")		unsteady_boundary_kind = OSCILLATING_BOUNDARY_FUEL_AIR_VELOCITIES;
+	else if (dummy == "FUEL_COMPOSITION")			unsteady_boundary_kind = OSCILLATING_BOUNDARY_FUEL_COMPOSITION;
+	else if (dummy == "RELAXATION_FUEL_VELOCITY")		unsteady_boundary_kind = RELAXATION_BOUNDARY_FUEL_VELOCITY;
+	else if (dummy == "RELAXATION_FUEL_TEMPERATURE")	unsteady_boundary_kind = RELAXATION_BOUNDARY_FUEL_TEMPERATURE;
+	//else if (dummy == "RELAXATION_FUEL_EQRATIO")		unsteady_boundary_kind = RELAXATION_BOUNDARY_FUEL_EQRATIO;	// TODO
 	else ErrorMessage("Wrong oscillation kind: " + dummy);
 
 	// The sinusoidal shape is assumed by default to be 3 (the best and reliable choice)
@@ -82,22 +119,49 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::setup(double _USteadyFuel, double _U
 	// -------------------------------------------------------------------------------------------------
 	// Setting steady state values	
 	// -------------------------------------------------------------------------------------------------
-	P				= _P;										// [Pa]
-	L				= _L;										// [m]
+	P			= _P;										// [Pa]
+	L			= _L;										// [m]
 	USteadyFuel		= _USteadyFuel;								// [kg/m2/s]
 	USteadyAir		= _USteadyAir;								// [kg/m2/s]
-	rhoSteadyFuel	= _rhoSteadyFuel;							// [kg/m3]
-	rhoSteadyAir	= _rhoSteadyAir;							// [kg/m3]
-	MWSteadyFuel	= _MWSteadyFuel;							// [kg/kmol]
+	rhoSteadyFuel		= _rhoSteadyFuel;							// [kg/m3]
+	rhoSteadyAir		= _rhoSteadyAir;							// [kg/m3]
+	MWSteadyFuel		= _MWSteadyFuel;							// [kg/kmol]
 	MWSteadyAir		= _MWSteadyAir;								// [kg/kmol]
 	TSteadyFuel		= _TSteadyFuel;								// [K]
 	TSteadyAir		= _TSteadyAir;								// [k]
-	vSteadyFuel     =  200. * USteadyFuel / rhoSteadyFuel;		// [cm/s]
-	vSteadyAir      = -200. * USteadyAir  / rhoSteadyAir;		// [cm/s]
-	KSteady         = 2.e-2*vSteadyAir/L*(1.+vSteadyFuel/vSteadyAir*sqrt(rhoSteadyFuel/rhoSteadyAir));
-	xSt				= L / ( 1. + _rhoSteadyAir/_rhoSteadyFuel*BzzPow2(vSteadyAir/vSteadyFuel) );
-	betaCoefficient = _rhoSteadyFuel/_rhoSteadyAir * (L/xSt-1.);
+	vSteadyFuel    		=  200. * USteadyFuel / rhoSteadyFuel;		// [cm/s]
+	vSteadyAir      	= -200. * USteadyAir  / rhoSteadyAir;		// [cm/s]
+	KSteady         	= 2.e-2*vSteadyAir/L*(1.+vSteadyFuel/vSteadyAir*sqrt(rhoSteadyFuel/rhoSteadyAir));
+	xSt			= L / ( 1. + _rhoSteadyAir/_rhoSteadyFuel*BzzPow2(vSteadyAir/vSteadyFuel) );
+	betaCoefficient 	= _rhoSteadyFuel/_rhoSteadyAir * (L/xSt-1.);
 	// -------------------------------------------------------------------------------------------------
+
+	if (unsteady_boundary_kind == RELAXATION_BOUNDARY_FUEL_VELOCITY)
+	{
+		if (vTargetFuel > vSteadyFuel)
+			relaxationFuelCoefficient = fabs(relaxationTimeFuel / log(0.01*vTargetFuel/(vTargetFuel-vSteadyFuel)));
+		else
+			relaxationFuelCoefficient = fabs(relaxationTimeFuel / log(-0.01*vTargetFuel/(vTargetFuel-vSteadyFuel)));
+	}
+
+	if (unsteady_boundary_kind == RELAXATION_BOUNDARY_FUEL_TEMPERATURE)
+	{
+		if (TTargetFuel > TSteadyFuel)
+			relaxationFuelCoefficient = fabs(relaxationTimeFuel / log(0.01*TTargetFuel/(TTargetFuel-TSteadyFuel)));
+		else
+			relaxationFuelCoefficient = fabs(relaxationTimeFuel / log(-0.01*TTargetFuel/(TTargetFuel-TSteadyFuel)));
+	}
+
+	if (unsteady_boundary_kind == RELAXATION_BOUNDARY_FUEL_EQRATIO)
+	{
+		// TODO
+		/*
+		if (phiTargetFuel > phiSteadyFuel)
+			relaxationFuelCoefficient = fabs(relaxationTimeFuel / log(0.01*phiTargetFuel/(phiTargetFuel-phiSteadyFuel)));
+		else
+			relaxationFuelCoefficient = fabs(relaxationTimeFuel / log(-0.01*phiTargetFuel/(phiTargetFuel-phiSteadyFuel)));
+		*/
+	}
 
 	// The semiamplitude for air and fuel is not the same
 	// The location of stagnation plane is the same
@@ -110,7 +174,7 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::setup(double _USteadyFuel, double _U
 	_2pi = 2.*acos(-1.);
 
 	tDelay = 0.;
-	onPrint = 1;
+	onPrint = 0;
 	lastPrint =-1;
 
 	{
@@ -158,6 +222,48 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::setup(double _USteadyFuel, double _U
 			cout << " alfa: " << semiAmplitudeFuel	<<  endl;
 		}
 
+		else if (unsteady_boundary_kind == RELAXATION_BOUNDARY_FUEL_VELOCITY)
+		{
+			cout << " FUEL VELOCITY RELAXATION"<< endl;
+			cout << "  * target velocity:        " << vSteadyFuel			<< " cm/s"	<< endl;
+			cout << "  * target velocity:        " << vTargetFuel			<< " cm/s"	<< endl;
+			cout << "  * relaxation time:        " << relaxationTimeFuel 		<< " s"		<<  endl;
+			cout << "  * relaxation coefficient: " << relaxationFuelCoefficient 	<< " s"		<<  endl;
+			cout << "  * output velocities:      ";
+			for (unsigned int j=0; j<list_target_fuel_velocities.size()-1; j++)
+				cout << list_target_fuel_velocities[j] << " ";
+			cout << "cm/s" << endl;
+		}
+
+		else if (unsteady_boundary_kind == RELAXATION_BOUNDARY_FUEL_TEMPERATURE)
+		{
+			cout << " FUEL TEMPERATURE RELAXATION"	<< endl;
+			cout << "  * target temperature:     "  << TSteadyFuel			<< " K"	<< endl;
+			cout << "  * target temperature:     "  << TTargetFuel			<< " K"	<< endl;
+			cout << "  * relaxation time:        "  << relaxationTimeFuel 		<< " s"	<<  endl;
+			cout << "  * relaxation coefficient: "  << relaxationFuelCoefficient 	<< " s"	<<  endl;
+			cout << "  * output temperatures:    ";
+			for (unsigned int j=0; j<list_target_fuel_temperatures.size()-1; j++)
+				cout << list_target_fuel_temperatures[j] << " ";
+			cout << "K" << endl;
+ 
+		}
+
+		else if (unsteady_boundary_kind == RELAXATION_BOUNDARY_FUEL_EQRATIO)
+		{
+			// TODO
+			/*
+			cout << " FUEL EQ. RATIO RELAXATION"	<< endl;
+			cout << "  * target eq. ratio:       " << phiSteadyFuel			<< "  "	<< endl;
+			cout << "  * target eq. ratio:       " << phiTargetFuel			<< "  "	<< endl;
+			cout << "  * relaxation time:        " << relaxationTimeFuel 		<< " s"	<<  endl;
+			cout << "  * relaxation coefficient: " << relaxationFuelCoefficient 	<< " s"	<<  endl;
+			for (unsigned int j=0; j<list_target_fuel_equivalence_ratios.size()-1; j++)
+				cout << list_target_fuel_equivalence_ratios[j] << " ";
+			cout << endl;
+			*/
+		}
+
 		cout << endl;
 		cout << " Temperatures: " << TSteadyFuel	<< " - " << TSteadyAir		<< " K"		<< endl;	
 		cout << " Velocities:   " << vSteadyFuel	<< " - " << vSteadyAir		<< " cm/s"	<< endl;	
@@ -175,15 +281,17 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::setup(double _USteadyFuel, double _U
 	}
 
 	// Equivalent Strain rate
-	Ntimes  = 1;
+	Ntimes  	= 1;
 	K		= KSteady;
 	Kvector.Append(KSteady);
 	timeVector.Append(0.);
 }
 
-void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _time, double &UC, double &UO, double &TAir,
-													 double _rhoC, double _rhoO, double _Tmax,
-													 BzzVector &WC, BzzVector &WO)
+void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _time, 	double &UC,    double &UO, 
+											double &TFuel, double &TAir,
+											double &rhoC,  double &rhoO, 
+											double _Tmax,
+											BzzVector &WC, BzzVector &WO)
 {
 	const double pi = acos(-1.);
 
@@ -206,8 +314,8 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _t
 		UC = give_oscillating_profile_Fuel(time);
 		UO = give_oscillating_profile_Air(time);
 
-		vAir  = -UO*200. / _rhoO;		// [cm/s]
-		vFuel =  UC*200. / _rhoC;		// [cm/s]
+		vAir  = -UO*200. / rhoO;		// [cm/s]
+		vFuel =  UC*200. / rhoC;		// [cm/s]
 	}
 
 	if (unsteady_boundary_kind == OSCILLATING_BOUNDARY_SIN_EXP)	// SINUSOIDAL EXPONENTIAL
@@ -219,8 +327,8 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _t
 		UC = give_oscillating_profile_Fuel(time, increasing_factor);
 		UO = give_oscillating_profile_Air(time, increasing_factor);
 
-		vAir  = -UO*200. / _rhoO;		// [cm/s]
-		vFuel =  UC*200. / _rhoC;		// [cm/s]
+		vAir  = -UO*200. / rhoO;		// [cm/s]
+		vFuel =  UC*200. / rhoC;		// [cm/s]
 	}
 
 	// --------------------------------------------------------
@@ -240,8 +348,8 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _t
 		UO = UO*-1.0;
 
 		vFuel =  vSteadyFuel;			// [cm/s]
-		UC    =  vFuel*_rhoC/200.;		// [kg/m2/s]
-		vAir  = -200.*UO / _rhoO;		// [cm/s]
+		UC    =  vFuel*rhoC/200.;		// [kg/m2/s]
+		vAir  = -200.*UO / rhoO;		// [cm/s]
 	}
 
 	// -----------------------------------------------------------
@@ -263,16 +371,16 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _t
 			else if (_time>1.50*pi)
 				UC = USteadyFuel + slope * (_time + q);
 			
-			vFuel = 200.*UC / _rhoC;					// [cm/s]
-			vAir  = sqrt(_rhoC/_rhoO*(L/xSt-1.)) * vFuel;		// [cm/s]
-			UO = -_rhoO * vAir / 200.;
+			vFuel = 200.*UC / rhoC;					// [cm/s]
+			vAir  = sqrt(rhoC/rhoO*(L/xSt-1.)) * vFuel;		// [cm/s]
+			UO = -rhoO * vAir / 200.;
 		}
 		else
 		{
 			UO = USteadyAir;
 			UC = USteadyFuel;
-			vFuel = 200.*UC / _rhoC;					// [cm/s]
-			vAir  = sqrt(_rhoC/_rhoO*(L/xSt-1.)) * vFuel;		// [cm/s]
+			vFuel = 200.*UC / rhoC;					// [cm/s]
+			vAir  = sqrt(rhoC/rhoO*(L/xSt-1.)) * vFuel;		// [cm/s]
 		}
 
 	//	double checkXst = L/(1.+_rhoO/_rhoC*vAir*vAir/vFuel/vFuel);
@@ -299,14 +407,14 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _t
 				TAir = TSteadyAir + slope * (_time + q);
 		}
 		
-		_rhoO = MWSteadyAir*P/8314./TAir;
-		betaCoefficient = _rhoC/_rhoO*(L/xSt-1.0);
+		rhoO = MWSteadyAir*P/8314./TAir;
+		betaCoefficient = rhoC/rhoO*(L/xSt-1.0);
 
 		vAir  = vSteadyAir;
 		vFuel = sqrt(1./betaCoefficient) * vAir;
 		
-		UC =  _rhoC*vFuel/200.;
-		UO = -_rhoO*vAir/200.;
+		UC =  rhoC*vFuel/200.;
+		UO = -rhoO*vAir/200.;
 
 	}
 
@@ -353,54 +461,129 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _t
 			WC[iN2]		= xN2/MWmix*MWN2;
 			WO = WC;
 
-			_rhoC		= P/Constants::R_J_kmol/TAir*MWmix;
-			_rhoO		= P/Constants::R_J_kmol/TAir*MWmix;
+			rhoC		= P/Constants::R_J_kmol/TAir*MWmix;
+			rhoO		= P/Constants::R_J_kmol/TAir*MWmix;
 
 			cout << "phi: " << phi	<< "  wH2:"		<< WC[iH2]	<< " SR: " << 
-				2.*vAir/L	*(1.+vFuel/vAir*sqrt(_rhoC/_rhoO)) / 100. << endl;
+				2.*vAir/L	*(1.+vFuel/vAir*sqrt(rhoC/rhoO)) / 100. << endl;
 			
-			UC =  _rhoC*vSteadyFuel/200.;
-			UO = -_rhoO*vSteadyAir/200.;
+			UC =  rhoC*vSteadyFuel/200.;
+			UO = -rhoO*vSteadyAir/200.;
 		}
 		else
 		{
-			_rhoC		= rhoSteadyFuel;
-			_rhoO		= rhoSteadyAir;
+			rhoC	= rhoSteadyFuel;
+			rhoO	= rhoSteadyAir;
 
-			UC =  _rhoC*vSteadyFuel/200.;
-			UO = -_rhoO*vSteadyAir/200.;
+			UC =  rhoC*vSteadyFuel/200.;
+			UO = -rhoO*vSteadyAir/200.;
 		}
+	}
+
+	if (unsteady_boundary_kind == RELAXATION_BOUNDARY_FUEL_VELOCITY)
+	{
+		if (vTargetFuel == vSteadyFuel)
+			vFuel = vSteadyFuel;
+		else
+			vFuel = vTargetFuel + (vSteadyFuel - vTargetFuel)*exp(-time/relaxationFuelCoefficient);	// [cm/s]	
+		vAir  = -200.*UO / rhoO;									// [cm/s]
+		UC    =  rhoC*vFuel/200.;									// [kg/m2/s]
+	}
+
+	if (unsteady_boundary_kind == RELAXATION_BOUNDARY_FUEL_TEMPERATURE)
+	{
+		if (TTargetFuel == TSteadyFuel)
+			TFuel = TSteadyFuel;
+		else
+			TFuel = TTargetFuel + (TSteadyFuel - TTargetFuel)*exp(-time/relaxationFuelCoefficient);	// [K]	
+
+		rhoC = P/Constants::R_J_kmol/TFuel*MWSteadyFuel;					// [kg/m3]
+		vAir  = -200.*UO / rhoO;								// [cm/s]
+		UC    =  rhoC*vSteadyFuel/200.;								// [kg/m2/s]
+	}
+
+	if (unsteady_boundary_kind == RELAXATION_BOUNDARY_FUEL_EQRATIO)
+	{
+		// TODO
+		/*
+		if (phiTargetFuel == phiSteadyFuel)
+			phiFuel = phiSteadyFuel;
+		else
+			phiFuel = phiTargetFuel + (phiSteadyFuel - phiTargetFuel)*exp(-time/relaxationFuelCoefficient);	
+	
+		vAir  = -200.*UO / rhoO;								// [cm/s]
+		UC    =  rhoC*vSteadyFuel/200.;								// [kg/m2/s]
+		*/
 	}
 
 	// Strain rate (instantaneous)
 	// --------------------------------------------------------
-	K		= 2.*vAir/L	*(1.+vFuel/vAir*sqrt(_rhoC/_rhoO)) / 100.;
-	KSeshadri	= 2.*vFuel/L*(1.-vAir/vFuel*sqrt(_rhoO/_rhoC)) / 100.;
+	K		= 2.*vAir/L	*(1.+vFuel/vAir*sqrt(rhoC/rhoO)) / 100.;
+	KSeshadri	= 2.*vFuel/L*(1.-vAir/vFuel*sqrt(rhoO/rhoC)) / 100.;
 
 }
 
-void OpenSMOKE_Flame1D_OscillatingBoundary::update_time_target(double _time)
+void OpenSMOKE_Flame1D_OscillatingBoundary::update_time_target(const double time)
 {
-/*	if (T>0)	iPrint = int(_time/(T/200.));
-	else		iPrint = 10;
+	onPrint = 0;
 
-	if (lastPrint == iPrint)
-		onPrint = 0;
-	else if (lastPrint < iPrint)
+	if (unsteady_boundary_kind == RELAXATION_BOUNDARY_FUEL_VELOCITY)
 	{
-		onPrint = 1;
-		lastPrint = iPrint;
+		double vFuel;
+
+		if (vTargetFuel == vSteadyFuel)
+			vFuel = vSteadyFuel;
+		else
+			vFuel = vTargetFuel + (vSteadyFuel - vTargetFuel)*exp(-time/relaxationFuelCoefficient);	// [cm/s]	
+		
+		if (vTargetFuel > vSteadyFuel)
+		{
+			list_target_fuel_velocities[list_target_fuel_velocities.size()-1] = 1.e32;
+			if (vFuel >= list_target_fuel_velocities[next_target])
+			{
+				onPrint = 1;
+				next_target++;
+			}
+		}
+		else
+		{
+			list_target_fuel_velocities[list_target_fuel_velocities.size()-1] = -1.e32;
+			if (vFuel <= list_target_fuel_velocities[next_target])
+			{
+				onPrint = 1;
+				next_target++;
+			}
+		}						
 	}
-	else
+
+	if (unsteady_boundary_kind == RELAXATION_BOUNDARY_FUEL_TEMPERATURE)
 	{
-		cout << iPrint << endl;
-		cout << lastPrint << endl;
-		cout << _time << endl;
-		cout << T << endl;
-		cout << "ERROR: something wrong in printing for oscillations" << endl;
-		getchar();
-		exit(-1);
-	}*/
+		double TFuel;
+
+		if (TTargetFuel == TSteadyFuel)
+			TFuel = TSteadyFuel;
+		else
+			TFuel = TTargetFuel + (TSteadyFuel - TTargetFuel)*exp(-time/relaxationFuelCoefficient);	// [K]	
+
+		if (TTargetFuel > TSteadyFuel)
+		{
+			list_target_fuel_temperatures[list_target_fuel_temperatures.size()-1] = 1.e32;
+			if (TFuel >= list_target_fuel_temperatures[next_target])
+			{
+				onPrint = 1;
+				next_target++;
+			}
+		}
+		else
+		{
+			list_target_fuel_temperatures[list_target_fuel_temperatures.size()-1] = -1.e32;
+			if (TFuel <= list_target_fuel_temperatures[next_target])
+			{
+				onPrint = 1;
+				next_target++;
+			}
+		}
+	}
 }
 
 double OpenSMOKE_Flame1D_OscillatingBoundary::give_oscillating_profile_Fuel(double time)

@@ -3043,12 +3043,13 @@ void OpenSMOKE_Flame1D::setup()
 
 	setupGasMixture();
 
-	if		(data->gridKind == "EQUISPACED")				grid.Construct(data->Np, data->L, 0.);
+	if		(data->gridKind == "EQUISPACED")		grid.Construct(data->Np, data->L, 0.);
 	else if (data->gridKind == "STRETCHED")				grid.Construct(data->Np, data->L, data->alfa, 0.);
-	else if (data->gridKind == "STRETCHED_STAGNATION")	grid.ConstructStretchedStagnation(data->Np, data->L, data->alfa, 0.);
-	else if (data->gridKind == "STRETCHED_POOL_FIRE")	grid.Construct(data->Np, 0., data->L, data->poolfire_grid_alfa_fuel, data->poolfire_grid_alfa_oxidizer, data->poolfire_grid_point_fraction, data->poolfire_grid_distance_fraction);
+	else if (data->gridKind == "STRETCHED_STAGNATION")		grid.ConstructStretchedStagnation(data->Np, data->L, data->alfa, 0.);
+	else if (data->gridKind == "STRETCHED_DOUBLE")			grid.Construct(data->Np, 0., data->L, data->alfa, 1.+ (1.-data->alfa)/2., 0.50, 0.50);
+	else if (data->gridKind == "STRETCHED_POOL_FIRE")		grid.Construct(data->Np, 0., data->L, data->poolfire_grid_alfa_fuel, data->poolfire_grid_alfa_oxidizer, data->poolfire_grid_point_fraction, data->poolfire_grid_distance_fraction);
 	else if (data->gridKind == "CENTERED")				grid.Construct(data->Np, data->L, data->xcen, data->wmix, 0.);
-	else if (data->gridKind == "USER")					grid.Construct("Grid.inp");
+	else if (data->gridKind == "USER")				grid.Construct("Grid.inp");
 	else ErrorMessage("Error in Grid Geometry, Wrong Type: " + data->gridKind);
 
 	Np = grid.Np;
@@ -3133,8 +3134,8 @@ void OpenSMOKE_Flame1D::setupBoundaryConditions()
 		BzzVectorInt dummy;
 		properties(0, -1, dummy, 0, 0);
 
-		const double rhoC = data->P_Pascal*PMtot[1] / Constants::R_J_kmol / data->TC;
-		const double rhoO = data->P_Pascal*PMtot[Np] / Constants::R_J_kmol / data->TO;
+		rhoC = data->P_Pascal*PMtot[1] / Constants::R_J_kmol / data->TC;
+		rhoO = data->P_Pascal*PMtot[Np] / Constants::R_J_kmol / data->TO;
 
 		if (data->geometry == "AXIS")		nGeometry = 3.; 
 		else if (data->geometry == "PLANAR") nGeometry = 2.; 
@@ -3172,6 +3173,8 @@ void OpenSMOKE_Flame1D::setupBoundaryConditions()
 
 		massFractionsAndPM(data->XC, WC, PMtot[1], mix->M);	// INLET
 		massFractionsAndPM(data->XO, WO, PMtot[Np], mix->M);	// OUTLET (estimated)
+		rhoC = data->P_Pascal*PMtot[1] / Constants::R_J_kmol / data->TC;
+		rhoO = data->P_Pascal*PMtot[Np] / Constants::R_J_kmol / data->TO;
 		setTemperatureAndMassFractionProfiles(FLAME1D_IGNITION_NONE);
 
 		BzzVectorInt dummy;
@@ -3191,6 +3194,8 @@ void OpenSMOKE_Flame1D::setupBoundaryConditions()
 		int i;
 
 		massFractionsAndPM(data->XC, WC, PMtot[1], mix->M);
+		rhoC = data->P_Pascal*PMtot[1] / Constants::R_J_kmol / data->TC;
+		rhoO = 0.;
 
 		setTemperatureAndMassFractionProfiles(FLAME1D_IGNITION_START);
 		BzzVectorInt dummy;
@@ -4248,6 +4253,106 @@ void OpenSMOKE_Flame1D::printOnFile(const std::string fileNameOutput)
 		fVerbose.close();
 	}
 }
+
+
+void OpenSMOKE_Flame1D::printSootOnFile(const std::string fileNameSoot, const std::string fileNameSootDistribution)	
+{
+	ofstream fSoot;
+	ofstream fSootDistribution;
+
+	openOutputFileAndControl(fSoot, fileNameSoot);
+	fSoot.setf(ios::scientific);
+
+	openOutputFileAndControl(fSootDistribution, fileNameSootDistribution);
+	fSootDistribution.setf(ios::scientific);
+
+	GnuPlotSootInterface(fSoot);
+	GnuPlotSootDistributionInterface(fSootDistribution);
+
+	for(int i=1;i<=Np;i++)
+	{
+		X.GetRow(i, &cVector);
+		double cTotForSoot = data->P_Pascal  / (Constants::R_J_kmol*T[i]);
+		cVector *= cTotForSoot;
+
+		double MWgas=0.;
+		for(int k=1;k<=NC;k++)
+			MWgas += X[i][k]*mix->M[k];
+		double rhoGas = cTotForSoot*MWgas;
+
+		// PAH Distribution data
+		W.GetRow(i, &wVector);
+		X.GetRow(i, &xVector);
+
+		// Soot Distribution data
+		mix->polimiSoot->Analysis(*mix, data->P_Pascal, T[i], wVector);
+		mix->polimiSoot->Distribution();
+		mix->polimiSoot->ProcessDistribution();
+
+		// Print On File - Soot data
+    		fSoot << setw(20) << left << 1.e2*grid.x[i];
+		fSoot << setw(20) << left << T[i];
+
+		fSoot << setw(20) << left << mix->polimiSoot->fv_large();
+		fSoot << setw(20) << left << mix->polimiSoot->x_large();
+		fSoot << setw(20) << left << mix->polimiSoot->omega_large();
+		fSoot << setw(20) << left << mix->polimiSoot->rho_large();
+		fSoot << setw(20) << left << mix->polimiSoot->N_large();
+		fSoot << setw(20) << left << mix->polimiSoot->h_over_c_large();
+		fSoot << setw(20) << left << mix->polimiSoot->dmean_N_large();
+		fSoot << setw(20) << left << mix->polimiSoot->d32_N_large();
+		fSoot << setw(20) << left << mix->polimiSoot->dstd_N();
+
+		fSoot << setw(20) << left << mix->polimiSoot->fv_small();
+		fSoot << setw(20) << left << mix->polimiSoot->x_small();
+		fSoot << setw(20) << left << mix->polimiSoot->omega_small();
+		fSoot << setw(20) << left << mix->polimiSoot->rho_small();
+		fSoot << setw(20) << left << mix->polimiSoot->N_small();
+
+		fSoot << endl;
+		
+		// Distribution
+		{
+			for (int k=1;k<=mix->polimiSoot->baskets_d().Size();k++)
+			{
+				fSootDistribution << setw(20) << left << 1.e2*grid.x[i];
+				fSootDistribution << setw(20) << left << k;
+				
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_d()[k];
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_m()[k];
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_V()[k];
+
+				fSootDistribution << setw(20) << left << log10(mix->polimiSoot->baskets_d()[k]);
+				fSootDistribution << setw(20) << left << log10(mix->polimiSoot->baskets_m()[k]);
+				fSootDistribution << setw(20) << left << log10(mix->polimiSoot->baskets_V()[k]);
+
+				fSootDistribution << setw(20) << left << log10(mix->polimiSoot->baskets_dlog10d()[k]);
+				fSootDistribution << setw(20) << left << log10(mix->polimiSoot->baskets_dlog10m()[k]);
+				fSootDistribution << setw(20) << left << log10(mix->polimiSoot->baskets_dlog10V()[k]);
+
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_fv()[k];
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_x()[k];
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_omega()[k];
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_rho()[k];
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_N()[k] / 1.e6; // [#/cm3]
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_N()[k] / mix->polimiSoot->baskets_dlog10d()[k] / 1.e6; // [#/cm3]
+
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_fv()[k]/(mix->polimiSoot->fv_large()+mix->polimiSoot->fv_small());
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_x()[k]/(mix->polimiSoot->x_large()+mix->polimiSoot->x_small());
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_omega()[k]/(mix->polimiSoot->omega_large()+mix->polimiSoot->omega_small());
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_rho()[k]/(mix->polimiSoot->rho_large()+mix->polimiSoot->rho_small());
+				fSootDistribution << setw(20) << left << mix->polimiSoot->baskets_N()[k]/(mix->polimiSoot->N_large()+mix->polimiSoot->N_small());
+
+				fSootDistribution << endl;
+			}
+		}
+		fSootDistribution << endl;
+	}
+
+	fSoot.close();
+	fSootDistribution.close();
+}
+
 /*
 void OpenSMOKE_Flame1D::GnuPlotPAHInterface(ofstream &fPAH)
 {
@@ -4579,14 +4684,16 @@ void OpenSMOKE_Flame1D::DAE_ODE_myPrint(BzzVector &v, double time)
 		
 		if (data->iUnsteady == true)
 		{
-			cout << time								<< "\t";
-			cout << unsteady.nPeriods					<< "\t";
-			cout << unsteady.phase						<< "\t";
-			cout << Tmax								<< "\t";
+			cout << time					<< "\t";
+		//	cout << unsteady.nPeriods			<< "\t";
+		//	cout << unsteady.phase				<< "\t";
+			cout << Tmax					<< "\t";
 			cout <<  (nGeometry-1.)*U[1]/rho[1]  *100.	<< "\t";
 			cout << -(nGeometry-1.)*U[Np]/rho[Np]*100.	<< "\t";
-			cout << unsteady.K							<< "\t";
-			cout << unsteady.KSeshadri					<< "\t";
+			cout <<  (nGeometry-1.)*UC/rhoC*100.		<< "\t";
+			cout << -(nGeometry-1.)*UO/rhoO*100.		<< "\t";
+			cout << unsteady.K				<< "\t";
+			cout << unsteady.KSeshadri			<< "\t";
 			cout << endl;
 		}
 
@@ -4628,7 +4735,7 @@ void OpenSMOKE_Flame1D::DAE_ODE_myPrint(BzzVector &v, double time)
 		data->iterationVideoCounter = 0;
 	}
 
-	if(unsteady.onPrint == 1 && data->iUnsteady == true && data->iterationVideoCounter == 0)
+	if(data->iUnsteady == true && data->iterationVideoCounter == 0)
 	{
 		for(int i=1;i<=Np;i++)
 		{
@@ -4784,6 +4891,26 @@ void OpenSMOKE_Flame1D::DAE_ODE_myPrint(BzzVector &v, double time)
 			cout << "TMax Old:    " << data->TMaxOld << endl;
 			cout << "Error(%):    " << fabs(TMax-data->TMaxOld)/TMax*100 << endl;
 			bzzStop = 1;
+		}
+	}
+
+	if (data->iUnsteady == true && unsteady.onPrint == 1)
+	{
+		stringstream t; t << time;
+
+		// Steady state solution
+		{
+			std::string nameFileSolution = nameFolderUnsteadyData + "/Solution_t_" + t.str() + ".out";
+			printOnFile(nameFileSolution);
+		}
+
+		// Soot
+		if (mix->polimiSoot->IsSoot() == true)
+		{
+			std::string nameFileSoot = nameFolderUnsteadyData + "/SootDetailed_t_" + t.str() + ".out";
+			std::string nameFileSootDistribution = nameFolderUnsteadyData + "/SootDistribution_t_" + t.str() + ".out";
+
+			printSootOnFile(nameFileSoot, nameFileSootDistribution);
 		}
 	}
 }
@@ -5191,7 +5318,7 @@ void OpenSMOKE_Flame1D::unsteady_boundary_conditions(double &time)
 {
 	if (data->iUnsteady == true)
 	{
-		unsteady.update_boundary_conditions(time, UC, UO, data->TO, rho[1], rho[Np], T.Max(), WC, WO);
+		unsteady.update_boundary_conditions(time, UC, UO, data->TC, data->TO, rhoC, rhoO, T.Max(), WC, WO);
 		for(int i=1;i<=NC;i++)
 		{
 			BCW_C[i] =  (nGeometry-1.)*UC*WC[i];
@@ -9921,18 +10048,32 @@ void OpenSMOKE_Flame1D::Run()
 				{	
 				//	solveNLS_Opposed(Hot, OPPOSED_ONLY_MOMENTUM);
 				//	if (data->iUnsteady != true)	solveDAE_Opposed(Hot, OPPOSED_ONLY_MOMENTUM, 1e5);
-					solveNLS_Opposed(Hot, OPPOSED_ONLY_MOMENTUM);
+				//	solveNLS_Opposed(Hot, OPPOSED_ONLY_MOMENTUM);
+
+					if (data->iUnsteady == true)	
+					{
+				//		solveDAE_Opposed(Hot, OPPOSED_ONLY_MOMENTUM, 1e5);
+				//		solveDAE_Opposed(Hot, OPPOSED_ALL, 1e5);
+					}
+					else if (data->iUnsteady == false)	
+					{
+						solveNLS_Opposed(Hot, OPPOSED_ONLY_MOMENTUM);
+					}
 				}
 
 				if (data->kind_of_subphysics == FLAME1D_SUBPHYSICS_NONE)
 				{
-					solveNLS_Reduced_Opposed(Hot, OPPOSED_ALL);
+					if (data->iUnsteady == false) solveNLS_Reduced_Opposed(Hot, OPPOSED_ALL);
 					solveDAE_Opposed(Hot, OPPOSED_ALL, operations->iOptionB[indexOperation]);
 				}
 				else if (data->kind_of_subphysics == FLAME1D_SUBPHYSICS_SOOT)
+				{
 					solveDAE_Opposed(Hot, OPPOSED_SOOT_ALL, operations->iOptionB[indexOperation]);
+				}
 				else if (data->kind_of_subphysics == FLAME1D_SUBPHYSICS_QMOM)
+				{
 					solveDAE_Opposed(Hot, OPPOSED_QMOM_ALL, operations->iOptionB[indexOperation]);
+				}
 			}
 
 			if (operations->iOperation[indexOperation]==61)

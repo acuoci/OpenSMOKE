@@ -1360,7 +1360,7 @@ void OpenSMOKE_Flame1D_DataManager::SetGrid(const std::string string_value)
 {
 	if (string_value != "CENTERED" && string_value != "EQUISPACED" &&
 		string_value != "STRETCHED" && string_value != "STRETCHED_POOL_FIRE" && string_value != "USER" &&
-		string_value != "STRETCHED_STAGNATION")
+		string_value != "STRETCHED_STAGNATION" && string_value != "STRETCHED_DOUBLE")
 		ErrorMessage("#Geometry options: EQUISPACED || CENTERED || STRETCHED || STRETCHED_POOL_FIRE || USER || STRETCHED_STAGNATION");
 
 	gridKind = string_value;

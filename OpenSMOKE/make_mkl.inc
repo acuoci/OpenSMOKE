@@ -12,7 +12,7 @@
 
 #Paths 
 BZZ_PATH 	       =  /software/chimica2/libraries/bzzmath/bzzmath-6.0
-OPENSMOKE_PATH         =  $(HOME)/Development/ExternalLibraries/OpenSMOKE/OpenSMOKE
+OPENSMOKE_PATH         =  $(HOME)/Development/ExternalNumericalLibraries/OpenSMOKE/OpenSMOKE
 NUMERICALRECIPES_PATH  =  /software/chimica2/libraries/nr/nr-gcc-4.8.2
 MKL_PATH               =  $(HOME)/intel/mkl
 

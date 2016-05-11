@@ -23,8 +23,9 @@
 #include "OpenSMOKE.hpp"
 
 enum unsteady_boundary_kinds {	OSCILLATING_BOUNDARY_NONE, OSCILLATING_BOUNDARY_SIN, 
-								OSCILLATING_BOUNDARY_AIR_VELOCITY, OSCILLATING_BOUNDARY_FUEL_AIR_VELOCITIES, 
-								OSCILLATING_BOUNDARY_AIR_TEMPERATURE, OSCILLATING_BOUNDARY_FUEL_COMPOSITION, OSCILLATING_BOUNDARY_SIN_EXP};
+				OSCILLATING_BOUNDARY_AIR_VELOCITY, OSCILLATING_BOUNDARY_FUEL_AIR_VELOCITIES, 
+				OSCILLATING_BOUNDARY_AIR_TEMPERATURE, OSCILLATING_BOUNDARY_FUEL_COMPOSITION, OSCILLATING_BOUNDARY_SIN_EXP, 
+				RELAXATION_BOUNDARY_FUEL_VELOCITY, RELAXATION_BOUNDARY_FUEL_TEMPERATURE, RELAXATION_BOUNDARY_FUEL_EQRATIO };
 
 class OpenSMOKE_Flame1D_OscillatingBoundary
 {
@@ -59,11 +60,20 @@ public:
 	double TSteadyAir;
 	double vSteadyFuel; 
 	double vSteadyAir;
+	double phiSteadyFuel; 
+	double phiSteadyAir;
 	double KSteady;
 	double P; 
 	double L; 
 	double xSt;
 	double betaCoefficient;
+
+	// Relaxation on the fuel side
+	double vTargetFuel;
+	double TTargetFuel;
+	double phiTargetFuel;
+	double relaxationTimeFuel;
+	double relaxationFuelCoefficient;
 
 	// Equivalent Strain rate
 	int Ntimes;
@@ -85,11 +95,12 @@ public:
 			   double _MWSteadyFuel, double _MWSteadyAir, double _TSteadyFuel, double _TSteadyAir,
 			   double _L, double _P, OpenSMOKE_ReactingGas  *_mix, const std::string fileName);
 
-	void update_boundary_conditions(double _time, double &UC, double &UO, double &TAir,
-									double _rhoC, double _rhoO, double _Tmax,
-									BzzVector &WC, BzzVector &WO);
+	void update_boundary_conditions(double _time, 	double &UC,    double &UO, 
+							double &TFuel, double &TAir,
+							double &rhoC,  double &rhoO, double _Tmax,
+							BzzVector &WC, BzzVector &WO);
 	
-	void update_time_target(double _time);
+	void update_time_target(const double time);
 
 private:
 
@@ -99,6 +110,11 @@ private:
 	double give_oscillating_profile_Air(double time, double incresing_factor);
 
 	OpenSMOKE_ReactingGas  *mix;
+
+	vector<double> list_target_fuel_velocities;
+	vector<double> list_target_fuel_temperatures;
+	vector<double> list_target_fuel_equivalence_ratios;
+	int next_target;
 
 private:
 

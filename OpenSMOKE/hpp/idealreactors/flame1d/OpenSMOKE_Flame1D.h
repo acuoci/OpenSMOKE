@@ -212,6 +212,7 @@ public:
 	// Print Functions
 	// ---------------------------------------------------------------------------
 	void printOnFile(const std::string fileNameOutput);
+	void printSootOnFile(const std::string fileNameSoot, const std::string fileNameSootDistribution);
 	void PrintXMLFile(const std::string file_name);
 	void printBackUpOnlyInputData(const std::string fileName);
 	void printBackUpOnlyData(const std::string fileName);
@@ -359,6 +360,7 @@ private:
 	// Boundary Conditions
 	// -------------------------------------------------------------------------------
 	double UO, UC, GO, GC, xST, K;
+	double rhoC, rhoO;
 	BzzVector WC, WO;
 
 	// Auxiliary variables
