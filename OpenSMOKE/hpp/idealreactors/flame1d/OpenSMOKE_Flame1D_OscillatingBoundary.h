@@ -25,7 +25,8 @@
 enum unsteady_boundary_kinds {	OSCILLATING_BOUNDARY_NONE, OSCILLATING_BOUNDARY_SIN, 
 				OSCILLATING_BOUNDARY_AIR_VELOCITY, OSCILLATING_BOUNDARY_FUEL_AIR_VELOCITIES, 
 				OSCILLATING_BOUNDARY_AIR_TEMPERATURE, OSCILLATING_BOUNDARY_FUEL_COMPOSITION, OSCILLATING_BOUNDARY_SIN_EXP, 
-				RELAXATION_BOUNDARY_FUEL_VELOCITY, RELAXATION_BOUNDARY_FUEL_TEMPERATURE, RELAXATION_BOUNDARY_FUEL_EQRATIO };
+				RELAXATION_BOUNDARY_FUEL_VELOCITY, RELAXATION_BOUNDARY_FUEL_TEMPERATURE, RELAXATION_BOUNDARY_FUEL_EQRATIO,
+				DYNAMIC_TEMPERATURE, DYNAMIC_VELOCITY };
 
 class OpenSMOKE_Flame1D_OscillatingBoundary
 {
@@ -74,6 +75,12 @@ public:
 	double phiTargetFuel;
 	double relaxationTimeFuel;
 	double relaxationFuelCoefficient;
+
+	// Dynamics
+	double slope_velocity_fuel_;
+	double slope_velocity_oxidizer_;
+	double slope_temperature_fuel_;
+	double slope_temperature_oxidizer_;
 
 	// Equivalent Strain rate
 	int Ntimes;

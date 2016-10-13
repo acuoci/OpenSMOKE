@@ -28,12 +28,12 @@ class OpenSMOKE_PolimiSoot
 {
 public:
 
-	void Setup(OpenSMOKE_IdealGas &gas, const std::string minimum_bin,
+	void Setup(OpenSMOKE_IdealGas &gas, const std::string minimum_bin, const std::string minimum_bin_aggregates,
 							const unsigned int bin_index_zero, const double bin_density_A, 
 							const unsigned int bin_index_final, const double bin_density_B,
 							const double Df);
 
-	void Setup(OpenSMOKE_IdealGas &gas, const std::string minimum_bin);
+	void Setup(OpenSMOKE_IdealGas &gas, const std::string minimum_bin, const std::string minimum_aggregates);
 
 	void Analysis(OpenSMOKE_IdealGas &gas, const double P_Pa, const double T, BzzVector &omegaGas);
 	void Distribution();

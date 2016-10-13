@@ -297,17 +297,17 @@ void OpenSMOKE_IdealGas::Setup(BzzLoad &binaryFile)
 }
 
 void OpenSMOKE_IdealGas::SetPolimiSoot(	const unsigned int bin_index_zero, const double bin_density_A, 
-										const unsigned int bin_index_final, const double bin_density_B,
-										const double Df)
+					const unsigned int bin_index_final, const double bin_density_B,
+					const double Df, const std::string bin_minimum_soot, const std::string bin_minimum_aggregates)
 {
 	polimiSoot = new OpenSMOKE_PolimiSoot;
-	polimiSoot->Setup(*this, "BIN5", bin_index_zero, bin_density_A, bin_index_final, bin_density_B,Df);
+	polimiSoot->Setup(*this, bin_minimum_soot, bin_minimum_aggregates, bin_index_zero, bin_density_A, bin_index_final, bin_density_B, Df);
 }
 
 void OpenSMOKE_IdealGas::SetPolimiSoot(	)
 {
 	polimiSoot = new OpenSMOKE_PolimiSoot;
-	polimiSoot->Setup(*this, "BIN5");
+	polimiSoot->Setup(*this, "BIN5", "BIN12");
 }
 
 void OpenSMOKE_IdealGas::PostProcessMeanTemperatureForThermodynamicProperties()

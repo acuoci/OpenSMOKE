@@ -100,7 +100,7 @@ public:
 	void Fitting(BzzLoad &binaryFile);
 	void SetPolimiSoot(	const unsigned int bin_index_zero, const double bin_density_A, 
 						const unsigned int bin_index_final, const double bin_density_B,
-						const double Df);
+						const double Df, const std::string bin_minimum_soot, const std::string bin_minimum_aggregates);
 	void SetPolimiSoot(	);
 
 	void CorrectSpeciesDiffusivityForSoot();

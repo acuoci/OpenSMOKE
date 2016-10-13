@@ -3079,6 +3079,19 @@ void OpenSMOKE_Flame1D::setup()
 	allocate_all();
 	cout << "Succesfully DONE!" << endl;
 
+	// Setup soot properties
+	{
+		mix->SetPolimiSoot(data->bin_index_zero, data->bin_density_A, data->bin_index_final, data->bin_density_B, data->Df, data->bin_minimum_soot, data->bin_minimum_aggregates);
+		
+		std::cout << std::endl;
+		std::cout << "User defined soot properties" << std::endl;
+		std::cout << " * Minimum BIN (soot):       " << data->bin_minimum_soot << std::endl;
+		std::cout << " * Minimum BIN (aggregates): " << data->bin_minimum_aggregates << std::endl;
+		std::cout << " * Density BIN" << data->bin_index_zero << "\t" << data->bin_density_A << " kg/m3" << std::endl;
+		std::cout << " * Density BIN" << data->bin_index_final << "\t" << data->bin_density_B << " kg/m3" << std::endl;
+		std::cout << std::endl;
+	}
+
 	// Radiation
 	if ( data->iGasRadiation == true || data->iRadiativeSootModel != RADIATIVE_SOOT_MODEL_NONE )
 		prepare_radiation();
@@ -3111,13 +3124,6 @@ void OpenSMOKE_Flame1D::setupGasMixture()
 	NC		= mix->NumberOfSpecies();
 	NR		= mix->NumberOfReactions();
 	nBlock	= 4 + NC;
-
-//	mix->pah_manager.recognizeSpecies(NC, mix->names, mix->M);
-
-	if (data->bin_index_zero > 0)
-		mix->SetPolimiSoot(data->bin_index_zero, data->bin_density_A, data->bin_index_final, data->bin_density_B, data->Df);
-	else
-		mix->SetPolimiSoot();
 }
 
 void OpenSMOKE_Flame1D::setupBoundaryConditions()
@@ -7866,6 +7872,19 @@ void OpenSMOKE_Flame1D::recoverFromBackUp(const std::string fileName)
 	}
 
 	allocate_all();
+
+	// Setup soot properties
+	{
+		mix->SetPolimiSoot(data->bin_index_zero, data->bin_density_A, data->bin_index_final, data->bin_density_B, data->Df, data->bin_minimum_soot, data->bin_minimum_aggregates);
+		
+		std::cout << std::endl;
+		std::cout << "User defined soot properties" << std::endl;
+		std::cout << " * Minimum BIN (soot):       " << data->bin_minimum_soot << std::endl;
+		std::cout << " * Minimum BIN (aggregates): " << data->bin_minimum_aggregates << std::endl;
+		std::cout << " * Density BIN" << data->bin_index_zero << "\t" << data->bin_density_A << " kg/m3" << std::endl;
+		std::cout << " * Density BIN" << data->bin_index_final << "\t" << data->bin_density_B << " kg/m3" << std::endl;
+		std::cout << std::endl;
+	}
 
 	cout << "Radiation Setup" << endl;
 	if ( data->iGasRadiation == true || data->iRadiativeSootModel != RADIATIVE_SOOT_MODEL_NONE )

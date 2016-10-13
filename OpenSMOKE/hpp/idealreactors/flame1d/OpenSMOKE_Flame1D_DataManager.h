@@ -237,6 +237,8 @@ public:
 	double initial_time_step;
 	int max_integration_order;
 
+	std::string bin_minimum_soot;
+	std::string bin_minimum_aggregates;
 	unsigned int bin_index_zero;
 	double bin_density_A;
 	unsigned int bin_index_final;
@@ -332,6 +334,8 @@ private:
 	void SetROPAOnFile();
 	void SetReactionRatesOnFile(const vector<string> _names);
 	void SetBINDensities(const vector<string> _names);
+	void SetBINMinimumSoot(const std::string _names);
+	void SetBINMinimumAggregates(const std::string _names);
 	void SetSingleContributions(const vector<string> _names);
 	void SetAdaptiveGrid(const std::string name);
 	void SetAdaptiveGridCoefficients(const vector<string> values);

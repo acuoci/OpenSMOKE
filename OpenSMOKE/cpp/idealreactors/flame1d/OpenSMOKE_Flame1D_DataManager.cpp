@@ -175,10 +175,12 @@ OpenSMOKE_Flame1D_DataManager::OpenSMOKE_Flame1D_DataManager()
 	iThermophoreticEffect = false;
 	iDepositionWall = false;
 
-	bin_index_zero = 0;
-	bin_density_A = 0.;
-	bin_index_final = 0;
-	bin_density_B = 0.;
+	bin_index_zero = 10;
+	bin_density_A = 1500.;
+	bin_index_final = 20;
+	bin_density_B = 1700.;
+	bin_minimum_soot = "BIN5";
+	bin_minimum_aggregates = "BIN12";
 
 	iCorrectDiffusionFormulation = true;
 	iPhysicalSootDiffusionCoefficients = 0;
@@ -459,6 +461,8 @@ OpenSMOKE_Dictionary_Flame1D::OpenSMOKE_Dictionary_Flame1D()
 	Add("#DepositionWall",			'O', 'N', "Deposition wall");
 
 	Add("#BINDensities",			'O', 'V', "BIN densities in kg/m3 (index0 rho0 indexF rhoF) [default 10 1500 20 1700]");
+	Add("#BINMinimumSoot",			'O', 'S', "BIN minimum soot (default BIN5)");
+	Add("#BINMinimumAggregates",		'O', 'S', "BIN minimum aggregates (default BIN12)");
 
 	Add("#VerboseFluxes",			'O', 'N', "Verbose fluxes (Fick + Soret)");
 
@@ -862,6 +866,12 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionary(OpenSMOKE_Dictionary_Flame1D
 
     if (dictionary.Return("#BINDensities", string_vector))
 		SetBINDensities(string_vector);
+
+    if (dictionary.Return("#BINMinimumSoot", string_value))
+		SetBINMinimumSoot(string_value);
+
+    if (dictionary.Return("#BINMinimumAggregates", string_value))
+		SetBINMinimumAggregates(string_value);
 
     if (dictionary.Return("#FormationRates", string_vector))
 		SetFormationRatesOnFile(string_vector);
@@ -1616,7 +1626,15 @@ void OpenSMOKE_Flame1D_DataManager::SetBINDensities(const vector<string> _names)
 	bin_density_B = atof(_names[3].c_str());
 }
 
+void OpenSMOKE_Flame1D_DataManager::SetBINMinimumSoot(const std::string name)
+{
+	bin_minimum_soot = name;
+}
 
+void OpenSMOKE_Flame1D_DataManager::SetBINMinimumAggregates(const std::string name)
+{
+	bin_minimum_aggregates = name;
+}
 
 void OpenSMOKE_Flame1D_DataManager::AssignMassFlowRate(const std::string units, const double value)
 {
