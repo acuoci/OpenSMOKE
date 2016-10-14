@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -20,14 +20,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -44,7 +44,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;C:\NumericalLibraries\OpenSMOKE\hpp;C:\NumericalLibraries\NumericalRecipes\hpp;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;C:\Development\ExternalNumericalLibraries\OpenSMOKE\OpenSMOKE\hpp;C:\Development\ExternalNumericalLibraries\NumericalRecipes\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -68,16 +68,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\NumericalLibraries\BzzMath\BzzMath6x\lib;C:\NumericalLibraries\NumericalRecipes\lib;C:\NumericalLibraries\OpenSMOKE\lib\vs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\lib\windows;C:\Development\ExternalNumericalLibraries\NumericalRecipes\lib\windows;C:\Development\ExternalNumericalLibraries\OpenSMOKE\OpenSMOKE\lib\vs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OutputFile>../../../exe/$(TargetName)_vs_32bit_release$(TargetExt)</OutputFile>
-      <AdditionalDependencies>libBzzMath6_VS_serial_32bit_release.lib;libOpenSMOKE_AddOns_32bit_release.lib;libOpenSMOKE_Basic_32bit_release.lib;libOpenSMOKE_IdealReactors_32bit_release.lib;libOpenSMOKE_PFR_32bit_release.lib;libOpenSMOKE_QMOM_32bit_release.lib;libOpenSMOKE_Engine_32bit_release.lib;libOpenSMOKE_SurfaceChemistry_32bit_release.lib;libOpenSMOKE_Flame1D_32bit_release.lib;libOpenSMOKE_Interfaces_32bit_release.lib;libOpenSMOKE_LiquidProperties_32bit_release.lib;libOpenSMOKE_PreProcessor_32bit_release.lib;libOpenSMOKE_CHEMKINPreProcessor_32bit_release.lib;libNumericalRecipes_VS_32bit_release.lib;libOpenSMOKE_Distributions_32bit_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libBzzMath60dev_MSVS2015_Win32_Release.lib;libOpenSMOKE_AddOns_32bit_release.lib;libOpenSMOKE_Basic_32bit_release.lib;libOpenSMOKE_IdealReactors_32bit_release.lib;libOpenSMOKE_PFR_32bit_release.lib;libOpenSMOKE_QMOM_32bit_release.lib;libOpenSMOKE_Engine_32bit_release.lib;libOpenSMOKE_SurfaceChemistry_32bit_release.lib;libOpenSMOKE_Flame1D_32bit_release.lib;libOpenSMOKE_Interfaces_32bit_release.lib;libOpenSMOKE_LiquidProperties_32bit_release.lib;libOpenSMOKE_PreProcessor_32bit_release.lib;libOpenSMOKE_CHEMKINPreProcessor_32bit_release.lib;libNumericalRecipes_MSVS2015_Win32_Release.lib;libOpenSMOKE_Distributions_32bit_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
