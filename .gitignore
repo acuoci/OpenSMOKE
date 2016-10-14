@@ -4,6 +4,9 @@
 *.dep
 .*.sw[op]
 *~
+*.VC.db
+*.VC.opendb
+*.sh
 
 #Libraries
 ##################
