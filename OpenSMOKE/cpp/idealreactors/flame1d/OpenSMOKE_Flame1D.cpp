@@ -4566,7 +4566,7 @@ void OpenSMOKE_Flame1D::GnuPlotInterfaceUnsteady()
 		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "uF[cm/s]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "uO[cm/s]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "T[K]",		fOutputCount);
-		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "dummy",		fOutputCount);
+		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "L[cm]",		fOutputCount);
 		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "dummy",		fOutputCount);
 		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "alfa[m2/s]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "Qreac[W/m3]",	fOutputCount);
@@ -4699,7 +4699,8 @@ void OpenSMOKE_Flame1D::DAE_ODE_myPrint(BzzVector &v, double time)
 			cout <<  (nGeometry-1.)*UC/rhoC*100.		<< "\t";
 			cout << -(nGeometry-1.)*UO/rhoO*100.		<< "\t";
 			cout << unsteady.K				<< "\t";
-			cout << unsteady.KSeshadri			<< "\t";
+			cout << unsteady.KSeshadri << "\t";
+			cout << grid.L*100. << "\t";
 			cout << endl;
 		}
 
@@ -4776,7 +4777,7 @@ void OpenSMOKE_Flame1D::DAE_ODE_myPrint(BzzVector &v, double time)
 			fUnsteadyMax << setw(20) << left << 100.*(nGeometry-1.)*U[1]/rho[1];	// 6. velocity
 			fUnsteadyMax << setw(20) << left << 100.*(nGeometry-1.)*U[Np]/rho[Np];	// 7. velocity
 			fUnsteadyMax << setw(20) << left << T.Max();							// 8. temperature
-			fUnsteadyMax << setw(20) << left << 0;									// 9. dummy
+			fUnsteadyMax << setw(20) << left << grid.L*100.;						// 9. current lenght of the grid [cm]
 			fUnsteadyMax << setw(20) << left << 0;									// 10. dummy
 			fUnsteadyMax << setw(20) << left << lambda[iMax]/Cp[iMax]/rho[iMax];	// 11. Thermal diffusivity [m2/s]
 			fUnsteadyMax << setw(20) << left << QReaction[iMax];					// 12. Maximum heat release [W/m3]
@@ -4863,7 +4864,7 @@ void OpenSMOKE_Flame1D::DAE_ODE_myPrint(BzzVector &v, double time)
 
 	if (data->iUnsteady == true)
 	{
-		unsteady_boundary_conditions(time);
+		unsteady_boundary_conditions(time, true);
 		unsteady.update_time_target(time);
 	}
 
@@ -5320,15 +5321,31 @@ void OpenSMOKE_Flame1D::nonLinearSystem_Twin_OnlyT(BzzVector &x, BzzVector &f)
 //								DAE SYSTEMs	- Opposed											   //
 //																								   //
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void OpenSMOKE_Flame1D::unsteady_boundary_conditions(double &time)
+void OpenSMOKE_Flame1D::unsteady_boundary_conditions(double &time, const bool step_print)
 {
 	if (data->iUnsteady == true)
 	{
-		unsteady.update_boundary_conditions(time, UC, UO, data->TC, data->TO, rhoC, rhoO, T.Max(), WC, WO);
-		for(int i=1;i<=NC;i++)
+		double Lnew;
+		unsteady.update_boundary_conditions(time, UC, UO, data->TC, data->TO, rhoC, rhoO, T.Max(), Lnew, WC, WO);
+		
+		if (unsteady.unsteady_boundary_kind != RELAXATION_GRID)
 		{
-			BCW_C[i] =  (nGeometry-1.)*UC*WC[i];
-			BCW_O[i] =  (nGeometry-1.)*UO*WO[i];
+			for (int i = 1; i <= NC; i++)
+			{
+				BCW_C[i] = (nGeometry - 1.)*UC*WC[i];
+				BCW_O[i] = (nGeometry - 1.)*UO*WO[i];
+			}
+		}
+		else
+		{
+			if (step_print == true)
+			{
+				// Change the grid
+				grid.Rescale(Lnew);
+			}
+			else
+			{
+			}
 		}
 	}
 }
@@ -5336,7 +5353,7 @@ void OpenSMOKE_Flame1D::unsteady_boundary_conditions(double &time)
 void OpenSMOKE_Flame1D::DAESystem_Opposed_All(BzzVector &x, double t, BzzVector &f)
 {
 		Tmax=T.Max();
-		unsteady_boundary_conditions(t);
+		unsteady_boundary_conditions(t, false);
 
 	// --------------------------------------------------------------------------------------
 	// 1. Recupero variabili fisiche
@@ -5398,7 +5415,7 @@ void OpenSMOKE_Flame1D::DAESystem_Twin_All(BzzVector &x, double t, BzzVector &f)
 {
 		Tmax=T.Max();
 
-		unsteady_boundary_conditions(t);
+		unsteady_boundary_conditions(t, false);
 
 	// --------------------------------------------------------------------------------------
 	// 1. Recupero variabili fisiche
@@ -5432,7 +5449,7 @@ void OpenSMOKE_Flame1D::DAESystem_Opposed_SOOT_ALL(BzzVector &x, double t, BzzVe
 {
 		Tmax=T.Max();
 
-		unsteady_boundary_conditions(t);
+		unsteady_boundary_conditions(t, false);
 
 	// --------------------------------------------------------------------------------------
 	// 1. Recupero variabili fisiche
@@ -5468,7 +5485,7 @@ void OpenSMOKE_Flame1D::DAESystem_Twin_SOOT_ALL(BzzVector &x, double t, BzzVecto
 {
 		Tmax=T.Max();
 
-		unsteady_boundary_conditions(t);
+		unsteady_boundary_conditions(t, false);
 
 	// --------------------------------------------------------------------------------------
 	// 1. Recupero variabili fisiche
@@ -9303,7 +9320,7 @@ void OpenSMOKE_Flame1D::DAESystem_Opposed_QMOM_ALL(BzzVector &x, double t, BzzVe
 {
 	Tmax=T.Max();
 
-	unsteady_boundary_conditions(t);
+	unsteady_boundary_conditions(t, false);
 
 	// --------------------------------------------------------------------------------------
 	// 1. Recupero variabili fisiche
@@ -9339,7 +9356,7 @@ void OpenSMOKE_Flame1D::DAESystem_Twin_QMOM_ALL(BzzVector &x, double t, BzzVecto
 {
 	Tmax=T.Max();
 
-	unsteady_boundary_conditions(t);
+	unsteady_boundary_conditions(t, false);
 
 	// --------------------------------------------------------------------------------------
 	// 1. Recupero variabili fisiche

@@ -330,6 +330,17 @@ void OpenSMOKE_Grid1D::Construct(BzzVector &coordinates)
 	Build();
 }
 
+void OpenSMOKE_Grid1D::Rescale(const double Lnew)
+{
+	BzzVector coordinates_new(Np);
+
+	const double coefficient = Lnew / L;
+	for (unsigned int i = 1; i <= Np; i++)
+		coordinates_new[i] = x[i] * coefficient;
+
+	Construct(coordinates_new);
+}
+
 // 1. Construct equispaced grid
 void OpenSMOKE_Grid1D::ConstructExponential(const int NP, const double LL, const double Beta)
 {

@@ -26,6 +26,7 @@ enum unsteady_boundary_kinds {	OSCILLATING_BOUNDARY_NONE, OSCILLATING_BOUNDARY_S
 				OSCILLATING_BOUNDARY_AIR_VELOCITY, OSCILLATING_BOUNDARY_FUEL_AIR_VELOCITIES, 
 				OSCILLATING_BOUNDARY_AIR_TEMPERATURE, OSCILLATING_BOUNDARY_FUEL_COMPOSITION, OSCILLATING_BOUNDARY_SIN_EXP, 
 				RELAXATION_BOUNDARY_FUEL_VELOCITY, RELAXATION_BOUNDARY_FUEL_TEMPERATURE, RELAXATION_BOUNDARY_FUEL_EQRATIO,
+				RELAXATION_GRID,
 				DYNAMIC_TEMPERATURE, DYNAMIC_VELOCITY };
 
 class OpenSMOKE_Flame1D_OscillatingBoundary
@@ -63,7 +64,9 @@ public:
 	double vSteadyAir;
 	double phiSteadyFuel; 
 	double phiSteadyAir;
+	double gridLengthSteady;
 	double KSteady;
+
 	double P; 
 	double L; 
 	double xSt;
@@ -73,6 +76,7 @@ public:
 	double vTargetFuel;
 	double TTargetFuel;
 	double phiTargetFuel;
+	double gridLengthTarget;
 	double relaxationTimeFuel;
 	double relaxationFuelCoefficient;
 
@@ -104,7 +108,7 @@ public:
 
 	void update_boundary_conditions(double _time, 	double &UC,    double &UO, 
 							double &TFuel, double &TAir,
-							double &rhoC,  double &rhoO, double _Tmax,
+							double &rhoC,  double &rhoO, double _Tmax, double &L,
 							BzzVector &WC, BzzVector &WO);
 	
 	void update_time_target(const double time);
@@ -121,6 +125,7 @@ private:
 	vector<double> list_target_fuel_velocities;
 	vector<double> list_target_fuel_temperatures;
 	vector<double> list_target_fuel_equivalence_ratios;
+	vector<double> list_target_grids;
 	int next_target;
 
 private:

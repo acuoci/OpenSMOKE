@@ -84,6 +84,8 @@ public:
 	void AdaptField(BzzVector &phi, BzzVector &xNew);
 	void AdaptField(BzzMatrix &phi, BzzVector &xNew);
 
+	void Rescale(const double Lnew);
+
 private:
 
 	bool iSpherical;

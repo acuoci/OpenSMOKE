@@ -244,7 +244,7 @@ public:
 	std::string nameFolderSteadyData;
 	std::string nameFolderAdditionalData;
 	
-	void unsteady_boundary_conditions(double &time);
+	void unsteady_boundary_conditions(double &time, const bool step_print);
 	OpenSMOKE_Flame1D_OscillatingBoundary unsteady;
 	int iUnsteadyFromBackUp;
 
