@@ -21,6 +21,9 @@
 *.unsuccessfulbuild
 *.pdb
 *.manifest
+*.VC.db
+*.VC.opendb
+*.sh
 
 #OpenFOAM
 #########
