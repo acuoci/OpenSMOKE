@@ -37,7 +37,6 @@ class OpenSMOKE_LiquidSpecies
 
 public:
 
-	OpenSMOKE_LiquidSpecies();
 	void SetName(const std::string name);
 	void SetProperties(OpenSMOKE_LiquidProperties_Database &database);
 	void Summary();

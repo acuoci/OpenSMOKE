@@ -447,6 +447,7 @@ public:
 	bool	iEquivalenceRatioForPremixedFlames;
 	vector<string> fuel_names;
 	BzzVector moles_fuel;
+	BzzVector masses_fuel;
 	vector<string> oxidizer_names;
 	BzzVector moles_oxidizer;
 

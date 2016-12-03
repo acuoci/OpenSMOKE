@@ -508,15 +508,13 @@ void OpenSMOKE_Dictionary_Flame1D::PrepareForOpposedFlames()
 	Add("#TIgnition", 'O', 'M', "Minimum temperature before ignition (default 1600K)");
 	Add("#DeltaTAccuracy", 'O', 'M', "Interval amplitude for ignition/extinction analyses");
 
-	Compulsory("#FuelMassFractions",     "#FuelMoleFractions",		"#PoolFire");
+	Compulsory("#FuelMassFractions",     "#FuelMoleFractions");
 	Compulsory("#OxidizerMassFractions", "#OxidizerMoleFractions");
 
 	Compulsory("#FuelTemperature",  "#PoolFire");
 	Compulsory("#FuelVelocity",     "#PoolFire");
-
 	Conflict("#FuelTemperature",    "#PoolFire");
 	Conflict("#FuelVelocity",		"#PoolFire");
-	Conflict("#FuelMassFractions",  "#PoolFire");
 	Conflict("#FuelMoleFractions",  "#PoolFire");
 
     Conflict("#FuelMassFractions",		"#FuelMoleFractions");
@@ -1219,6 +1217,19 @@ void OpenSMOKE_Flame1D_DataManager::AssignFuelMassFractions(const vector<string>
 	ChangeDimensions(0, &iXC);
 	for(i=1;i<=mix->NumberOfSpecies();i++)
 		if (XC[i]!=0.)	iXC.Append(i);
+
+	// Fuel names and composition
+	{
+		fuel_names.resize(_names.size() + 1);
+		ChangeDimensions(_names.size(), &moles_fuel);
+		ChangeDimensions(_names.size(), &masses_fuel);
+		for (int i = 1; i <= int(_names.size()); i++)
+		{
+			fuel_names[i] = _names[i - 1];
+			masses_fuel[i] = _values[i - 1];
+			moles_fuel[i] = XC[mix->recognize_species(_names[i - 1])];
+		}
+	}
 }
 
 void OpenSMOKE_Flame1D_DataManager::AssignFuelMassFractions(BzzVector &omega_fuel)
@@ -1996,18 +2007,9 @@ void OpenSMOKE_Flame1D_DataManager::SetPoolFireGridOptions(const vector<string> 
 	poolfire_grid_distance_fraction = atof(values[7].c_str()); 
 }
 
-
 void OpenSMOKE_Flame1D_DataManager::SetPoolFire(const vector<string> values)
 {
-	// Assign Pool Fire composition
-	{
-		vector<string> names;	names.push_back(nameFuel);
-		vector<double> values;	values.push_back(1.);
-		AssignFuelMassFractions(names, values);
-	}
-
 	int nsize = values.size();
-
 
 	if (values[1] == "Equilibrium")		iPoolFire = POOL_FIRE_EQUILIBRIUM;
 	if (values[1] == "Tboiling")		iPoolFire = POOL_FIRE_TASSIGNED;
@@ -2016,11 +2018,17 @@ void OpenSMOKE_Flame1D_DataManager::SetPoolFire(const vector<string> values)
 	OpenSMOKE_LiquidProperties_Database *liquid_properties = new OpenSMOKE_LiquidProperties_Database();
 	liquid_properties->ReadFromFolder(values[0]);
 
-	pool_fire_liquid_species = new OpenSMOKE_LiquidSpecies();
-	pool_fire_liquid_species->SetName(nameFuel);
-	pool_fire_liquid_species->SetProperties(*liquid_properties);
-	pool_fire_liquid_species->Summary();
-	pool_fire_temperature = pool_fire_liquid_species->TNormalBoiling(P_Pascal);
+	unsigned int nf = moles_fuel.Size();
+	pool_fire_liquid_species = new OpenSMOKE_LiquidSpecies[nf+1];
+
+	pool_fire_temperature = 0.;
+	for (unsigned int i = 1; i <= nf; i++)
+	{
+		pool_fire_liquid_species[i].SetName(fuel_names[i]);
+		pool_fire_liquid_species[i].SetProperties(*liquid_properties);
+		pool_fire_liquid_species[i].Summary();
+		pool_fire_temperature += pool_fire_liquid_species[i].TNormalBoiling(P_Pascal)*moles_fuel[i];
+	}
 
 	if (iPoolFire == POOL_FIRE_TASSIGNED)
 	{
@@ -2053,7 +2061,9 @@ void OpenSMOKE_Flame1D_DataManager::SetPoolFire(const vector<string> values)
 		double rho_gas = P_Pascal/Constants::R_J_kmol/pool_fire_temperature*mix->M(jFUEL);
 		mix->SpeciesConductivityFromFitting(pool_fire_temperature);
 		double lambda_gas = mix->lambda[jFUEL];
-		double DHvap = pool_fire_liquid_species->Hv(pool_fire_temperature);
+		double DHvap = 0.;
+		for(unsigned int i=1;i<=masses_fuel.Size();i++)
+			DHvap += pool_fire_liquid_species[i].Hv(pool_fire_temperature)*masses_fuel[i];
 		AssignFuelTemperature("K", pool_fire_temperature);
 		AssignFuelVelocity("m/s", lambda_gas/rho_gas/DHvap*dT_over_dx);
 	}

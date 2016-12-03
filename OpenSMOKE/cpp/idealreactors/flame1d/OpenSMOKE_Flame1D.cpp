@@ -1827,8 +1827,9 @@ void OpenSMOKE_Flame1D::printSummaryForOpposed()
 	cout << " Inlet distance:     " << grid.L*100.			<< " cm" << endl;
 	cout << " Stagnation plane:   " << xST*100.				<< " cm" << endl;
 	cout << " Strain rate:        " << K					<< " 1/s" << endl;
+	
 	if (data->iPoolFire != POOL_FIRE_NONE)
-	cout << " Strain rate (P.F.): " << 2.*data->VO/grid.L	<< " 1/s" << endl;
+		cout << " Strain rate (P.F.): " << 2.*data->VO/grid.L	<< " 1/s" << endl;
 
 	cout << endl;
 
@@ -7546,23 +7547,51 @@ void OpenSMOKE_Flame1D::give_Opposed_DU_DG_DH()
 	dG[1] = G[1] - GC;
 	dH[1] = H[1] - H[2];
 
+	// POOLEQS
 	if (data->iPoolFire == POOL_FIRE_TASSIGNED || data->iPoolFire == POOL_FIRE_EQUILIBRIUM)
 	{
-		const double DHvap = data->pool_fire_liquid_species->Hv(T[1]) * data->correctionFactorVaporizationHeat;
+		
+		// Vaporization heat
+		double Qvap = 0.;
+		for (unsigned int j = 1; j <= data->moles_fuel.Size(); j++)
+			Qvap += data->pool_fire_liquid_species[j].Hv(T[1])*data->masses_fuel[j];
+		Qvap *= (nGeometry - 1.)*U[1];
+		Qvap *= data->correctionFactorVaporizationHeat;
+		
+		// Radiative heat
 		const double Qincident = Constants::sigma*data->pool_fire_view_factor*(pow(data->TO, 4.) - pow(T[1], 4.));
+		
+		// Conduction heat (gas side)
 		const double Qconduction = lambda[1] * (T[2] - T[1])*grid.udxe[1];
-		dU[1] = (nGeometry - 1.)*U[1] * DHvap - ( Qconduction +  Qincident);
+
+		// Energy balance equation
+		dU[1] = Qvap - ( Qconduction +  Qincident);
 		data->VC = (nGeometry-1.)*U[1] / rho[1];
 	}
 
 	if (data->iPoolFire == POOL_FIRE_LIQUIDPOOL)
 	{
-		const double lambdaLiquid = data->pool_fire_liquid_species->lambda(0.50*(T[1]+data->pool_fire_feed_temperature));
-		const double DHvap = data->pool_fire_liquid_species->Hv(T[1]) * data->correctionFactorVaporizationHeat;
+		// Vaporization heat
+		double Qvap = 0.;
+		for (unsigned int j = 1; j <= data->moles_fuel.Size(); j++)
+			Qvap += data->pool_fire_liquid_species[j].Hv(T[1])*data->masses_fuel[j];
+		Qvap *= (nGeometry - 1.)*U[1];
+		Qvap *= data->correctionFactorVaporizationHeat;
+
+		// Radiative heat
 		const double Qincident = Constants::sigma*data->pool_fire_view_factor*(pow(data->TO, 4.) - pow(T[1], 4.));
-		const double QtoBottom = lambdaLiquid*(T[1] - data->pool_fire_feed_temperature) / data->pool_fire_depth;
+
+		// Conduction heat (gas side)
 		const double Qconduction = lambda[1] * (T[2] - T[1])*grid.udxe[1];
-		dU[1] = (nGeometry-1.)*U[1] * DHvap - ( Qconduction - QtoBottom + Qincident );
+
+		// Conduction heat (liquid side)
+		double lambdaLiquid = 0.;
+		for (unsigned int j = 1; j <= data->moles_fuel.Size(); j++)
+			lambdaLiquid += data->pool_fire_liquid_species[j].lambda(0.50*(T[1] + data->pool_fire_feed_temperature))*data->masses_fuel[j];
+		const double QtoBottom = lambdaLiquid*(T[1] - data->pool_fire_feed_temperature) / data->pool_fire_depth;
+		
+		// Energy balance equation
+		dU[1] = Qvap + QtoBottom - ( Qconduction + Qincident );
 		data->VC = (nGeometry-1.)*U[1] / rho[1];
 	}
 	
@@ -7675,11 +7704,28 @@ void OpenSMOKE_Flame1D::give_Opposed_DW(const std::string string_kind)
 		}
 	}
 	
+	// POOLEQS
 	if (data->iPoolFire == POOL_FIRE_TASSIGNED || data->iPoolFire == POOL_FIRE_EQUILIBRIUM || data->iPoolFire == POOL_FIRE_LIQUIDPOOL)
 	{
-		for(j=1;j<=NC;j++)
-			dW[1][j] = rho[1] * ((nGeometry-1.)*U[1] * urho[1] * W[1][j] + vStar[1][j]);
-		dW[1][data->jFUEL] = (nGeometry-1.)*U[1] * (1. - W[1][data->jFUEL]) - rho[1] * vStar[1][data->jFUEL];
+		// Non evaporating species
+		for (j = 1; j <= NC; j++)
+			dW[1][j] = rho[1] * ((nGeometry - 1.)*U[1] * urho[1] * W[1][j] + vStar[1][j]);
+
+		// Evaporating species
+		for (j = 1; j <= data->moles_fuel.Size(); j++)
+		{
+			const unsigned int k = mix->recognize_species(data->fuel_names[j]);
+			const double Pvap = data->pool_fire_liquid_species[j].Pv(T[1]) * data->correctionFactorVaporPressure;
+			dW[1][k] = (Pvap / data->P_Pascal)*data->moles_fuel[j] - X[1][k];
+		}
+
+		// Closure of mass balances using the inert species
+		{
+			double sum = 0.;
+			for (unsigned j = 1; j <= NC; j++)
+				sum += W[1][j];
+			dW[1][data->jINERT] = sum - 1.;
+		}
 	}
 
 	if (data->iSingleContributions == true)
@@ -7742,10 +7788,20 @@ void OpenSMOKE_Flame1D::give_Opposed_DT(double t)
 	{
 		dT[1] = T[1] - data->TC;
 
+		// POOLEQS
 		if (data->iPoolFire == POOL_FIRE_EQUILIBRIUM || data->iPoolFire == POOL_FIRE_LIQUIDPOOL)
 		{
-			double Pvap = data->pool_fire_liquid_species->Pv(T[1]) * data->correctionFactorVaporPressure;
-			dT[1] = Pvap/data->P_Pascal - X[1][data->jFUEL];
+			double sumW = 0.;
+			double sumVstar = 0.;
+			for (j = 1; j <= data->moles_fuel.Size(); j++)
+			{
+				const unsigned int k = mix->recognize_species(data->fuel_names[j]);
+
+				sumW += W[1][k];
+				sumVstar += vStar[1][k];
+			}
+
+			dT[1] = (nGeometry - 1.)*U[1]*(1.-sumW) - rho[1]*sumVstar;
 			data->TC = T[1];
 		}
 

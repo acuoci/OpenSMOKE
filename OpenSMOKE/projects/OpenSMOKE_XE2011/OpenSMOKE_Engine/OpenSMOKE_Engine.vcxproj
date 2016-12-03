@@ -78,7 +78,7 @@
     <IncludePath>..\..\..\hpp;C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;C:\Temp\Backup\NumericalLibraries\NumericalRecipes\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\..\..\hpp;C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;C:\Temp\Backup\NumericalLibraries\NumericalRecipes\hpp;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\..\hpp;C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;C:\Development\ExternalNumericalLibraries\NumericalRecipes\src\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

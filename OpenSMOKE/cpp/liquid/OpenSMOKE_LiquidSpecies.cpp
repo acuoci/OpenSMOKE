@@ -31,7 +31,7 @@ void OpenSMOKE_LiquidSpecies::ErrorMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidSpecies"	<< endl;
-    cout << "Object: " << name_object			<< endl;
+    cout << "Object: " << name					<< endl;
     cout << "Error:  " << message				<< endl;
     cout << "Press a key to continue... "		<< endl;
     getchar();
@@ -42,15 +42,10 @@ void OpenSMOKE_LiquidSpecies::WarningMessage(const std::string message)
 {
     cout << endl;
     cout << "Class:  OpenSMOKE_LiquidSpecies"	<< endl;
-    cout << "Object: "		<< name_object		<< endl;
+    cout << "Object: "		<< name				<< endl;
     cout << "Warning:  "	<< message			<< endl;
     cout << "Press a key to continue... "		<< endl;
     getchar();
-}
-
-OpenSMOKE_LiquidSpecies::OpenSMOKE_LiquidSpecies()
-{
-	name_object = "[not assigned]";
 }
 
 void OpenSMOKE_LiquidSpecies::SetName(const std::string _name)
