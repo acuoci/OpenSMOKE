@@ -1416,10 +1416,16 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 				
 				if (massInput[i] > 0.)
 				{	
-					if (fabs(massInput[i]-sum)/sum > 1.e-4)
+					const double maximum_acceptable_relative_error_input_output = 1e-4;
+
+					if (fabs(massInput[i]-sum)/(fabs(sum)+1e-16) > maximum_acceptable_relative_error_input_output)
 					{
-						cout << massInput[i] << " " << sum << endl;
-						ErrorMessage("Clsuter  Error in sum of feeds!");
+						cout << endl;
+						cout << "WARNING: Cluster error in sum of feeds !" << endl;;
+						cout << " * Current input mass:  " << massInput[i] << endl;
+						cout << " * Current output mass: " << sum << endl;
+						cout << " * Difference:          " << massInput[i]-sum << endl;
+						cout << " * Relative difference: " << (massInput[i]-sum)/sum << endl;
 					}
 
 					fClustering << 1 << endl;

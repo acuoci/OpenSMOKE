@@ -1,13 +1,5 @@
 FILE_NAME    =  OpenSMOKE_KinPP
 
-ifeq ($(COMPILER_NAME),intel)
-MKL_LIBS        = -Wl,--start-group $(MKL_ROOT)/lib/intel64/libmkl_intel_lp64.a $(MKL_ROOT)/lib/intel64/libmkl_core.a $(MKL_ROOT)/lib/intel64/libmkl_sequential.a -Wl,--end-group -lpthread -lm
-endif
-
-ifeq ($(COMPILER_NAME),gnu)
-MKL_LIBS        = -Wl,--start-group $(MKL_ROOT)/lib/intel64/libmkl_intel_lp64.a $(MKL_ROOT)/lib/intel64/libmkl_core.a $(MKL_ROOT)/lib/intel64/libmkl_sequential.a -Wl,--end-group -lpthread -lm
-endif
-
 # ------------------------------------------------------------------------------------------------
 # OBJECTS
 # ------------------------------------------------------------------------------------------------
@@ -35,7 +27,7 @@ INCDIRS     = -I../../src $(BZZ_INCLUDE) $(MKL_INCLUDE) $(OPENSMOKE_INCLUDE) $(N
 # LIBRARIES
 # ------------------------------------------------------------------------------------------------
 LIBS_PATH 	      = -L$(BZZ_PATH_LIB) -L$(MKL_PATH_LIB) -L$(OPENSMOKE_PATH_LIB) -L$(NR_PATH_LIB)
-LIBS 		      = $(LOC_LIBS) $(BZZ_LIBS) $(NR_LIBS) $(MKL_LIBS)
+LIBS 		      = $(LOC_LIBS) $(BZZ_LIBS) $(NR_LIBS) $(MKL_LIBS) -lpthread -lm -ldl 
 
 # ------------------------------------------------------------------------------------------------
 # COMPILER

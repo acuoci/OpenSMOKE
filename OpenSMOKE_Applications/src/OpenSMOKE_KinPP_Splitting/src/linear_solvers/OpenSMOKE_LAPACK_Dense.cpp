@@ -22,22 +22,22 @@
 #include <iomanip>
 #include "OpenSMOKE_LAPACK_Dense.h"
 
-void OpenSMOKE_LAPACK_Dense::ErrorMessage(const string message_)
+void OpenSMOKE_LAPACK_Dense::ErrorMessage(const std::string message_)
 {
-    cout << endl;
-    cout << "Class: " << "OpenSMOKE_LAPACK_Dense"	<< endl;
-    cout << "Error: " << message_					<< endl;
-    cout << "Press enter to continue... "			<< endl;
+    std::cout << std::endl;
+    std::cout << "Class: " << "OpenSMOKE_LAPACK_Dense"	<< std::endl;
+    std::cout << "Error: " << message_					<< std::endl;
+    std::cout << "Press enter to continue... "			<< std::endl;
     getchar();
     exit(-1);
 }
 
-void OpenSMOKE_LAPACK_Dense::WarningMessage(const string message_)
+void OpenSMOKE_LAPACK_Dense::WarningMessage(const std::string message_)
 {
-    cout << endl;
-    cout << "Class:	  " << "OpenSMOKE_LAPACK_Dense"	<< endl;
-    cout << "Warning: " << message_					<< endl;
-	cout << endl;
+    std::cout << std::endl;
+    std::cout << "Class:	  " << "OpenSMOKE_LAPACK_Dense"	<< std::endl;
+    std::cout << "Warning: " << message_					<< std::endl;
+	std::cout << std::endl;
 }
 
 OpenSMOKE_LAPACK_Dense::OpenSMOKE_LAPACK_Dense(void)

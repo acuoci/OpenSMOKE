@@ -169,16 +169,16 @@ cd ..
 cd ..
 
 
-#rm ../exe/linux/intel_mkl/OpenSMOKE_KinPP_Splitting_INTEL_MKL.sh
-#cd OpenSMOKE_KinPP_Splitting/projects/OpenSMOKE_KinPP_Splitting_Linux
-#mkdir ../../exe
-#mkdir intel_mkl
-#make -f makefile.mkl COMPILER_NAME=intel clean
-#make -f makefile.mkl COMPILER_NAME=intel
-#mv ../../exe/OpenSMOKE_KinPP_Splitting_INTEL_MKL.sh ../../../../exe/linux/intel_mkl
-#cd ..
-#cd ..
-#cd ..
+rm ../exe/linux/intel_mkl/OpenSMOKE_KinPP_Splitting_INTEL_MKL.sh
+cd OpenSMOKE_KinPP_Splitting/projects/OpenSMOKE_KinPP_Splitting_Linux
+mkdir ../../exe
+mkdir intel_mkl
+make -f makefile.mkl COMPILER_NAME=intel clean
+make -f makefile.mkl COMPILER_NAME=intel
+mv ../../exe/OpenSMOKE_KinPP_Splitting_INTEL_MKL.sh ../../../../exe/linux/intel_mkl
+cd ..
+cd ..
+cd ..
 
 
 

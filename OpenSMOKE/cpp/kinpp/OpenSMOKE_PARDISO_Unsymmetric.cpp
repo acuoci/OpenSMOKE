@@ -305,9 +305,9 @@ void OpenSMOKE_PARDISO_Unsymmetric::CompleteMatrix()
 	if (status_	!= OPENSMOKE_DIRECTSOLVER_STATUS_OPEN)
 		ErrorMessage("CompleteMatrix() cannot be used if the Matrix was already closed");
 
-	cout << " Number of non-zero elements:    " << numberNonZeroElements << endl;
-	cout << " Sparsity fill-in:               " << double(numberNonZeroElements)/double(n*n)*100. << endl;
-	cout << " Mean non zero elements per row: " << double(numberNonZeroElements)/double(n) << endl;
+	std::cout << " Number of non-zero elements:    " << numberNonZeroElements << std::endl;
+	std::cout << " Sparsity fill-in:               " << double(numberNonZeroElements)/double(n*n)*100. << std::endl;
+	std::cout << " Mean non zero elements per row: " << double(numberNonZeroElements)/double(n) << std::endl;
 
 	// Indices revision
 	if (iCStyleIndexing==true)

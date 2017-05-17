@@ -34,7 +34,7 @@ CXX_ADD_FLAGS = -fopenmp
 endif
 
 ifeq ($(COMPILER_NAME),intel)
-CXX_ADD_FLAGS = -openmp    
+CXX_ADD_FLAGS = -openmp -D_GNU_SOURCE 
 endif
   
 # ------------------------------------------------------------------------------------------------
@@ -46,13 +46,13 @@ INCDIRS     = -I../../src $(BZZ_INCLUDE) $(MKL_INCLUDE) $(OPENSMOKE_INCLUDE) $(N
 # LIBRARIES
 # ------------------------------------------------------------------------------------------------
 LIBS_PATH 	      = -L$(BZZ_PATH_LIB) -L$(MKL_PATH_LIB) -L$(OPENSMOKE_PATH_LIB) -L$(NR_PATH_LIB) -L$(LIS_PATH_LIB) -L$(MUMPS_PATH_LIB) -L$(BLAS_PATH_LIB) -L$(METIS_PATH_LIB) 
-LIBS 		      =   $(LOC_LIBS) $(BZZ_LIBS) $(NR_LIBS) $(LIS_LIBS) $(MUMPS_LIBS) $(BLAS_LIBS) $(MKL_LIBS) -lgfortran -lpthread
+LIBS 		      =   $(LOC_LIBS) $(BZZ_LIBS) $(NR_LIBS) $(LIS_LIBS) $(MUMPS_LIBS) $(BLAS_LIBS) $(MKL_LIBS) -lpthread -lm -ldl -lgfortran
 
 # ------------------------------------------------------------------------------------------------
 # COMPILER
 # ------------------------------------------------------------------------------------------------
 CPP       = $(CXX) 	$(CXX_FLAGS) -c $(CXX_ADD_FLAGS)	$(INCDIRS)
-LINKER    = $(CXX) 	-O3 -static 	$(CXX_ADD_FLAGS)	$(INCDIRS) 	$(LIBS_PATH)
+LINKER    = $(CXX) 	-O3		$(CXX_ADD_FLAGS)	$(INCDIRS) 	$(LIBS_PATH)
 
 # ------------------------------------------------------------------------------------------------
 # DETAILS

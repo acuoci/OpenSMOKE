@@ -2116,6 +2116,32 @@ BzzVectorInt OpenSMOKE_Kinetics::ReactionIndices(const vector<string> list_of_sp
 	return indices;
 }
 
+void OpenSMOKE_Kinetics::ReactionIndices(const std::vector<std::string> list_of_species, std::vector<bool>& fluctuatingReactions) 
+{ 
+    fluctuatingReactions.resize(NR+1); 
+    for(int j=1;j<=NR;j++) 
+        fluctuatingReactions[j] = false; 
+ 
+ 
+    if (list_of_species.size() > 0) 
+    { 
+        BzzVectorInt fluctuating_reactions = ReactionIndices(list_of_species); 
+     
+        for(int j=1;j<=NR;j++) 
+            for(int k=1;k<=fluctuating_reactions.Size();k++) 
+                if (fluctuating_reactions[k] == j) 
+                { 
+                    fluctuatingReactions[j] = true; 
+                    break; 
+                } 
+    } 
+    else 
+    { 
+        for(int j=1;j<=NR;j++) 
+            fluctuatingReactions[j] = true; 
+    } 
+}
+
 void OpenSMOKE_Kinetics::ChangeFrequencyFactor(const int j, const double variation)
 {
 	k01[j]  = exp(k01[j]);

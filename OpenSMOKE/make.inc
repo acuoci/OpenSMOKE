@@ -13,12 +13,12 @@
 #Paths 
 BZZ_PATH 	       =  /software/chimica2/libraries/bzzmath/bzzmath-6.0
 OPENSMOKE_PATH         =  $(HOME)/Development/ExternalNumericalLibraries/OpenSMOKE/OpenSMOKE
-NUMERICALRECIPES_PATH  =  /software/chimica2/libraries/nr/nr-gcc-4.8.2
+NUMERICALRECIPES_PATH  =  /software/chimica2/libraries/nr/nr-gcc-6.3.0
 
 #Options
 #OPTIONS_INTEL   =  -O2 -static 
 #OPTIONS_GNU     =  -O2 -static -Wall -fexpensive-optimizations -funroll-loops
-OPTIONS_INTEL    =  -O3 -Wall -m64 -DUSE_INTEL_MKL=0 -I/usr/include/x86_64-linux-gnu/c++/4.8
+OPTIONS_INTEL    =  -O3 -Wall -m64 -DUSE_INTEL_MKL=0
 OPTIONS_GNU      =  -O3 -Wall -m64 -DUSE_INTEL_MKL=0
 
 # ------------------------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ OPENSMOKE_INCLUDE    = -I$(OPENSMOKE_PATH)/hpp
 # ------------------------------------------------------------------------------------------------
 # LIBRARY PATHS
 # ------------------------------------------------------------------------------------------------
-BZZ_PATH_LIB           = $(BZZ_PATH)/lib/release
+BZZ_PATH_LIB           = $(BZZ_PATH)/lib/release-6.3.0
 NR_PATH_LIB            = $(NUMERICALRECIPES_PATH)/lib/release
 OPENSMOKE_PATH_LIB     = $(OPENSMOKE_PATH)/lib/linux/$(OBJ_PATH)
 MKL_PATH_LIB           = $(MKL_PATH)/lib/intel64
@@ -75,6 +75,4 @@ MKL_PATH_LIB           = $(MKL_PATH)/lib/intel64
 # COMPILER INSTRUCTIONS
 # ------------------------------------------------------------------------------------------------
 CCP = $(CXX) $(CXX_FLAGS) -c $(BZZ_INCLUDE)  $(OPENSMOKE_INCLUDE) $(MKL_INCLUDE) $(NR_INCLUDE) 
-
-
 

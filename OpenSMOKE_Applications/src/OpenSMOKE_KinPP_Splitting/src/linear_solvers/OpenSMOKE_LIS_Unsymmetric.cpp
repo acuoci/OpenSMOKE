@@ -75,7 +75,7 @@ void OpenSMOKE_LIS_Unsymmetric::SetSparsityPattern(BzzMatrixSparse &M)
 	}
 
 	// Memory Allocation
-	lis_matrix_malloc_crs(n,numberNonZeroElements,&rows,&columns,&values);
+	lis_matrix_malloc_csr(n,numberNonZeroElements,&rows,&columns,&values);
 
 	rows[0] = 1;
 	// Counting non zero elements
@@ -166,7 +166,7 @@ void OpenSMOKE_LIS_Unsymmetric::OpenMatrix(const int nRows, const int numberNonZ
 	n = nRows;
 
 	// Memory Allocation
-	lis_matrix_malloc_crs(n,numberNonZeroElements,&rows,&columns,&values);
+	lis_matrix_malloc_csr(n,numberNonZeroElements,&rows,&columns,&values);
 
 	// Counters
 	countGlobal_=0;
@@ -280,7 +280,7 @@ void OpenSMOKE_LIS_Unsymmetric::CompleteMatrix()
 	// Assembling
 	lis_matrix_create(0,&A);
 	lis_matrix_set_size(A,0,n);
-	lis_matrix_set_crs(numberNonZeroElements, rows, columns, values, A);
+	lis_matrix_set_csr(numberNonZeroElements, rows, columns, values, A);
 	lis_matrix_assemble(A);
 
 	// Vectors
@@ -411,7 +411,7 @@ void OpenSMOKE_LIS_Unsymmetric::SetLinearEquationSolver(const linearEquationSolv
 	else if (kind == LINEAR_EQUATION_SOLVER_BiCR)
 		linearEquationSolver_ = " -i bicr ";
 	else if (kind == LINEAR_EQUATION_SOLVER_CRS)
-		linearEquationSolver_ = " -i crs ";
+		linearEquationSolver_ = " -i csr ";
 	else if (kind == LINEAR_EQUATION_SOLVER_BiCRSTAB)
 		linearEquationSolver_ = "-i bicrstab";
 	else if (kind == LINEAR_EQUATION_SOLVER_GPBiCR)

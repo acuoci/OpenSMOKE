@@ -126,7 +126,11 @@ bool OpenSMOKE_KPP_SingleReactor::ReadReactorProperties(ifstream &fInput)
 	fInput >> dummy_int;
 
 	if (dummy_int != index_)
+	{
+		std::cout << "Expected index: " << index_ << std::endl;
+		std::cout << "Found index:    " << dummy_int << std::endl;
 		ErrorMessage("Indices do not fit!");
+	}
 
 	fInput >> temperature_;
 	fInput >> pressure_;

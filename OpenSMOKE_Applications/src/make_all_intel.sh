@@ -168,17 +168,16 @@ cd ..
 cd ..
 cd ..
 
-
-#rm ../exe/linux/intel/OpenSMOKE_KinPP_Splitting_INTEL.sh
-#cd OpenSMOKE_KinPP_Splitting/projects/OpenSMOKE_KinPP_Splitting_Linux
-#mkdir ../../exe
-#mkdir intel
-#make -f makefile.bzzmath COMPILER_NAME=intel clean
-#make -f makefile.bzzmath COMPILER_NAME=intel
-#mv ../../exe/OpenSMOKE_KinPP_Splitting_INTEL.sh ../../../../exe/linux/intel
-#cd ..
-#cd ..
-#cd ..
+rm ../exe/linux/intel/OpenSMOKE_KinPP_Splitting_INTEL.sh
+cd OpenSMOKE_KinPP_Splitting/projects/OpenSMOKE_KinPP_Splitting_Linux
+mkdir ../../exe
+mkdir intel
+make -f makefile.bzzmath COMPILER_NAME=intel clean
+make -f makefile.bzzmath COMPILER_NAME=intel
+mv ../../exe/OpenSMOKE_KinPP_Splitting_INTEL.sh ../../../../exe/linux/intel
+cd ..
+cd ..
+cd ..
 
 
 

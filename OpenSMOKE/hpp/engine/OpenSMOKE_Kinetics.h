@@ -225,6 +225,7 @@ public:
 	void KineticExpressionString(ofstream &fOutput, const int j);
 
 	BzzVectorInt ReactionIndices(const vector<string> list_of_species);
+	void ReactionIndices(const std::vector<std::string> list_of_species, std::vector<bool>& fluctuatingReactions);
 
 	BzzVector GiveMeSumNuDirect();
 
