@@ -45,6 +45,7 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::WarningMessage(const std::string mes
 void OpenSMOKE_Flame1D_OscillatingBoundary::setup(double _USteadyFuel, double _USteadyAir, 
 								double _rhoSteadyFuel, double _rhoSteadyAir, 
 								double _MWSteadyFuel, double _MWSteadyAir,
+								BzzVector& _YSteadyFuel, BzzVector& _YSteadyAir,
 								double _TSteadyFuel, double _TSteadyAir,
 								double _L, double _P, OpenSMOKE_ReactingGas *_mix, const std::string fileName)
 {
@@ -55,7 +56,7 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::setup(double _USteadyFuel, double _U
 	next_target = 0;
 	onPrint = 0;
 
-	mix = mix;
+	mix = _mix;
 
 	ifstream fInput;
 	openInputFileAndControl(fInput, fileName);
@@ -96,6 +97,14 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::setup(double _USteadyFuel, double _U
 		rhoSteadyAir		= _rhoSteadyAir;				// [kg/m3]
 		MWSteadyFuel		= _MWSteadyFuel;				// [kg/kmol]
 		MWSteadyAir		= _MWSteadyAir;					// [kg/kmol]
+		YSteadyFuel = _YSteadyFuel;						// mass fractions
+		YSteadyAir = _YSteadyAir;						// mass fractions
+		
+		ChangeDimensions(YSteadyFuel.Size(), &XSteadyFuel);
+		ChangeDimensions(YSteadyAir.Size(), &XSteadyAir);
+		mix->GetMoleFractionsFromMassFractions(XSteadyFuel, YSteadyFuel);
+		mix->GetMoleFractionsFromMassFractions(XSteadyAir, YSteadyAir);
+		
 		TSteadyFuel		= _TSteadyFuel;					// [K]
 		TSteadyAir		= _TSteadyAir;					// [k]
 		vSteadyFuel    		=  200. * USteadyFuel / rhoSteadyFuel;		// [cm/s]
@@ -192,6 +201,14 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::setup(double _USteadyFuel, double _U
 		rhoSteadyAir		= _rhoSteadyAir;							// [kg/m3]
 		MWSteadyFuel		= _MWSteadyFuel;							// [kg/kmol]
 		MWSteadyAir		= _MWSteadyAir;								// [kg/kmol]
+		YSteadyFuel = _YSteadyFuel;						// mass fractions
+		YSteadyAir = _YSteadyAir;						// mass fractions
+
+		ChangeDimensions(YSteadyFuel.Size(), &XSteadyFuel);
+		ChangeDimensions(YSteadyAir.Size(), &XSteadyAir);
+		mix->GetMoleFractionsFromMassFractions(XSteadyFuel, YSteadyFuel);
+		mix->GetMoleFractionsFromMassFractions(XSteadyAir, YSteadyAir);
+
 		TSteadyFuel		= _TSteadyFuel;								// [K]
 		TSteadyAir		= _TSteadyAir;								// [k]
 		vSteadyFuel    		=  200. * USteadyFuel / rhoSteadyFuel;		// [cm/s]
@@ -357,7 +374,8 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _t
 											double &TFuel, double &TAir,
 											double &rhoC,  double &rhoO, 
 											double _Tmax,
-											BzzVector &WC, BzzVector &WO)
+											BzzVector &WC, BzzVector &WO,
+											OpenSMOKE_Flame1D_DataManager& data)
 {
 	const double pi = acos(-1.);
 
@@ -474,6 +492,14 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _t
 		}
 		
 		rhoO = MWSteadyAir*P/8314./TAir;
+		
+		// Correction of density because of the equation of state
+		if (data.eos.type == EosModel::EOS_PR)
+		{
+			const double Z = data.eos.Z(TAir, P, XSteadyAir);
+			rhoO *= Z;
+		}
+
 		betaCoefficient = rhoC/rhoO*(L/xSt-1.0);
 
 		vAir  = vSteadyAir;
@@ -527,6 +553,7 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _t
 			WC[iN2]		= xN2/MWmix*MWN2;
 			WO = WC;
 
+			// TODO: add the cubic equation of state
 			rhoC		= P/Constants::R_J_kmol/TAir*MWmix;
 			rhoO		= P/Constants::R_J_kmol/TAir*MWmix;
 
@@ -564,6 +591,14 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _t
 			TFuel = TTargetFuel + (TSteadyFuel - TTargetFuel)*exp(-time/relaxationFuelCoefficient);	// [K]	
 
 		rhoC = P/Constants::R_J_kmol/TFuel*MWSteadyFuel;					// [kg/m3]
+			
+		// Correction of density because of the equation of state
+		if (data.eos.type == EosModel::EOS_PR)
+		{
+			const double Z = data.eos.Z(TFuel, P, XSteadyFuel);
+			rhoC *= Z;
+		}
+
 		vAir  = -200.*UO / rhoO;								// [cm/s]
 		UC    =  rhoC*vSteadyFuel/200.;								// [kg/m2/s]
 	}
@@ -587,14 +622,29 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _t
 		if (slope_temperature_fuel_ != 0.)
 		{
 			TFuel = TSteadyFuel + slope_temperature_fuel_*time;	// [K]
+
 			rhoC  = P/Constants::R_J_kmol/TFuel*MWSteadyFuel;	// [kg/m3]
+			// Correction of density because of the equation of state
+			if (data.eos.type == EosModel::EOS_PR)
+			{
+				const double Z = data.eos.Z(TFuel, P, XSteadyFuel);
+				rhoC *= Z;
+			}
 			UC    = rhoC*vSteadyFuel/200.;				// [kg/m2/s]
 		}
 
 		if (slope_temperature_oxidizer_ != 0.)
 		{
 			TAir  = TSteadyAir + slope_temperature_oxidizer_*time;	// [K]
+			
 			rhoO  = P/Constants::R_J_kmol/TAir*MWSteadyAir;		// [kg/m3]
+			// Correction of density because of the equation of state
+			if (data.eos.type == EosModel::EOS_PR)
+			{
+				const double Z = data.eos.Z(TAir, P, XSteadyAir);
+				rhoO *= Z;
+			}
+
 			UO    = -rhoO*vSteadyAir/200.;				// [kg/m2/s]
 		}
 

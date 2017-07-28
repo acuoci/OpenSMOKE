@@ -469,6 +469,8 @@ OpenSMOKE_Dictionary_Flame1D::OpenSMOKE_Dictionary_Flame1D()
 	Add("#TODO_Sampling",			'O', 'M', "Sampling coefficient (in Pa/m)");
 
 	Add("#FixedEnthalpyLeftSide",	'O', 'N', "Instead of fixing the temperature on the left side, the enthalpy is fixed");
+
+	Add("#EquationOfState", 'O', 'S', "Equation of state: ideal (default) | PR");
 }
 
 void OpenSMOKE_Dictionary_Flame1D::PrepareForOpposedFlames()
@@ -726,6 +728,9 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionary(OpenSMOKE_Dictionary_Flame1D
     std::string  string_value;
 	vector<string> string_vector;
 	vector<double> double_vector;
+
+	if (dictionary.Return("#EquationOfState", string_value))
+		SetEquationOfState(string_value);
 
 	if (dictionary.Return("#Pressure", double_value, string_value))
         AssignPressure(string_value, double_value);
@@ -1073,6 +1078,14 @@ void OpenSMOKE_Flame1D_DataManager::LockForPremixedFlames()
 			x[mix->recognize_species(nameC[i])] = xC[i];
 		double MWmix = mix->GetMWFromMoleFractions(x);
 		double rho = P_Pascal*MWmix/Constants::R_J_kmol/TC;
+
+		// Correction of density because of the equation of state
+		if (eos.type == EosModel::EOS_PR)
+		{
+			const double Z = eos.Z(TC, P_Pascal, x);
+			rho *= Z;
+		}
+
 		MassFlowRate = VC*rho*CrossSectionalArea;
 	}
 
@@ -1498,6 +1511,13 @@ void OpenSMOKE_Flame1D_DataManager::SetSootRadiation(const std::string value)
 	else if (value == "bilger")		iRadiativeSootModel = RADIATIVE_SOOT_MODEL_BILGER;
 	else if (value == "widmann")	iRadiativeSootModel = RADIATIVE_SOOT_MODEL_WIDMANN;
 	else ErrorMessage("Wrong #SootRadiation option");
+}
+
+void OpenSMOKE_Flame1D_DataManager::SetEquationOfState(const std::string value)
+{
+	if (value == "ideal")	{}
+	else if (value == "PR") { eos.SetPR(mix); }
+	else ErrorMessage("Wrong #EquationOfState attribute. Available options: ideal (default) | PR");
 }
 
 void OpenSMOKE_Flame1D_DataManager::SetGridRefineGradient(const int int_value)
@@ -2059,6 +2079,15 @@ void OpenSMOKE_Flame1D_DataManager::SetPoolFire(const vector<string> values)
 	{
 		double dT_over_dx = 7.e5;	// [K/m]
 		double rho_gas = P_Pascal/Constants::R_J_kmol/pool_fire_temperature*mix->M(jFUEL);
+		
+		// Correction of density because of the equation of state
+		if (eos.type == EosModel::EOS_PR)
+		{
+			BzzVector xVector(mix->NumberOfSpecies()); xVector = 0.; xVector[jFUEL] = 1.;
+			const double Z = eos.Z(pool_fire_temperature, P_Pascal, xVector);
+			rho_gas *= Z;
+		}
+
 		mix->SpeciesConductivityFromFitting(pool_fire_temperature);
 		double lambda_gas = mix->lambda[jFUEL];
 		double DHvap = 0.;
@@ -2112,4 +2141,335 @@ void OpenSMOKE_Flame1D_DataManager::SetTIgnition(const std::string units, const 
 void OpenSMOKE_Flame1D_DataManager::SetDeltaTAccuracy(const std::string units, const double value)
 {
 	DeltaTAccuracy = value;
+}
+
+
+std::vector<double> CubicRootsReal(const double a, const double b, const double c, const double d)
+{
+	std::vector<double> solution;
+
+	const double alfa = b / a;
+	const double beta = c / a;
+	const double gamma = d / a;
+
+	const double p = beta - alfa * alfa / 3.;
+	const double q = 2. * alfa * alfa * alfa / 27. - alfa * beta / 3. + gamma;
+
+	const double D = q * q / 4. + p * p * p / 27.;
+
+	if (D > 0.)
+	{
+		solution.resize(1);
+		solution[0] = cbrt(-0.5 * q + std::sqrt(D)) +
+			cbrt(-0.5 * q - std::sqrt(D)) - alfa / 3.;
+	}
+	else if (D == 0.)
+	{
+		solution.resize(2);
+		solution[0] = -2. * std::cbrt(q / 2.) - alfa / 3.;
+		solution[1] = std::cbrt(q / 2.) - alfa / 3.;
+	}
+	else if (D < 0.)
+	{
+		solution.resize(3);
+		const double r = std::sqrt(-p * p * p / 27.);
+		const double costheta = -q / (2. * r);
+		const double theta = std::acos(costheta);
+		solution[0] = 2. * std::cbrt(r) * std::cos(theta / 3.) - alfa / 3.;
+		solution[1] = 2. * std::cbrt(r) * std::cos((2. * Constants::pi + theta) / 3.) - alfa / 3.;
+		solution[2] = 2. * std::cbrt(r) * std::cos((4. * Constants::pi + theta) / 3.) - alfa / 3.;
+	}
+
+	return solution;
+}
+
+void EosModel::SetPR(OpenSMOKE_ReactingGas* mix)
+{
+	type = EOS_PR;
+
+	for (int k = 1; k <= mix->NumberOfSpecies(); k++)
+	{
+		if (mix->names[k] == "Air")
+		{
+			index_.push_back(k); Tc_.push_back(126.3); Pc_.push_back(3.4e+06); omega_.push_back(0.038); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C10H8")
+		{
+			index_.push_back(k); Tc_.push_back(748.5); Pc_.push_back(4.05e+06); omega_.push_back(0.304); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C11H10")
+		{
+			index_.push_back(k); Tc_.push_back(772.0); Pc_.push_back(3.6e+06); omega_.push_back(0.342); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C2H2")
+		{
+			index_.push_back(k); Tc_.push_back(308.3); Pc_.push_back(6140000); omega_.push_back(0.19); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C2H4")
+		{
+			index_.push_back(k); Tc_.push_back(282.4); Pc_.push_back(5040000); omega_.push_back(0.089); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C2H5OH")
+		{
+			index_.push_back(k); Tc_.push_back(514.0); Pc_.push_back(6.15e+06); omega_.push_back(0.645); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C2H6")
+		{
+			index_.push_back(k); Tc_.push_back(305.4); Pc_.push_back(4880000); omega_.push_back(0.099); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C3H8")
+		{
+			index_.push_back(k); Tc_.push_back(369.8); Pc_.push_back(4250000); omega_.push_back(0.153); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C4H10O")
+		{
+			index_.push_back(k); Tc_.push_back(563.0); Pc_.push_back(4.42e+06); omega_.push_back(0.591); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C5H10O")
+		{
+			index_.push_back(k); Tc_.push_back(561.0); Pc_.push_back(3.74e+06); omega_.push_back(0.345); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C6H6O")
+		{
+			index_.push_back(k); Tc_.push_back(694.3); Pc_.push_back(6.13e+06); omega_.push_back(0.442); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C7H8" || mix->names[k] == "TOLUO")
+		{
+			index_.push_back(k); Tc_.push_back(591.8); Pc_.push_back(4.11e+06); omega_.push_back(0.264); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C9H20")
+		{
+			index_.push_back(k); Tc_.push_back(594.5); Pc_.push_back(2.29e+06); omega_.push_back(0.443); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "CH3COCH3")
+		{
+			index_.push_back(k); Tc_.push_back(508.3); Pc_.push_back(4.7e+06); omega_.push_back(0.306); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "CH3OH")
+		{
+			index_.push_back(k); Tc_.push_back(512.5); Pc_.push_back(8.08e+06); omega_.push_back(0.565); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "CH4")
+		{
+			index_.push_back(k); Tc_.push_back(190.4); Pc_.push_back(4600000); omega_.push_back(0.011); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "CO")
+		{
+			index_.push_back(k); Tc_.push_back(132.92); Pc_.push_back(34.99e+05); omega_.push_back(0.0663); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "CO2")
+		{
+			index_.push_back(k); Tc_.push_back(304.19); Pc_.push_back(73.82e+05); omega_.push_back(0.2276); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "H2")
+		{
+			index_.push_back(k); Tc_.push_back(33.2); Pc_.push_back(1300000); omega_.push_back(-0.218); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "H2O")
+		{
+			index_.push_back(k); Tc_.push_back(647.13); Pc_.push_back(2.2055e+07); omega_.push_back(0.3449); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "IC8H18")
+		{
+			index_.push_back(k); Tc_.push_back(543.96); Pc_.push_back(2.57e+06); omega_.push_back(0.304); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "N2")
+		{
+			index_.push_back(k); Tc_.push_back(126.3); Pc_.push_back(3.4e+06); omega_.push_back(0.036); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "NC10H22")
+		{
+			index_.push_back(k); Tc_.push_back(617.8); Pc_.push_back(2.11e+06); omega_.push_back(0.49); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "NC12H26")
+		{
+			index_.push_back(k); Tc_.push_back(658.0); Pc_.push_back(1.82e+06); omega_.push_back(0.576); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "NC14H30")
+		{
+			index_.push_back(k); Tc_.push_back(693.0); Pc_.push_back(1.57e+06); omega_.push_back(0.643); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "NC15H32")
+		{
+			index_.push_back(k); Tc_.push_back(708.0); Pc_.push_back(1.48e+06); omega_.push_back(0.685); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "NC16H34")
+		{
+			index_.push_back(k); Tc_.push_back(723.0); Pc_.push_back(1.4e+06); omega_.push_back(0.717); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "NC5H12")
+		{
+			index_.push_back(k); Tc_.push_back(469.7); Pc_.push_back(3.38e+06); omega_.push_back(0.252); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "NC6H14")
+		{
+			index_.push_back(k); Tc_.push_back(507.6); Pc_.push_back(3.03e+06); omega_.push_back(0.301); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "NC6H14O")
+		{
+			index_.push_back(k); Tc_.push_back(611.4); Pc_.push_back(3.51e+06); omega_.push_back(0.578); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "NC7H14")
+		{
+			index_.push_back(k); Tc_.push_back(572.19); Pc_.push_back(3.471e+06); omega_.push_back(0.235); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "NC7H16")
+		{
+			index_.push_back(k); Tc_.push_back(540.3); Pc_.push_back(2.74e+06); omega_.push_back(0.351); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "NC8H18")
+		{
+			index_.push_back(k); Tc_.push_back(568.8); Pc_.push_back(2.486e+06); omega_.push_back(0.398); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "NPBENZ")
+		{
+			index_.push_back(k); Tc_.push_back(638.38); Pc_.push_back(3.2e+06); omega_.push_back(0.346); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "O2")
+		{
+			index_.push_back(k); Tc_.push_back(154.58); Pc_.push_back(50.43e+05); omega_.push_back(0.0222); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "TMBENZ")
+		{
+			index_.push_back(k); Tc_.push_back(637.36); Pc_.push_back(3.127e+06); omega_.push_back(0.398); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "XYLENE")
+		{
+			index_.push_back(k); Tc_.push_back(617.05); Pc_.push_back(3.53e+06); omega_.push_back(0.325); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "MCYC6")
+		{
+			index_.push_back(k); Tc_.push_back(572.19); Pc_.push_back(3.48e+06); omega_.push_back(0.236); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C4H10")
+		{
+			index_.push_back(k); Tc_.push_back(425.120); Pc_.push_back(3.7700E+06); omega_.push_back(0.1970); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C3H6")
+		{
+			index_.push_back(k); Tc_.push_back(365.570); Pc_.push_back(4.6300E+06); omega_.push_back(0.1370); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C6H6")
+		{
+			index_.push_back(k); Tc_.push_back(562.160); Pc_.push_back(4.8800E+06); omega_.push_back(0.2090); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "CH3OH")
+		{
+			index_.push_back(k); Tc_.push_back(512.640); Pc_.push_back(8.1400E+06); omega_.push_back(0.5660); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "C2H5OH")
+		{
+			index_.push_back(k); Tc_.push_back(513.920); Pc_.push_back(6.1200E+06); omega_.push_back(0.6430); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "HE")
+		{
+			index_.push_back(k); Tc_.push_back(5.200); Pc_.push_back(2.3000E+05); omega_.push_back(-0.3880); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "NE")
+		{
+			index_.push_back(k); Tc_.push_back(44.400); Pc_.push_back(2.6700E+06); omega_.push_back(-0.0380); MW_.push_back(mix->M(k));
+		}
+		else if (mix->names[k] == "AR")
+		{
+			index_.push_back(k); Tc_.push_back(150.860); Pc_.push_back(4.9000E+06); omega_.push_back(0.); MW_.push_back(mix->M(k));
+		}
+	}
+
+	a_.resize(index_.size());
+	b_.resize(index_.size());
+
+	cout << "-----------------------------------------------------------------------" << endl;
+	cout << " Species to be used in the cubic equation of state                     " << endl;
+	cout << "-----------------------------------------------------------------------" << endl;
+	cout << setw(20) << left << "Name";
+	cout << setw(10) << left << "Tc[K]";
+	cout << setw(10) << left << "Pc[bar]";
+	cout << setw(10) << left << "omega[-]";
+	cout << endl;
+	cout << "-----------------------------------------------------------------------" << endl;
+
+	for (unsigned int j = 0; j < index_.size(); j++)
+	{
+		cout << setw(20) << left << mix->names[index_[j]];
+		cout << setw(10) << left << Tc_[j];
+		cout << setw(10) << left << Pc_[j] / 1.e5;
+		cout << setw(10) << left << omega_[j];
+		cout << endl;
+	}
+	cout << "-----------------------------------------------------------------------" << endl;
+	cout << endl;
+}
+
+#include <algorithm>
+
+const double EosModel::R_ = 8.314;
+
+EosModel::EosModel()
+{
+	type = EOS_IDEALGAS;
+}
+
+double EosModel::Zmin() const
+{
+	return *std::min_element(ZR_.begin(), ZR_.end());
+}
+
+double EosModel::Zmax() const
+{
+	return *std::max_element(ZR_.begin(), ZR_.end());
+}
+
+double EosModel::Z(const double T, const double P, const BzzVector& x)
+{
+	// Calculation of coefficients of individual species
+	for (unsigned int j = 0; j < index_.size(); j++)
+	{
+		const double Tr = T / Tc_[j];
+		const double Pr = P / Pc_[j];
+		const double m = 0.37464 + 1.54226 * omega_[j] - 0.26992 * omega_[j]*omega_[j];
+		const double alfa = std::pow(1. + m*(1. - std::sqrt(Tr)), 2.);
+
+		a_[j] = 0.45724 * (std::pow((R_ * Tc_[j]), 2.) / Pc_[j]) * alfa;
+		b_[j] = 0.0778 * R_ * Tc_[j] / Pc_[j];
+	}
+
+	// Sum of relevant mole fractions
+	double sum = 0.;
+	{
+		for (unsigned int j = 0; j < index_.size(); j++)
+		{
+			const int k = index_[j];
+			sum += x[k];
+		}
+
+		const double sum_threshold = 0.95;
+		if (sum < sum_threshold)
+		{
+			std::cout << "The sum of mole fraction is < " << sum_threshold << std::endl;
+			std::cout << "The cubic equation of state cannot be applied properly." << std::endl;
+		}
+	}
+
+	// Calculation of mixture coefficients
+	amix_ = 0.;
+	bmix_ = 0.;
+	for (unsigned int j = 0; j < index_.size(); j++)
+	{
+		const int k = index_[j];
+		amix_ += (x[k]/sum) * sqrt(a_[j]);
+		bmix_ += (x[k]/sum) * b_[j];
+	}
+	amix_ *= amix_;
+
+	Amix_ = amix_ * P / std::pow((R_*T), 2.);
+	Bmix_ = bmix_ * P / (R_*T);
+
+	// Calculation of cubic roots
+	const double a1 = -(1. - Bmix_);
+	const double a2 = Amix_ - 3. * Bmix_ * Bmix_ - 2. * Bmix_;
+	const double a3 = -(Amix_ * Bmix_ - Bmix_ * Bmix_ - Bmix_ * Bmix_ * Bmix_);
+	ZR_ = CubicRootsReal(1., a1, a2, a3);
+
+	// Returns only the gas solution
+	return Zmax();
 }

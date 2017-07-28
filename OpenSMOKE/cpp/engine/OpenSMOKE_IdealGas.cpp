@@ -698,6 +698,20 @@ void OpenSMOKE_IdealGas::GetMWAndMoleFractionsFromMassFractions(double &MWmix, B
 	x *= MWmix;
 }
 
+void OpenSMOKE_IdealGas::GetMassFractionsFromMoleFractions(BzzVector &y, BzzVector &x)
+{
+	ElementByElementProduct(x, M, &y);
+	const double MWmix = y.GetSumElements();
+	y /= MWmix;
+}
+
+void OpenSMOKE_IdealGas::GetMoleFractionsFromMassFractions(BzzVector &x, BzzVector &y)
+{
+	ElementByElementProduct(y, uM, &x);
+	const double MWmix = 1. / x.GetSumElements();
+	x *= MWmix;
+}
+
 void OpenSMOKE_IdealGas::GetMWAndMoleFractionsFromMassFractions(BzzVector &MWmix, BzzMatrix &x, BzzMatrix &y)
 {
 	for(int i=1;i<=x.Rows();i++)

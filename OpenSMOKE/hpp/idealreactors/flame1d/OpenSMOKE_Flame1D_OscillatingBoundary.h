@@ -21,6 +21,7 @@
 #define OpenSMOKE_Flame1D_OscillatingBoundary_H
 
 #include "OpenSMOKE.hpp"
+#include "OpenSMOKE_Flame1D_DataManager.h"
 
 enum unsteady_boundary_kinds {	OSCILLATING_BOUNDARY_NONE, OSCILLATING_BOUNDARY_SIN, 
 				OSCILLATING_BOUNDARY_AIR_VELOCITY, OSCILLATING_BOUNDARY_FUEL_AIR_VELOCITIES, 
@@ -57,6 +58,10 @@ public:
 	double rhoSteadyAir;
 	double MWSteadyFuel; 
 	double MWSteadyAir;
+	BzzVector XSteadyFuel;
+	BzzVector XSteadyAir;
+	BzzVector YSteadyFuel;
+	BzzVector YSteadyAir;
 	double TSteadyFuel; 
 	double TSteadyAir;
 	double vSteadyFuel; 
@@ -99,13 +104,14 @@ public:
 	double	InPhase;
 
 	void setup(double _USteadyFuel, double _USteadyAir,   double _rhoSteadyFuel, double _rhoSteadyAir, 
-			   double _MWSteadyFuel, double _MWSteadyAir, double _TSteadyFuel, double _TSteadyAir,
+			   double _MWSteadyFuel, double _MWSteadyAir, BzzVector& _YSteadyFuel, BzzVector& _YSteadyAir, double _TSteadyFuel, double _TSteadyAir,
 			   double _L, double _P, OpenSMOKE_ReactingGas  *_mix, const std::string fileName);
 
 	void update_boundary_conditions(double _time, 	double &UC,    double &UO, 
 							double &TFuel, double &TAir,
 							double &rhoC,  double &rhoO, double _Tmax,
-							BzzVector &WC, BzzVector &WO);
+							BzzVector &WC, BzzVector &WO,
+							OpenSMOKE_Flame1D_DataManager& data);
 	
 	void update_time_target(const double time);
 

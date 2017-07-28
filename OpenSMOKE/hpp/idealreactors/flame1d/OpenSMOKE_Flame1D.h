@@ -132,6 +132,7 @@ public:
 	BzzMatrix x_elemental;
 	BzzMatrix omega_elemental;
 	BzzVector Z;
+	BzzVector csi;
 	BzzVector rho;
 
 

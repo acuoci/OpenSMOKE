@@ -112,6 +112,8 @@ public:
 	void	GetMWAndMoleFractionsFromMassFractions(double &MWmix, BzzVector &x, BzzVector &y);
 	void	GetMassFractionsFromMoleFractionsAndMW(BzzVector &y, BzzVector &x, const double MWmix);
 	void	GetMoleFractionsFromMassFractionsAndMW(BzzVector &x, BzzVector &y, const double MWmix);
+	void	GetMassFractionsFromMoleFractions(BzzVector &y, BzzVector &x);
+	void	GetMoleFractionsFromMassFractions(BzzVector &x, BzzVector &y);
 
 	void	GetMWAndMoleFractionsFromMassFractions(BzzVector &MWmix, BzzMatrix &x, BzzMatrix &y);
 	void	GetMWAndMassFractionsFromMoleFractions(BzzVector &MWmix, BzzMatrix &y, BzzMatrix &x);

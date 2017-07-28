@@ -147,6 +147,7 @@ void OpenSMOKE_Flame1D::allocate_only_Np()
 	// --------------------------------------------
 	ChangeDimensions(Np, mix->NumberOfElements(), &x_elemental);
 	ChangeDimensions(Np, mix->NumberOfElements(), &omega_elemental);
+	ChangeDimensions(Np, &csi);
 	ChangeDimensions(Np, &Z);
 
 	// Differentials
@@ -1973,6 +1974,14 @@ void OpenSMOKE_Flame1D::properties(int ReactionON, int jacobianIndex, BzzVectorI
 			// a. Calcolo della concentrazione e della densita [kmol/m3] [kg/m3]
 			cTot = data->P_Pascal  / (Constants::R_J_kmol*T[i]);
 			rho[i] = cTot * PMtot[i];
+
+			// Correction of density because of the equation of state
+			if (data->eos.type == EosModel::EOS_PR)
+			{
+				Z[i] = data->eos.Z(T[i], data->P_bar*1e5, xVector);
+				rho[i] *= Z[i];
+			}
+
 			urho[i] = 1./rho[i];
 			cVector = cTot*xVector;
 
@@ -2082,6 +2091,14 @@ void OpenSMOKE_Flame1D::properties(int ReactionON, int jacobianIndex, BzzVectorI
 			// a. Calcolo della concentrazione e della densita [kmol/m3] [kg/m3]
 			cTot = data->P_Pascal  / (Constants::R_J_kmol*T[i]);
 			rho[i] = cTot * PMtot[i];
+
+			// Correction of density because of the equation of state
+			if (data->eos.type == EosModel::EOS_PR)
+			{
+				Z[i] = data->eos.Z(T[i], data->P_bar*1e5, xVector);
+				rho[i] *= Z[i];
+			}
+
 			urho[i] = 1./rho[i];
 			cVector = cTot*xVector;
 
@@ -2144,6 +2161,14 @@ void OpenSMOKE_Flame1D::properties(int ReactionON, int jacobianIndex, BzzVectorI
 			// a. Calcolo della concentrazione e della densita [kmol/m3] [kg/m3]
 			cTot = data->P_Pascal  / (Constants::R_J_kmol*T[i]);
 			rho[i] = cTot * PMtot[i];
+
+			// Correction of density because of the equation of state
+			if (data->eos.type == EosModel::EOS_PR)
+			{
+				Z[i] = data->eos.Z(T[i], data->P_bar*1e5, xVector);
+				rho[i] *= Z[i];
+			}
+
 			urho[i] = 1./rho[i];
 			cVector = cTot*xVector;
 
@@ -2200,6 +2225,14 @@ void OpenSMOKE_Flame1D::properties(int ReactionON, int jacobianIndex, BzzVectorI
 			// a. Calcolo della concentrazione e della densita [kmol/m3] [kg/m3]
 			cTot = data->P_Pascal  / (Constants::R_J_kmol*T[i]);
 			rho[i] = cTot * PMtot[i];
+
+			// Correction of density because of the equation of state
+			if (data->eos.type == EosModel::EOS_PR)
+			{
+				Z[i] = data->eos.Z(T[i], data->P_bar*1e5, xVector);
+				rho[i] *= Z[i];
+			}
+
 			urho[i] = 1./rho[i];
 			cVector = cTot*xVector;
 
@@ -2284,6 +2317,14 @@ void OpenSMOKE_Flame1D::properties(int ReactionON)
 		// a. Calcolo della concentrazione e della densita [kmol/m3] [kg/m3]
 		const double cTot = data->P_Pascal  / (Constants::R_J_kmol*T[i]);
 		rho[i] = cTot * PMtot[i];
+
+		// Correction of density because of the equation of state
+		if (data->eos.type == EosModel::EOS_PR)
+		{
+			Z[i] = data->eos.Z(T[i], data->P_bar*1e5, xVector);
+			rho[i] *= Z[i];
+		}
+
 		urho[i] = 1./rho[i];
 		cVector = cTot*xVector;
 
@@ -3698,6 +3739,7 @@ void OpenSMOKE_Flame1D::printOnFile(const std::string fileNameOutput)
 			fOutput << setw(20) << left << T[i];
 			
 			fOutput << setw(20) << left << rho[i];
+			fOutput << setw(20) << left << Z[i];
 			fOutput << setw(20) << left << mu[i];
 			fOutput << setw(20) << left << lambda[i];
 			fOutput << setw(20) << left << Cp[i];
@@ -3706,7 +3748,7 @@ void OpenSMOKE_Flame1D::printOnFile(const std::string fileNameOutput)
 
 			// Elemental
 			ElementalAnalysis();
-			fOutput << setw(20) << left << Z[i];
+			fOutput << setw(20) << left << csi[i];
 			for(j=1;j<=mix->NumberOfElements();j++)
 				fOutput << setw(20) << left << x_elemental[i][j];
 			for(j=1;j<=mix->NumberOfElements();j++)
@@ -3777,6 +3819,7 @@ void OpenSMOKE_Flame1D::printOnFile(const std::string fileNameOutput)
 			fOutput << setw(20) << left << T[i];
 
 			fOutput << setw(20) << left << rho[i];
+			fOutput << setw(20) << left << Z[i];
 			fOutput << setw(20) << left << mu[i];
 			fOutput << setw(20) << left << lambda[i];
 			fOutput << setw(20) << left << Cp[i];
@@ -3785,7 +3828,7 @@ void OpenSMOKE_Flame1D::printOnFile(const std::string fileNameOutput)
 
 			// Elemental
 			ElementalAnalysis();
-			fOutput << setw(20) << left << Z[i];
+			fOutput << setw(20) << left << csi[i];
 			for(j=1;j<=mix->NumberOfElements();j++)
 				fOutput << setw(20) << left << x_elemental[i][j];
 			for(j=1;j<=mix->NumberOfElements();j++)
@@ -4548,7 +4591,8 @@ void OpenSMOKE_Flame1D::GnuPlotInterfaceUnsteady()
 		PrintTagOnGnuplotLabel(20, fUnsteady, "H[Pa/m2]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fUnsteady, "G[kg/m3/s]", fOutputCount);
 		PrintTagOnGnuplotLabel(20, fUnsteady, "T[K]",		fOutputCount);
-		PrintTagOnGnuplotLabel(20, fUnsteady, "rho[kg/m3]",		fOutputCount);
+		PrintTagOnGnuplotLabel(20, fUnsteady, "rho[kg/m3]", fOutputCount);
+		PrintTagOnGnuplotLabel(20, fUnsteady, "Z[-]",		fOutputCount);
 		PrintTagOnGnuplotLabel(20, fUnsteady, "MW[kg/kmol]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fUnsteady, "Qreac[W/m3]",	fOutputCount);
 
@@ -4609,12 +4653,13 @@ void OpenSMOKE_Flame1D::GnuPlotInterface(ofstream &fOutput)
 		PrintTagOnGnuplotLabel(20, fOutput, "H[Pa/m2]",		fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "T[K]",			fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "rho[kg/m3]",	fOutputCount);
+		PrintTagOnGnuplotLabel(20, fOutput, "Z[-]",			fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "mu[kg/m/s]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "k[W/m/K]",		fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "Cp[J/kg/K]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "Qreac[W/m3]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "Qrad[W/m3]",	fOutputCount);
-		PrintTagOnGnuplotLabel(20, fOutput, "Z[-]",			fOutputCount);
+		PrintTagOnGnuplotLabel(20, fOutput, "csi[-]",		fOutputCount);
 	
 		// Elements
 		for(j=1;j<=mix->NumberOfElements();j++)
@@ -4649,12 +4694,13 @@ void OpenSMOKE_Flame1D::GnuPlotInterface(ofstream &fOutput)
 		PrintTagOnGnuplotLabel(20, fOutput, "A[m2]",		fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "T[K]",			fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "rho[kg/m3]",	fOutputCount);
+		PrintTagOnGnuplotLabel(20, fOutput, "Z[-]",			fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "mu[kg/m/s]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "k[W/m/K]",		fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "Cp[J/kg/K]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "Qreac[W/m3]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fOutput, "Qrad[W/m3]",	fOutputCount);
-		PrintTagOnGnuplotLabel(20, fOutput, "Z[-]",			fOutputCount);
+		PrintTagOnGnuplotLabel(20, fOutput, "csi[-]",		fOutputCount);
 
 		// Elements
 		for(j=1;j<=mix->NumberOfElements();j++)
@@ -4756,6 +4802,7 @@ void OpenSMOKE_Flame1D::DAE_ODE_myPrint(BzzVector &v, double time)
 			fUnsteady << setw(20) << left << G[i];								// 8. mass flow rate
 			fUnsteady << setw(20) << left << T[i];								// 9. temperature
 			fUnsteady << setw(20) << left << rho[i];							// density
+			fUnsteady << setw(20) << left << Z[i];								// comprimibility factor
 			fUnsteady << setw(20) << left << PMtot[i];							// molecular weight
 			fUnsteady << setw(20) << left << QReaction[i];						// heat release
 			
@@ -5325,7 +5372,7 @@ void OpenSMOKE_Flame1D::unsteady_boundary_conditions(double &time)
 {
 	if (data->iUnsteady == true)
 	{
-		unsteady.update_boundary_conditions(time, UC, UO, data->TC, data->TO, rhoC, rhoO, T.Max(), WC, WO);
+		unsteady.update_boundary_conditions(time, UC, UO, data->TC, data->TO, rhoC, rhoO, T.Max(), WC, WO, *data);
 		for(int i=1;i<=NC;i++)
 		{
 			BCW_C[i] =  (nGeometry-1.)*UC*WC[i];
@@ -6974,9 +7021,11 @@ void OpenSMOKE_Flame1D::solveDAE_Opposed(int Hot_Or_Cold, const flame1d_model st
 				xFirstGuess[k++] = W[i][j];
 		}
 
-		if (iUnsteadyFromBackUp!=-1 && data->iUnsteady == true)
-			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], 
-							T[1], T[Np], grid.L, data->P_Pascal, mix, data->unsteady_flame_file_name);
+		if (iUnsteadyFromBackUp != -1 && data->iUnsteady == true)
+		{
+			unsteady.setup(U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], W.GetRow(1), W.GetRow(Np),
+				T[1], T[Np], grid.L, data->P_Pascal, mix, data->unsteady_flame_file_name);
+		}
 		GnuPlotInterfaceUnsteady();
 
 
@@ -7066,7 +7115,7 @@ void OpenSMOKE_Flame1D::solveDAE_Opposed(int Hot_Or_Cold, const flame1d_model st
 		}
 
 		if (iUnsteadyFromBackUp!=-1 && data->iUnsteady == true)
-			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], 
+			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], W.GetRow(1), W.GetRow(Np),
 							T[1], T[Np], grid.L, data->P_Pascal, mix, data->unsteady_flame_file_name);
 
 		GnuPlotInterfaceUnsteady();
@@ -7092,7 +7141,7 @@ void OpenSMOKE_Flame1D::solveDAE_Opposed(int Hot_Or_Cold, const flame1d_model st
 		}
 
 		if (iUnsteadyFromBackUp!=-1 && data->iUnsteady == true)
-			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], 
+			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], W.GetRow(1), W.GetRow(Np),
 							T[1], T[Np], grid.L, data->P_Pascal, mix, data->unsteady_flame_file_name);
 
 		GnuPlotInterfaceUnsteady();
@@ -7172,7 +7221,7 @@ void OpenSMOKE_Flame1D::solveDAE_Twin(int Hot_Or_Cold, const flame1d_model strin
 		}
 
 		if (iUnsteadyFromBackUp!=-1 && data->iUnsteady == true)
-			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], 
+			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], W.GetRow(1), W.GetRow(Np),
 							T[1], T[Np], grid.L, data->P_Pascal, mix, data->unsteady_flame_file_name);
 		GnuPlotInterfaceUnsteady();
 
@@ -7246,7 +7295,7 @@ void OpenSMOKE_Flame1D::solveDAE_Twin(int Hot_Or_Cold, const flame1d_model strin
 		}
 
 		if (iUnsteadyFromBackUp!=-1 && data->iUnsteady == true)
-			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], 
+			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], W.GetRow(1), W.GetRow(Np),
 							T[1], T[Np], grid.L, data->P_Pascal, mix, data->unsteady_flame_file_name);
 
 		GnuPlotInterfaceUnsteady();
@@ -7272,7 +7321,7 @@ void OpenSMOKE_Flame1D::solveDAE_Twin(int Hot_Or_Cold, const flame1d_model strin
 		}
 
 		if (iUnsteadyFromBackUp!=-1 && data->iUnsteady == true)
-			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], 
+			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], W.GetRow(1), W.GetRow(Np),
 							T[1], T[Np], grid.L, data->P_Pascal, mix, data->unsteady_flame_file_name);
 
 		GnuPlotInterfaceUnsteady();
@@ -10756,7 +10805,7 @@ void OpenSMOKE_Flame1D::ElementalAnalysis()
 		omega_elemental_vector = omega_elemental.GetRow(i);
 		omega_elemental_fuel_vector = omega_elemental.GetRow(1);
 		omega_elemental_air_vector = omega_elemental.GetRow(Np);
-		Z[i] = mix->GetMixtureFraction(omega_elemental_vector, omega_elemental_fuel_vector, omega_elemental_air_vector);
+		csi[i] = mix->GetMixtureFraction(omega_elemental_vector, omega_elemental_fuel_vector, omega_elemental_air_vector);
 	}
 }
 
@@ -10791,7 +10840,7 @@ void OpenSMOKE_Flame1D::SaveOnBinaryFile(BzzSave &fOutput)
 		dummy = "MIXTUREFRACTION";
 		strcpy(name, dummy.c_str());
 		fOutput.fileSave.write((char*) name, sizeof(name));
-		fOutput << Z;
+		fOutput << csi;
 	}
 	else
 	{
@@ -10968,6 +11017,14 @@ void OpenSMOKE_Flame1D::propertiesSingleReactors(const int i)
 		// a. Calcolo della concentrazione e della densita [kmol/m3] [kg/m3]
 		double cTot = data->P_Pascal  / (Constants::R_J_kmol*T[i]);
 		rho[i] = cTot * PMtot[i];
+
+		// Correction of density because of the equation of state
+		if (data->eos.type == EosModel::EOS_PR)
+		{
+			Z[i] = data->eos.Z(T[i], data->P_bar*1e5, xVector);
+			rho[i] *= Z[i];
+		}
+
 		urho[i] = 1./rho[i];
 		cVector = cTot*xVector;
 

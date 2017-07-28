@@ -40,6 +40,42 @@ public:
 enum kind_of_pool_fire {POOL_FIRE_NONE, POOL_FIRE_EQUILIBRIUM, POOL_FIRE_LIQUIDPOOL, POOL_FIRE_TASSIGNED};
 enum radiative_soot_model {RADIATIVE_SOOT_MODEL_NONE, RADIATIVE_SOOT_MODEL_FLUENT, RADIATIVE_SOOT_MODEL_BILGER, RADIATIVE_SOOT_MODEL_WIDMANN};
 
+class EosModel 
+{
+public:
+
+	enum {EOS_IDEALGAS, EOS_PR} type;
+
+public:
+
+	EosModel();
+	void SetPR(OpenSMOKE_ReactingGas* mix);
+	double Z(const double T, const double P, const BzzVector& x);
+
+private:
+
+	double Zmin() const;
+	double Zmax() const;
+
+	static const double R_;
+
+	std::vector<double> Tc_;
+	std::vector<double> Pc_;
+	std::vector<double> omega_;
+	std::vector<double> MW_;
+	std::vector<int>    index_;
+	
+	double amix_;
+	double bmix_;
+	std::vector<double>    a_;
+	std::vector<double>    b_;
+
+	double Amix_;
+	double Bmix_;
+
+	std::vector<double> ZR_;
+};
+
 class OpenSMOKE_Flame1D_DataManager
 {
 public:
@@ -259,6 +295,8 @@ public:
 
 	bool iFixedEnthalpyLeftSide;
 
+	EosModel eos;
+
 private:
 
 	ifstream fInput;
@@ -314,6 +352,7 @@ private:
 	void SetEnvironmentTemperature(const std::string units, const double value);
 	void SetGasRadiation();
 	void SetSootRadiation(const std::string value);
+	void SetEquationOfState(const std::string value);
 	void SetSoretEffect();
 	void SetPhysicalSootDiffusionCoefficients(const int value);
 	void SetThermophoreticEffect();
