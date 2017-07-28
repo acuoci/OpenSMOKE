@@ -7023,7 +7023,9 @@ void OpenSMOKE_Flame1D::solveDAE_Opposed(int Hot_Or_Cold, const flame1d_model st
 
 		if (iUnsteadyFromBackUp != -1 && data->iUnsteady == true)
 		{
-			unsteady.setup(U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], W.GetRow(1), W.GetRow(Np),
+			BzzVector WF(NC); W.GetRow(1, &WF);
+			BzzVector WO(NC); W.GetRow(Np, &WO);
+			unsteady.setup(U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], WF, WO,
 				T[1], T[Np], grid.L, data->P_Pascal, mix, data->unsteady_flame_file_name);
 		}
 		GnuPlotInterfaceUnsteady();
@@ -7115,8 +7117,12 @@ void OpenSMOKE_Flame1D::solveDAE_Opposed(int Hot_Or_Cold, const flame1d_model st
 		}
 
 		if (iUnsteadyFromBackUp!=-1 && data->iUnsteady == true)
-			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], W.GetRow(1), W.GetRow(Np),
+		{
+			BzzVector WF(NC); W.GetRow(1, &WF);
+			BzzVector WO(NC); W.GetRow(Np, &WO);
+			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], WF, WO,
 							T[1], T[Np], grid.L, data->P_Pascal, mix, data->unsteady_flame_file_name);
+		}
 
 		GnuPlotInterfaceUnsteady();
 
@@ -7141,8 +7147,12 @@ void OpenSMOKE_Flame1D::solveDAE_Opposed(int Hot_Or_Cold, const flame1d_model st
 		}
 
 		if (iUnsteadyFromBackUp!=-1 && data->iUnsteady == true)
-			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], W.GetRow(1), W.GetRow(Np),
+		{
+			BzzVector WF(NC); W.GetRow(1, &WF);
+			BzzVector WO(NC); W.GetRow(Np, &WO);
+			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], WF, WO,
 							T[1], T[Np], grid.L, data->P_Pascal, mix, data->unsteady_flame_file_name);
+		}
 
 		GnuPlotInterfaceUnsteady();
 
@@ -7221,8 +7231,13 @@ void OpenSMOKE_Flame1D::solveDAE_Twin(int Hot_Or_Cold, const flame1d_model strin
 		}
 
 		if (iUnsteadyFromBackUp!=-1 && data->iUnsteady == true)
-			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], W.GetRow(1), W.GetRow(Np),
+		{
+			BzzVector WF(NC); W.GetRow(1, &WF);
+			BzzVector WO(NC); W.GetRow(Np, &WO);
+			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], WO, WF,
 							T[1], T[Np], grid.L, data->P_Pascal, mix, data->unsteady_flame_file_name);
+		}
+
 		GnuPlotInterfaceUnsteady();
 
 
@@ -7295,8 +7310,12 @@ void OpenSMOKE_Flame1D::solveDAE_Twin(int Hot_Or_Cold, const flame1d_model strin
 		}
 
 		if (iUnsteadyFromBackUp!=-1 && data->iUnsteady == true)
-			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], W.GetRow(1), W.GetRow(Np),
+		{
+			BzzVector WF(NC); W.GetRow(1, &WF);
+			BzzVector WO(NC); W.GetRow(Np, &WO);
+			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], WF, WO,
 							T[1], T[Np], grid.L, data->P_Pascal, mix, data->unsteady_flame_file_name);
+		}
 
 		GnuPlotInterfaceUnsteady();
 
@@ -7321,8 +7340,12 @@ void OpenSMOKE_Flame1D::solveDAE_Twin(int Hot_Or_Cold, const flame1d_model strin
 		}
 
 		if (iUnsteadyFromBackUp!=-1 && data->iUnsteady == true)
-			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], W.GetRow(1), W.GetRow(Np),
+		{
+			BzzVector WF(NC); W.GetRow(1, &WF);
+			BzzVector WO(NC); W.GetRow(Np, &WO);
+			unsteady.setup(	U[1], U[Np], rho[1], rho[Np], PMtot[1], PMtot[Np], WF, WO,
 							T[1], T[Np], grid.L, data->P_Pascal, mix, data->unsteady_flame_file_name);
+		}
 
 		GnuPlotInterfaceUnsteady();
 
