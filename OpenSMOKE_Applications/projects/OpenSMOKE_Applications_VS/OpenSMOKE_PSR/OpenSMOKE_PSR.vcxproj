@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -22,33 +22,34 @@
     <ProjectGuid>{9DB01043-08EB-4C05-95D4-2507C3C1E4A3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>OpenSMOKE_PSR</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>NotSet</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>NotSet</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -68,19 +69,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\NumericalLibraries\BzzMath6\hpp;C:\NumericalLibraries\OpenSMOKE\hpp;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;C:\Development\ExternalNumericalLibraries\OpenSMOKE\OpenSMOKE\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\NumericalLibraries\BzzMath6\hpp;C:\NumericalLibraries\OpenSMOKE\hpp;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;C:\Development\ExternalNumericalLibraries\OpenSMOKE\OpenSMOKE\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\NumericalLibraries\BzzMath6\hpp;C:\NumericalLibraries\OpenSMOKE\hpp;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;C:\Development\ExternalNumericalLibraries\OpenSMOKE\OpenSMOKE\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\NumericalLibraries\BzzMath6\hpp;C:\NumericalLibraries\OpenSMOKE\hpp;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;C:\Development\ExternalNumericalLibraries\OpenSMOKE\OpenSMOKE\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -89,14 +90,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>../../../exe/$(TargetName)_vs_32bit_debug$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>C:\NumericalLibraries\BzzMath6\lib;C:\NumericalLibraries\OpenSMOKE\lib\vs;C:\NumericalLibraries\NumericalRecipes\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libBzzMath6_VS_serial_32bit_debug.lib;libOpenSMOKE_AddOns_32bit_debug.lib;libOpenSMOKE_Basic_32bit_debug.lib;libOpenSMOKE_IdealReactors_32bit_debug.lib;libOpenSMOKE_PSR_32bit_debug.lib;libOpenSMOKE_QMOM_32bit_debug.lib;libOpenSMOKE_Engine_32bit_debug.lib;libOpenSMOKE_SurfaceChemistry_32bit_debug.lib;libNumericalRecipes_VS_32bit_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\lib\windows;C:\Development\ExternalNumericalLibraries\OpenSMOKE\OpenSMOKE\lib\vs;C:\Development\ExternalNumericalLibraries\NumericalRecipes\lib\windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libBzzMath60dev_MSVS2017_Win32_Debug.lib;libOpenSMOKE_AddOns_32bit_debug.lib;libOpenSMOKE_Basic_32bit_debug.lib;libOpenSMOKE_IdealReactors_32bit_debug.lib;libOpenSMOKE_PSR_32bit_debug.lib;libOpenSMOKE_QMOM_32bit_debug.lib;libOpenSMOKE_Engine_32bit_debug.lib;libOpenSMOKE_SurfaceChemistry_32bit_debug.lib;libNumericalRecipes_MSVS2017_Win32_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -106,14 +107,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>../../../exe/$(TargetName)_vs_64bit_debug$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>C:\NumericalLibraries\BzzMath6\lib;C:\NumericalLibraries\OpenSMOKE\lib\vs;C:\NumericalLibraries\NumericalRecipes\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libBzzMath6_VS_serial_64bit_debug.lib;libOpenSMOKE_AddOns_64bit_debug.lib;libOpenSMOKE_Basic_64bit_debug.lib;libOpenSMOKE_IdealReactors_64bit_debug.lib;libOpenSMOKE_PSR_64bit_debug.lib;libOpenSMOKE_QMOM_64bit_debug.lib;libOpenSMOKE_Engine_64bit_debug.lib;libOpenSMOKE_SurfaceChemistry_64bit_debug.lib;libNumericalRecipes_VS_64bit_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\lib\windows;C:\Development\ExternalNumericalLibraries\OpenSMOKE\OpenSMOKE\lib\vs;C:\Development\ExternalNumericalLibraries\NumericalRecipes\lib\windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libBzzMath60dev_MSVS2017_x64_Debug.lib;libOpenSMOKE_AddOns_64bit_debug.lib;libOpenSMOKE_Basic_64bit_debug.lib;libOpenSMOKE_IdealReactors_64bit_debug.lib;libOpenSMOKE_PSR_64bit_debug.lib;libOpenSMOKE_QMOM_64bit_debug.lib;libOpenSMOKE_Engine_64bit_debug.lib;libOpenSMOKE_SurfaceChemistry_64bit_debug.lib;libNumericalRecipes_MSVS2017_x64_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,7 +128,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,8 +136,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>../../../exe/$(TargetName)_vs_32bit_release$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>C:\NumericalLibraries\BzzMath6\lib;C:\NumericalLibraries\OpenSMOKE\lib\vs;C:\NumericalLibraries\NumericalRecipes\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libBzzMath6_VS_serial_32bit_release.lib;libOpenSMOKE_AddOns_32bit_release.lib;libOpenSMOKE_Basic_32bit_release.lib;libOpenSMOKE_IdealReactors_32bit_release.lib;libOpenSMOKE_PSR_32bit_release.lib;libOpenSMOKE_QMOM_32bit_release.lib;libOpenSMOKE_Engine_32bit_release.lib;libOpenSMOKE_SurfaceChemistry_32bit_release.lib;libNumericalRecipes_VS_32bit_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\lib\windows;C:\Development\ExternalNumericalLibraries\OpenSMOKE\OpenSMOKE\lib\vs;C:\Development\ExternalNumericalLibraries\NumericalRecipes\lib\windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libBzzMath60dev_MSVS2017_Win32_Release.lib;libOpenSMOKE_AddOns_32bit_release.lib;libOpenSMOKE_Basic_32bit_release.lib;libOpenSMOKE_IdealReactors_32bit_release.lib;libOpenSMOKE_PSR_32bit_release.lib;libOpenSMOKE_QMOM_32bit_release.lib;libOpenSMOKE_Engine_32bit_release.lib;libOpenSMOKE_SurfaceChemistry_32bit_release.lib;libNumericalRecipes_MSVS2017_Win32_Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -150,7 +151,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,8 +159,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>../../../exe/$(TargetName)_vs_64bit_release$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>C:\NumericalLibraries\BzzMath6\lib;C:\NumericalLibraries\OpenSMOKE\lib\vs;C:\NumericalLibraries\NumericalRecipes\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libBzzMath6_VS_serial_64bit_release.lib;libOpenSMOKE_AddOns_64bit_release.lib;libOpenSMOKE_Basic_64bit_release.lib;libOpenSMOKE_IdealReactors_64bit_release.lib;libOpenSMOKE_PSR_64bit_release.lib;libOpenSMOKE_QMOM_64bit_release.lib;libOpenSMOKE_Engine_64bit_release.lib;libOpenSMOKE_SurfaceChemistry_64bit_release.lib;libNumericalRecipes_VS_64bit_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\lib\windows;C:\Development\ExternalNumericalLibraries\OpenSMOKE\OpenSMOKE\lib\vs;C:\Development\ExternalNumericalLibraries\NumericalRecipes\lib\windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libBzzMath60dev_MSVS2017_x64_Release.lib;libOpenSMOKE_AddOns_64bit_release.lib;libOpenSMOKE_Basic_64bit_release.lib;libOpenSMOKE_IdealReactors_64bit_release.lib;libOpenSMOKE_PSR_64bit_release.lib;libOpenSMOKE_QMOM_64bit_release.lib;libOpenSMOKE_Engine_64bit_release.lib;libOpenSMOKE_SurfaceChemistry_64bit_release.lib;libNumericalRecipes_MSVS2017_x64_Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
