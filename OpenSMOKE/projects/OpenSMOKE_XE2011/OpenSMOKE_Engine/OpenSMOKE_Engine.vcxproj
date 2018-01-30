@@ -75,7 +75,7 @@
     <IncludePath>C:\NumericalLibraries\BzzMath\BzzMath6x\hpp;C:\NumericalLibraries\OpenSMOKE\hpp;C:\NumericalLibraries\NumericalRecipes\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\..\hpp;C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;C:\Temp\Backup\NumericalLibraries\NumericalRecipes\hpp;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\..\hpp;C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;C:\Development\ExternalNumericalLibraries\NumericalRecipes\src\hpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>..\..\..\hpp;C:\Development\ExternalNumericalLibraries\BzzMath\BzzMath6-dev\hpp;C:\Development\ExternalNumericalLibraries\NumericalRecipes\src\hpp;$(IncludePath)</IncludePath>

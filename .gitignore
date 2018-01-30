@@ -24,6 +24,7 @@
 *.VC.db
 *.VC.opendb
 *.sh
+*.db-*
 
 #OpenFOAM
 #########
