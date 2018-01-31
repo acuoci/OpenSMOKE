@@ -76,12 +76,14 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::setup(double _USteadyFuel, double _U
 	else if (dummy == "RELAXATION_FUEL_TEMPERATURE")	unsteady_boundary_kind = RELAXATION_BOUNDARY_FUEL_TEMPERATURE;
 	//else if (dummy == "RELAXATION_FUEL_EQRATIO")		unsteady_boundary_kind = RELAXATION_BOUNDARY_FUEL_EQRATIO;	// TODO
 
-	else if (dummy == "DYNAMIC_TEMPERATURE")		unsteady_boundary_kind = DYNAMIC_TEMPERATURE;
-	else if (dummy == "DYNAMIC_VELOCITY")			unsteady_boundary_kind = DYNAMIC_VELOCITY;
+	else if (dummy == "DYNAMIC_TEMPERATURE")							unsteady_boundary_kind = DYNAMIC_TEMPERATURE;
+	else if (dummy == "DYNAMIC_VELOCITY")								unsteady_boundary_kind = DYNAMIC_VELOCITY;
+	else if (dummy == "DYNAMIC_OXIDIZER_TEMPERATURE_AUTOIGNITION")		unsteady_boundary_kind = DYNAMIC_TEMPERATURE_AUTOIGNITION_FIXED_STRAINRATE_BALANCED;
 
 	else ErrorMessage("Wrong oscillation kind: " + dummy);
 	
-	if (	unsteady_boundary_kind == DYNAMIC_TEMPERATURE || unsteady_boundary_kind == DYNAMIC_VELOCITY       )
+	if (	unsteady_boundary_kind == DYNAMIC_TEMPERATURE || unsteady_boundary_kind == DYNAMIC_VELOCITY   ||
+			unsteady_boundary_kind == DYNAMIC_TEMPERATURE_AUTOIGNITION_FIXED_STRAINRATE_BALANCED)
 	{
 		fInput >> slope_temperature_fuel_;		fInput.getline(commento, SIZE);		// temperature slope in K/s
 		fInput >> slope_temperature_oxidizer_;		fInput.getline(commento, SIZE);		// temperature slope in K/s
@@ -650,6 +652,45 @@ void OpenSMOKE_Flame1D_OscillatingBoundary::update_boundary_conditions(double _t
 
 		vFuel =  200.*UC / rhoC;
 		vAir  = -200.*UO / rhoO;
+	}
+
+	if (unsteady_boundary_kind == DYNAMIC_TEMPERATURE_AUTOIGNITION_FIXED_STRAINRATE_BALANCED)
+	{
+		if (slope_temperature_fuel_ != 0.)
+		{
+			TFuel = TSteadyFuel + slope_temperature_fuel_ * time;	// [K]
+
+			rhoC = P / Constants::R_J_kmol / TFuel * MWSteadyFuel;	// [kg/m3]
+
+			// Correction of density because of the equation of state
+			if (data.eos.type == EosModel::EOS_PR)
+			{
+				const double Z = data.eos.Z(TFuel, P, XSteadyFuel);
+				rhoC *= Z;
+			}
+
+			vAir = KSteady * L / 2.;							// [m/s]
+			vFuel = vAir * std::sqrt(rhoSteadyAir/rhoC);		// [m/s]
+		}
+
+		if (slope_temperature_oxidizer_ != 0.)
+		{
+			TAir = TSteadyAir + slope_temperature_oxidizer_ * time;	// [K]
+
+			rhoO = P / Constants::R_J_kmol / TAir * MWSteadyAir;		// [kg/m3]
+																		// Correction of density because of the equation of state
+			if (data.eos.type == EosModel::EOS_PR)
+			{
+				const double Z = data.eos.Z(TAir, P, XSteadyAir);
+				rhoO *= Z;
+			}
+
+			vAir  = KSteady * L / 0.04;							// [cm/s]
+			vFuel = vAir * std::sqrt(rhoO / rhoSteadyFuel);		// [cm/s]
+		}
+
+		UO = -rhoO * vAir / 200.;				// [kg/m2/s]
+		UC = rhoC * vFuel / 200.;				// [kg/m2/s]
 	}
 
 	if (unsteady_boundary_kind == DYNAMIC_VELOCITY)

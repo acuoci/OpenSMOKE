@@ -4611,8 +4611,8 @@ void OpenSMOKE_Flame1D::GnuPlotInterfaceUnsteady()
 		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "uF[cm/s]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "uO[cm/s]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "T[K]",		fOutputCount);
-		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "dummy",		fOutputCount);
-		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "dummy",		fOutputCount);
+		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "TF[K]",		fOutputCount);
+		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "TO[K]",		fOutputCount);
 		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "alfa[m2/s]",	fOutputCount);
 		PrintTagOnGnuplotLabel(20, fUnsteadyMax, "Qreac[W/m3]",	fOutputCount);
 
@@ -4733,27 +4733,60 @@ void OpenSMOKE_Flame1D::DAE_ODE_myPrint(BzzVector &v, double time)
 	if(data->iterationVideoCounter == data->nStepsVideo)
 	{
 		cout.setf(ios::scientific);
-		cout << data->iteration << "\t";
+
+		if (data->iteration%1000 == 1)
+		{
+			cout << setw(8) << left << "#Step";
+
+			if (data->iUnsteady == true)
+			{
+				cout << setw(15) << "time[s]";
+				cout << setw(9)  << "Tmax[K]";
+				cout << setw(9)  << "TF[K]";
+				cout << setw(9)  << "TO[K]";
+				cout << setw(9)  << "uF[cm/s]";
+				cout << setw(9)  << "uO[cm/s]";
+				cout << setw(9)  << "uF[cm/s]";
+				cout << setw(9)  << "uO[cm/s]";;
+				cout << setw(9)  << "K[Hz]";
+				cout << setw(9)  << "KSes[Hz]";
+				cout << endl;
+			}
+			else
+			{
+				cout << setw(15) << "time[s]";
+				cout << setw(9) << "Tmax[K]";
+
+				if (data->iDepositionWall == true)
+				{
+					cout << setw(15) << "SumMax[?]";
+					cout << setw(15) << "Depos.[?]";
+					cout << setw(15) << "VO[?]";
+				}
+				cout << endl;
+			}
+		}
+
+		cout << setw(8) << left << data->iteration;
 		
 		if (data->iUnsteady == true)
 		{
-			cout << time					<< "\t";
-		//	cout << unsteady.nPeriods			<< "\t";
-		//	cout << unsteady.phase				<< "\t";
-			cout << Tmax					<< "\t";
-			cout <<  (nGeometry-1.)*U[1]/rho[1]  *100.	<< "\t";
-			cout << -(nGeometry-1.)*U[Np]/rho[Np]*100.	<< "\t";
-			cout <<  (nGeometry-1.)*UC/rhoC*100.		<< "\t";
-			cout << -(nGeometry-1.)*UO/rhoO*100.		<< "\t";
-			cout << unsteady.K				<< "\t";
-			cout << unsteady.KSeshadri			<< "\t";
-			cout << endl;
+			cout << setw(15) << left << scientific << setprecision(6) << time;
+			cout << setw(9) << left << fixed << setprecision(3) << Tmax;
+			cout << setw(9) << left << fixed << setprecision(3) << T[1];
+			cout << setw(9) << left << fixed << setprecision(3) << T[Np];
+			cout << setw(9) << left << fixed << setprecision(3) << (nGeometry-1.)*U[1]/rho[1]  *100.;
+			cout << setw(9) << left << fixed << setprecision(3) << -(nGeometry-1.)*U[Np]/rho[Np]*100.;
+			cout << setw(9) << left << fixed << setprecision(3) << (nGeometry-1.)*UC/rhoC*100.;
+			cout << setw(9) << left << fixed << setprecision(3) << -(nGeometry-1.)*UO/rhoO*100.;
+			cout << setw(9) << left << fixed << setprecision(3) << unsteady.K;
+			cout << setw(9) << left << fixed << setprecision(3) << unsteady.KSeshadri;
 		}
 
 		else
 		{
-			cout << time << "\t";
-			cout << Tmax << "\t";
+			cout << setw(15) << left << scientific << setprecision(6) << time;
+			cout << setw(9) << left << fixed << setprecision(3) << Tmax;
 
 			if(data->iDepositionWall == true)
 			{
@@ -4770,9 +4803,9 @@ void OpenSMOKE_Flame1D::DAE_ODE_myPrint(BzzVector &v, double time)
 					if (local_sum > sum_max) sum_max = local_sum;
 				}
 
-				cout << sum_max << "\t";
-				cout << soot_deposition << "\t";
-				cout << -data->VO*100. << "\t";
+				cout << setw(15) << left << scientific << setprecision(6) << sum_max;
+				cout << setw(15) << left << scientific << setprecision(6) << soot_deposition;
+				cout << setw(15) << left << scientific << setprecision(6) << -data->VO*100.;
 			}
 
 		}
@@ -4824,8 +4857,8 @@ void OpenSMOKE_Flame1D::DAE_ODE_myPrint(BzzVector &v, double time)
 			fUnsteadyMax << setw(20) << left << 100.*(nGeometry-1.)*U[1]/rho[1];	// 6. velocity
 			fUnsteadyMax << setw(20) << left << 100.*(nGeometry-1.)*U[Np]/rho[Np];	// 7. velocity
 			fUnsteadyMax << setw(20) << left << T.Max();							// 8. temperature
-			fUnsteadyMax << setw(20) << left << 0;									// 9. dummy
-			fUnsteadyMax << setw(20) << left << 0;									// 10. dummy
+			fUnsteadyMax << setw(20) << left << T[1];								// 9. temperature fuel [K]
+			fUnsteadyMax << setw(20) << left << T[Np];								// 10. temperature oxidizer [K]
 			fUnsteadyMax << setw(20) << left << lambda[iMax]/Cp[iMax]/rho[iMax];	// 11. Thermal diffusivity [m2/s]
 			fUnsteadyMax << setw(20) << left << QReaction[iMax];					// 12. Maximum heat release [W/m3]
 				
@@ -5372,7 +5405,10 @@ void OpenSMOKE_Flame1D::unsteady_boundary_conditions(double &time)
 {
 	if (data->iUnsteady == true)
 	{
+	//	std::cout << "Before: " << UC << " " << UO << " " << data->TC << " " << data->TO << " " << rhoC << " " << rhoO << std::endl;
 		unsteady.update_boundary_conditions(time, UC, UO, data->TC, data->TO, rhoC, rhoO, T.Max(), WC, WO, *data);
+	//	std::cout << "After:  " << UC << " " << UO << " " << data->TC << " " << data->TO << " " << rhoC << " " << rhoO << std::endl;
+
 		for(int i=1;i<=NC;i++)
 		{
 			BCW_C[i] =  (nGeometry-1.)*UC*WC[i];
