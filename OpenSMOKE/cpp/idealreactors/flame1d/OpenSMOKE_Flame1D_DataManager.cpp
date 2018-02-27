@@ -151,6 +151,7 @@ OpenSMOKE_Flame1D_DataManager::OpenSMOKE_Flame1D_DataManager()
 	iUserDefinedLewisNumbers            = false;
 
 	initial_time_step = -1;
+	maximum_time_step = -1;
 	max_integration_order = -1;
 
 	// TODO
@@ -408,6 +409,7 @@ OpenSMOKE_Dictionary_Flame1D::OpenSMOKE_Dictionary_Flame1D()
 
 	Add("#InitialTimeStep",			'O', 'M', "Initial time step");
 	Add("#MaximumIntegrationOrder",	'O', 'I', "Maximum integration order");
+	Add("#MaximumTimeStep",			'O', 'M', "Maximum time step");
 
 	Add("#SoretEffect",				'O', 'N', "Soret effect");
 	Add("#ThermophoreticEffect",	'O', 'N', "Thermophoretic effect");
@@ -797,6 +799,9 @@ void OpenSMOKE_Flame1D_DataManager::CheckDictionary(OpenSMOKE_Dictionary_Flame1D
 
 	if (dictionary.Return("#InitialTimeStep", double_value, string_value))
 		SetInitialTimeStep(string_value, double_value);
+
+	if (dictionary.Return("#MaximumTimeStep", double_value, string_value))
+		SetMaximumTimeStep(string_value, double_value);
 
 	if (dictionary.Return("#MaximumIntegrationOrder", int_value))
 		SetMaximumIntegrationOrder(int_value);
@@ -1451,6 +1456,11 @@ void OpenSMOKE_Flame1D_DataManager::SetMaximumIntegrationOrder(const int int_val
 void OpenSMOKE_Flame1D_DataManager::SetInitialTimeStep(const std::string units, const double value)
 {
 	initial_time_step = OpenSMOKE_Conversions::conversion_time(value, units);
+}
+
+void OpenSMOKE_Flame1D_DataManager::SetMaximumTimeStep(const std::string units, const double value)
+{
+	maximum_time_step = OpenSMOKE_Conversions::conversion_time(value, units);
 }
 
 void OpenSMOKE_Flame1D_DataManager::SetFuelRadialGradient(const std::string units, const double value)

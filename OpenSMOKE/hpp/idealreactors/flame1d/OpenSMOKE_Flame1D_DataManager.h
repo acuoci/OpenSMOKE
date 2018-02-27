@@ -271,6 +271,7 @@ public:
 	BzzVector user_defined_lewis_numbers;
 
 	double initial_time_step;
+	double maximum_time_step;
 	int max_integration_order;
 
 	std::string bin_minimum_soot;
@@ -395,6 +396,7 @@ private:
 
 	void SetMaximumIntegrationOrder(const int int_value);
 	void SetInitialTimeStep(const std::string units, const double value);
+	void SetMaximumTimeStep(const std::string units, const double value);
 
 	void SetDepositionWall();
 	void SetSampling(const std::string units, const double value);
