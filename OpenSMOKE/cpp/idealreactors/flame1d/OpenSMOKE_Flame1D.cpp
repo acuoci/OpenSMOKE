@@ -9214,7 +9214,13 @@ void OpenSMOKE_Flame1D::DAESystemSolution(BzzDaeSparseObject *o, double tEnd)
 	if (data->maximum_time_step > 0)
 	{
 		cout << "Maximum time step: " << data->maximum_time_step << endl;
-		o->SetMaxStep(data->maximum_time_step);
+		o->SetHMax(data->maximum_time_step);
+	}
+
+	if (data->maximum_number_time_steps > 0)
+	{
+		cout << "Maximum number time steps: " << data->maximum_number_time_steps << endl;
+		o->SetMaxStep(data->maximum_number_time_steps);
 	}
 
 	if (data->max_integration_order > 0)
