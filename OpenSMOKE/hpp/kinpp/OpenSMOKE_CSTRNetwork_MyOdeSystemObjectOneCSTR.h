@@ -31,11 +31,11 @@ class OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR : public BzzOdeSystemObject
 private:
 	
 	int numComponents;
-	OpenSMOKE_CSTRNetwork *cstrNewtwork;
+	OpenSMOKE_CSTRNetwork& cstrNetwork_;
 
 public:
 	
-	OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR(OpenSMOKE_CSTRNetwork *cstrN);
+	explicit OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR(OpenSMOKE_CSTRNetwork& cstrN);
 	
 	virtual void GetSystemFunctions(BzzVector &y,double t,BzzVector &f);
 	virtual void ObjectBzzPrint(void);
@@ -44,3 +44,4 @@ public:
 };
 
 #endif // OPENSMOKE_CSTRNETWORK_MYODESYSTEMOBJECTONECSTR_H
+

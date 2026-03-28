@@ -30,10 +30,10 @@ class OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR : public BzzOdeSystemObject
 {
 private:
 	int numComponents;
-	OpenSMOKE_CSTRNetwork *cstrNewtwork;
+	OpenSMOKE_CSTRNetwork& cstrNetwork_;
 
 public:
-	OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR(OpenSMOKE_CSTRNetwork *cstrN);
+	explicit OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR(OpenSMOKE_CSTRNetwork& cstrN);
 
 public:
 	virtual void GetSystemFunctions(BzzVector &y,double t,BzzVector &f);
@@ -45,4 +45,5 @@ public:
 
 
 #endif
+
 

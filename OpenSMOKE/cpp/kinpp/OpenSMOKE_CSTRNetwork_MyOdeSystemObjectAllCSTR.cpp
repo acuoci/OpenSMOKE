@@ -22,13 +22,10 @@
 #include "kinpp/OpenSMOKE_CSTRNetwork.h"
 #include "kinpp/OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR.h"
 
-OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR::OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR(OpenSMOKE_CSTRNetwork *cstrN)
+OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR::OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR(OpenSMOKE_CSTRNetwork& cstrN)
+	: cstrNetwork_(cstrN)
 {
-	std::cout << "OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR: Setting pointer to OpenSMOKE_CSTRNetwork" << std::endl;
-	cstrNewtwork = cstrN;
-	std::cout << "OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR: Setting number of species" << std::endl;
-	numComponents = cstrNewtwork->Reactions->NumberOfSpecies();
-	std::cout << "OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR: Setup completed" << std::endl;	
+	numComponents = cstrNetwork_.Reactions->NumberOfSpecies();
 }
 
 void OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR::ObjectBzzPrint(void)
@@ -39,22 +36,22 @@ void OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR::ObjectBzzPrint(void)
 void OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR::GetSystemFunctions(BzzVector &x,double t, BzzVector &f)
 {
 	double FMax, FMean;
-	cstrNewtwork->countFourthTotal++;
+	cstrNetwork_.countFourthTotal++;
 
-	cstrNewtwork->GetAllResiduals(x,f);
+	cstrNetwork_.GetAllResiduals(x,f);
 
 	FMean = f.GetSumAbsElements() / double(x.Size());
 	FMax = f.MaxAbs();
 
 	// Write on video
-	cout	<< "# = "		<< cstrNewtwork->countFourthTotal	<< "\t"
+	cout	<< "# = "		<< cstrNetwork_.countFourthTotal	<< "\t"
 			<< "time = "	<< t								<< "\t"
 			<< "Mean "		<< FMean							<< "\t"
 			<< "Max "		<< FMax								<< "\t"
 			<< endl;
 
-	if (cstrNewtwork->OnlyODE == true)
-		cstrNewtwork->fResiduals_4 << cstrNewtwork->countFourthTotal++ << "\t" << t << "\t" << FMean << "\t" << FMax << endl;
+	if (cstrNetwork_.OnlyODE == true)
+		cstrNetwork_.fResiduals_4 << cstrNetwork_.countFourthTotal << "\t" << t << "\t" << FMean << "\t" << FMax << endl;
 }
 
 void OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR::GetJacobian(BzzVector &y, double t)
@@ -65,7 +62,7 @@ void OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR::GetJacobian(BzzVector &y, d
 	// presi in considerazione gli elementi extradiagonale
 	// y rappresenta il vettore delle frazioni massive di tuttOpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR::e le specie e di tutti
 	// i reattori
-	cstrNewtwork->GetDiagonalMatricesForLinearizedSistem(fileDiagonal,y);
+	cstrNetwork_.GetDiagonalMatricesForLinearizedSistem(fileDiagonal,y);
 }
 
 void OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR::GetBuildJacobian(double hr, BzzMatrixSparseLockedByRows *Sh)
@@ -104,4 +101,5 @@ void OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR::GetBuildJacobian(double hr,
 
 	Product(-hr,SL,Sh);
 }
+
 

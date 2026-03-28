@@ -302,7 +302,7 @@ public:
 
 	void AssignKineticScheme(OpenSMOKE_ReactingGas &_Reactions);
 
-	void AssignLogger(Logger* log) { log_ = log; }
+	void AssignLogger(Logger& log) { log_ = &log; }
 
 	// OPERATORS
 	// ----------------------------------------------------------------------------

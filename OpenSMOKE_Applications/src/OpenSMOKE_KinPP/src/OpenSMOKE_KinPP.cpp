@@ -395,7 +395,7 @@ int main(int argc, char* argv[])
 		std::cout << "KinPP no sequence" << std::endl;
  
 		OpenSMOKE_CSTRNetwork	cstr;
-		cstr.AssignLogger(&log);
+		cstr.AssignLogger(log);
 
 		log.info("Assign kinetic scheme");
 		cstr.AssignKineticScheme(mix);

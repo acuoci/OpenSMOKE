@@ -22,28 +22,26 @@
 #include "kinpp/OpenSMOKE_CSTRNetwork.h"
 #include "kinpp/OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR.h"
 
-OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR::OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR(OpenSMOKE_CSTRNetwork *cstrN) 
+OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR::OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR(OpenSMOKE_CSTRNetwork& cstrN)
+	: cstrNetwork_(cstrN)
 {
-	std::cout << "OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR: Setting pointer to OpenSMOKE_CSTRNetwork" << std::endl;
-	cstrNewtwork = cstrN;
-	std::cout << "OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR: Setting number of species" << std::endl;
-	numComponents = cstrNewtwork->Reactions->NumberOfSpecies();
-	std::cout << "OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR: Setup completed" << std::endl;
+	numComponents = cstrNetwork_.Reactions->NumberOfSpecies();
 }
 
 void OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR::ObjectBzzPrint(void)
 {
 	::BzzPrint("\nObject Print for Numerical Jacobian");
-	::BzzPrint("\nReactor %d", cstrNewtwork->kReactor);
+	::BzzPrint("\nReactor %d", cstrNetwork_.kReactor);
 }
 
 void OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR::GetSystemFunctions(BzzVector &x,double t, BzzVector &f)
 {
-	cstrNewtwork->GetResiduals(x,f);
+	cstrNetwork_.GetResiduals(x,f);
 	Minus(&f);
 }
 
 void OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR:: GetJacobian(BzzVector &x,double t,BzzMatrix &JJ)
 {
-	cstrNewtwork->GetJacobian(x,JJ);
+	cstrNetwork_.GetJacobian(x,JJ);
 }
+

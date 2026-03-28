@@ -2209,13 +2209,10 @@ int OpenSMOKE_CSTRNetwork::GetFirst(void)
 	double h;
 	double hMin;
 
-std::cout << "Here 20" << std::endl;
 	// Inizializzazione del sistema ODE per il singolo CSTR
 	BzzOdeStiffObject ode;
-std::cout << "Here 21" << std::endl;
-	OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR cstrMono(this);
-std::cout << "Here 3" << std::endl;
-//	cstrMono(this);
+	OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR cstrMono(*this);
+
 
 	// Allocazione di memoria
 	BzzVector x0,x1,d1;
@@ -2228,7 +2225,7 @@ std::cout << "Here 3" << std::endl;
 	BzzVector R(numComponents);
 	BzzVector Rvw(numComponents);
 	BzzVectorInt vectorReactorsNotOK(numCSTRReactors);	// flag per individuare reattori non OK
-std::cout << "Here 4" << std::endl;
+
 	// Inizializzazione variabili
 	memoCount			= 30;
 	minNoOK				= numCSTRReactors + 1;
@@ -2239,7 +2236,7 @@ std::cout << "Here 4" << std::endl;
 	countTutto			= 0;
 	uvariables			= 1. / double(numComponents * numCSTRReactors);
 	ucomponents			= 1. / double(numComponents);
-	std::cout << "Here 5" << std::endl;
+	
 	const double	odeTolAbs		= 1.e-15;	// Default 1e-15
 	const int		odeMaxJacobian	= 3;		// Default 3
 	const double	MaxTau			= 100.;		// Default 100.
@@ -2247,10 +2244,10 @@ std::cout << "Here 4" << std::endl;
 	// Start times
 	double start = BzzGetCpuTime();
 	double memoStart = start;
-std::cout << "Here 6" << std::endl;
+
 	// START COMPUTATIONS
 	GetResiduals(massFractionsInReactorsSolution,Res);
-std::cout << "Here 7" << std::endl;
+
 	resMeanOpt = uvariables * Res.GetSumAbsElements();
 	maxResOpt = Res.MaxAbs();
 
@@ -2864,7 +2861,7 @@ void OpenSMOKE_CSTRNetwork::GetSecond(void)
 		BzzVector yMin(initialValues.Size());
 		BzzVector yMax(initialValues.Size());
 
-		OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR obj(this);
+		OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR obj(*this);
 
 		tStart = 0.;
 		tEnd = 10.;
@@ -5059,7 +5056,7 @@ void OpenSMOKE_CSTRNetwork::GetFourth(const double tEnd)
 		double stopODE;
 		BzzVector yMin(initialValues.Size());
 		BzzVector yMax(initialValues.Size());
-		OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR obj(this);
+		OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR obj(*this);
 
 		tStart = 0.;
 		stopODE = tolAbs * uvariables;
