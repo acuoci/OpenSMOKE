@@ -107,7 +107,7 @@ private:
 
 	bool pardiso_analysis_done_;
 	
-	int    *perm;			// Permutation index
+	std::vector<int> perm_;	// Permutation index
 };
 
 #endif	// OpenSMOKE_PARDISO_Unsymmetric_H

@@ -60,10 +60,6 @@ const double OpenSMOKE_CSTRNetwork::UR_CTOT = 1./R_CTOT;
 int OpenSMOKE_CSTRNetwork::count		= 0;
 int OpenSMOKE_CSTRNetwork::countInScope = 0;
 
-#if SYMBOLIC_KINETICS==1
-	std::vector<std::unique_ptr<OpenSMOKE_SymbolicKinetics>> reactor;
-#endif
-
 #define DEBUG_LOADING 0
 
 bool IsItANumber(const char value)
@@ -177,19 +173,9 @@ OpenSMOKE_CSTRNetwork::~OpenSMOKE_CSTRNetwork(void)
 	if (countInScope > 0)
 		countInScope--;
 
-	delete[] FromClusterToCluster_Index;
-	delete[] FromClusterToCluster_MassFlowRate;
-	delete[] FromClusterToCluster_DiffusionFlowRate;
-	FromClusterToCluster_Index = nullptr;
-	FromClusterToCluster_MassFlowRate = nullptr;
-	FromClusterToCluster_DiffusionFlowRate = nullptr;
-
-	#if SYMBOLIC_KINETICS==1
-	if (countInScope == 0)
-	{
-		reactor.clear();
-	}
-	#endif
+	FromClusterToCluster_Index.clear();
+	FromClusterToCluster_MassFlowRate.clear();
+	FromClusterToCluster_DiffusionFlowRate.clear();
 }
 
 void OpenSMOKE_CSTRNetwork::SetDeltaTFluctuationsMinDelta(const double _Fluctuations_DeltaMin)
@@ -265,9 +251,6 @@ OpenSMOKE_CSTRNetwork::OpenSMOKE_CSTRNetwork(void)
 	OnlyClustering	= false;
 
 	Reactions                              = nullptr;
-	FromClusterToCluster_Index             = nullptr;
-	FromClusterToCluster_MassFlowRate      = nullptr;
-	FromClusterToCluster_DiffusionFlowRate = nullptr;
 
 	cout.setf(ios::scientific);
 }
@@ -1042,12 +1025,12 @@ void OpenSMOKE_CSTRNetwork::calculate_clustering(std::string fileNetwork, int ci
 
 
 	// Vettori di connessione dei flussi massivi
-	delete[] FromClusterToCluster_Index;
-	delete[] FromClusterToCluster_MassFlowRate;
-	delete[] FromClusterToCluster_DiffusionFlowRate;
-	FromClusterToCluster_Index				= new BzzVectorInt[numCSTRReactors+1];
-	FromClusterToCluster_MassFlowRate		= new BzzVector[numCSTRReactors+1];
-	FromClusterToCluster_DiffusionFlowRate	= new BzzVector[numCSTRReactors+1];
+	FromClusterToCluster_Index.clear();
+	FromClusterToCluster_MassFlowRate.clear();
+	FromClusterToCluster_DiffusionFlowRate.clear();
+	FromClusterToCluster_Index.resize(numCSTRReactors+1);
+	FromClusterToCluster_MassFlowRate.resize(numCSTRReactors+1);
+	FromClusterToCluster_DiffusionFlowRate.resize(numCSTRReactors+1);
 	ChangeDimensions(numCSTRReactors, &Hinput);
 
 	// Ciclo su tutte le celle della simulazione CFD originale

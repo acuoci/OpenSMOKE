@@ -40,7 +40,7 @@ void OpenSMOKE_PARDISO_Unsymmetric::SetUserDefaultOptions(const OpenSMOKE_Direct
 	rows = nullptr;
 	columns = nullptr;
 	values = nullptr;
-	perm = nullptr;
+	perm_.clear();
 	n = 0;
 	nrhs = 0;
 	numberNonZeroElements = 0;
@@ -177,12 +177,11 @@ void OpenSMOKE_PARDISO_Unsymmetric::ClearStorage()
 	ReleasePardisoInternalData();
 
 	CleanMemory();
-	delete[] perm;
 
 	rows = nullptr;
 	columns = nullptr;
 	values = nullptr;
-	perm = nullptr;
+	perm_.clear();
 
 	scratch_rhs_.clear();
 	scratch_sol_.clear();
@@ -219,7 +218,7 @@ void OpenSMOKE_PARDISO_Unsymmetric::SetSparsityPattern(BzzMatrixSparse &M)
 
 	n = M.Rows();
 	rows = new int[n+1];
-	perm = new int[n];
+	perm_.resize(n);
 	rows[0] = 1;
 
 	// Counting non zero elements
@@ -312,7 +311,7 @@ void OpenSMOKE_PARDISO_Unsymmetric::OpenMatrix(const int nRows, const int number
 	numberNonZeroElements = numberNonZeroElements_;
 	n = nRows;
 	rows = new int[n+1];
-	perm = new int[n];
+	perm_.resize(n);
 	
 	values  = new double[numberNonZeroElements];
 	columns = new int[numberNonZeroElements];
@@ -417,7 +416,7 @@ void OpenSMOKE_PARDISO_Unsymmetric::CompleteMatrix()
 	scratch_sol_.assign(n, 0.);
 
 	if (msglvl==1)	MessageOnTheScreen("PARDISO: Sparse linear system analysis");
-	pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, values, rows, columns, perm, &nrhs, iparm, &msglvl,
+	pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, values, rows, columns, perm_.data(), &nrhs, iparm, &msglvl,
 		scratch_rhs_.data(), scratch_sol_.data(), &error_);
 	ErrorAnalysis();
 	pardiso_analysis_done_ = true;
@@ -441,7 +440,7 @@ void OpenSMOKE_PARDISO_Unsymmetric::NumericalFactorization()
 	phase = 22;	// Numerical factorization
 	
 	if (msglvl==1)	MessageOnTheScreen("PARDISO: Numerical factorization");
-	pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, values, rows, columns, perm, &nrhs, iparm, &msglvl,
+	pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, values, rows, columns, perm_.data(), &nrhs, iparm, &msglvl,
 		scratch_rhs_.data(), scratch_sol_.data(), &error_);
 	ErrorAnalysis();
 
@@ -467,7 +466,7 @@ void OpenSMOKE_PARDISO_Unsymmetric::Solve(BzzVector &b, BzzVector &x)
 	double* b_ = b.GetHandle();
 	
 	if (msglvl==1)	MessageOnTheScreen("PARDISO: Solve sparse linear system");
-	pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, values, rows, columns, perm, &nrhs, iparm, &msglvl, b_, x_, &error_);
+	pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, values, rows, columns, perm_.data(), &nrhs, iparm, &msglvl, b_, x_, &error_);
 	ErrorAnalysis();
 }
 
@@ -513,7 +512,7 @@ void OpenSMOKE_PARDISO_Unsymmetric::Solve(BzzMatrix &b, BzzMatrix &x, const bool
 	}
 
 	if (msglvl==1)	MessageOnTheScreen("PARDISO: Solve sparse linear system");
-	pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, values, rows, columns, perm, &nrhs, iparm, &msglvl, b_, x_, &error_);
+	pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, values, rows, columns, perm_.data(), &nrhs, iparm, &msglvl, b_, x_, &error_);
 	ErrorAnalysis();
 
 	// From C vector back to BzzMatrix

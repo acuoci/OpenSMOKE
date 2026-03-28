@@ -22,6 +22,8 @@
 #ifndef OPENSMOKE_CSTRNETWORK_H
 #define OPENSMOKE_CSTRNETWORK_H
 
+#include <memory>
+#include <vector>
 #include "BzzMath.hpp"
 #include "OpenSMOKE_Logger.h"
 #include "basic/OpenSMOKE_Constants.h"
@@ -270,14 +272,17 @@ private:
 
 	int					iAnalyticalJacobian;
 	SymbolicKinetics	analyticalJacobian;
+	#if SYMBOLIC_KINETICS==1
+	std::vector<std::unique_ptr<OpenSMOKE_SymbolicKinetics>> reactor;
+	#endif
 	int sinExpansion;
 	int iKindOfCorrection;
 	
 	double Hin_tot, Hout_tot;
 	BzzVector  Hinput;
-	BzzVectorInt	*FromClusterToCluster_Index;
-	BzzVector *FromClusterToCluster_MassFlowRate;
-	BzzVector *FromClusterToCluster_DiffusionFlowRate;
+	std::vector<BzzVectorInt> FromClusterToCluster_Index;
+	std::vector<BzzVector> FromClusterToCluster_MassFlowRate;
+	std::vector<BzzVector> FromClusterToCluster_DiffusionFlowRate;
 	void EnthalpyAnalysis(	const std::string fileNameEnthalpy,				const std::string fileNameDeltaEnthalpy,
 							const std::string fileNameDifferenceEnthalpy,	const std::string fileNameInletEnthalpy,
 							const std::string fileNameErrorEnthalpy);
@@ -404,3 +409,4 @@ public:
 };
 
 #endif // OPENSMOKE_CSTRNETWORK_H
+
