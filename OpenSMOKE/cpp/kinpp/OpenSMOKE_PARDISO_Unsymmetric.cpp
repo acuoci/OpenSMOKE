@@ -330,6 +330,10 @@ void OpenSMOKE_PARDISO_Unsymmetric::SetSparsityPattern(const int nElementsPerRow
 	if (status_	!= OPENSMOKE_DIRECTSOLVER_STATUS_OPEN)
 		ErrorMessage("SetSparsityPattern(const int nElementsPerRows, const BzzVectorInt &indicesColumns) can be used only for Open Matrices");
 
+	// Guard: ensure the incoming batch fits within the pre-allocated CSR arrays
+	if (countGlobal_ + indicesColumns.Size() > numberNonZeroElements)
+		ErrorMessage("SetSparsityPattern: countGlobal_ + indicesColumns.Size() exceeds numberNonZeroElements ? sparsity pattern overflows the allocated CSR storage");
+
 	// Non zero elements
 	{		
 		int nLocalRows = indicesColumns.Size() / nElementsPerRows;
@@ -366,6 +370,10 @@ void OpenSMOKE_PARDISO_Unsymmetric::UpdateMatrix(const BzzVector &valuesVector)
 
 	if (status_	== OPENSMOKE_DIRECTSOLVER_STATUS_OPEN)
 		ErrorMessage("UpdateMatrix(const BzzVector &valuesVector) can be used only for Open Matrices");
+
+	// Guard: incoming value count must exactly match the CSR non-zero count
+	if (valuesVector.Size() != numberNonZeroElements)
+		ErrorMessage("UpdateMatrix(BzzVector): valuesVector.Size() does not match numberNonZeroElements ? matrix structure has changed");
 
 	countGlobal_ = 0;
 
