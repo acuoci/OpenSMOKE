@@ -20,6 +20,9 @@
  ***************************************************************************/
 
 #include <vector>
+#include <cstring>
+#include <sstream>
+#include <stdexcept>
 #include "basic/OpenSMOKE_Constants.h"
 #include "kinpp/OpenSMOKE_CSTRNetwork.h"
 #include "kinpp/OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR.h"
@@ -73,11 +76,11 @@ bool IsItANumber(const char value)
 
 void OpenSMOKE_CSTRNetwork::ErrorMessage(const std::string message)
 {
-    cout << endl;
-    cout << "Class:  OpenSMOKE_CSTRNetwork"	<< endl;
-    cout << "Object: " << name_object		<< endl;
-    cout << "Error:  " << message           << endl;
-    exit(-1);
+	std::ostringstream error;
+	error << "Class: OpenSMOKE_CSTRNetwork\n"
+		  << "Object: " << name_object << "\n"
+		  << "Error: " << message;
+	throw std::runtime_error(error.str());
 }
 
 void OpenSMOKE_CSTRNetwork::WarningMessage(const std::string message)
@@ -170,13 +173,27 @@ void OpenSMOKE_CSTRNetwork::SetSubTasksPrint(void)
 
 OpenSMOKE_CSTRNetwork::~OpenSMOKE_CSTRNetwork(void)
 {
-	if (Reactions == nullptr ||
-	    Reactions->NumberOfReactions() == 0 || Reactions->NumberOfSpecies() == 0)
-		return;
+	if (countInScope > 0)
+		countInScope--;
 
 	delete[] FromClusterToCluster_Index;
 	delete[] FromClusterToCluster_MassFlowRate;
 	delete[] FromClusterToCluster_DiffusionFlowRate;
+	FromClusterToCluster_Index = nullptr;
+	FromClusterToCluster_MassFlowRate = nullptr;
+	FromClusterToCluster_DiffusionFlowRate = nullptr;
+
+	#if SYMBOLIC_KINETICS==1
+	if (countInScope == 0)
+	{
+		for (std::size_t i = 0; i < reactor.size(); ++i)
+		{
+			delete reactor[i];
+			reactor[i] = nullptr;
+		}
+		reactor.clear();
+	}
+	#endif
 }
 
 void OpenSMOKE_CSTRNetwork::SetDeltaTFluctuationsMinDelta(const double _Fluctuations_DeltaMin)
@@ -1029,6 +1046,9 @@ void OpenSMOKE_CSTRNetwork::calculate_clustering(std::string fileNetwork, int ci
 
 
 	// Vettori di connessione dei flussi massivi
+	delete[] FromClusterToCluster_Index;
+	delete[] FromClusterToCluster_MassFlowRate;
+	delete[] FromClusterToCluster_DiffusionFlowRate;
 	FromClusterToCluster_Index				= new BzzVectorInt[numCSTRReactors+1];
 	FromClusterToCluster_MassFlowRate		= new BzzVector[numCSTRReactors+1];
 	FromClusterToCluster_DiffusionFlowRate	= new BzzVector[numCSTRReactors+1];
@@ -4156,6 +4176,12 @@ void OpenSMOKE_CSTRNetwork::MemoTemperatureFunctions(const int kind)
 	log_->info(" -correction-uKeq-max: " + std::to_string(matrix_correction_uKeq.Max()));
 
 	#if SYMBOLIC_KINETICS==1
+	for (std::size_t i = 0; i < reactor.size(); ++i)
+	{
+		delete reactor[i];
+		reactor[i] = nullptr;
+	}
+	reactor.clear();
 
 	if (iAnalyticalJacobian == 1)
 	{
@@ -4920,8 +4946,7 @@ void OpenSMOKE_CSTRNetwork::ConnectionMatrix()
 {
 	int i;
 
-	BzzVectorInt *connection;
-	connection = new BzzVectorInt[numCSTRReactors+1];
+	std::vector<BzzVectorInt> connection(numCSTRReactors+1);
 
 	// Reattori in comunicazione con il reattore i
 	for(i = 1;i <= numCSTRReactors;i++)
@@ -4929,10 +4954,14 @@ void OpenSMOKE_CSTRNetwork::ConnectionMatrix()
 		connection[i].Append(i);
 		for(int j=1;j<=FromClusterToCluster_Index[i].Size();j++)
 		{
-			if (FromClusterToCluster_Index[i][j] != 0)
+			const int target = FromClusterToCluster_Index[i][j];
+			if (target != 0)
 			{
-				connection[i].Append(FromClusterToCluster_Index[i][j]);
-				connection[FromClusterToCluster_Index[i][j]].Append(i);
+				if (target < 1 || target > numCSTRReactors)
+					ErrorMessage("ConnectionMatrix: invalid cluster index in FromClusterToCluster_Index");
+
+				connection[i].Append(target);
+				connection[target].Append(i);
 			}
 		}
 	}

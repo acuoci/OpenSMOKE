@@ -20,17 +20,17 @@
 
 #include <string>
 #include <iomanip>
+#include <sstream>
+#include <stdexcept>
 #include "kinpp/OpenSMOKE_DirectLinearSolver_Unsymmetric.h"
 using namespace std;
 
 void OpenSMOKE_DirectLinearSolver_Unsymmetric::ErrorMessage(const std::string message_)
 {
-    cout << endl;
-    cout << "Class: " << name_solver_			<< endl;
-    cout << "Error: " << message_				<< endl;
-    cout << "Press enter to continue... "		<< endl;
-    getchar();
-    exit(-1);
+	std::ostringstream error;
+	error << "Class: " << name_solver_ << "\n"
+		  << "Error: " << message_;
+	throw std::runtime_error(error.str());
 }
 
 void OpenSMOKE_DirectLinearSolver_Unsymmetric::WarningMessage(const std::string message_)

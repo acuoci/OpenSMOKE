@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <sstream>
+#include <stdexcept>
 #include <ctime>
 #include "BzzMath.hpp"
 #include "interfaces/SimpleOpt.h"
@@ -43,12 +44,10 @@ void test(const string fileName);
 
 void ErrorMessage(const string message)
 { 
-    cout << endl;
-    cout << "Executable:  OpenSMOKE_KinPP"		<< endl;
-    cout << "Error:       "  << message			<< endl;
-    cout << "Press a key to continue... "		<< endl;
-    getchar();
-    exit(-1);
+	std::ostringstream error;
+	error << "Executable: OpenSMOKE_KinPP\n"
+		  << "Error: " << message;
+	throw std::runtime_error(error.str());
 }
 
 // define the ID values to indentify the option
@@ -803,3 +802,4 @@ void test(const string fileName)
 #else*/
 void test(const string fileName) {}
 //#endif
+

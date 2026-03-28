@@ -19,6 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <sstream>
+#include <stdexcept>
 #include "basic/OpenSMOKE_Constants.h"
 #include "kinpp/OpenSMOKE_CSTRNetwork_CorrectionCoefficients.h"
 using namespace std;
@@ -46,13 +48,12 @@ void OpenSMOKE_CSTRNetwork_CorrectionCoefficients::GiveMeNormalizedVariables(con
 
 	if (csiMean >= 1. || csiMean <= 0.)
 	{
-		cout << "The boundary values are not appropriate for this simulation" << endl;
-		cout << "Tmax:  " << Tmax	<< endl;
-		cout << "Tmin:  " << Tmin	<< endl;
-		cout << "Tmean: " << T		<< endl;
-		cout << "Press enter to continue... " << endl;
-		getchar();
-		exit(-1);
+		std::ostringstream error;
+		error << "The boundary values are not appropriate for this simulation\n"
+			  << "Tmax:  " << Tmax << "\n"
+			  << "Tmin:  " << Tmin << "\n"
+			  << "Tmean: " << T;
+		throw std::runtime_error(error.str());
 	}
 }
 
