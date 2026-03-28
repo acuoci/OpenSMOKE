@@ -23,6 +23,7 @@
 #define OPENSMOKE_CSTRNETWORK_H
 
 #include "BzzMath.hpp"
+#include "OpenSMOKE_Logger.h"
 #include "basic/OpenSMOKE_Constants.h"
 #include "engine/OpenSMOKE_ReactingGas.h"
 
@@ -80,6 +81,7 @@ private:
 
 	double MaxCoeffCorr;
 
+	double Fluctuations_DeltaMin;
 	double Fluctuations_DeltaMax;
 	double Fluctuations_TMax;
 	double Fluctuations_CcMax;
@@ -188,7 +190,7 @@ private:
 	void calculate_initial_massfractions_in_clusters(int numCluster, BzzMatrix &omegaReduced, BzzMatrix &aux);
 	void calculate_clustering(std::string fileNetwork, int cicloDiffusion, int numCluster, BzzVectorInt &cstrClusterSize, BzzMatrix &auxMass, BzzMatrix &aux);
 	void read_tolerances(const std::string fileTolerances, int numCSTRReactors, double cicloCluster);
-	void complete_clustering(int countInput, int cicloDiffusion, int relaxation, int iaia, BzzMatrix &auxMass);
+	void complete_clustering(int countInput, int cicloDiffusion, int relaxation, int iaia, BzzMatrix &auxMass, int pippo);
 
 	void MemoTemperatureFunctions(const int kind);
 	void CorrectionCoefficient_None(	BzzVector &u_temperature, BzzVector &log_temperature,
@@ -295,6 +297,8 @@ public:
 
 	void AssignKineticScheme(OpenSMOKE_ReactingGas &_Reactions);
 
+	void AssignLogger(Logger* log) { log_ = log; }
+
 	// OPERATORS
 	// ----------------------------------------------------------------------------
 	void operator()(const std::string fileNetwork,	const std::string first, const std::string fileTolerances,
@@ -316,6 +320,7 @@ public:
 	void	SetTolRel(double tolr);
 	void	SetTolAbs(double tola);
 	void	SetMaxCorrectionCoefficient(const double _MaxCoeffCorr);
+	void	SetDeltaTFluctuationsMinDelta(const double _Fluctuations_DeltaMin);
 	void	SetDeltaTFluctuationsMaxDelta(const double _Fluctuations_DeltaMax);
 	void	SetDeltaTFluctuationsMaxUserDefined(const double _Fluctuations_TMax);
 	void	SetDeltaTFluctuationsMaxLocal(const double _Fluctuations_CcMax);
@@ -394,6 +399,8 @@ public:
 
 	bool OnlyODE;
 	bool OnlyClustering;
+
+	Logger* log_;
 };
 
 #endif // OPENSMOKE_CSTRNETWORK_H

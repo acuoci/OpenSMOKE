@@ -14,7 +14,7 @@
 BZZ_PATH 	       =  /software/chimica2/libraries/bzzmath/bzzmath-6.0
 OPENSMOKE_PATH         =  $(HOME)/Development/ExternalLibraries/OpenSMOKE/OpenSMOKE
 NUMERICALRECIPES_PATH  =  /software/chimica2/libraries/nr/nr-gcc-4.8.2
-MKL_PATH               =  $(HOME)/intel/mkl
+MKL_PATH               =  /software/chimica2/libraries/intel/xe_2019/
 
 #Options
 OPTIONS_INTEL    =  -O3 -Wall -m64 -DUSE_INTEL_MKL=1 -openmp -I/usr/include/x86_64-linux-gnu/c++/4.8
@@ -57,7 +57,7 @@ endif
 # ------------------------------------------------------------------------------------------------
 # INCLUDE
 # ------------------------------------------------------------------------------------------------
-BZZ_INCLUDE          = -I$(BZZ_PATH)/hpp
+BZZ_INCLUDE          = -I$(BZZ_PATH)/hpp/release-9.2.0/
 MKL_INCLUDE          = -I$(MKL_PATH)/include
 NR_INCLUDE           = -I$(NUMERICALRECIPES_PATH)/include
 OPENSMOKE_INCLUDE    = -I$(OPENSMOKE_PATH)/hpp
@@ -65,7 +65,7 @@ OPENSMOKE_INCLUDE    = -I$(OPENSMOKE_PATH)/hpp
 # ------------------------------------------------------------------------------------------------
 # LIBRARY PATHS
 # ------------------------------------------------------------------------------------------------
-BZZ_PATH_LIB           = $(BZZ_PATH)/lib/release
+BZZ_PATH_LIB           = $(BZZ_PATH)/lib/release-9.2.0
 NR_PATH_LIB            = $(NUMERICALRECIPES_PATH)/lib/release
 OPENSMOKE_PATH_LIB     = $(OPENSMOKE_PATH)/lib/linux/$(OBJ_PATH)
 MKL_PATH_LIB           = $(MKL_PATH)/lib/intel64

@@ -21,6 +21,8 @@
 
 #include <sstream>
 #include <ctime>
+#include "kinpp/OpenSMOKE_Logger.h"
+
 #include "BzzMath.hpp"
 #include "interfaces/SimpleOpt.h"
 #include "kinpp/OpenSMOKE_CSTRNetwork.h"
@@ -233,9 +235,12 @@ int main(int argc, char* argv[])
 
 
 	// 5. Correction
+    std::string correction = "none";
     if (parser.parse("--correction", argument))
 	{
-		if		(argument == "none")		iKindOfCorrection = 0;
+		correction = argument;
+
+		if	(argument == "none")		iKindOfCorrection = 0;
 		else if (argument == "sin")			iKindOfCorrection = 1;
 		else if (argument == "dirac")		iKindOfCorrection = 2;
 		else if (argument == "beta")		iKindOfCorrection = 3;
@@ -298,6 +303,8 @@ int main(int argc, char* argv[])
 	if (parser.parse("--t-max-local", argument))
 		t_max_local = atof(argument.c_str());
 
+	if (t_max_delta < 0. && t_max_ud < 0. && t_max_local < 0.)
+		ErrorMessage("One of the following options is mandatory: --t-max-delta | --t-max-ud | --t-max-local");
 
 	max_rel_tol = -1;
 	if (parser.parse("--max-tol-rel", argument))
@@ -331,6 +338,30 @@ int main(int argc, char* argv[])
 	if (parser.parse("-only-clustering"))
 		only_clustering = true;
 
+	// Initialize logger
+	Logger log("sim.log");
+
+	// Logging
+	log.section("Input data");
+	log.info("--kinetics = " + kineticSchemePath);
+	log.info("--clustering = " + std::to_string(cicloCluster));
+	log.info("--relaxation = " + std::to_string(relaxation));
+	log.info("--correction = " + correction);
+	log.info("-jacobian = " + std::to_string(iAnalyticalJacobian));
+	log.info("--max-correction = " + std::to_string(max_correction));
+	log.info("--t-max-delta = " + std::to_string(t_max_delta));
+	log.info("--t-max-ud = " + std::to_string(t_max_ud));
+	log.info("--t-max-local = " + std::to_string(t_max_local));
+	log.info("--max-tol-rel = " + std::to_string(max_rel_tol));
+	log.info("--max-tol-abs = " + std::to_string(max_abs_tol));
+	log.info("--tol-rel = " + std::to_string(rel_tol));
+	log.info("--tol-abs = " + std::to_string(abs_tol));
+	log.info("--max-newtons = " + std::to_string(max_newtons));
+	log.info("--f1stop = " + std::to_string(f1stop));
+	log.info("-only-ode = " + std::to_string(only_ode));
+	log.info("-only-clustering = " + std::to_string(only_clustering));
+
+
 	// -------------------------------------------------------------- //
 	//					Environment preparation						  //
 	// -------------------------------------------------------------- //
@@ -359,19 +390,28 @@ int main(int argc, char* argv[])
 
 	if (iSequence == false)
 	{	
+		log.section("KinPP no sequence");
+
+		std::cout << "KinPP no sequence" << std::endl;
+ 
 		OpenSMOKE_CSTRNetwork	cstr;
+		cstr.AssignLogger(&log);
+
+		log.info("Assign kinetic scheme");
 		cstr.AssignKineticScheme(mix);
+
+		log.info("Set memo temperature");
 		cstr.SetMemoTemperature();
 		
 		// Options
+		log.info("Set options");
 		{
 			if (iSpeciesFluctuations == true)	cstr.SetFluctuationsList(speciesFluctuations);
 
-			if (max_correction>=0)				cstr.SetMaxCorrectionCoefficient(max_correction);
-
-				 if (t_max_delta>=0)		cstr.SetDeltaTFluctuationsMaxDelta(t_max_delta);
-			else if (t_max_ud>=0)			cstr.SetDeltaTFluctuationsMaxUserDefined(t_max_ud);
-			else if (t_max_local>=0)		cstr.SetDeltaTFluctuationsMaxLocal(t_max_local);
+			if (max_correction>=0)		cstr.SetMaxCorrectionCoefficient(max_correction);
+			if (t_max_delta>=0)		cstr.SetDeltaTFluctuationsMaxDelta(t_max_delta);
+			else if (t_max_ud>=0)		cstr.SetDeltaTFluctuationsMaxUserDefined(t_max_ud);
+			else if (t_max_local>=0)	cstr.SetDeltaTFluctuationsMaxLocal(t_max_local);
 			
 			if (max_rel_tol>0.)		cstr.SetMaxTolRel(max_rel_tol);
 			if (max_abs_tol>0.)		cstr.SetMaxTolAbs(max_abs_tol);
@@ -380,19 +420,23 @@ int main(int argc, char* argv[])
 			if (max_newtons>0)		cstr.SetMaxCountNewtonIterations(max_newtons);
 			if (f1stop>0.)			cstr.SetF1Stop(f1stop);
 			if (only_ode==true)		cstr.SetOdeOnly(true);
-			if (only_clustering==true)		cstr.SetClusteringOnly(true);
+			if (only_clustering==true)	cstr.SetClusteringOnly(true);
 		}
 
 		// No Relaxation
 		if(relaxation == 0)
 		{
+			std::cout << "KinPP no sequence relaxation 0" << std::endl;
+
 			int cicloDiffusion = 1;
 			
-			startUser	= BzzGetUserTime();
+			startUser   = BzzGetUserTime();
 			startKernel = BzzGetKernelTime();
-			start		= BzzGetCpuTime();
+			start	    = BzzGetCpuTime();
 
+			log.info("Start calculations CSTR: relaxation=0, cycleDiffusion=1");
 			cstr(CFDNetworkFile, FirstGuessFile, TolerancesFile, cicloCluster, cicloDiffusion, fromBackUp, relaxation, iAnalyticalJacobian, analyticalJacobian, iKindOfCorrection);
+			log.info("Completed calculations CSTR: relaxation=0, cycleDiffusion=1");
 			cstr.OutputPrint(0);
 			cstr.Save('*', MassFile);
 		}
@@ -400,6 +444,8 @@ int main(int argc, char* argv[])
 		// Start from previous solution
 		else if(relaxation == 2)
 		{
+			std::cout << "KinPP no sequence relaxation 2" << std::endl;
+
 			int cicloDiffusion	= 1;
 			fromBackUp			= 1;
 
@@ -407,7 +453,9 @@ int main(int argc, char* argv[])
 			startKernel = BzzGetKernelTime();
 			start		= BzzGetCpuTime();
 
+			log.info("Start calculations CSTR: relaxation=2, cycleDiffusion=1");
 			cstr(CFDNetworkFile, FirstGuessFile, TolerancesFile, cicloCluster, cicloDiffusion, fromBackUp, relaxation, iAnalyticalJacobian, analyticalJacobian, iKindOfCorrection);
+			log.info("Completed calculations CSTR: relaxation=2, cycleDiffusion=1");
 			cstr.OutputPrint(0);
 			cstr.Save('*', MassFile);
 		}
@@ -415,20 +463,26 @@ int main(int argc, char* argv[])
 		// Relaxation
 		else if(relaxation == 1)
 		{
+			std::cout << "KinPP no sequence relaxation 1" << std::endl;
+
 			int cicloDiffusion = 4;
 
 			startUser	= BzzGetUserTime();
 			startKernel = BzzGetKernelTime();
 			start		= BzzGetCpuTime();
 
+			log.info("Start calculations CSTR: relaxation=1, cycleDiffusion=4");
 			cstr(CFDNetworkFile, FirstGuessFile, TolerancesFile, cicloCluster, cicloDiffusion, fromBackUp, relaxation, iAnalyticalJacobian, analyticalJacobian, iKindOfCorrection);
+			log.info("Completed calculations CSTR: relaxation=1, cycleDiffusion=4");
 			cstr.OutputPrint(0);
 			cstr.Save('*',MassFile);
 			fromBackUp = 1;
 			for(cicloDiffusion = 3;cicloDiffusion > 0;cicloDiffusion--)
 			{
 				printf("\ncicloDiffusion %d",cicloDiffusion);
+				log.info("Start calculations CSTR: relaxation=1, cycleDiffusion=" + std::to_string(cicloDiffusion));
 				cstr(CFDNetworkFile,FirstGuessFile, TolerancesFile, cicloCluster, cicloDiffusion, fromBackUp, relaxation, iAnalyticalJacobian, analyticalJacobian, iKindOfCorrection);
+				log.info("Completed calculations CSTR: relaxation=1, cycleDiffusion=" + std::to_string(cicloDiffusion));
 				cstr.OutputPrint(0);
 				cstr.Save('*',MassFile);
 			}
@@ -443,6 +497,8 @@ int main(int argc, char* argv[])
 
 	if (iSequence == true)
 	{
+		std::cout << "KinPP sequence" << std::endl;
+
 		ifstream		fSequence;
 		BzzVector	    iClusterList;
 		BzzVectorInt	iCycleList;

@@ -275,7 +275,10 @@ void OpenSMOKE_KPP_SingleReactor_KineticsManager::Setup(const KPP_Correction cor
  	else if (mixture->NumberOfSpecies() ==  81 && mixture->NumberOfReactions() == 1392)
                 symbolicKinetics = new OpenSMOKE_SymbolicKinetics_Polimi_C1C3HTNOX_AVIO_0702();  
         else
-            ErrorMessage("No available kinetic scheme");
+        {
+		symbolicKinetics = new OpenSMOKE_SymbolicKinetics_Polimi_H2CONOX_1101(); 
+	    	//ErrorMessage("No available kinetic scheme");
+	}
         
 	symbolicKinetics->assignKineticConstants(mix_->k1, mix_->uKeq, mix_->logFcent, mix_->k2);
 

@@ -654,6 +654,8 @@ void OpenSMOKE_KPP_SingleReactor::SolveCSTR_CorrectorContinous_Smart(const doubl
 
 void OpenSMOKE_KPP_SingleReactor::SolveCSTR_CorrectorDiscrete_Smart(const double tau, BzzMatrix& tmpMatrix, BzzOdeStiffObject& o)
 {
+	std::cout << " * OpenSMOKE_KPP_SingleReactor::SolveCSTR_CorrectorDiscrete_Smart" << std::endl;
+
 	// Variables
 	double FInitial, F0, F1;
 
@@ -674,6 +676,7 @@ void OpenSMOKE_KPP_SingleReactor::SolveCSTR_CorrectorDiscrete_Smart(const double
 	status.failure = 0;
 
 	// 1. Checking initial composition
+	std::cout << "   Checking initial composition..." << std::endl;
 	CheckMassFractions(omega_, eps);
 
 	// 2. If the network was never solved, the ODE solver is called 
@@ -704,18 +707,21 @@ void OpenSMOKE_KPP_SingleReactor::SolveCSTR_CorrectorDiscrete_Smart(const double
 	}
 
 	// 4. First step of newton method
+	std::cout << "   First step of newton method..." << std::endl;
 	{
 		PrepareJacobianNewtonMethod(JacobianFactorizedGauss_, omega_, tmpMatrix);
 		status.nJacobianEvaluations++;
 	}
 
 	// 5a. Newton's correction
+	std::cout << "   Newton's correction..." << std::endl;
 	Solve(JacobianFactorizedGauss_, residuals_, &d);
 	double hMin = NewtonStepReductionFactor(omega_, d);
 
 	// 6. Solve ODE system if Newton method is not satisfactory
 	if(hMin<=hMinRequested)
 	{
+		std::cout << "   ODE solution (because of Newton's failure)..." << std::endl;
 		F1 = ODESystemIntegration(tau, omega_, residuals_, o);
 		if (F1 > 1.e-4)
 			status.failure = 1;
@@ -729,6 +735,7 @@ void OpenSMOKE_KPP_SingleReactor::SolveCSTR_CorrectorDiscrete_Smart(const double
 	// 7. Again with Newton's Method
 	if(hMin != 1.)
 	{
+		std::cout << "   Second step of newton method..." << std::endl;
 		hMin *= safetyReductionCoefficient;
 		Product(hMin,&d);
 	}
@@ -743,6 +750,7 @@ void OpenSMOKE_KPP_SingleReactor::SolveCSTR_CorrectorDiscrete_Smart(const double
 	// 10. ODE (II)
 	if (F1>=F0)
 	{
+		std::cout << "   ODE solution..." << std::endl;
 		F1 = ODESystemIntegration(tau, omega_, residuals_, o);
 		status.norm1_over_nc = F1;
 		status.normInf = residuals_.MaxAbs();
@@ -754,6 +762,8 @@ void OpenSMOKE_KPP_SingleReactor::SolveCSTR_CorrectorDiscrete_Smart(const double
 	int jacobianAge = 0;
 	for(int iteration=1;iteration<=maxIterationsNewtons;iteration++)
 	{
+		std::cout << "   Newton's iteration " << iteration << std::endl;
+
 		jacobianAge++;
 
 		// Check convergence

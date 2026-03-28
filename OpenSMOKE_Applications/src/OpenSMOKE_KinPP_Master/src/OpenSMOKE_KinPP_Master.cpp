@@ -21,6 +21,7 @@
 
 #include <sstream>
 #include <ctime>
+#include <unistd.h>  // POSIX (Linux/macOS)
 #include "BzzMath.hpp"
 #include "interfaces/SimpleOpt.h"
 #include "basic/OpenSMOKE_Utilities.h"
@@ -241,8 +242,10 @@ int main(int argc, char* argv[])
 			fSequence.close();
 		}
 
-		string originalFolderCase = folderCase + "\\Original"; 
-
+		string originalFolderCase = folderCase + "/Original"; 
+		cout << "FolderCase: " << folderCase << endl;
+		cout << "OriginalFolderCase: " << originalFolderCase << endl;
+		
 		for(int i=1;i<=iClusterList.Size();i++)
 		{
 			stringstream number;
@@ -250,6 +253,7 @@ int main(int argc, char* argv[])
 
 			{
 				string command1 = "cd " + originalFolderCase;
+				cout << command1 << endl;
 				system(command1.c_str());
 
 				string command2 = clusteringExe + " --input Original --kinetics " + kineticSchemePath + "  --clustering " + number.str() + " -only-clustering" +
@@ -258,33 +262,43 @@ int main(int argc, char* argv[])
 				system(command2.c_str());
 
 				string command3 = "mkdir Clustering" + number.str();
+				cout << command3 << endl;
 				system(command3.c_str());
 
-				string command5 = "mkdir Clustering" + number.str() + "\\Input";
+				string command5 = "mkdir Clustering" + number.str() + "/Input";
+				cout << command5 << endl;
 				system(command5.c_str());
 
-				string command51 = "mkdir Clustering" + number.str() + "\\Output";
+				string command51 = "mkdir Clustering" + number.str() + "/Output";
+				cout << command51 << endl;
 				system(command51.c_str());
 
-				string command52 = "mkdir Clustering" + number.str() + "\\Output\\Backup";
+				string command52 = "mkdir Clustering" + number.str() + "/Output/Backup";
+				cout << command52 << endl;
 				system(command52.c_str());
 
-				string command6 = copystring + " ClusteringTopology.out " + "Clustering" + number.str() + "\\Input\\ClusteringTopology.out";
+				string command6 = copystring + " ClusteringTopology.out " + "Clustering" + number.str() + "/Input/ClusteringTopology.out";
+				std::cout << command6.c_str() << std::endl;
 				system(command6.c_str());
 
-				string command7 = copystring + " Clustering.CFDNetwork.bzz " + "Clustering" + number.str() + "\\Input\\CFDNetwork.bzz";
+				string command7 = copystring + " Clustering.CFDNetwork.bzz " + "Clustering" + number.str() + "/Input/CFDNetwork.bzz";
+				cout << command7 << endl;
 				system(command7.c_str());
 
-				string command8 = copystring + " Clustering.FirstGuess.bzz " + "Clustering" + number.str() + "\\Input\\FirstGuess.bzz";
+				string command8 = copystring + " Clustering.FirstGuess.bzz " + "Clustering" + number.str() + "/Input/FirstGuess.bzz";
+				cout << command8 << endl;
 				system(command8.c_str());
 
 				string command9 = removefiles + " Clustering.FirstGuess.bzz Clustering.CFDNetwork.bzz ClusteringTopology.out";
+				cout << command9 << endl;
 				system(command9.c_str());
 
 				string command10 = removefolders + " Temp";
+				cout << command10 << endl;
 				system(command10.c_str());
 
 				string command11 = removefolders + " Output";
+				cout << command11 << endl;
 				system(command11.c_str());
 
 			}
@@ -296,20 +310,30 @@ int main(int argc, char* argv[])
 					stringstream number_previous;
 					number_previous << iClusterList[i-1];
 
-					string command = copystring + "Clustering" + number_previous.str() + "\\Output\\Backup\\Backup.end " + "Clustering" + number.str() + "\\Output\\Backup\\Backup.start";
+					string command = copystring + "Clustering" + number_previous.str() + "/Output/Backup/Backup.end " + "Clustering" + number.str() + "/Output/Backup/Backup.start";
 					system(command.c_str());
 
-					string command1 = copystring + " Input.withbackup " + "Clustering" + number.str() + "\\Input.inp";
+					string command1 = copystring + " Input.withbackup " + "Clustering" + number.str() + "/Input.inp";
 					system(command1.c_str());
 				}
 				else
 				{
-					string command1 = copystring + " Input.withoutbackup " + "Clustering" + number.str() + "\\Input.inp";
+					string command1 = copystring + " Input.withoutbackup " + "Clustering" + number.str() + "/Input.inp";
 					system(command1.c_str());
 				}
 
-				string command2 = " cd Clustering" + number.str();
-				system(command2.c_str());
+				string command2 = "cd Clustering" + number.str() + "/";
+
+	//			system(command2.c_str());
+string command222 = "Clustering" + number.str();
+if(chdir(command222.c_str()) != 0)
+{
+	perror("chdir failed");
+}
+string command21 = "pwd";
+				system(command21.c_str());
+string command22 = "ls -lah ";
+				system(command22.c_str());
 
 				string command3 = kppExe;
 				system(command3.c_str());

@@ -130,6 +130,8 @@ dictionary_(dictionary)
 	// Check Dictionary
 	CheckDictionary();
 	CheckUserInput();
+
+	std::cout << "Symbolic: " << iSymbolicKinetics_ << std::endl; getchar();
 }
 
 OpenSMOKE_KPP_DataManager::~OpenSMOKE_KPP_DataManager(void)

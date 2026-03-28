@@ -24,8 +24,11 @@
 
 OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR::OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR(OpenSMOKE_CSTRNetwork *cstrN) 
 {
+	std::cout << "OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR: Setting pointer to OpenSMOKE_CSTRNetwork" << std::endl;
 	cstrNewtwork = cstrN;
+	std::cout << "OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR: Setting number of species" << std::endl;
 	numComponents = cstrNewtwork->Reactions->NumberOfSpecies();
+	std::cout << "OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR: Setup completed" << std::endl;
 }
 
 void OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR::ObjectBzzPrint(void)

@@ -168,17 +168,16 @@ cd ..
 cd ..
 cd ..
 
-
-#rm ../exe/linux/gnu_mkl/OpenSMOKE_KinPP_Splitting_GNU_MKL_MT.sh
-#cd OpenSMOKE_KinPP_Splitting/projects/OpenSMOKE_KinPP_Splitting_Linux
-#mkdir ../../exe
-#mkdir gnu_mkl_mt
-#make -f makefile.mkl.mt COMPILER_NAME=gnu clean
-#make -f makefile.mkl.mt COMPILER_NAME=gnu
-#mv ../../exe/OpenSMOKE_KinPP_Splitting_GNU_MKL_MT.sh ../../../../exe/linux/gnu_mkl_mt
-#cd ..
-#cd ..
-#cd ..
+rm ../exe/linux/gnu_mkl/OpenSMOKE_KinPP_Splitting_GNU_MKL_MT.sh
+cd OpenSMOKE_KinPP_Splitting/projects/OpenSMOKE_KinPP_Splitting_Linux
+mkdir ../../exe
+mkdir gnu_mkl_mt
+make -f makefile.mkl.mt COMPILER_NAME=gnu clean
+make -f makefile.mkl.mt COMPILER_NAME=gnu
+mv ../../exe/OpenSMOKE_KinPP_Splitting_GNU_MKL_MT.sh ../../../../exe/linux/gnu_mkl_mt
+cd ..
+cd ..
+cd ..
 
 
 

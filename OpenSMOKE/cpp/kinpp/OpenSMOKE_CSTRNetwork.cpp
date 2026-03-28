@@ -62,6 +62,15 @@ int OpenSMOKE_CSTRNetwork::countInScope = 0;
 
 #define DEBUG_LOADING 0
 
+bool IsItANumber(const char value)
+{
+    if (value == '0' || value == '1' || value == '2' || value == '3' || value == '4' || value == '5'
+            || value == '6' || value == '7' || value == '8' || value == '9')
+        return true;
+    else
+        return false;
+}
+
 void OpenSMOKE_CSTRNetwork::ErrorMessage(const std::string message)
 {
     cout << endl;
@@ -169,6 +178,11 @@ OpenSMOKE_CSTRNetwork::~OpenSMOKE_CSTRNetwork(void)
 		return;
 }
 
+void OpenSMOKE_CSTRNetwork::SetDeltaTFluctuationsMinDelta(const double _Fluctuations_DeltaMin)
+{
+	Fluctuations_DeltaMin	= _Fluctuations_DeltaMin;
+}
+
 void OpenSMOKE_CSTRNetwork::SetMaxCorrectionCoefficient(const double _MaxCoeffCorr)
 {
 	MaxCoeffCorr = _MaxCoeffCorr;
@@ -176,17 +190,17 @@ void OpenSMOKE_CSTRNetwork::SetMaxCorrectionCoefficient(const double _MaxCoeffCo
 
 void OpenSMOKE_CSTRNetwork::SetDeltaTFluctuationsMaxDelta(const double _Fluctuations_DeltaMax)
 {
-		Fluctuations_DeltaMax	= _Fluctuations_DeltaMax;
+	Fluctuations_DeltaMax	= _Fluctuations_DeltaMax;
 }
 
 void OpenSMOKE_CSTRNetwork::SetDeltaTFluctuationsMaxUserDefined(const double _Fluctuations_TMax)
 {
-	Fluctuations_TMax		= _Fluctuations_TMax;
+	Fluctuations_TMax	= _Fluctuations_TMax;
 }
 
 void OpenSMOKE_CSTRNetwork::SetDeltaTFluctuationsMaxLocal(const double _Fluctuations_CcMax)
 {
-	Fluctuations_CcMax		= _Fluctuations_CcMax;
+	Fluctuations_CcMax	= _Fluctuations_CcMax;
 }
 
 void OpenSMOKE_CSTRNetwork::SetFluctuationsList(const std::string speciesFluctuations)
@@ -218,9 +232,10 @@ OpenSMOKE_CSTRNetwork::OpenSMOKE_CSTRNetwork(void)
 	sinExpansion		= 16;
 	MaxCoeffCorr		= 1.e10;
 	
-	Fluctuations_DeltaMax	= 0.;
-	Fluctuations_TMax		= 0.;
-	Fluctuations_CcMax		= 0.;
+	Fluctuations_DeltaMin	= 20.;
+	Fluctuations_DeltaMax	= 200.;
+	Fluctuations_TMax	= 0.;
+	Fluctuations_CcMax	= 0.;
 
 	name_object = "[Name not assigned]";
 
@@ -253,6 +268,8 @@ void OpenSMOKE_CSTRNetwork::CheckInputfile(ifstream &file, std::string fileName)
 
 void OpenSMOKE_CSTRNetwork::reading_the_network_file(std::string fileNetwork, int &countInput)
 {
+	log_->info("Reading the network file: " + fileNetwork);
+
 	int			i,j,k;
 	ifstream	fInput;
 
@@ -296,6 +313,9 @@ void OpenSMOKE_CSTRNetwork::reading_the_network_file(std::string fileNetwork, in
 	ChangeDimensions(numCSTRReactors, &pressure);
 	ChangeDimensions(numCSTRReactors, &volume);
 
+	// Standar deviation
+	BzzVector sigmaT(numCSTRReactors);
+
 	// Connection Vectors - Initialization
 	bki = 1;
 	bOut = 1;
@@ -335,6 +355,9 @@ void OpenSMOKE_CSTRNetwork::reading_the_network_file(std::string fileNetwork, in
 		pressure[indexCell] = pressureCell;
 		volume[indexCell] = volumeCell;
 		qanm[indexCell] = TvarianceCell;
+
+		// Standard deviation
+		sigmaT[indexCell] = std::sqrt(std::max(qanm[indexCell],0.)/2.) * temperature[indexCell];
 
 		// Number of external input in the CFD cell
 		// ------------------------------------------------------------------------------
@@ -412,6 +435,22 @@ void OpenSMOKE_CSTRNetwork::reading_the_network_file(std::string fileNetwork, in
 	TminGlobal = temperature.Min();
 	TmaxGlobal = temperature.Max();
 
+	// Min and Max normalized variance
+	const double qanmMinGlobal = qanm.Min();
+	const double qanmMaxGlobal = qanm.Max();
+
+	// Min and Max standard deviation
+	const double sigmaTMinGlobal = sigmaT.Min();
+	const double sigmaTMaxGlobal = sigmaT.Max();
+
+	// Min and Max pressure
+	const double PminGlobal = pressure.Min();
+	const double PmaxGlobal = pressure.Max();
+
+	// Min and Max volume
+	const double VminGlobal = volume.Min();
+	const double VmaxGlobal = volume.Max();
+
 	// Memory allocation for the sparse matrix of connections
 	cstrConnect(countCSTRConnect);
 
@@ -475,7 +514,7 @@ void OpenSMOKE_CSTRNetwork::reading_the_network_file(std::string fileNetwork, in
 				}
 
 				if(omegaSum < .999999 || omegaSum > 1.000001)
-					cout << "WARNING: Wrong fraction in " << indexCell << " reactor: " << omegaSum << endl;
+					cout << "WARNING: Wrong mass fraction sum in " << indexCell << " reactor: " << omegaSum << endl;
 			}
 
 			massExternalInputCFDCells[indexCell] = totalInputMassFlowRate;
@@ -544,6 +583,21 @@ void OpenSMOKE_CSTRNetwork::reading_the_network_file(std::string fileNetwork, in
 	cout << "        Mean relative error in mass balances on CFD cells: " << meanError << endl;
 	cout << "        Max  relative error in mass balances on CFD cells: " << maxError << endl;
 
+	// Statistics
+	{
+		log_->info(" -reactors: " + std::to_string(numCSTRReactors));
+		log_->info(" -min-t: " + std::to_string(TminGlobal));
+		log_->info(" -max-t: " + std::to_string(TmaxGlobal));
+		log_->info(" -min-p: " + std::to_string(PminGlobal));
+		log_->info(" -max-p: " + std::to_string(PmaxGlobal));
+		log_->info(" -min-v: " + std::to_string(VminGlobal));
+		log_->info(" -max-v: " + std::to_string(VmaxGlobal));
+		log_->info(" -min-sigma-t: " + std::to_string(sigmaTMinGlobal));
+		log_->info(" -max-sigma-t: " + std::to_string(sigmaTMaxGlobal));
+		log_->info(" -mean-error: " + std::to_string(meanError));
+		log_->info(" -max-error: " + std::to_string(maxError));
+	}
+
 }
 
 void OpenSMOKE_CSTRNetwork::read_tolerances(const std::string fileTolerances, int numCSTRReactors, double cicloCluster)
@@ -572,14 +626,64 @@ void OpenSMOKE_CSTRNetwork::read_tolerances(const std::string fileTolerances, in
 void OpenSMOKE_CSTRNetwork::read_first_guess(std::string first)
 {
 	BzzLoad load(first);
-	load >> numComponents >> iSpec >> massFractionsInReactors;
+	load >> numComponents >> numComponentsReduced;
+
+	ChangeDimensions(numComponentsReduced, &iSpec);
+	vector<string> namesReduced;
+	namesReduced.resize(numComponentsReduced+1);
+	for (int j=1;j<=numComponentsReduced;j++)
+		load >> namesReduced[j];
+
+	load >> massFractionsInReactors;
+		
 	load.End();
-	numComponentsReduced = iSpec.Size();
+        
+
+	if (IsItANumber(namesReduced[1].at(0)) == true)
+	{
+	    for (int j=1;j<=numComponentsReduced;j++)
+	        iSpec[j] = atoi(namesReduced[j].c_str());
+
+	}
+	else
+	{
+	    for (int j=1;j<=numComponentsReduced;j++)
+	    {
+		bool found = false;
+		for (int jj=1;jj<=numComponents;jj++)
+			if ( namesReduced[j] == Reactions->names[jj])
+			{
+				iSpec[j] = jj;
+				found = true;
+				break;
+			}
+		if (found == false)
+		{
+			std::cout << "Reduced species: " << namesReduced[j] << std::endl;
+			BzzError("The species above is not available in the detailed mechanism");
+		}
+	    }
+	}
+        
+	cout << " * List of species recognized" << endl;
+	for (int j=1;j<=numComponentsReduced;j++)
+		cout << "   " << iSpec[j] << " " << namesReduced[j] << endl;
+
+	std::cout << "Number of detailed species: " << numComponents << std::endl;
+	std::cout << "Number of reduced species:  " << iSpec.Size() << std::endl;
 }
 
 void OpenSMOKE_CSTRNetwork::build_cluster(double cicloCluster, int numCSTRReactors, int countInput, int &numCluster, BzzVectorInt &cstrClusterSize)
 {
 	cout << "I am building the cluster... " << endl;
+	cout << " * Cycle number:  " << cicloCluster << endl;
+	cout << " * CSTR reactors: " << numCSTRReactors << endl;
+	cout << " * Input counter: " << countInput << endl;
+
+	log_->section("Building cluster");
+	log_->info(" -reactors: " + std::to_string(numCSTRReactors));
+	log_->info(" -cycle: " + std::to_string(cicloCluster));
+	log_->info(" -inputs: " + std::to_string(countInput));
 
 	int		i,j,k;
 	int		ki, kii;
@@ -613,8 +717,12 @@ void OpenSMOKE_CSTRNetwork::build_cluster(double cicloCluster, int numCSTRReacto
 	double start = BzzGetCpuTime();
 
 	// Loop on every CFD cell
+	cout << " * Loop over every CFD cell" << endl;
 	for(ki = 1;ki <= numCSTRReactors;ki++)
 	{
+		if (ki%(numCSTRReactors/100) == 1)
+			cout << "   - Processing: " << ki << "/" << numCSTRReactors << endl;
+
 		kiSize = cstrConnect.GetSize(ki);
 		if(kiSize == 0)
 			continue;
@@ -646,17 +754,21 @@ void OpenSMOKE_CSTRNetwork::build_cluster(double cicloCluster, int numCSTRReacto
 
 		for(j = 1;j <= kiSize;j++)
 		{
+
 			iTry = cstrConnectVector[j];
 			if(iTry == iBoss)
 				continue;
 			if(cstrConnect.GetSize(iTry) == 0)
 				continue;
 			clusterOK = 0;
+
 			if(fabs(tBoss - temperature[iTry]) < dtBoss)
 				clusterOK = 1;
+
 			if(clusterOK == 1) // verifica la composizione
 			{
 				massFractionsInReactors.UseMatrixRowAsVector(iTry,&massFractionsTry);
+
 				for(i = 1;i <= numComponentsReduced;i++)
 				{
 					if(fabs(massFractionsTry[i] - massFractionsBoss[i]) >
@@ -674,6 +786,7 @@ void OpenSMOKE_CSTRNetwork::build_cluster(double cicloCluster, int numCSTRReacto
 			// verifca se metterlo nel cluster
 			if(clusterOK == 1) // lo deve mettere
 				cstrCluster[++iLast] = iTry;
+
 		}
 
 		cstrConnect.DeleteVector(iBoss);
@@ -740,11 +853,16 @@ void OpenSMOKE_CSTRNetwork::build_cluster(double cicloCluster, int numCSTRReacto
 		for(i = 1;i <= iLast;i++)
 			giveClusterIndexFromCellIndex[auxil[i]] = numCluster;
 		saveCluster << auxil;
+
 	}
 
+	log_->info(" -clusters: " + std::to_string(numCluster ));
+
+	cout << " * Cluster number: " << numCluster << endl;
+	cout << " * Saving cluster..." << endl;
 	saveCluster.End();
 
-	cout << "I built the cluster... " << endl;
+	cout << " * Clustering completed" << endl;
 }
 
 void OpenSMOKE_CSTRNetwork::calculate_initial_massfractions_in_clusters(int numCluster, BzzMatrix &omegaReduced_Cluster, BzzMatrix &omegaReduced_CFD)
@@ -755,19 +873,74 @@ void OpenSMOKE_CSTRNetwork::calculate_initial_massfractions_in_clusters(int numC
 
 	BzzVector clusterVolume(numCluster);
 
-	cout << "Calculate initial massfractions in clusters..." << endl;
+	cout << "   Calculate initial massfractions in clusters..." << endl;
+	log_->section("Calculate initial massfractions in clusters");
 
-	BzzLoad load(firstGuessFile);
-	load >> numC >> iSpec >> omegaReduced_CFD;
-	ispecSize = iSpec.Size();
-	load.End();
+	{
+		int NCReduced;
+		BzzLoad load(firstGuessFile);
+		load >> numC >> NCReduced;
+
+		ChangeDimensions(NCReduced, &iSpec);
+		vector<string> namesReduced;
+		namesReduced.resize(NCReduced+1);
+		for (int j=1;j<=NCReduced;j++)
+			load >> namesReduced[j];
+
+		load >> omegaReduced_CFD;
+		
+		load.End();
+
+		cout << "First species: " << namesReduced[1] << endl;   
+		cout << "Last species:  " << namesReduced[NCReduced] << endl;         
+
+		if (IsItANumber(namesReduced[1].at(0)) == true)
+		{
+		    for (int j=1;j<=NCReduced;j++)
+		        iSpec[j] = atoi(namesReduced[j].c_str());
+
+		}
+		else
+		{
+		    for (int j=1;j<=NCReduced;j++)
+		    {
+			bool found = false;
+			for (int jj=1;jj<=numC;jj++)
+				if ( namesReduced[j] == Reactions->names[jj])
+				{
+					iSpec[j] = jj;
+					found = true;
+					break;
+				}
+			if (found == false)
+			{
+				std::cout << "Reduced species: " << namesReduced[j] << std::endl;
+				BzzError("The species above is not available in the detailed mechanism");
+			}
+		    }
+		}
+
+		ispecSize = iSpec.Size();
+        
+		cout << " * List of species recognized" << endl;
+		for (int j=1;j<=NCReduced;j++)
+			cout << "   " << iSpec[j] << " " << namesReduced[j] << endl;
+
+		std::cout << "Number of detailed species: " << numC << std::endl;
+		std::cout << "Number of reduced species:  " << iSpec.Size() << std::endl;
+	}
+
 
 	ChangeDimensions(numCluster, ispecSize, &omegaReduced_Cluster);
+
+	BzzVectorInt clusterSize(numCluster);
+	clusterSize = 0;
 
 	for(i = 1;i <= numCSTRReactors;i++)
 	{
 		j = giveClusterIndexFromCellIndex[i];
 		clusterVolume[j] += volume[i];
+		clusterSize[j] += 1;
 		for(k = 1;k <= ispecSize;k++)
 			omegaReduced_Cluster[j][k] += volume[i] * omegaReduced_CFD[i][k];
 	}
@@ -784,6 +957,13 @@ void OpenSMOKE_CSTRNetwork::calculate_initial_massfractions_in_clusters(int numC
 
 	cout << "Calculated initial massfractions in clusters..." << endl;
 	cout << "Number of reactors: " << numCluster << endl;
+
+	log_->info(" -clusters: " + std::to_string(numCluster));
+	log_->info(" -min-v: " + std::to_string(clusterVolume.Min()));
+	log_->info(" -max-v: " + std::to_string(clusterVolume.Max()));
+	log_->info(" -min-size: " + std::to_string(clusterSize.Min()));
+	log_->info(" -max-size: " + std::to_string(clusterSize.Max()));
+	log_->info(" -mean-size: " + std::to_string(double(numCSTRReactors)/double(numCluster)));
 }
 
 void OpenSMOKE_CSTRNetwork::calculate_clustering(std::string fileNetwork, int cicloDiffusion, int numCluster,
@@ -791,7 +971,8 @@ void OpenSMOKE_CSTRNetwork::calculate_clustering(std::string fileNetwork, int ci
 											BzzMatrix &omegaReduced_Cluster,
 											BzzMatrix &omegaReduced_CFD)
 {
-	cout << "Calculate clustering..." << endl;
+	cout << "Calculate mass fuxes matrices for clustered mesh..." << endl;
+	log_->section("Calculate mass fuxes matrices for clustered mesh");
 
 	int i,j,k;
 	ifstream fInput;
@@ -850,6 +1031,10 @@ void OpenSMOKE_CSTRNetwork::calculate_clustering(std::string fileNetwork, int ci
 	// Ciclo su tutte le celle della simulazione CFD originale
 	for(k = 1;k <= originalNumCSTRReactors;k++)
 	{
+		const int step = std::max(1, originalNumCSTRReactors / 100);
+		if (k%step == 1)
+			cout << "   - Processing: " << k << "/" << originalNumCSTRReactors << endl;
+
 		fInput >> indexCell;
 		fInput >> temperatureCell;
 		fInput >> pressureCell;
@@ -899,7 +1084,7 @@ void OpenSMOKE_CSTRNetwork::calculate_clustering(std::string fileNetwork, int ci
 				}
 
 				if(sumOmega < .999999 || sumOmega > 1.000001)
-					cout << "WARNING: Wrong fraction in " << indexCell << " reactor: " << sumOmega << endl;
+					cout << "WARNING: Wrong mass fraction sum in " << indexCell << " reactor: " << sumOmega << endl;
 				
 				// Enthalpy
 				BzzVector h_input(numComponents);
@@ -1004,12 +1189,14 @@ void OpenSMOKE_CSTRNetwork::calculate_clustering(std::string fileNetwork, int ci
 	// Mean Values for each cluster
 	cout << "Mean values..." << endl;
 	double uNumberOfCFDCells;
+	BzzVector sigmaT(numCSTRReactors);
 	for(i = 1;i <= numCSTRReactors;i++)
 	{
 		uNumberOfCFDCells	 = 1. / double(cstrClusterSize[i]);
 		temperature[i]		*= uNumberOfCFDCells;
-		qanm[i]				*= uNumberOfCFDCells;
-		pressure[i]			*= uNumberOfCFDCells;
+		qanm[i]			*= uNumberOfCFDCells;
+		pressure[i]		*= uNumberOfCFDCells;
+		sigmaT[i] 		 = temperature[i] * std::sqrt( std::max(qanm[i],0.)/2.);
 	}
 
 	ProductT(volume, Reactions->M, &volumeMolecularWeightT);
@@ -1024,6 +1211,14 @@ void OpenSMOKE_CSTRNetwork::calculate_clustering(std::string fileNetwork, int ci
 		fClusteringTopology << volumeCellOriginal;
 		fClusteringTopology.End();
 	}
+
+	log_->info(" -clusters: " + std::to_string(numCSTRReactors));
+	log_->info(" -t-min: " + std::to_string(temperature.Min()));
+	log_->info(" -t-max: " + std::to_string(temperature.Max()));
+	log_->info(" -p-min: " + std::to_string(pressure.Min()));
+	log_->info(" -p-max: " + std::to_string(pressure.Max()));
+	log_->info(" -sigma-min: " + std::to_string(sigmaT.Min()));
+	log_->info(" -sigma-max: " + std::to_string(sigmaT.Max()));
 }
 
 void OpenSMOKE_CSTRNetwork::calculate_massflowrate_in_reactors(BzzVector &inputMassFlowRate,
@@ -1082,7 +1277,7 @@ void OpenSMOKE_CSTRNetwork::calculate_massflowrate_in_reactors(BzzVector &inputM
 	cout << "        Max  relative error in mass balances on clusters: " << maxError << endl;
 }
 
-void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusion, int relaxation, int iaia, BzzMatrix &omegaReduced_Cluster)
+void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusion, int relaxation, int iaia, BzzMatrix &omegaReduced_Cluster, int pippo)
 {
 	int i, j, k;
 	double *ptrVal;
@@ -1109,13 +1304,18 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 	cout << " - Jacobian size [MB]:        " << BzzPow2(numComponents*numCSTRReactors)*8./1.e6	<< endl;
 	cout << endl;
 
+	log_->section("Complete clustering");
+	log_->info(" -clustering-ratio(%): " + std::to_string(double(numCSTRReactors)/double(originalNumCSTRReactors)*100.));
+
 	// Calculate provisional mass flow rate
-	cout << " - 01 - Relative Errors before normalization " << endl;
+	cout << " - 01 - Relative Errors before normalization " << endl;	
+	log_->info(" -01: Relative Errors before normalization");
 	calculate_massflowrate_in_reactors(provisionalInputMassRate, provisionalOutputMassRate);
 
 	// Vengono normalizzate le portate massive della matrice Mg e ne viene cambiato il segno e viene rifatta la trasposizione;
 	// i termini sulla diagonale principale vengono settati pari al valore unitario
 	cout << " - 02 - Normalizing mass balances on clusters... " << endl;
+	log_->info(" -02: Normalizing mass balances on clusters");
 	cout << "        Building Mg matrix... " << endl;
 	for(i = 1;i <= numCSTRReactors;i++)
 	{
@@ -1144,12 +1344,12 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 	cout << "        Updating input mass flow rates... " << endl;
 	if(relaxation == 0 || relaxation == 2 || (relaxation == 1 && cicloDiffusion == 4))
 	{
-		bool BzzLinearSolvers = false;
-		bool PardisoLinearSolvers = true;
+		bool BzzLinearSolvers = true;
+		bool PardisoLinearSolvers = false;
 
 		if (BzzLinearSolvers == true)
 		{ 
-			cout << "I am using BzzMath..." << endl;
+			cout << "I am using BzzMath linear solver..." << endl;
 			BzzFactorizedSparseGauss Fg;		
 			Fg = Mg;
 			massRate = massInput;
@@ -1160,7 +1360,7 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 		}
 		else if (PardisoLinearSolvers == true)
 		{
-			cout << "I am using Pardiso..." << endl;
+			cout << "I am using Pardiso linear solver..." << endl;
 			OpenSMOKE_PARDISO_Unsymmetric Fg(OPENSMOKE_DIRECTSOLVER_SQUAREMATRIX);
 			Fg.SetSparsityPattern(Mg);
 			Fg.UpdateMatrix(Mg);
@@ -1207,6 +1407,7 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 	// Calculate provisional mass flow rate
 	// The transposition is necessary because the Ms matrix is defined in the opposite way
 	cout << " - 03 - Relative Errors after normalization " << endl;
+	log_->info(" -03: Relative Errors after normalization");
 	Transpose(&Mg);
 	calculate_massflowrate_in_reactors(provisionalInputMassRate, provisionalOutputMassRate);
 	Delete(&Mg);
@@ -1214,6 +1415,7 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 
 	// Updating External Feeds
 	cout << " - 04 - Updating external feeds... " << endl;
+	log_->info(" -04: Updating external feeds");
 	{
 		int indexCell;
 		double massIn;
@@ -1274,12 +1476,56 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 	if(iaia == 0)
 	{
 		cout << " - 05 - Reading data from FirstGuess.bzz file..." << endl;
+		log_->info(" -05: Reading data from FirstGuess.bzz file");
 
 		int numC;
-
+		int NCReduced;
 		BzzLoad load(firstGuessFile);
-		load >> numC >> iSpec;
+		load >> numC >> NCReduced;
+
+		ChangeDimensions(NCReduced, &iSpec);
+		vector<string> namesReduced;
+		namesReduced.resize(NCReduced+1);
+		for (int j=1;j<=NCReduced;j++)
+			load >> namesReduced[j];
+		
 		load.End();
+
+		cout << "First species: " << namesReduced[1] << endl;   
+		cout << "Last species:  " << namesReduced[NCReduced] << endl;         
+
+		if (IsItANumber(namesReduced[1].at(0)) == true)
+		{
+		    for (int j=1;j<=NCReduced;j++)
+		        iSpec[j] = atoi(namesReduced[j].c_str());
+
+		}
+		else
+		{
+		    for (int j=1;j<=NCReduced;j++)
+		    {
+			bool found = false;
+			for (int jj=1;jj<=numC;jj++)
+				if ( namesReduced[j] == Reactions->names[jj])
+				{
+					iSpec[j] = jj;
+					found = true;
+					break;
+				}
+			if (found == false)
+			{
+				std::cout << "Reduced species: " << namesReduced[j] << std::endl;
+				BzzError("The species above is not available in the detailed mechanism");
+			}
+		    }
+		}
+        
+		cout << " * List of species recognized" << endl;
+		for (int j=1;j<=NCReduced;j++)
+			cout << "   " << iSpec[j] << " " << namesReduced[j] << endl;
+
+		std::cout << "Number of detailed species: " << numC << std::endl;
+		std::cout << "Number of reduced species:  " << iSpec.Size() << std::endl;
 
 		if(numC != numComponents)
 			BzzError("numC != numComponents");
@@ -1297,6 +1543,7 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 	else
 	{
 		cout << " - 05 - Recovering data from mass.tmp file..." << endl;
+		log_->info(" -05: Recovering data from mass.tmp file");
 
 		int numC,jC;
 		BzzVectorInt aui;
@@ -1328,6 +1575,7 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 	// Write cluster network file
 	{
 		cout << " - 06 - Writing cluster network file..." << endl;
+		log_->info(" -06: Writing cluster network file");
 		ofstream fClusterNetwork;
 		openOutputFileAndControl(fClusterNetwork, "Temp/ClusterNetwork.tmp");
 		fClusterNetwork.setf(ios::scientific);
@@ -1339,6 +1587,7 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 	// Write temperature network file
 	{
 		cout << " - 07 - Writing temperature network file..." << endl;
+		log_->info(" -07: Writing temperature network file");
 		ofstream fTemperature;
 		openOutputFileAndControl(fTemperature, "Output/maps/Temperature.map");
 		fTemperature.setf(ios::scientific);
@@ -1350,6 +1599,7 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 	// Write sum cells network file
 	{
 		cout << " - 08 - Writing sum cells network file..." << endl;
+		log_->info(" -08: Writing sum cells network file");
 		ofstream fSumCells;
 		openOutputFileAndControl(fSumCells, "Output/maps/SumCells.map");
 		fSumCells.setf(ios::scientific);
@@ -1364,6 +1614,7 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 	// Write random network file
 	{
 		cout << " - 09 - Writing random network file..." << endl;
+		log_->info(" -09: Writing random network file");
 		ofstream fRandom;
 		openOutputFileAndControl(fRandom, "Output/maps/Random.map");
 		fRandom.setf(ios::scientific);
@@ -1381,6 +1632,7 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 	{
 		{
 			cout << "I am writing Clustering.FirstGuess.bzz" << endl;
+			
 
 			ofstream fClustering;
 			fClustering.open("Clustering.FirstGuess.bzz", ios::out);
@@ -1393,6 +1645,7 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 			fClustering << numCSTRReactors << " " << iSpec.Size() << endl;
 			for(int i=1;i<=numCSTRReactors;i++)
 			{
+				std::cout << "Reactor " << i << " " << omegaReduced_Cluster[i][1] << std::endl;
 				for(k = 1;k <= iSpec.Size();k++)
 					fClustering << omegaReduced_Cluster[i][k] << endl;	
 			}
@@ -1486,7 +1739,7 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 	}
 
 	// Open fResidualFile
-	openOutputFileAndControl(fHistory,		"History.out");
+	openOutputFileAndControl(fHistory, "History.out");
 	fHistory.setf(ios::scientific);
 	openOutputFileAndControl(fResiduals_1,	"Output/residuals/Residuals_1.out");
 	fResiduals_1.setf(ios::scientific);
@@ -1521,13 +1774,13 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 
 	if (OnlyODE == true)
 	{
-	openOutputFileAndControl(fResiduals_4,	"Output/residuals/Residuals_4.out");
-	fResiduals_4.setf(ios::scientific);
-	fResiduals_4 << "Iteration   " << "\t";
-	fResiduals_4 << "time        " << "\t";
-	fResiduals_4 << "Fmean[-]    " << "\t";
-	fResiduals_4 << "Fmax[5]     " << "\t";
-	fResiduals_4 << endl << endl;
+		openOutputFileAndControl(fResiduals_4,	"Output/residuals/Residuals_4.out");
+		fResiduals_4.setf(ios::scientific);
+		fResiduals_4 << "Iteration   " << "\t";
+		fResiduals_4 << "time        " << "\t";
+		fResiduals_4 << "Fmean[-]    " << "\t";
+		fResiduals_4 << "Fmax[5]     " << "\t";
+		fResiduals_4 << endl << endl;
 	}
 
 	countThirdTotal  = 0;
@@ -1547,18 +1800,26 @@ void OpenSMOKE_CSTRNetwork::operator()(const std::string fileNetwork, const std:
 	BzzMatrix omegaReduced_CFD;
 
 	firstGuessFile		= first;
-	networkFile			= fileNetwork;
-	iAnalyticalJacobian = _iAnalyticalJacobian;
+	networkFile		= fileNetwork;
+	iAnalyticalJacobian 	= _iAnalyticalJacobian;
 	analyticalJacobian	= _analyticalJacobian;
 	iKindOfCorrection	= _iKindOfCorrection;
 
+	std::cout << " * OpenSMOKE_CSTRNetwork: read_first_guess..." << std::endl;
 	read_first_guess(first);
+	std::cout << " * OpenSMOKE_CSTRNetwork: reading_the_network_file..." << std::endl;
 	reading_the_network_file(fileNetwork, countInput);
+	std::cout << " * OpenSMOKE_CSTRNetwork: read_tolerances..." << std::endl;
 	read_tolerances(fileTolerances, numCSTRReactors, cicloCluster);
+	std::cout << " * OpenSMOKE_CSTRNetwork: build_cluster..." << std::endl;
 	build_cluster(cicloCluster, numCSTRReactors, countInput, numCluster, cstrClusterSize);
+	std::cout << " * OpenSMOKE_CSTRNetwork: calculate_initial_massfractions_in_clusters..." << std::endl;
 	calculate_initial_massfractions_in_clusters(numCluster, omegaReduced_Cluster, omegaReduced_CFD);
+	std::cout << " * OpenSMOKE_CSTRNetwork: calculate_clustering..." << std::endl;
 	calculate_clustering(fileNetwork, cicloDiffusion, numCluster, cstrClusterSize, omegaReduced_Cluster, omegaReduced_CFD);
-	complete_clustering(countInput, cicloDiffusion, relaxation, iaia, omegaReduced_Cluster);
+	std::cout << " * OpenSMOKE_CSTRNetwork: complete_clustering..." << std::endl;
+	complete_clustering(countInput, cicloDiffusion, relaxation, iaia, omegaReduced_Cluster, 0);
+	std::cout << " * OpenSMOKE_CSTRNetwork: start_solving_network..." << std::endl;
 	start_solving_network(iaia);
 }
 
@@ -1577,6 +1838,8 @@ void OpenSMOKE_CSTRNetwork::start_solving_network(const int from_cfd_results)
 	cout << " START COMPUTATIONS" << endl;
 	cout << "-----------------------------------------------------------------" << endl;
 	cout << endl;
+
+	log_->section("Cluster network solution");
 
 	// Initial Solution
 	massFractionsInReactorsSolution = massFractionsInReactors;
@@ -1631,10 +1894,14 @@ void OpenSMOKE_CSTRNetwork::globalAlgorithm()
 	// Convergence Criteria
 	maxNumberOfIterations_Global = Max(numCSTRReactors / 3,30);
 
+	log_->info(" - Complete methodology: maxIt = " + std::to_string(MaxNumberOfIterations) + " maxItGlob = " + std::to_string(maxNumberOfIterations_Global));
+
 	int okok;
 	int countCicle = 1;
 	for(int iter = 1; iter<=MaxNumberOfIterations;iter++)
 	{
+		log_->info("   - Iteration: " + std::to_string(iter));
+
 		fHistory << "Cycle:  " << iter << "." << countCicle       << endl;
 		fHistory << "TolRel: " << tolRel << "\t" << "TolAbs: " << tolAbs << endl;
 		fHistory << "--------------------------------------------------" << endl;
@@ -1646,7 +1913,7 @@ void OpenSMOKE_CSTRNetwork::globalAlgorithm()
 		//	  1 = se la convergenza e' stata ottenuta in maniera corretta
 		fHistory << "First: " << endl;
 		start = BzzGetCpuTime();
-		
+	std::cout << "Here 1" << std::endl;	
 			okok = GetFirst();
 		
 		end = BzzGetCpuTime();
@@ -1723,6 +1990,8 @@ void OpenSMOKE_CSTRNetwork::odeOnlyAlgorithm()
 	// Convergence Criteria
 	maxNumberOfIterations_Global = Max(numCSTRReactors / 3,30);
 
+	log_->info(" - ODE only methodology");
+
 	int okok;
 	int countCicle = 1;
 	double tEnd0 = 10.;
@@ -1738,7 +2007,7 @@ void OpenSMOKE_CSTRNetwork::odeOnlyAlgorithm()
 				start = BzzGetCpuTime();
 
 				if (iter<=3)	GetFourth(tEnd0);
-				else			GetFourth(tEnd0*pow(3., double(iter-3.)));
+				else		GetFourth(tEnd0*pow(3., double(iter-3.)));
 
 				end = BzzGetCpuTime();
 			
@@ -1932,11 +2201,12 @@ int OpenSMOKE_CSTRNetwork::GetFirst(void)
 	double h;
 	double hMin;
 
-
+std::cout << "Here 20" << std::endl;
 	// Inizializzazione del sistema ODE per il singolo CSTR
 	BzzOdeStiffObject ode;
+std::cout << "Here 21" << std::endl;
 	OpenSMOKE_CSTRNetwork_MyOdeSystemObjectOneCSTR cstrMono(this);
-
+std::cout << "Here 3" << std::endl;
 //	cstrMono(this);
 
 	// Allocazione di memoria
@@ -1950,7 +2220,7 @@ int OpenSMOKE_CSTRNetwork::GetFirst(void)
 	BzzVector R(numComponents);
 	BzzVector Rvw(numComponents);
 	BzzVectorInt vectorReactorsNotOK(numCSTRReactors);	// flag per individuare reattori non OK
-
+std::cout << "Here 4" << std::endl;
 	// Inizializzazione variabili
 	memoCount			= 30;
 	minNoOK				= numCSTRReactors + 1;
@@ -1961,7 +2231,7 @@ int OpenSMOKE_CSTRNetwork::GetFirst(void)
 	countTutto			= 0;
 	uvariables			= 1. / double(numComponents * numCSTRReactors);
 	ucomponents			= 1. / double(numComponents);
-	
+	std::cout << "Here 5" << std::endl;
 	const double	odeTolAbs		= 1.e-15;	// Default 1e-15
 	const int		odeMaxJacobian	= 3;		// Default 3
 	const double	MaxTau			= 100.;		// Default 100.
@@ -1969,9 +2239,10 @@ int OpenSMOKE_CSTRNetwork::GetFirst(void)
 	// Start times
 	double start = BzzGetCpuTime();
 	double memoStart = start;
-
+std::cout << "Here 6" << std::endl;
 	// START COMPUTATIONS
 	GetResiduals(massFractionsInReactorsSolution,Res);
+std::cout << "Here 7" << std::endl;
 	resMeanOpt = uvariables * Res.GetSumAbsElements();
 	maxResOpt = Res.MaxAbs();
 
@@ -1979,6 +2250,7 @@ int OpenSMOKE_CSTRNetwork::GetFirst(void)
 	cout << "  ** Optimal Mean Residual: " << resMeanOpt << endl;
 	cout << "  ** Optimal Max  Residual: " << maxResOpt << endl;
 	
+	log_->info("     - Sequential ODEs");
 
 	// ---------------------------------------------------------------------------------------//
 	//							GLOBAL ITERATION
@@ -2018,8 +2290,9 @@ int OpenSMOKE_CSTRNetwork::GetFirst(void)
 		iSequence *= -1;
 		kReactor = sequence[index];
 
-		if (kReactor%(int(0.05*numCSTRReactors)+1) == 0)	iPrintReactor = true;
-		else											iPrintReactor = false;
+		if (kReactor%(int(0.10*numCSTRReactors)+1) == 0)	iPrintReactor = true;
+		else							iPrintReactor = false;
+
 		if(iPrintReactor==true)
 		{
 			cout << " -- R#: "		<< kReactor	<< "/"		<< numCSTRReactors << "\t";
@@ -2299,14 +2572,14 @@ int OpenSMOKE_CSTRNetwork::GetFirst(void)
 
 	// Informazioni a video
 	cout	<< endl
-			<< "Total number of global calls: "			<< countTutto					<< endl
-			<< "Number of CSTR already ok: "			<< countReactorsOK_FirstGuess	<< endl
+			<< "Total number of global calls: "		<< countTutto					<< endl
+			<< "Number of CSTR already ok: "		<< countReactorsOK_FirstGuess	<< endl
 			<< "Total number of ODE system solved: "	<< countIntegrations			<< endl
-			<< "FStop Value (Assigned): "				<< F1Stop						<< endl
-			<< "Maximum residual (Newton): "			<< F1Max						<< endl
+			<< "FStop Value (Assigned): "			<< F1Stop						<< endl
+			<< "Maximum residual (Newton): "		<< F1Max						<< endl
 			<< "Maximum Residual (Accumulation): "		<< F1MaxIntegration				<< endl
-			<< "CPU Time (Global): "					<< BzzGetCpuTime() - start		<< endl
-			<< "CPU Time (Local): "						<< BzzGetCpuTime() - memoStart	<< endl
+			<< "CPU Time (Global): "			<< BzzGetCpuTime() - start		<< endl
+			<< "CPU Time (Local): "				<< BzzGetCpuTime() - memoStart	<< endl
 			<< endl;
 
 	// Se sono state fatte piu' di 30 chiamate e il residuo (di accumulo) e' ancora
@@ -2380,6 +2653,8 @@ int OpenSMOKE_CSTRNetwork::GetFirst(void)
 					<< global_time														<< "\t" 
 					<< local_time														<< "\t" 
 					<< endl;
+
+	log_->info("       - resMean = " + std::to_string(resMean) + " resMax = " + std::to_string(resMax) + " reacNotOK = " + std::to_string(nReactorsNotOK) );
 
 	// Convergence (1)
 	// Non si tratta di una convergenza veramente piena
@@ -2543,6 +2818,7 @@ void OpenSMOKE_CSTRNetwork::GetSecond(void)
 	countSecondTotal++;
 	fResiduals_2 << countSecondTotal << "\t";
 
+	log_->info("     - Global ODE");
 
 	// Memory Allocation
 	ChangeDimensions(numCSTRReactors, &blockDimensions);
@@ -2571,6 +2847,7 @@ void OpenSMOKE_CSTRNetwork::GetSecond(void)
 	cout << "  ** Mean Residual Before Second Method" << F0 << endl;
 	cout << "  ** Max  Residual Before Second Method" << maxF0 << endl;
 	fResiduals_2 << F0 << "\t" << maxF0 << "\t";
+	log_->info("       - mean-res = " + std::to_string(F0) + " max-res = " + std::to_string(maxF0));
 
 	// Solving the ODE System
 	{
@@ -2578,6 +2855,7 @@ void OpenSMOKE_CSTRNetwork::GetSecond(void)
 		double stopODE;
 		BzzVector yMin(initialValues.Size());
 		BzzVector yMax(initialValues.Size());
+
 		OpenSMOKE_CSTRNetwork_MyOdeSystemObjectAllCSTR obj(this);
 
 		tStart = 0.;
@@ -2586,9 +2864,9 @@ void OpenSMOKE_CSTRNetwork::GetSecond(void)
 		BzzMatrixSparseLockedByRows Q = Ld;
 	//	obj(this);
 
-        std::string fileSparseMatrix = "Temp/A.tmp";
-        char fileSM[200];
-        strcpy(fileSM, fileSparseMatrix.c_str());
+		std::string fileSparseMatrix = "Temp/A.tmp";
+		char fileSM[200];
+		strcpy(fileSM, fileSparseMatrix.c_str());
 		BzzOdeSparseStiffObject o(initialValues, tStart, &obj, blockDimensions, &Q, fileSM);
 		yMin = 0.;
 		yMax = 1.;
@@ -2599,8 +2877,7 @@ void OpenSMOKE_CSTRNetwork::GetSecond(void)
 		o.StopIntegrationWhenSumAbsY1IsLessThan(stopODE);
 		massFractionsInReactorsSolution_Vector = o(tEnd);
 
-		cout	<< "CPU Time for Solving Linear System in Second Method (ODE): "
-				<< BzzGetCpuTime() - start << endl;
+		cout	<< "CPU Time for Solving Linear System in Second Method (ODE): " << BzzGetCpuTime() - start << endl;
 	}
 
 	// Calcolo dei nuovi residui dopo l'integrazione del sistema ODE
@@ -2610,6 +2887,7 @@ void OpenSMOKE_CSTRNetwork::GetSecond(void)
 	cout << "  ** Mean Residual After Second Method (ODE): " << F1 << endl;
 	cout << "  ** Max  Residual After Second Method (ODE): " << maxF1 << endl;
 	fResiduals_2 << F1 << "\t" << maxF1 << "\t";
+	log_->info("       - mean-res = " + std::to_string(F1) + " max-res = " + std::to_string(maxF1));
 
 	// Accetta la nuova soluzione che sicuramente e' buona in quanto ottenuta
 	// attraverso la soluzione di un transitorio reale
@@ -2685,6 +2963,8 @@ int OpenSMOKE_CSTRNetwork::GetThird(void)
 	BzzSave save('*', "Temp/MemoJacobian.tmp");
 	save << numCSTRReactors;
 
+	log_->info("     - Global NLS");
+
 	// Ciclo sui singoli reattori
 	for(kr = 1;kr <= numCSTRReactors;kr++)
 	{
@@ -2748,6 +3028,8 @@ int OpenSMOKE_CSTRNetwork::GetThird(void)
 	cout << " ** Mean Residuals Before Global Newton "<< F0 << endl;
 	cout << " ** Max  Residuals Before Global Newton "<< maxF0 << endl;
 	fResiduals_3 << F0 << "\t" << maxF0 << "\t";
+	log_->info("       - mean-res = " + std::to_string(F0) + " max-res = " + std::to_string(maxF0));
+
 
 	double startLocal = BzzGetCpuTime();
 
@@ -2891,6 +3173,7 @@ int OpenSMOKE_CSTRNetwork::GetThird(void)
 			<< BzzGetCpuTime() - start << endl;
 	fResiduals_3 << F1 << "\t" << maxF1 << "\t";
 	fResiduals_3 << endl;
+	log_->info("       - mean-res = " + std::to_string(F1) + " max-res = " + std::to_string(maxF1));
 
 	// Se la norma della correzione e' piu' piccola di quella
 	// del punto precedente e non ho fatto molte iterazioni conviene accettare il
@@ -3630,7 +3913,7 @@ void OpenSMOKE_CSTRNetwork::CleanTemperatureVariance(const int kind)
 		cout << "Minimum csi: " << min_csi << endl;
 		cout << "Maximum csi: " << max_csi << endl;
 	}
-	else if (kind >= 2)		// Beta || Gaussian
+	else if (kind >= 2)		// Direc || Beta || Gaussian
 	{
 		int iCountMin = 0;
 		int iCountMax = 0;
@@ -3657,8 +3940,10 @@ void OpenSMOKE_CSTRNetwork::CleanTemperatureVariance(const int kind)
 			if (csi > max_csi)	max_csi = csi;
 		}
 
-		cout << "Minimum csi: " << min_csi << endl;
-		cout << "Maximum csi: " << max_csi << endl;
+		cout << "Minimum csi (allowed): " << Constants::csi_min << endl;
+		cout << "Maximum csi (allowed): " << Constants::csi_max << endl;
+		cout << "Minimum csi (current): " << min_csi << endl;
+		cout << "Maximum csi (current): " << max_csi << endl;
 		cout << "Number of corrections of minimum variance: " << iCountMin << endl;
 		cout << "Number of corrections of maximum variance: " << iCountMax << endl;
 
@@ -3670,8 +3955,9 @@ void OpenSMOKE_CSTRNetwork::CleanTemperatureVariance(const int kind)
 
 void OpenSMOKE_CSTRNetwork::MemoTemperatureFunctions(const int kind)
 {
-	int kCSTR;
 	double uRT;
+
+	log_->section("Saving temperature functions");
 
 	cout << "        Memory allocation... " << endl;
 	BzzVector u_temperature(numCSTRReactors);
@@ -3682,7 +3968,7 @@ void OpenSMOKE_CSTRNetwork::MemoTemperatureFunctions(const int kind)
 	BzzMatrix matrix_correction_k2(numCSTRReactors,numReactions);
 
 	cout << "        Preparation... " << endl;
-	for(kCSTR = 1;kCSTR <= numCSTRReactors;kCSTR++)
+	for(int kCSTR = 1;kCSTR <= numCSTRReactors;kCSTR++)
 	{
 		u_temperature[kCSTR] = 1. / temperature[kCSTR];
 		log_temperature[kCSTR] = log(temperature[kCSTR]);
@@ -3710,20 +3996,21 @@ void OpenSMOKE_CSTRNetwork::MemoTemperatureFunctions(const int kind)
 	ChangeDimensions(numCSTRReactors, &Tmax);
 	ChangeDimensions(numCSTRReactors, &DeltaT);
 
-	Tmin   = TminGlobal-20.;
+	// Option 1: delta temperature 
+	Tmin   = TminGlobal-Fluctuations_DeltaMin;
 	Tmax   = TmaxGlobal+Fluctuations_DeltaMax;
 
-	// User defined maximum temperature
+	// Option 2: user defined maximum temperature
 	if (Fluctuations_TMax != 0.)
 		Tmax = Fluctuations_TMax;
 	
-	// User defined Correction coefficient (local)
+	// Option 3: user defined correction coefficient (local)
 	if (Fluctuations_CcMax != 0.)
-		for(kCSTR = 1;kCSTR <= numCSTRReactors;kCSTR++)
+		for(int kCSTR = 1;kCSTR <= numCSTRReactors;kCSTR++)
 			Tmax[kCSTR] = temperature[kCSTR]*Fluctuations_CcMax;
 
 	// Max-Min temperature difference
-	for(kCSTR = 1;kCSTR <= numCSTRReactors;kCSTR++)
+	for(int kCSTR = 1;kCSTR <= numCSTRReactors;kCSTR++)
 		DeltaT[kCSTR] = (Tmax[kCSTR]-Tmin);
 	
 	cout << "                Clean Temperature Variance... " << endl;
@@ -3731,8 +4018,13 @@ void OpenSMOKE_CSTRNetwork::MemoTemperatureFunctions(const int kind)
 
 	cout << " * Minimum Global Temperature:  " << TminGlobal << " K" << endl;
 	cout << " * Maximum Global Temperature:  " << TmaxGlobal << " K" << endl;
-	cout << " * Minimum Allowed Temperature: " << Tmin		 << " K" << endl;
-	cout << " * Maximum Global Temperature:  " << Tmax.Max() << " K" << endl;
+	cout << " * Minimum Allowed Temperature: " << Tmin       << " K" << endl;
+	cout << " * Maximum Allowed Temperature: " << Tmax.Max() << " K" << endl;
+
+	log_->info(" -t-min-global: " + std::to_string(TminGlobal));
+	log_->info(" -t-max-global: " + std::to_string(TmaxGlobal));
+	log_->info(" -t-min-allowed: " + std::to_string(Tmin));
+	log_->info(" -t-max-allowed: " + std::to_string(Tmax.Max()));
 
 	// Fluctuating reactions
 	{
@@ -3762,32 +4054,37 @@ void OpenSMOKE_CSTRNetwork::MemoTemperatureFunctions(const int kind)
 	if (kind == 0)
 	{
 		cout << "        Step B: Correction coefficients [none]... " << endl;
+		log_->info(" -no-correction");
 		CorrectionCoefficient_None(	u_temperature, log_temperature,
 									matrix_correction_k1, matrix_correction_uKeq, matrix_correction_k2);
 	}
 	else if (kind == 1)
 	{
 		cout << "        Step B: Correction coefficients [sin expansion]... " << endl;
+		log_->info(" -sin-correction");
 		CorrectionCoefficient_SinExpansion(	u_temperature, log_temperature,
 										matrix_correction_k1, matrix_correction_uKeq, matrix_correction_k2);
 	}
 	else if (kind == 2)
 	{
 		cout << "        Step B: Correction coefficients [double delta dirac]... " << endl;
+		log_->info(" -dirac-correction");
 		CorrectionCoefficient_DeltaDirac(	u_temperature, log_temperature,
 										matrix_correction_k1, matrix_correction_uKeq, matrix_correction_k2);
 	}
 	else if (kind == 3)
 	{
 		cout << "        Step B: Correction coefficients [beta PDF]... " << endl;
+		log_->info(" -beta-correction");
 		CorrectionCoefficient_BetaPDF(u_temperature, log_temperature,
 										matrix_correction_k1, matrix_correction_uKeq, matrix_correction_k2);
 	}
 	else if (kind == 4)
 	{
 		cout << "        Step B: Correction coefficients [clipped gaussian PDF]... " << endl;
+		log_->info(" -gaussian-correction");
 		CorrectionCoefficient_ClippedGaussianPDF(	u_temperature, log_temperature,
-													matrix_correction_k1, matrix_correction_uKeq, matrix_correction_k2);
+								matrix_correction_k1, matrix_correction_uKeq, matrix_correction_k2);
 	}
 
 	fWarning.close();
@@ -3827,7 +4124,7 @@ void OpenSMOKE_CSTRNetwork::MemoTemperatureFunctions(const int kind)
 	if(memoTemperature == 1)
 	{
 		BzzSave save('*', "Temp/MemoTemperatureFunctions.tmp");
-		for(kCSTR = 1;kCSTR <= numCSTRReactors;kCSTR++)
+		for(int kCSTR = 1;kCSTR <= numCSTRReactors;kCSTR++)
 		{
 			BzzVector auxiliar;
 
@@ -3839,6 +4136,13 @@ void OpenSMOKE_CSTRNetwork::MemoTemperatureFunctions(const int kind)
 		// Closing File
 		save.End();
 	}
+
+	log_->info(" -correction-k1-min: " + std::to_string(matrix_correction_k1.Min()));
+	log_->info(" -correction-k1-max: " + std::to_string(matrix_correction_k1.Max()));
+	log_->info(" -correction-k2-min: " + std::to_string(matrix_correction_k2.Min()));
+	log_->info(" -correction-k2-max: " + std::to_string(matrix_correction_k2.Max()));
+	log_->info(" -correction-uKeq-min: " + std::to_string(matrix_correction_uKeq.Min()));
+	log_->info(" -correction-uKeq-max: " + std::to_string(matrix_correction_uKeq.Max()));
 
 	#if SYMBOLIC_KINETICS==1
 
@@ -3881,15 +4185,15 @@ void OpenSMOKE_CSTRNetwork::MemoTemperatureFunctions(const int kind)
 		else
 			ErrorMessage("No Symbolic Jacobian available!");
 			*/
-		if (reactor[1]->NC != Reactions->NumberOfSpecies())		ErrorMessage("The number of species in the Symbolic Kinetics is wrong");
+		if (reactor[1]->NC != Reactions->NumberOfSpecies())	ErrorMessage("The number of species in the Symbolic Kinetics is wrong");
 		if (reactor[1]->NR != Reactions->NumberOfReactions())	ErrorMessage("The number of reactions in the Symbolic Kinetics is wrong");
 		
-		for(kCSTR = 1;kCSTR <= numCSTRReactors;kCSTR++)
+		for(int kCSTR = 1;kCSTR <= numCSTRReactors;kCSTR++)
 		{
-			BzzVector k1_map			= Reactions->k1_map.GetRow(kCSTR);
-			BzzVector uKeq_map			= Reactions->uKeq_map.GetRow(kCSTR);
-			BzzVector logFcent_map		= Reactions->logFcent_map.GetRow(kCSTR);
-			BzzVector k2_map			= Reactions->k2_map.GetRow(kCSTR);
+			BzzVector k1_map	= Reactions->k1_map.GetRow(kCSTR);
+			BzzVector uKeq_map	= Reactions->uKeq_map.GetRow(kCSTR);
+			BzzVector logFcent_map	= Reactions->logFcent_map.GetRow(kCSTR);
+			BzzVector k2_map	= Reactions->k2_map.GetRow(kCSTR);
 			reactor[kCSTR]->assignKineticConstants(k1_map, uKeq_map, logFcent_map, k2_map);
 		}
 	}
@@ -4213,7 +4517,10 @@ void OpenSMOKE_CSTRNetwork::CorrectionCoefficient_SinExpansion(BzzVector &u_temp
 	double	uT;
 	double	uRT;
 
+	const bool sin_integral = false;
+
 	OpenSMOKE_SinIntegralDistribution SinIntegralDistribution;
+	OpenSMOKE_SinDistribution SinDistribution;
 
 	for(kCSTR = 1;kCSTR <= numCSTRReactors; kCSTR++)
 	{
@@ -4243,9 +4550,10 @@ void OpenSMOKE_CSTRNetwork::CorrectionCoefficient_SinExpansion(BzzVector &u_temp
 					double	EsuR = -(Reactions->kinetics.E1[j] + T*Reactions->reactionDH_map[kCSTR][j]);
 					double	n = Reactions->kinetics.beta1[j] + Reactions->kinetics.sumNuij[j];
 
-					CoeffCorr = SinIntegralDistribution.CorrectionCoefficient(n, EsuR, T);
+					if (sin_integral == true)	CoeffCorr = SinIntegralDistribution.CorrectionCoefficient(n, EsuR, T);
+					else				CoeffCorr = SinDistribution.CorrectionCoefficient(qanm[kCSTR]*T*T, EsuR, n, T);
 					if (CoeffCorr > MaxCoeffCorr)	WarningLargeCorrectionCoefficient(kCSTR, T, g, j, Reactions->strReaction[j], EsuR, n, CoeffCorr);
-					if (CoeffCorr < 0.)				WarningSmallCorrectionCoefficient(kCSTR, T, g, j, Reactions->strReaction[j], EsuR, n, CoeffCorr);
+					if (CoeffCorr < 0.)		WarningSmallCorrectionCoefficient(kCSTR, T, g, j, Reactions->strReaction[j], EsuR, n, CoeffCorr);
 				}
 			}
 
@@ -4262,9 +4570,10 @@ void OpenSMOKE_CSTRNetwork::CorrectionCoefficient_SinExpansion(BzzVector &u_temp
 					double	EsuR = -Reactions->kinetics.E1[j];
 					double	n = Reactions->kinetics.beta1[j];
 
-					CoeffCorr = SinIntegralDistribution.CorrectionCoefficient(n, EsuR, T);
+					if (sin_integral == true)	CoeffCorr = SinIntegralDistribution.CorrectionCoefficient(n, EsuR, T);
+					else				CoeffCorr = SinDistribution.CorrectionCoefficient(qanm[kCSTR]*T*T, EsuR, n, T);
 					if (CoeffCorr > MaxCoeffCorr)	WarningLargeCorrectionCoefficient(kCSTR, T, g, j, Reactions->strReaction[j], EsuR, n, CoeffCorr);
-					if (CoeffCorr < 0.)				WarningSmallCorrectionCoefficient(kCSTR, T, g, j, Reactions->strReaction[j], EsuR, n, CoeffCorr);
+					if (CoeffCorr < 0.)		WarningSmallCorrectionCoefficient(kCSTR, T, g, j, Reactions->strReaction[j], EsuR, n, CoeffCorr);
 				}
 			}
 			matrix_correction_k1[kCSTR][j] = CoeffCorr;
@@ -4279,20 +4588,27 @@ void OpenSMOKE_CSTRNetwork::CorrectionCoefficient_SinExpansion(BzzVector &u_temp
 						double	EsuR = -Reactions->kinetics.E2[j];
 						double	n = Reactions->kinetics.beta2[j];
 
-						CoeffCorr = SinIntegralDistribution.CorrectionCoefficient(n, EsuR, T);
-						
+						if (sin_integral == true)	CoeffCorr = SinIntegralDistribution.CorrectionCoefficient(n, EsuR, T);
+						else				CoeffCorr = SinDistribution.CorrectionCoefficient(qanm[kCSTR]*T*T, EsuR, n, T);
 						if (CoeffCorr > MaxCoeffCorr)	WarningLargeCorrectionCoefficient(kCSTR, T, g, j, Reactions->strReaction[j], EsuR, n, CoeffCorr);
-						if (CoeffCorr < 0.)				WarningSmallCorrectionCoefficient(kCSTR, T, g, j, Reactions->strReaction[j], EsuR, n, CoeffCorr);
+						if (CoeffCorr < 0.)		WarningSmallCorrectionCoefficient(kCSTR, T, g, j, Reactions->strReaction[j], EsuR, n, CoeffCorr);
 					}
 				}
 				matrix_correction_k2[kCSTR][j] = CoeffCorr;
 			}
 		}
 
+		if (sin_integral == true)	
 		{
 			Tk_20000[kCSTR] = KineticTemperature(SinIntegralDistribution.CorrectionCoefficient(0., 20000./1.987, T), T, 20000./1.987, 0.);
 			Tk_40000[kCSTR] = KineticTemperature(SinIntegralDistribution.CorrectionCoefficient(0., 40000./1.987, T), T, 40000./1.987, 0.);
 			Tk_60000[kCSTR] = KineticTemperature(SinIntegralDistribution.CorrectionCoefficient(0., 60000./1.987, T), T, 60000./1.987, 0.);
+		}
+		else
+		{
+			Tk_20000[kCSTR] = KineticTemperature(SinDistribution.CorrectionCoefficient(qanm[kCSTR]*T*T, 20000./1.987, 0., T), T, 20000./1.987, 0.);
+			Tk_40000[kCSTR] = KineticTemperature(SinDistribution.CorrectionCoefficient(qanm[kCSTR]*T*T, 40000./1.987, 0., T), T, 40000./1.987, 0.);
+			Tk_60000[kCSTR] = KineticTemperature(SinDistribution.CorrectionCoefficient(qanm[kCSTR]*T*T, 60000./1.987, 0., T), T, 60000./1.987, 0.);
 		}
 
 	}	// End Cycle On each Reactor
@@ -4437,7 +4753,7 @@ void OpenSMOKE_CSTRNetwork::CorrectionCoefficient_BetaPDF(	BzzVector &u_temperat
 
 					CoeffCorr = BetaDistribution.ReactionCorrectionCoefficient(n, EsuR, T, Tmin, Tmax[kCSTR]);
 					if (CoeffCorr > MaxCoeffCorr)	WarningLargeCorrectionCoefficient(kCSTR, T, g, j, Reactions->strReaction[j], EsuR, n, CoeffCorr);
-					if (CoeffCorr < 0.)				WarningSmallCorrectionCoefficient(kCSTR, T, g, j, Reactions->strReaction[j], EsuR, n, CoeffCorr);
+					if (CoeffCorr < 0.)		WarningSmallCorrectionCoefficient(kCSTR, T, g, j, Reactions->strReaction[j], EsuR, n, CoeffCorr);
 				}
 			}
 			matrix_correction_uKeq[kCSTR][j] = CoeffCorr;
@@ -4627,8 +4943,8 @@ void OpenSMOKE_CSTRNetwork::ConnectionMatrix()
 	fOutput.close();
 }
 
-void OpenSMOKE_CSTRNetwork::WarningLargeCorrectionCoefficient(const int k, const double T, const double g, const int iReaction, 
-							const std::string stringReaction, const double EsuR, const double n, double &CoeffCorr)
+void OpenSMOKE_CSTRNetwork::WarningLargeCorrectionCoefficient(	const int k, const double T, const double g, const int iReaction, 
+								const std::string stringReaction, const double EsuR, const double n, double &CoeffCorr)
 {
 	double csi = (T-Tmin)/DeltaT[k];
 	double Tk = KineticTemperature(CoeffCorr, T, EsuR, n);
@@ -4691,6 +5007,9 @@ void OpenSMOKE_CSTRNetwork::GetFourth(const double tEnd)
 	BzzVector initialValues;
 	BzzVector residual_Vector;
 
+
+	log_->info("     - Global ODE (2)");
+
 	// Memory Allocation
 	ChangeDimensions(numCSTRReactors, &blockDimensions);
 	ChangeDimensions(numCSTRReactors * numComponents, &residual_Vector);
@@ -4717,6 +5036,7 @@ void OpenSMOKE_CSTRNetwork::GetFourth(const double tEnd)
 	cout << "Solving Linear System in Fourth Method (ODE)" << endl;
 	cout << "  ** Mean Residual Before Fourth Method" << F0 << endl;
 	cout << "  ** Max  Residual Before Fourth Method" << maxF0 << endl;
+	log_->info("       - mean-res = " + std::to_string(F0) + " max-res = " + std::to_string(maxF0));
 
 	// Solving the ODE System
 	{
@@ -4731,9 +5051,9 @@ void OpenSMOKE_CSTRNetwork::GetFourth(const double tEnd)
 		BzzMatrixSparseLockedByRows Q = Ld;
 		//obj(this);
 
-        std::string fileSparseMatrix = "Temp/A.tmp";
-        char fileSM[200];
-        strcpy(fileSM, fileSparseMatrix.c_str());
+		std::string fileSparseMatrix = "Temp/A.tmp";
+		char fileSM[200];
+		strcpy(fileSM, fileSparseMatrix.c_str());
 		BzzOdeSparseStiffObject o(initialValues, tStart, &obj, blockDimensions, &Q, fileSM);
 		yMin = 0.;
 		yMax = 1.;
@@ -4760,8 +5080,10 @@ void OpenSMOKE_CSTRNetwork::GetFourth(const double tEnd)
 	maxF1 = residual_Vector.MaxAbs();
 	cout << "  ** Mean Residual After Fourth Method (ODE): " << F1 << endl;
 	cout << "  ** Max  Residual After Fourth Method (ODE): " << maxF1 << endl;
+	log_->info("       - mean-res = " + std::to_string(F1) + " max-res = " + std::to_string(maxF1));
 
 	// Accetta la nuova soluzione che sicuramente e' buona in quanto ottenuta
 	// attraverso la soluzione di un transitorio reale
 	CopyDataFromVector(&massFractionsInReactorsSolution,massFractionsInReactorsSolution_Vector);
 }
+

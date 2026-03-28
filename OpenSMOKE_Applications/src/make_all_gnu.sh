@@ -169,16 +169,16 @@ cd ..
 cd ..
 
 
-#rm ../exe/linux/gnu/OpenSMOKE_KinPP_Splitting_GNU.sh
-#cd OpenSMOKE_KinPP_Splitting/projects/OpenSMOKE_KinPP_Splitting_Linux
-#mkdir ../../exe
-#mkdir gnu
-#make -f makefile.bzzmath COMPILER_NAME=gnu clean
-#make -f makefile.bzzmath COMPILER_NAME=gnu
-#mv ../../exe/OpenSMOKE_KinPP_Splitting_GNU.sh ../../../../exe/linux/gnu
-#cd ..
-#cd ..
-#cd ..
+rm ../exe/linux/gnu/OpenSMOKE_KinPP_Splitting_GNU.sh
+cd OpenSMOKE_KinPP_Splitting/projects/OpenSMOKE_KinPP_Splitting_Linux
+mkdir ../../exe
+mkdir gnu
+make -f makefile.bzzmath COMPILER_NAME=gnu clean
+make -f makefile.bzzmath COMPILER_NAME=gnu
+mv ../../exe/OpenSMOKE_KinPP_Splitting_GNU.sh ../../../../exe/linux/gnu
+cd ..
+cd ..
+cd ..
 
 
 

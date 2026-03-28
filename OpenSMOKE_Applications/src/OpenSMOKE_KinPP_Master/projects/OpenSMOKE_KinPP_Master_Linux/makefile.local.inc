@@ -28,7 +28,7 @@ LIBS 		      = $(LOC_LIBS) $(BZZ_LIBS) $(NR_LIBS) $(MKL_LIBS)
 # COMPILER
 # ------------------------------------------------------------------------------------------------
 CPP       = $(CXX) 	$(CXX_FLAGS) -c 	$(INCDIRS)
-LINKER    = $(CXX) 	-O3 -static  $(CXX_FLAGS) 		$(INCDIRS) 	$(LIBS_PATH)
+LINKER    = $(CXX) 	-O3   $(CXX_FLAGS) 		$(INCDIRS) 	$(LIBS_PATH)
 
 # ------------------------------------------------------------------------------------------------
 # DETAILS

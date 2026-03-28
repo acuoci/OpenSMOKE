@@ -18,8 +18,9 @@ MYHOME		       =  $(HOME)
 BZZ_PATH 	       =  /software/chimica2/libraries/bzzmath/bzzmath-6.0
 OPENSMOKE_PATH         =  $(HOME)/Development/ExternalNumericalLibraries/OpenSMOKE/OpenSMOKE
 NUMERICALRECIPES_PATH  =  /software/chimica2/libraries/nr/nr-gcc-6.3.0
-MKL_PATH               =  $(HOME)/intel/mkl
+MKL_PATH               =  /software/chimica2/libraries/intel/xe_2019/
 SYSTEM_LIB_PATH        =  /usr/lib/x86_64-redhat-linux5E/lib64/
+#SYSTEM_LIB_PATH       = /
 
 #Paths 
 LIS_PATH               =  /software/chimica2/libraries/lis/lis-1.7.29/serial-gcc-6.3.0
@@ -56,7 +57,8 @@ ifeq ($(COMPILER_NAME),intel)
 OBJ_PATH    = intel_mkl
 STRING_NAME = INTEL_MKL
 CXX         = icpc
-CXX_FLAGS   = $(OPTIONS_INTEL) -static
+CXX_FLAGS   = $(OPTIONS_INTEL) 
+#-static
 BZZ_LIBS    = $(BZZ_LIBS_INTEL)
 NR_LIBS     = $(NR_LIBS_INTEL)
 
@@ -67,7 +69,8 @@ ifeq ($(COMPILER_NAME),gnu)
 OBJ_PATH    = gnu_mkl
 STRING_NAME = GNU_MKL
 CXX         = g++
-CXX_FLAGS   = $(OPTIONS_GNU) -static
+CXX_FLAGS   = $(OPTIONS_GNU) 
+#-static
 BZZ_LIBS    = $(BZZ_LIBS_GNU) 
 NR_LIBS     = $(NR_LIBS_GNU)
 
@@ -76,7 +79,7 @@ endif
 # ------------------------------------------------------------------------------------------------
 # INCLUDE
 # ------------------------------------------------------------------------------------------------
-BZZ_INCLUDE          = -I$(BZZ_PATH)/hpp
+BZZ_INCLUDE          = -I$(BZZ_PATH)/hpp/release-9.2.0
 MKL_INCLUDE          = -I$(MKL_PATH)/include
 MKL_ROOT	     =   ${MKL_PATH}
 NR_INCLUDE           = -I$(NUMERICALRECIPES_PATH)/include
@@ -88,7 +91,7 @@ METIS_INCLUDE        = -I$(METIS_PATH)/include
 # ------------------------------------------------------------------------------------------------
 # LIBRARY PATHS
 # ------------------------------------------------------------------------------------------------
-BZZ_PATH_LIB           = $(BZZ_PATH)/lib/release-6.3.0
+BZZ_PATH_LIB           = $(BZZ_PATH)/lib/release-9.2.0
 NR_PATH_LIB            = $(NUMERICALRECIPES_PATH)/lib
 OPENSMOKE_PATH_LIB     = $(OPENSMOKE_PATH)/lib/linux/$(OBJ_PATH)
 MKL_PATH_LIB           = $(MKL_PATH)/lib/intel64

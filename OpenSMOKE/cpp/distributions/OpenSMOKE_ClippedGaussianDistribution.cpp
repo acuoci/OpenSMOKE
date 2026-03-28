@@ -80,6 +80,7 @@ void OpenSMOKE_ClippedGaussianDistribution::Set(const double _csi, const double 
 
 	dx = (x2-x1)/double(N);
 	x[1] = x1;
+	y[1] = exp(-BzzPow2(x[1]-csi)/(2.*g));
 	for(j=2;j<=N+1;j++)	x[j] = x[j-1]+dx;
 	for(j=2;j<=N+1;j++)	y[j] = exp(-BzzPow2(x[j]-csi)/(2.*g));
 }

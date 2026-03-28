@@ -189,8 +189,23 @@ bool IsANumber(const char value)
     else
         return false;
 }
+
 void OpenSMOKE_KPP_ReactorNetwork::ReadFirstGuess()
 {
+	// Extract number of reactors
+	{
+		ifstream fInput(data_.nameFirstGuessFile().c_str(), ios::in);
+
+		unsigned int dummy;
+		unsigned int NCReduced;
+		fInput >> dummy;
+		fInput >> NCReduced;
+		for (int j=1;j<=NCReduced;j++)
+            		fInput >> dummy;
+		fInput >> NR_;
+		fInput.close();
+	}
+
 	ifstream fInput(data_.nameFirstGuessFile().c_str(), ios::in);
 
 	unsigned int NCDetailed;
@@ -198,6 +213,11 @@ void OpenSMOKE_KPP_ReactorNetwork::ReadFirstGuess()
 
 	fInput >> NCDetailed;
 	fInput >> NCReduced;
+	
+	cout << " * Number of detailed species: " << NCDetailed << endl;
+	cout << " * Number of reduced species:  " << NCReduced << endl;
+	cout << " * Number of reactors:  " << NR_ << endl;
+	getchar();
 
 	ChangeDimensions(NCReduced, &jReduced);
 	vector<string> namesReduced;
@@ -205,7 +225,9 @@ void OpenSMOKE_KPP_ReactorNetwork::ReadFirstGuess()
 
         for (int j=1;j<=jReduced.Size();j++)
             fInput >> namesReduced[j];
-        
+
+	cout << "First species: " << namesReduced[1] << endl;         
+
         if (IsANumber(namesReduced[1].at(0)) == true)
         {
             for (int j=1;j<=jReduced.Size();j++)
@@ -218,12 +240,10 @@ void OpenSMOKE_KPP_ReactorNetwork::ReadFirstGuess()
                 jReduced[j] = mix_.recognize_species(namesReduced[j]);
         }
         
+	cout << " * List of species recognized" << endl;
         for (int j=1;j<=jReduced.Size();j++)
-            cout << jReduced[j] << " " << mix_.names[jReduced[j]] << endl;
+            cout << "   " << jReduced[j] << " " << mix_.names[jReduced[j]] << endl;
         
-        
-	fInput >> NR_;
-
 	// Allocating kinetics
 	if (data_.iSaveKineticConstants() == true)
 		kinetics_ = new OpenSMOKE_KPP_SingleReactor_KineticsManager[NR_+1];
@@ -253,8 +273,24 @@ void OpenSMOKE_KPP_ReactorNetwork::ReadFirstGuess()
 
 	unsigned int dummy;
 	fInput >> dummy;
+	if (dummy != NR_)
+	{
+		cout << "Number of reduced reactors" << NR_ << endl;
+		cout << "Number of reactors from FirstGuess file: " << dummy << endl;
+
+		ErrorMessage("The number of reactors the FirstGuess file does not fit!");
+	}
+
+	fInput >> dummy;
 	if (dummy != NCReduced)
+	{
+		cout << "Number of reduced species: " << NCReduced << " - Number of detailed species: " << NCDetailed << endl;
+		cout << "Number of reduced species from FirstGuess file: " << dummy << endl;
+		cout << "Number of species in the detailed mechanism: " << mix_.NumberOfSpecies() << endl;
+
 		ErrorMessage("The number of reduced species in the FirstGuess file does not fit!");
+	}
+
 	if (mix_.NumberOfSpecies() != NCDetailed)
 		ErrorMessage("The number of detailed species in the FirstGuess file does not fit with the number of species in the detailed kinetic file!");
 
@@ -359,7 +395,7 @@ void OpenSMOKE_KPP_ReactorNetwork::BuildNetwork()
 	// Memory Allocation
 	cout << " * Memory allocation..." << endl;
 	MemoryAllocation();
-    cout << "Done: Memory Allocation" << endl; //getchar();
+    	cout << "   Done: Memory Allocation" << endl; //getchar();
 
 	// Build network
 	cout << " * Assembling mass flow rate topology..." << endl;
@@ -368,75 +404,79 @@ void OpenSMOKE_KPP_ReactorNetwork::BuildNetwork()
 		for(int j=1;j<=reactors_[k].out().Size();j++)
 			reactors_[reactors_[k].out()[j]].UpdateInflow(k, reactors_[k].cOut()[j], reactors_[k].diffusion()[j]);
 	}
-    cout << "Done: Assembling mass flow rate topology" << endl; // getchar();
+    	cout << "   Done: Assembling mass flow rate topology" << endl; // getchar();
         
 	// Assemblig local reactors
 	cout << " * Assembling local topology..." << endl;
 	for (int k=1;k<=NR_;k++)
 		reactors_[k].Assembling();
-    cout << "Done: Assembling local topology" << endl; //getchar();
+    	cout << "   Done: Assembling local topology" << endl; //getchar();
 
 	// Mass flow rate Errors
 	cout << " * Mass flow errors (before corrections)" << endl;
 	MassFlowErrors();
-    cout << "Done: Mass flow errors" << endl; //getchar();
+    	cout << "   Done: Mass flow errors" << endl; //getchar();
 
 	// Adjust mass fluxes
 	cout << " * Correcting mass flow rates..." << endl;
 	CorrectingMassFlowRates();
-    cout << "Done: Correcting mass flow rates" << endl; //getchar();
+    	cout << "   Done: Correcting mass flow rates" << endl; //getchar();
 
 	// Mass flow rate Errors
 	cout << " * Mass flow errors (after corrections)" << endl;
 	MassFlowErrors();
-    cout << "Done: Mass flow errors" << endl; //getchar();
+    	cout << "   Done: Mass flow errors" << endl; //getchar();
 	
 	// External feeds and outputs indices
+	cout << " * External feeds and outputs indices" << endl;
 	for (int k=1;k<=NR_;k++)
 	{
 		if (reactors_[k].IsExternalFeedReactor() == true)	jExternalFeedReactors.Append(k);
 		if (reactors_[k].IsExternalOutputReactor() == true)	jExternalOutputReactors.Append(k);
 	}
-    cout << "Done: External feeds and outputs indices" << endl; //getchar();
+    	cout << "   Done: External feeds and outputs indices" << endl; //getchar();
 
 	// Convection-Diffusion Matrix
 	cout << " * Assembling Convection-Diffusion Matrix..." << endl;
 	AssemblingConvectionDiffusionMatrix();
-    cout << "Done: Convection-Diffusion Matrix" << endl; //getchar();
+    	cout << "   Done: Convection-Diffusion Matrix" << endl; //getchar();
 
 	// External feeds Right Hand Sides
 	cout << " * Assembling Right Hand Sides..." << endl;
 	AssemblingRightHandSides();
-    cout << "Done: Assembling Right Hand Sides" << endl; //getchar();
+        cout << "   Done: Assembling Right Hand Sides" << endl; //getchar();
 
 	// Exchange info with single reactors
 	cout << " * Convection-Diffusion matrix communication..." << endl;
 	for (int k=1;k<=NR_;k++)
 		reactors_[k].ConvectionDiffusionMatrixCommunication(*this);
-    cout << "Done: Convection-Diffusion matrix communication" << endl; //getchar();
+    	cout << "   Done: Convection-Diffusion matrix communication" << endl; //getchar();
         
 	// Statistics on C matrix
+	cout << " * SummaryConvectionDiffusionMatrix..." << endl;
 	SummaryConvectionDiffusionMatrix();
-    cout << "Done: SummaryConvectionDiffusionMatrix" << endl; //getchar();
+    	cout << "Done: SummaryConvectionDiffusionMatrix" << endl; //getchar();
 
 	// Write additional info
+	cout << " * WriteReactorNetworkData..." << endl;
 	WriteReactorNetworkData();
-    cout << "Done: WriteReactorNetworkData" << endl; //getchar();
+    	cout << "Done: WriteReactorNetworkData" << endl; //getchar();
 
 	// Initial residuals
+	cout << " * ResidualsAnalysis..." << endl;
 	ResidualsAnalysis();
-    cout << "Done: ResidualsAnalysis" << endl; //getchar();
+    	cout << "   Done: ResidualsAnalysis" << endl; //getchar();
 
 	// Initialize OdeSystem
 	cout << " * Initialize reactors..." << endl;
-    odePool = new ODE_Pool(data_.nThreads(), NumberOfSpecies());
-    for(int k=0;k<data_.nThreads();k++)
+	odePool = new ODE_Pool(data_.nThreads(), NumberOfSpecies());
+	for(int k=0;k<data_.nThreads();k++)
 		odePool->Set(k, reactors_[k+1]);
 	odePool->Initialize();
         
 //	for (int k=1;k<=NR_;k++)
 //		reactors_[k].SetInitialConditions();
-    cout << "Done: Initialize reactors" << endl; //getchar();
+    	cout << "   Done: Initialize reactors" << endl; //getchar();
 
 	cout << " * Initialize convection sparse matrix..." << endl;
 	if (data_.PredictorCorrector_SparseLinearSolver() == KPP_SPARSESOLVER_PARDISO)
@@ -458,13 +498,13 @@ void OpenSMOKE_KPP_ReactorNetwork::BuildNetwork()
 		lisMatrixConvection = new OpenSMOKE_LIS_Unsymmetric(OPENSMOKE_DIRECTSOLVER_SQUAREMATRIX);
 		lisMatrixConvection->SetSparsityPattern(C_);
 	}
-    cout << "Done: Initialize convection sparse matrix" << endl; //getchar();
+    	cout << "   Done: Initialize convection sparse matrix" << endl; //getchar();
 
 	// Open Files
 	cout << " * Open statistics files..." << endl;
 	statistics_ = new OpenSMOKE_KPP_SingleReactorStatistics(mix_.NumberOfSpecies(), NR_, "SequenceStatistics.out");
 	statisticsConvective_ = new OpenSMOKE_KPP_ConvectiveNetworkStatistics(mix_.NumberOfSpecies(), NR_, "SequenceConvection.out");
-    cout << "Done: Open statistics files" << endl; //getchar();
+    	cout << "   Done: Open statistics files" << endl; //getchar();
 	
 	if (data_.GlobalODE_SparseLinearSolver()  == KPP_SPARSESOLVER_PARDISO || data_.GlobalNLS_SparseLinearSolver() == KPP_SPARSESOLVER_PARDISO)
 	{
@@ -490,7 +530,7 @@ void OpenSMOKE_KPP_ReactorNetwork::BuildNetwork()
 		// OpenSMOKE Gauss Siedel Global Linear Systems
 		openSMOKEMatrixGlobal = new OpenSMOKE_KPP_BlockMatrixNetwork();
 	}
-    cout << "Done: Global Solver" << endl; //getchar();
+    	cout << "   Done: Global Solver" << endl; //getchar();
 	
 	// Courant number (the maximum value is 1)
 	ChangeDimensions(NR_, &timeSteps);
@@ -513,15 +553,15 @@ void OpenSMOKE_KPP_ReactorNetwork::BuildNetwork()
 	
 	fGlobalNLS_.open(globalnls_name.c_str());
 	fGlobalNLS_.setf(ios::scientific);       
-    fGlobalNLS_ << setw(12) << left << "Iter.(1)";
-    fGlobalNLS_ << setw(12) << left << "Glob-NLS(2)";
-    fGlobalNLS_ << setw(12) << left << "Loc-NLS(3)";
-    fGlobalNLS_ << setw(16) << left << "Dummy(4)";
-    fGlobalNLS_ << setw(16) << left << "Reduction(5)";
-    fGlobalNLS_ << setw(12) << left << "Jacob(6)";        
-    fGlobalNLS_ << setw(12) << left << "LS-Iter(7)";
-    fGlobalNLS_ << setw(16) << left << "LS-Norm1(8)";
-    fGlobalNLS_ << endl;
+	fGlobalNLS_ << setw(12) << left << "Iter.(1)";
+	fGlobalNLS_ << setw(12) << left << "Glob-NLS(2)";
+	fGlobalNLS_ << setw(12) << left << "Loc-NLS(3)";
+	fGlobalNLS_ << setw(16) << left << "Dummy(4)";
+	fGlobalNLS_ << setw(16) << left << "Reduction(5)";
+	fGlobalNLS_ << setw(12) << left << "Jacob(6)";        
+	fGlobalNLS_ << setw(12) << left << "LS-Iter(7)";
+	fGlobalNLS_ << setw(16) << left << "LS-Norm1(8)";
+	fGlobalNLS_ << endl;
         
 	fSequence_.open(sequence_name.c_str());
 	fSequence_.setf(ios::scientific);        
@@ -1233,7 +1273,8 @@ void OpenSMOKE_KPP_ReactorNetwork::SolveSequenceCSTR()
 				if (count == 500)	{	cout << "Reactor " << k << endl; count=0;}
 				count++;
 
-                            odePool->Set(0,reactors_[k]);
+				std::cout << "Reactor number " << k << " out of " << NR_ << std::endl;
+                            	odePool->Set(0,reactors_[k]);
 				reactors_[k].SolveCSTR_CorrectorContinous_Smart(data_.SingleReactor_IntegrationTime(), *this, tmpMatrix, odePool->o(0));
                         }
 			cout << "* Sequence completed..." << endl;
