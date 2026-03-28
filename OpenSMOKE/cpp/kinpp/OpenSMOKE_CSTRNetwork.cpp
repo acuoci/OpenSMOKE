@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <vector>
+#include <memory>
 #include <cstring>
 #include <sstream>
 #include <stdexcept>
@@ -60,7 +61,7 @@ int OpenSMOKE_CSTRNetwork::count		= 0;
 int OpenSMOKE_CSTRNetwork::countInScope = 0;
 
 #if SYMBOLIC_KINETICS==1
-	std::vector<OpenSMOKE_SymbolicKinetics*> reactor;
+	std::vector<std::unique_ptr<OpenSMOKE_SymbolicKinetics>> reactor;
 #endif
 
 #define DEBUG_LOADING 0
@@ -186,11 +187,6 @@ OpenSMOKE_CSTRNetwork::~OpenSMOKE_CSTRNetwork(void)
 	#if SYMBOLIC_KINETICS==1
 	if (countInScope == 0)
 	{
-		for (std::size_t i = 0; i < reactor.size(); ++i)
-		{
-			delete reactor[i];
-			reactor[i] = nullptr;
-		}
 		reactor.clear();
 	}
 	#endif
@@ -4176,21 +4172,16 @@ void OpenSMOKE_CSTRNetwork::MemoTemperatureFunctions(const int kind)
 	log_->info(" -correction-uKeq-max: " + std::to_string(matrix_correction_uKeq.Max()));
 
 	#if SYMBOLIC_KINETICS==1
-	for (std::size_t i = 0; i < reactor.size(); ++i)
-	{
-		delete reactor[i];
-		reactor[i] = nullptr;
-	}
 	reactor.clear();
 
 	if (iAnalyticalJacobian == 1)
 	{
 		cout << "        Step E: Initialize Analytical Jacobian... " << endl; 
-		reactor.assign(numCSTRReactors + 1, nullptr);
+		reactor.resize(numCSTRReactors + 1);
 
 		if (analyticalJacobian == GRI12)
 			for (int kCSTR=1;kCSTR<=numCSTRReactors;kCSTR++)
-				reactor[kCSTR] = new OpenSMOKE_SymbolicKinetics_GRI12();
+				reactor[kCSTR].reset(new OpenSMOKE_SymbolicKinetics_GRI12());
 		else
 			ErrorMessage("No Symbolic Jacobian available!");
 		/*
