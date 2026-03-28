@@ -21,6 +21,7 @@
 #ifndef OpenSMOKE_PARDISO_Unsymmetric_H
 #define OpenSMOKE_PARDISO_Unsymmetric_H
 
+#include <vector>
 #include "BzzMath.hpp"
 #include "kinpp/OpenSMOKE_DirectLinearSolver_Unsymmetric.h"
 
@@ -84,6 +85,8 @@ private:
 	void CompleteMatrix();
 	void ErrorAnalysis();
 	void SetUserDefaultOptions(const OpenSMOKE_DirectLinearSolver_Unsymmetric_Kind kind);
+	void ReleasePardisoInternalData();
+	void ClearStorage();
 
 private:
 	
@@ -95,8 +98,17 @@ private:
 	int msglvl;				// Message level information
 	int iparm[64];			// Options
 	bool iCStyleIndexing;	// C-Style indices
+
+	// Reusable work buffers to avoid per-call allocations
+	std::vector<double> scratch_rhs_;
+	std::vector<double> scratch_sol_;
+	std::vector<double> scratch_rhs_multi_;
+	std::vector<double> scratch_sol_multi_;
+
+	bool pardiso_analysis_done_;
 	
 	int    *perm;			// Permutation index
 };
 
 #endif	// OpenSMOKE_PARDISO_Unsymmetric_H
+

@@ -37,6 +37,21 @@ void OpenSMOKE_PARDISO_Unsymmetric::SetUserDefaultOptions(const OpenSMOKE_Direct
 	iCStyleIndexing				= true;
 	kind_						= kind;
 	status_						= OPENSMOKE_DIRECTSOLVER_STATUS_OPEN;
+	rows = nullptr;
+	columns = nullptr;
+	values = nullptr;
+	perm = nullptr;
+	n = 0;
+	nrhs = 0;
+	numberNonZeroElements = 0;
+	countGlobal_ = 0;
+	countGlobalRows_ = 0;
+	error_ = 0;
+	pardiso_analysis_done_ = false;
+	scratch_rhs_.clear();
+	scratch_sol_.clear();
+	scratch_rhs_multi_.clear();
+	scratch_sol_multi_.clear();
 
 	// Solver internal data address pointer
 	for (int j=0;j<64;j++)
@@ -113,9 +128,73 @@ void OpenSMOKE_PARDISO_Unsymmetric::SetUserDefaultOptions(const OpenSMOKE_Direct
 				// 1=the solver prints statistical information to the screen
 
 	// Maximal number of factors with identical nonzero sparsity structure that the user 
-	// would like to keep at the same time in memor
+	// would like to keep at the same time in memory
 	maxfct = 1;
-    
+
+	// Actual matrix for the solution phase.
+	mnum = 1;
+
+	// This scalar value defines the matrix type
+	mtype = 11;		// Unsymmetric matrix
+}
+
+void OpenSMOKE_PARDISO_Unsymmetric::ReleasePardisoInternalData()
+{
+	if (pardiso_analysis_done_ == false)
+		return;
+
+	int phase_release = -1;
+	int release_n = (n > 0) ? n : 1;
+	int release_nrhs = 1;
+	int release_error = 0;
+	int dummy_ia[2] = {0, 0};
+	int dummy_ja[1] = {0};
+	int dummy_perm[1] = {0};
+	double dummy_a[1] = {0.};
+	double dummy_rhs[1] = {0.};
+	double dummy_sol[1] = {0.};
+
+	pardiso(pt, &maxfct, &mnum, &mtype, &phase_release, &release_n,
+		dummy_a,
+		dummy_ia,
+		dummy_ja,
+		dummy_perm,
+		&release_nrhs,
+		iparm,
+		&msglvl,
+		dummy_rhs,
+		dummy_sol,
+		&release_error);
+
+	for (int j=0;j<64;j++)
+		pt[j] = 0;
+
+	pardiso_analysis_done_ = false;
+}
+
+void OpenSMOKE_PARDISO_Unsymmetric::ClearStorage()
+{
+	ReleasePardisoInternalData();
+
+	CleanMemory();
+	delete[] perm;
+
+	rows = nullptr;
+	columns = nullptr;
+	values = nullptr;
+	perm = nullptr;
+
+	scratch_rhs_.clear();
+	scratch_sol_.clear();
+	scratch_rhs_multi_.clear();
+	scratch_sol_multi_.clear();
+
+	n = 0;
+	nrhs = 0;
+	numberNonZeroElements = 0;
+	countGlobal_ = 0;
+	countGlobalRows_ = 0;
+	status_ = OPENSMOKE_DIRECTSOLVER_STATUS_OPEN;
 	// Actual matrix for the solution phase. 
 	// With this scalar you can define the matrix that you would like to factorize. 
 	mnum = 1;
@@ -127,6 +206,7 @@ void OpenSMOKE_PARDISO_Unsymmetric::SetUserDefaultOptions(const OpenSMOKE_Direct
 
 OpenSMOKE_PARDISO_Unsymmetric::~OpenSMOKE_PARDISO_Unsymmetric(void)
 {
+	ClearStorage();
 }
 
 void OpenSMOKE_PARDISO_Unsymmetric::SetSparsityPattern(BzzMatrixSparse &M)
@@ -287,6 +367,8 @@ void OpenSMOKE_PARDISO_Unsymmetric::UpdateMatrix(const BzzVector &valuesVector)
 	if (status_	== OPENSMOKE_DIRECTSOLVER_STATUS_OPEN)
 		ErrorMessage("UpdateMatrix(const BzzVector &valuesVector) can be used only for Open Matrices");
 
+	countGlobal_ = 0;
+
 	// Non zero elements
 	{		
 		for(int k=1;k<=valuesVector.Size();k++)
@@ -323,15 +405,14 @@ void OpenSMOKE_PARDISO_Unsymmetric::CompleteMatrix()
 	nrhs  = 1;  // Number of RHSs
 	phase = 11;	// Analysis
 
-	double* b_ = new double[n];	// dummy variables
-	double* x_ = new double[n];	// dummy variables	
+	scratch_rhs_.assign(n, 0.);
+	scratch_sol_.assign(n, 0.);
 
-	for(int j=0;j<n;j++)
-		b_[j] = 0.;
-	
 	if (msglvl==1)	MessageOnTheScreen("PARDISO: Sparse linear system analysis");
-	pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, values, rows, columns, perm, &nrhs, iparm, &msglvl, b_, x_, &error_);
+	pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, values, rows, columns, perm, &nrhs, iparm, &msglvl,
+		scratch_rhs_.data(), scratch_sol_.data(), &error_);
 	ErrorAnalysis();
+	pardiso_analysis_done_ = true;
 
 	// Update Status
 	status_	= OPENSMOKE_DIRECTSOLVER_STATUS_TOFACTORIZE;
@@ -345,17 +426,15 @@ void OpenSMOKE_PARDISO_Unsymmetric::NumericalFactorization()
 	if (status_	== OPENSMOKE_DIRECTSOLVER_STATUS_FACTORIZED)
 		return;
 
-	double* x_ = new double[n];
-	double* b_ = new double[n];
-
-	for(int j=0;j<n;j++)
-		b_[j] = 0.;//b[j+1];
+	scratch_sol_.assign(n, 0.);
+	scratch_rhs_.assign(n, 0.);
 
 	nrhs  = 1;  // Number of RHSs
 	phase = 22;	// Numerical factorization
 	
 	if (msglvl==1)	MessageOnTheScreen("PARDISO: Numerical factorization");
-	pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, values, rows, columns, perm, &nrhs, iparm, &msglvl, b_, x_, &error_);
+	pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, values, rows, columns, perm, &nrhs, iparm, &msglvl,
+		scratch_rhs_.data(), scratch_sol_.data(), &error_);
 	ErrorAnalysis();
 
 	// Update Status
@@ -403,11 +482,13 @@ void OpenSMOKE_PARDISO_Unsymmetric::Solve(BzzMatrix &b, BzzMatrix &x, const bool
 	if (iVerticalStorage == true)	nrhs  = b.Columns();	// Number of RHSs
 	else							nrhs  = b.Rows();		// Number of RHSs
 	
-	// Memory Allocation
-	double* x_ = new double[n*nrhs];
-	double* b_ = new double[n*nrhs];
+	const int storageSize = n*nrhs;
+	scratch_sol_multi_.resize(storageSize);
+	scratch_rhs_multi_.resize(storageSize);
+	double* x_ = scratch_sol_multi_.data();
+	double* b_ = scratch_rhs_multi_.data();
 
-	// From BzzVector to C vector
+	// From BzzMatrix to C vector
 	if (iVerticalStorage == true)
 	{
 		int j=0;
@@ -427,7 +508,7 @@ void OpenSMOKE_PARDISO_Unsymmetric::Solve(BzzMatrix &b, BzzMatrix &x, const bool
 	pardiso(pt, &maxfct, &mnum, &mtype, &phase, &n, values, rows, columns, perm, &nrhs, iparm, &msglvl, b_, x_, &error_);
 	ErrorAnalysis();
 
-	// From C Vector to BzzVector
+	// From C vector back to BzzMatrix
 	if (iVerticalStorage == true)
 	{
 		int j=0;
@@ -452,9 +533,7 @@ void OpenSMOKE_PARDISO_Unsymmetric::ResetCounters()
 
 void OpenSMOKE_PARDISO_Unsymmetric::Delete()
 {
-	CleanMemory();
-
-	delete[] perm;
+	ClearStorage();
 }
 
 void OpenSMOKE_PARDISO_Unsymmetric::SetDefaultOptions()
@@ -612,6 +691,7 @@ void OpenSMOKE_PARDISO_Unsymmetric::ErrorAnalysis()
 	else if (error_ == -10)	ErrorMessage("Problems with opening OOC temporary files");
 	else if (error_ == -11)	ErrorMessage("Read/write problems with the OOC data file");
 }
+
 
 
 
