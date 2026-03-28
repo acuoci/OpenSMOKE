@@ -57,7 +57,7 @@ int OpenSMOKE_CSTRNetwork::count		= 0;
 int OpenSMOKE_CSTRNetwork::countInScope = 0;
 
 #if SYMBOLIC_KINETICS==1
-	OpenSMOKE_SymbolicKinetics* reactor[5000];
+	std::vector<OpenSMOKE_SymbolicKinetics*> reactor;
 #endif
 
 #define DEBUG_LOADING 0
@@ -77,8 +77,6 @@ void OpenSMOKE_CSTRNetwork::ErrorMessage(const std::string message)
     cout << "Class:  OpenSMOKE_CSTRNetwork"	<< endl;
     cout << "Object: " << name_object		<< endl;
     cout << "Error:  " << message           << endl;
-    cout << "Press a key to continue... "   << endl;
-    getchar();
     exit(-1);
 }
 
@@ -88,8 +86,6 @@ void OpenSMOKE_CSTRNetwork::WarningMessage(const std::string message)
     cout << "Class:  OpenSMOKE_CSTRNetwork"	<< endl;
     cout << "Object: "		<< name_object	<< endl;
     cout << "Warning:  "	<< message      << endl;
-    cout << "Press a key to continue... "   << endl;
-    getchar();
 }
 
 void OpenSMOKE_CSTRNetwork::SetSolution(BzzMatrix &omega)
@@ -174,8 +170,13 @@ void OpenSMOKE_CSTRNetwork::SetSubTasksPrint(void)
 
 OpenSMOKE_CSTRNetwork::~OpenSMOKE_CSTRNetwork(void)
 {
-	if(Reactions->NumberOfReactions() == 0 || Reactions->NumberOfSpecies() == 0)
+	if (Reactions == nullptr ||
+	    Reactions->NumberOfReactions() == 0 || Reactions->NumberOfSpecies() == 0)
 		return;
+
+	delete[] FromClusterToCluster_Index;
+	delete[] FromClusterToCluster_MassFlowRate;
+	delete[] FromClusterToCluster_DiffusionFlowRate;
 }
 
 void OpenSMOKE_CSTRNetwork::SetDeltaTFluctuationsMinDelta(const double _Fluctuations_DeltaMin)
@@ -249,6 +250,11 @@ OpenSMOKE_CSTRNetwork::OpenSMOKE_CSTRNetwork(void)
 
 	OnlyODE	= false;
 	OnlyClustering	= false;
+
+	Reactions                              = nullptr;
+	FromClusterToCluster_Index             = nullptr;
+	FromClusterToCluster_MassFlowRate      = nullptr;
+	FromClusterToCluster_DiffusionFlowRate = nullptr;
 
 	cout.setf(ios::scientific);
 }
@@ -1031,7 +1037,7 @@ void OpenSMOKE_CSTRNetwork::calculate_clustering(std::string fileNetwork, int ci
 	// Ciclo su tutte le celle della simulazione CFD originale
 	for(k = 1;k <= originalNumCSTRReactors;k++)
 	{
-		const int step = std::max(1, originalNumCSTRReactors / 100);
+		int step = std::max(1, originalNumCSTRReactors / 100);
 		if (k%step == 1)
 			cout << "   - Processing: " << k << "/" << originalNumCSTRReactors << endl;
 
@@ -1735,7 +1741,7 @@ void OpenSMOKE_CSTRNetwork::complete_clustering(int countInput, int cicloDiffusi
 		}
 
 		cout << "Clustering successfull!" << endl;
-		exit(0);
+		return;
 	}
 
 	// Open fResidualFile
@@ -1819,8 +1825,11 @@ void OpenSMOKE_CSTRNetwork::operator()(const std::string fileNetwork, const std:
 	calculate_clustering(fileNetwork, cicloDiffusion, numCluster, cstrClusterSize, omegaReduced_Cluster, omegaReduced_CFD);
 	std::cout << " * OpenSMOKE_CSTRNetwork: complete_clustering..." << std::endl;
 	complete_clustering(countInput, cicloDiffusion, relaxation, iaia, omegaReduced_Cluster, 0);
-	std::cout << " * OpenSMOKE_CSTRNetwork: start_solving_network..." << std::endl;
-	start_solving_network(iaia);
+	if (!OnlyClustering)
+	{
+		std::cout << " * OpenSMOKE_CSTRNetwork: start_solving_network..." << std::endl;
+		start_solving_network(iaia);
+	}
 }
 
 void OpenSMOKE_CSTRNetwork::start_solving_network(const int from_cfd_results)
@@ -2866,7 +2875,8 @@ void OpenSMOKE_CSTRNetwork::GetSecond(void)
 
 		std::string fileSparseMatrix = "Temp/A.tmp";
 		char fileSM[200];
-		strcpy(fileSM, fileSparseMatrix.c_str());
+		strncpy(fileSM, fileSparseMatrix.c_str(), sizeof(fileSM) - 1);
+		fileSM[sizeof(fileSM) - 1] = '\0';
 		BzzOdeSparseStiffObject o(initialValues, tStart, &obj, blockDimensions, &Q, fileSM);
 		yMin = 0.;
 		yMax = 1.;
@@ -3013,7 +3023,8 @@ int OpenSMOKE_CSTRNetwork::GetThird(void)
 	ExtraDiagonalTermsMatrix = Ld;
 	std::string fileJacobian = "Temp/MemoJacobian.tmp";
 	char fileJ[200];
-	strcpy(fileJ, fileJacobian.c_str());
+	strncpy(fileJ, fileJacobian.c_str(), sizeof(fileJ) - 1);
+	fileJ[sizeof(fileJ) - 1] = '\0';
 	GlobalMatrix(fileJ, &ExtraDiagonalTermsMatrix);
 
 	// Scrittura delle equazioni per tutta la rete di reattori: calcolo dei residui
@@ -4149,7 +4160,8 @@ void OpenSMOKE_CSTRNetwork::MemoTemperatureFunctions(const int kind)
 	if (iAnalyticalJacobian == 1)
 	{
 		cout << "        Step E: Initialize Analytical Jacobian... " << endl; 
-		
+		reactor.assign(numCSTRReactors + 1, nullptr);
+
 		if (analyticalJacobian == GRI12)
 			for (int kCSTR=1;kCSTR<=numCSTRReactors;kCSTR++)
 				reactor[kCSTR] = new OpenSMOKE_SymbolicKinetics_GRI12();
@@ -5053,7 +5065,8 @@ void OpenSMOKE_CSTRNetwork::GetFourth(const double tEnd)
 
 		std::string fileSparseMatrix = "Temp/A.tmp";
 		char fileSM[200];
-		strcpy(fileSM, fileSparseMatrix.c_str());
+		strncpy(fileSM, fileSparseMatrix.c_str(), sizeof(fileSM) - 1);
+		fileSM[sizeof(fileSM) - 1] = '\0';
 		BzzOdeSparseStiffObject o(initialValues, tStart, &obj, blockDimensions, &Q, fileSM);
 		yMin = 0.;
 		yMax = 1.;
@@ -5086,4 +5099,5 @@ void OpenSMOKE_CSTRNetwork::GetFourth(const double tEnd)
 	// attraverso la soluzione di un transitorio reale
 	CopyDataFromVector(&massFractionsInReactorsSolution,massFractionsInReactorsSolution_Vector);
 }
+
 
